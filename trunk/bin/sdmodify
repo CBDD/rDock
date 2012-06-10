@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+# Script to set the first title line equal to a given data field
+#
+# Usage:  sdmodify -f<DataField> [sdFiles]
+#
+#         If sdFiles not given, reads from standard input
+#         Output is to standard output
+
+use lib "$ENV{'RBT_ROOT'}/lib";
+
+use SDRecord;
+
+my $SDMODKEY = "ID";
+
+#Print help if no command line arguments
+#printHelpAndExit() if (scalar(@ARGV) == 0);
+
+#Parse command line arguments
+my @files;
+while (scalar(@ARGV)) {
+  my $arg = shift @ARGV;
+  printHelpAndExit() if ($arg eq '-h');
+  if (index($arg,'-f')==0) {
+    $SDMODKEY = substr($arg,2);#modification key
+  }
+  else {
+    push @files,$arg;#must be a filename
+  }
+}
+push @ARGV,@files;#put the filenames back in the arg list
+
+#read records
+my $sdRec = new SDRecord;
+my $nRec=0;
+while ($sdRec->readRec('DATA'=>1,'LINES'=>1)) {
+  $sdRec->addData('_REC' => ++$nRec);#add record# as temp data field
+  #set the first line equal to the given data field
+  my $nLines = scalar (@{$sdRec->{'LINES'}});
+  if ($nLines > 0) {
+    ${$sdRec->{'LINES'}}[0] = $sdRec->{'DATA'}->{$SDMODKEY};
+  }
+  $sdRec->writeRec();
+}

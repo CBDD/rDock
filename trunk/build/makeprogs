@@ -1,0 +1,73 @@
+# Partial Makefile for rDock executables
+# DO NOT CALL DIRECTLY - IS INCLUDED BY Makefile.<platform>-<config>-exe
+# which is in turn created by exemake
+#******************************************************************************/
+SRCDIR		= ../src/exe
+UNITTESTDIR	= ./test
+DEPLIBS		= $(LIBDIR)/libRbt.so
+LINKLIBS	= -lRbt -lm -lpopt
+
+CC		= $(TMAKE_CC)
+CFLAGS		= $(TMAKE_CFLAGS_CONFIG)
+CXX		= $(TMAKE_CXX)
+CXXFLAGS	= $(TMAKE_CXXFLAGS_CONFIG) $(DEFINES) -I../include -I../include/GP -I../popt -L$(LIBDIR)
+#
+# Extra include and lib directories for Daylight exes
+#
+DT_CXXFLAGS	= $(CXXFLAGS) -I../import/daylight/include \
+		  -L../import/daylight/libAMD64 -L../import/daylight/lib
+DT_LINKLIBS	= $(LINKLIBS) -ldt_smarts -ldt_smiles
+#
+# Extra include and lib directories for CppUnit-based unit tests
+UNITTEST_CXXFLAGS	= $(CXXFLAGS) -I$(UNITTESTDIR)
+UNITTEST_LINKLIBS	= -lRbt -ldl -lcppunit
+#
+# Build targets
+all: exe dt_exe unit_test
+
+# Standalone rDock executables
+exe:	$(DESTDIR)/rbdock \
+        $(DESTDIR)/rbcavity \
+        $(DESTDIR)/rbrms \
+	$(DESTDIR)/rbmoegrid \
+	$(DESTDIR)/rblist \
+	$(DESTDIR)/rbcalcgrid
+
+# These exes require the Daylight SMARTS/SMILES toolkits
+dt_exe: $(DESTDIR)/rbtether \
+        $(DESTDIR)/smart_rms
+
+# Unit test executable - gets built everytime
+# Exe is built directly in the $(UNITTESTDIR) and not in the platform-specific build directories ($(DESTDIR)
+# i.e. only one instance of unit_test exe is maintained, corresponding to the last platform/config that was built
+unit_test:
+	$(CXX) $(UNITTEST_CXXFLAGS) $(UNITTESTDIR)/*.cxx $(UNITTEST_LINKLIBS) -o $(UNITTESTDIR)/unit_test
+
+$(DESTDIR)/rbmoegrid: $(SRCDIR)/rbmoegrid.cxx $(DEPLIBS)
+	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbmoegrid.cxx $(LINKLIBS) -o $@
+
+$(DESTDIR)/rbcavity: $(SRCDIR)/rbcavity.cxx $(DEPLIBS)
+	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbcavity.cxx $(LINKLIBS) -o $@
+
+$(DESTDIR)/rblist: $(SRCDIR)/rblist.cxx $(DEPLIBS)
+	$(CXX) $(CXXFLAGS) $(SRCDIR)/rblist.cxx $(LINKLIBS) -o $@
+
+$(DESTDIR)/rbdock: $(SRCDIR)/rbdock.cxx $(DEPLIBS)
+	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbdock.cxx $(LINKLIBS) -o $@
+
+$(DESTDIR)/rbcalcgrid: $(SRCDIR)/rbcalcgrid.cxx $(DEPLIBS)
+	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbcalcgrid.cxx $(LINKLIBS) -o $@
+
+$(DESTDIR)/rbrms: $(SRCDIR)/rbrms.cxx $(DEPLIBS)
+	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbrms.cxx $(LINKLIBS) -o $@
+
+# These exes depend on the Daylight SMARTS/SMILES toolkit libraries
+
+$(OBJECTS_DIR)/RbtSmarts.o : ../src/daylight/RbtSmarts.cxx
+	$(CXX) $(DT_CXXFLAGS) ../src/daylight/RbtSmarts.cxx -c -o $@
+
+$(DESTDIR)/rbtether: $(OBJECTS_DIR)/RbtSmarts.o $(SRCDIR)/rbtether.cxx $(DEPLIBS)
+	$(CXX) $(DT_CXXFLAGS) $(SRCDIR)/rbtether.cxx $(OBJECTS_DIR)/RbtSmarts.o $(DT_LINKLIBS) -o $@
+
+$(DESTDIR)/smart_rms: $(OBJECTS_DIR)/RbtSmarts.o $(SRCDIR)/smart_rms.cxx $(DEPLIBS)
+	$(CXX) $(DT_CXXFLAGS) $(SRCDIR)/smart_rms.cxx $(OBJECTS_DIR)/RbtSmarts.o $(DT_LINKLIBS) -o $@

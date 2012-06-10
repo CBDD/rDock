@@ -1,0 +1,197 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE Receptor ionic atom definitions 
+VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/RbtIonicAtoms.prm#2 $
+################################################################################
+#
+# Revision history:
+#
+# 21 Nov 2001 (DM) Added Heme Fe entries
+# 19 Oct 2001 (DM) Extended list of metal ions
+# 13 Jun 2000 (DM) Branched from RbtRNAScoringFunction.prm
+#                  New format for ionic atoms (separate section for each residue)
+#
+################################################################################
+# Formal charges for RNA atoms
+#
+# A/ADE
+#
+SECTION A
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+
+SECTION ADE
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+#
+# C/CYT
+#
+SECTION C
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+
+SECTION CYT
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+#
+# G/GUA
+#
+SECTION G
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+
+SECTION GUA
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+#
+# U/URA
+#
+SECTION U
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+
+SECTION URA
+	O1P		-0.5
+	O2P		-0.5
+END_SECTION
+
+#################################################################################
+# Formal charges for amino acids
+#
+# LYS+
+#
+SECTION LYS
+	HZ1		+0.333
+	HZ2		+0.333
+	HZ3		+0.333
+END_SECTION
+#
+# ARG+
+#
+SECTION ARG
+	HE		+0.167
+	HH11		+0.167
+	HH12		+0.167
+	HH21		+0.167
+	HH22		+0.167
+	CZ		+0.167
+END_SECTION
+#
+# HSP+
+#
+SECTION HSP
+	HD1		+0.333
+	HE2		+0.333
+	CE1		+0.333
+END_SECTION
+
+SECTION HIS
+	MANDATORY	HD1,HE2
+	HD1             +0.333
+        HE2             +0.333
+        CE1             +0.333
+END_SECTION
+#
+# ASP-
+#
+SECTION ASP
+	FORBIDDEN	HD1,HD2
+	OD1		-0.5
+	OD2		-0.5
+END_SECTION
+#
+# GLU-
+#
+SECTION GLU
+	FORBIDDEN	HE1,HE2
+	OE1		-0.5
+	OE2		-0.5
+END_SECTION
+
+#################################################################################
+# Formal charges for metal cations
+#
+SECTION NA
+	NA		+1.0
+END_SECTION
+
+SECTION MG
+	MG		+1.0
+END_SECTION
+
+SECTION K
+	K		+1.0
+END_SECTION
+
+SECTION CA
+	CA		+1.0
+END_SECTION
+
+SECTION V
+	V		+1.0
+END_SECTION
+
+SECTION MN
+	MN		+1.0
+END_SECTION
+
+SECTION FE
+	FE		+1.0
+END_SECTION
+
+# Specific entries for GOLD PDB test set
+SECTION FS4
+	FE1		+1.0
+	FE2		+1.0
+	FE3		+1.0
+	FE4		+1.0
+END_SECTION
+
+SECTION HEM
+	FE		+1.0
+END_SECTION
+
+SECTION NI
+	NI		+1.0
+END_SECTION
+
+SECTION ZN
+	ZN		+1.0
+END_SECTION
+
+# Specific entries for ASTEX MOL2 test set
+SECTION HG
+	HG		+1.0
+END_SECTION
+
+SECTION CD
+	CD		+1.0
+END_SECTION
+
+SECTION FS
+	FE1		+1.0
+	FE2		+1.0
+	FE3		+1.0
+	FE4		+1.0
+END_SECTION
+
+SECTION CO
+	CO		+1.0
+END_SECTION
+
+#These metals occur in undefined residues
+SECTION UNK
+	MG		+1.0
+	MN		+1.0
+	ZN		+1.0
+	FE1		+1.0
+	FE2             +1.0
+	FE3             +1.0
+	FE4             +1.0
+END_SECTION

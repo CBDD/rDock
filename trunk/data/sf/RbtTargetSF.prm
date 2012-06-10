@@ -1,0 +1,9 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE Intra-target scoring function
+VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/RbtTargetSF.prm#2 $
+
+SECTION DIHEDRAL
+	SCORING_FUNCTION	RbtDihedralTargetSF
+	WEIGHT			0.5
+	IMPL_H_CORR		TRUE
+END_SECTION

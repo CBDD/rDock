@@ -1,0 +1,221 @@
+#!/usr/bin/perl
+# Filters SD records by given data field                                       *
+#                                                                              *
+# Usage:  sdfilter -f'$<DataField> <Operator> <Value>'  [sdFiles]              *
+#      or sdfilter -f<filename> [sdFiles]                                      *
+#                                                                              *
+#         where <filename> contains a list of <DataField> <Operator> <Value>   *
+#         filters, one per line.                                               *
+#         Multiple filters are OR'd together (for AND, pipe to a 2nd sdfilter) *
+#                                                                              *
+#         If sdFiles not given, reads from standard input                      *
+#         Output is to standard output                                         *
+#*******************************************************************************
+use lib "$ENV{'RBT_ROOT'}/lib";
+
+use SDRecord;
+
+#keep track of the number of occurrences of each value of this key
+my $summaryKey = "Name";
+
+#list of filter strings
+#all filters in the list are OR'd together
+my @SDFILTERS;
+
+# DM 5 Dec 2000 - new option to filter on diverse_molecules.list
+# as output by C2
+# Essentially just a list of record numbers
+my $cerius2filter = 0;
+my $cerius2file = "diverse_molecules.list";
+my @cerius2recs;
+
+#Print help if no command line arguments
+printHelpAndExit() if (scalar(@ARGV) == 0);
+
+#Parse command line arguments
+my @files;
+while (scalar(@ARGV)) {
+  my $arg = shift @ARGV;
+  printHelpAndExit() if ($arg eq '-h');
+  if (index($arg,'-f')==0) {
+    $arg = substr($arg,2);
+    #try opening the argument as a file
+    if (open FILTERFILE,$arg) {
+      #get the list of filter strings from the file
+      my @strList = <FILTERFILE>;
+      close FILTERFILE;
+      chomp @strList;
+      #build the filter strings into a proper Perl expression for eval
+      #and add to the list
+      push @SDFILTERS,buildFilterList(@strList);
+    }
+    else {
+      #build the filter string into a proper Perl expression for eval
+      #and add to the list
+      push @SDFILTERS, buildFilterList($arg);
+    }
+  }
+  elsif (index($arg,'-sup')==0) {
+    my $supplier = substr($arg,4);
+    my $supplierFilter = "scalar(grep /$supplier/, \@supplierList) > 0";
+    #print "Supplier filter = $supplierFilter\n";
+    push @SDFILTERS, $supplierFilter;
+  }
+  elsif (index($arg,'-s')==0) {
+    $summaryKey = substr($arg,2);
+  }
+  #DM 05 Dec 2000 - c2 option
+  elsif (index($arg,'-c2')==0) {
+    $cerius2filter = 1;
+    $arg = substr($arg,3);
+    $cerius2file = $arg if ($arg); #argument overrides default file name
+    if (open FILTERFILE,$cerius2file) {
+      #Skip first two lines
+      my $tmp = <FILTERFILE> || die "Invalid Cerius2 file $cerius2file";
+      $tmp = <FILTERFILE> || die "Invalid Cerius2 file $cerius2file";
+      while (<FILTERFILE>) {
+	chomp;
+	push @cerius2recs,split(" ",$_);
+      }
+      close FILTERFILE;
+    }
+    die "No records in $cerius2file\n" if (scalar(@cerius2recs)==0);
+    #Sort into reverse order so we can pop the record #'s off later
+    @cerius2recs = reverse (sort {$a<=>$b} @cerius2recs);
+    #foreach $rec (@cerius2recs) {
+    #  print "$rec\n";
+    #}
+  }
+  else {
+    push @files,$arg;#must be a filename
+  }
+}
+push @ARGV,@files;#put the filenames back in the arg list
+
+#read records
+my $sdRec = new SDRecord;
+my %count;#record the number of occurrences of each value of $summaryKey
+my $nRec=0;
+#In C2 mode, just need to check record numbers so we can read the SD file
+#without parsing the data fields
+if ($cerius2filter) {
+  my $c2nextRec = pop @cerius2recs;
+  while ($sdRec->readRec('LINES'=>1)) {
+    if ((++$nRec)==$c2nextRec) {
+      $sdRec->writeRec();
+      exit if (scalar(@cerius2recs)==0);
+      $c2nextRec=pop @cerius2recs;
+    }
+  }
+}
+#Normal mode, need to parse the data fields
+else {
+  while ($sdRec->readRec('DATA'=>1,'LINES'=>1)) {
+    $sdRec->addData('_REC' => ++$nRec);#add record# as temp data field
+    $sdRec->addData('_COUNT' => ++$count{$sdRec->{'DATA'}->{$summaryKey}});#add count as temp data field
+    my @supplierList = buildSupplierList($sdRec);
+    foreach $filter (@SDFILTERS) {
+      if (eval $filter) {
+	$sdRec->writeRec();#write record if one of the filters returns true
+	last;
+      }
+    }
+  }
+}
+
+#######################################################################
+# Compose a complete SD filter string for each string in the parameter list
+# Complete strings are of the form: $sdRec->{'DATA'}->{'Name'} eq RBT162"
+# Note: the SDRecord object name is hardcoded as $sdRec
+sub buildFilterList {
+  my @strList = @_;#input list of unexpanded filter strings
+  my @filterList;#output list of expanded filter strings
+
+  #loop over each input string
+  foreach $str (@strList) {
+    my $filter;
+    my $i1 = 0;
+    my $lenstr = length($str);
+    while ($i1 < $lenstr) {
+      #print "i1=$i1\n";
+      $i2 = index($str,"\$",$i1);
+      #print "i2=$i2\n";
+      if ($i2 == -1) {
+	$filter .= substr($str,$i1);
+	last;
+      }
+      $filter .= substr($str,$i1,$i2-$i1);
+      #DM 04 Sept 2000 - allow for spaces in field names
+      #by surrounding with {} brackets
+      #e.g. ${CDD id}
+      #Check for { first, if not found assume standard format (e.g. $Name)
+      my $i3 = index($str,"{",$i2+1);
+      if ($i3 == $i2+1) {
+	my $i4 = index($str,"}",$i3+1);
+	my $var;
+	if ($i4 == -1) {
+	  $var = substr($str,$i3+1);
+	  $filter .= "\$sdRec->{'DATA'}->{'$var'}";
+	  last;
+	}
+	else {
+	  $var = substr($str,$i3+1,$i4-$i3-1);
+	  $filter .= "\$sdRec->{'DATA'}->{'$var'}";
+	}
+	$i1 = $i4+1;
+      }
+      #Standard format
+      else {
+	$i3 = index($str," ",$i2+1);
+	#print "i3=$i3\n";
+	my $var;
+	if ($i3 == -1) {
+	  $var = substr($str,$i2+1);
+	  $filter .= "\$sdRec->{'DATA'}->{'$var'}";
+	  last;
+	}
+	else {
+	  $var = substr($str,$i2+1,$i3-$i2-1);
+	  $filter .= "\$sdRec->{'DATA'}->{'$var'}";
+	}
+	$i1 = $i3;
+      }
+    }
+    #print "$filter\n";
+    push @filterList,$filter;
+  }
+  return @filterList;
+}
+
+#######################################################################
+# Extract the list of suppliers from the Cat_coden multi-line data field
+sub buildSupplierList {
+  my $rec = shift;
+  my @suppliers;
+  my $suppBase = $rec->{'DATAREF'}->{'Cat_coden'}+1;
+  my $linesRef = $rec->{'LINES'};
+  if (defined $suppBase) {
+    while ($$linesRef[$suppBase] ne "") {
+      push @suppliers,$$linesRef[$suppBase++];
+    }
+  }
+  #print "Supplier list:\n";
+  #print join("\n",@suppliers);
+  return @suppliers;
+}
+
+#######################################################################
+sub printHelpAndExit {
+  print "\nFilters SD records by data fields\n";
+  print "\nUsage:\tsdfilter -f'\$<DataField> <Operator> <Value>' [-s<DataField>] [sdFiles]\n";
+  print "or\tsdfilter -f<filename> [-s<DataField>] [sdFiles]\n\n";
+  print "Note:\tMultiple filters are allowed and are OR'd together.\n";
+  print "\tFilters can be provided in a file, one per line.\n";
+  print "\n\tStandard Perl operators should be used. e.g.\n";
+  print "\teq ne lt gt le ge for strings\n\t== != < > <= >= for numeric\n";
+  print "\n\t_REC (record #) is provided as a pseudo-data field\n";
+  print "\tif -s option is used, _COUNT (#occurrences of DataField) is provided as a pseudo-data field\n";
+  print "\n\tIf SD file list not given, reads from standard input\n";
+  print "\tOutput is to standard output\n\n";
+  exit;
+}

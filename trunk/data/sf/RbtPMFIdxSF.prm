@@ -1,0 +1,46 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE Protein-ligand PMF (indexed version)
+VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/RbtPMFIdxSF.prm#2 $
+################################################################################
+#
+# Revision history:
+#
+# References:
+#
+################################################################################
+# Constant scoring function
+# Represents loss of translation, rotational entropy of ligand
+SECTION CONST
+	SCORING_FUNCTION	RbtConstSF
+	WEIGHT			+5.4	# Free-energy weighting
+END_SECTION
+
+################################################################################
+# Rotational scoring function
+# Represents loss of torsional entropy of ligand
+SECTION ROT
+	SCORING_FUNCTION	RbtRotSF
+	WEIGHT			+1.0	# Free-energy weighting
+END_SECTION
+
+################################################################################
+# Setup PMF atom types
+SECTION SETUP_PMF
+    	SCORING_FUNCTION    	RbtSetupPMFSF
+END_SECTION
+
+################################################################################
+# Intermolecular PMF
+SECTION PMF
+        SCORING_FUNCTION        RbtPMFIdxSF
+        SLOPE                   -3.0		# slope of the repulsive short-range linear term
+        CC_CUTOFF                6.0		# count only shorter C_receptor - C_ligand interactions
+        WEIGHT                   1.0
+        GRIDSTEP                 1.0		# indexed grid distance (need not be dense) 
+        BORDER                   1.0		#
+        PMFDIR                   data/pmf	# ${RBT_ROOT/}data/pmf where the .pmfs are
+END_SECTION
+###############################################################################
+#        OVERALL_CUTOFF           9.0		# value of overall cutoff (similar to C cutoff but for all types)
+
+

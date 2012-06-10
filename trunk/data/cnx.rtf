@@ -1,0 +1,157 @@
+*>>>>>>>>> Combined Residue Topology File for Proteins <<<<<<<<<
+*>>>>>>>>>>>>>>>>>>>> and Nucleic Acids <<<<<<<<<<<<<<<<<<<<<<<<
+*>>>>>>>>>>>>>>>>> Using All Hydrogens (ALLH) <<<<<<<<<<<<<<<<<<
+*>>>>>>>>>>>>>>>>>>>>> January 1996 <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+*>>>>>>> Direct comments to Alexander D. MacKerell Jr. <<<<<<<<<
+*>>>>>> 410-706-7442 or email: alex,mmiris.ab.umd.edu  <<<<<<<<<
+* These files are a beta release; additional parameter development
+* and testing may lead to alteration of the contents.
+*
+* $Id: //depot/dev/client3/rdock/2006.1/data/cnx.rtf#2 $
+*
+* 30 Apr 1999 (D Morley, RiboTargets)
+* Modified for RiboDock:
+* Added hybridisation state tags to comment field
+* Removed all but the MASS records (added element name)
+*
+   22     1
+!MASS     1 H      1.00800 H ! polar H (RBT::SP3)
+!MASS     2 HC     1.00800 H ! N-ter H (RBT::SP3)
+!MASS     3 HA     1.00800 H ! nonpolar H (RBT::SP3)
+MASS     4 HT     1.00800 H ! TIPS3P WATER HYDROGEN (RBT::SP3)
+MASS     5 HP     1.00800 H ! aromatic H (RBT::SP3)
+MASS     6 HB     1.00800 H ! backbone H (RBT::SP3)
+MASS     7 HR1    1.00800 H ! his he1, (+) his HG,HD2 (RBT::SP3)
+MASS     8 HR2    1.00800 H ! (+) his HE1 (RBT::SP3)
+MASS     9 HR3    1.00800 H ! neutral his HG, HD2 (RBT::SP3)
+MASS    10 HS     1.00800 H ! thiol hydrogen (RBT::SP3)
+MASS    11 HA1    1.00800 H ! for alkene; RHC=CR (RBT::SP3)
+MASS    12 HA2    1.00800 H ! for alkene; H2C=CR (RBT::SP3)
+!MASS    20 C     12.01100 C ! polar C (RBT::SP3)
+MASS    21 CA    12.01100 C ! aromatic C (RBT::SP2)
+MASS    22 CT1   12.01100 C ! aliphatic sp3 C for CH (RBT::SP3)
+MASS    23 CT2   12.01100 C ! aliphatic sp3 C for CH2 (RBT::SP3)
+MASS    24 CT3   12.01100 C ! aliphatic sp3 C for CH3 (RBT::SP3)
+MASS    25 CPH1  12.01100 C ! his CG and CD2 carbons (RBT::SP2)
+MASS    26 CPH2  12.01100 C ! his CE1 carbon (RBT::SP2)
+MASS    27 CPT   12.01100 C ! trp C between rings (RBT::SP2)
+!MASS    28 CY    12.01100 C ! TRP C in pyrrole ring (RBT::SP2)
+MASS    29 CP1   12.01100 C ! tetrahedral C (proline CA) (RBT::SP3)
+MASS    30 CP2   12.01100 C ! tetrahedral C (proline CB/CG) (RBT::SP3)
+MASS    31 CP3   12.01100 C ! tetrahedral C (proline CD) (RBT::SP3)
+MASS    32 CC    12.01100 C ! carbonyl C for sidechains asn,asp,gln,glu (RBT::SP2)
+MASS    33 CD    12.01100 C ! carbonyl C for none amides, asp,glu,cter (RBT::SP2)
+MASS    34 CPA   12.01100 C ! heme alpha-C
+MASS    35 CPB   12.01100 C ! heme beta-C
+MASS    36 CPM   12.01100 C ! heme meso-C
+MASS    37 CM    12.01100 C ! heme CO carbon (RBT::SP2)
+MASS    38 CS    12.01100 C ! thiolate carbon
+MASS    39 CE1   12.01100 C ! for alkene; RHC=CR
+MASS    40 CE2   12.01100 C ! for alkene; H2C=CR
+!MASS    50 N     14.00700 N ! proline N (RBT::SP3)
+MASS    51 NR1   14.00700 N ! neutral his protonated ring nitrogen (RBT::TRI)
+MASS    52 NR2   14.00700 N ! neutral his unprotonated ring nitrogen (RBT::SP2)
+MASS    53 NR3   14.00700 N ! charged his ring nitrogen (RBT::TRI)
+!MASS    54 NH1   14.00700 N ! peptide nitrogen (RBT::TRI)
+!MASS    55 NH2   14.00700 N ! amide nitrogen (RBT::TRI)
+!MASS    56 NH3   14.00700 N ! ammonium nitrogen (RBT::SP3)
+!MASS    57 NC2   14.00700 N ! guanidinium nitroogen (RBT::TRI)
+MASS    58 NY    14.00700 N ! TRP N in pyrrole ring (RBT::TRI)
+MASS    59 NP    14.00700 N ! Proline ring NH2+ (N-terminal) (RBT::SP3)
+MASS    60 NPH   14.00700 N ! heme pyrrole N (RBT::TRI)
+!MASS    70 O     15.99900 O ! carbonyl oxygen (RBT::SP2)
+MASS    71 OB    15.99900 O ! carbonyl oxygen in acetic acid (RBT::SP2)
+!MASS    72 OC    15.99900 O ! carboxylate oxygen (RBT::SP2)
+!MASS    73 OH1   15.99900 O ! hydroxyl oxygen (RBT::SP3)
+MASS    74 OS    15.99940 O ! ester oxygen (RBT::SP3)
+MASS    75 OT    15.99940 O ! TIPS3P WATER OXYGEN (RBT::SP3)
+MASS    76 OM    15.99900 O ! heme CO/O2 oxygen (RBT::SP2)
+MASS    81 S     32.06000 S ! sulphur (RBT::SP3)
+!MASS    82 SM    32.06000 S ! sulfur C-S-S-C type (RBT::SP3)
+MASS    83 SS    32.06000 S ! thiolate sulfur
+!
+! nucleic acid section
+!MASS 104    HT    1.008000 ! TIPS3P WATER HYDROGEN
+MASS 106    HN1   1.008000 H ! Nucleic acid amine proton (RBT::SP3)
+MASS 107    HN2   1.008000 H ! Nucleic acid ring nitrogen proton (RBT::SP3)
+MASS 108    HN3   1.008000 H ! Nucleic acid aromatic carbon proton (RBT::SP3)
+MASS 109    HN4   1.008000 H ! Nucleic acid phosphate hydroxyl proton (RBT::SP3)
+MASS 110   HN5   1.008000 H ! Nucleic acid ribose hydroxyl proton (RBT::SP3)
+MASS 111   HN6   1.008000 H ! Nucleic acid ribose aliphatic proton (RBT::SP3)
+MASS 112   HN7   1.008000 H ! Nucleic acid proton (equivalent to protein HA) (RBT::SP3)
+MASS 113   HN3B  1.008000 H ! NAD+ aromatic hydrogen (RBT::SP3)
+MASS 128   CN1  12.011000 C ! Nucleic acid carbonyl carbon (RBT::SP2)
+MASS 129   CN2  12.011000 C ! Nucleic acid aromatic carbon to amide (RBT::SP2)
+MASS 130   CN3  12.011000 C ! Nucleic acid aromatic carbon (RBT::SP2)
+MASS 131   CN4  12.011000 C ! Nucleic acid purine C8 and ADE C2 (RBT::SP2)
+MASS 132   CN5  12.011000 C ! Nucleic acid purine C4 and C5 (RBT::SP2)
+MASS 133   CN6  12.011000 C ! Nucleic acid sp3 ribose ring carbon (RBT::SP3)
+MASS 134   CN6B 12.011000 C ! Nucleic acid sp3 ribose ring carbon, C1' (RBT::SP3)
+MASS 135   CN6C 12.011000 C ! Nucleic acid sp3 deoxyribose ring carbon, C2' (RBT::SP3)
+MASS 136   CN7  12.011000 C ! Nucleic acid carbon (equivalent to protein CT1) (RBT::SP3)
+MASS 137   CN8  12.011000 C ! Nucleic acid carbon (equivalent to protein CT2) (RBT::SP3)
+MASS 138   CN9  12.011000 C ! Nucleic acid carbon (equivalent to protein CT3) (RBT::SP3)
+MASS 139   CN3A 12.011000 C ! NAD+ aromatic carbon (RBT::SP2)
+MASS 140   CN3B 12.011000 C ! NAD+ aromatic carbon (RBT::SP2)
+MASS 141   CN3C 12.011000 C ! NADH aromatic carbon (RBT::SP2)
+MASS 142   CN3D 12.011000 C ! Nucleic acid aromatic carbon for 5MC (RBT::SP2)
+MASS 143   CN1A 12.011000 C ! NAD+/NADH amide carbonyl carbon (RBT::SP2)
+MASS 150   NN1  14.007000 N ! Nucleic acid amide nitrogen (RBT::TRI)
+MASS 151   NN2  14.007000 N ! Nucleic acid protonated ring nitrogen (RBT::TRI)
+MASS 152   NN2U 14.007000 N ! Nucleic acid protonated ring nitrogen, ura N3 (RBT::TRI)
+MASS 153   NN2G 14.007000 N ! Nucleic acid protonated ring nitrogen, gua N1 (RBT::TRI)
+MASS 154   NN3  14.007000 N ! Nucleic acid unprotonated ring nitrogen (RBT::SP2)
+MASS 155   NN4  14.007000 N ! Nucleic acid purine N7 (RBT::SP2)
+MASS 156   NN5  14.007000 N ! Nucleic acid sp2 amine nitrogen (RBT::TRI)
+MASS 157   NN3A 14.007000 N ! Nucleic acid unprotonated ring nitrogen, ade N1 and N3 (RBT::SP2)
+MASS 158   NN3I 14.007000 N ! Nucleic acid unprotonated ring nitrogen, inosine N3 (RBT::SP2)
+!MASS 164   OT   15.999400 ! TIPS3P WATER OXYGEN
+MASS 165   ON1  15.999400 O ! Nucleic acid carbonyl oxygen (RBT::SP2)
+MASS 166   ON1C 15.999400 O ! Nucleic acid carbonyl oxygen, cyt O2 (RBT::SP2)
+MASS 167   ON2  15.999400 O ! Nucleic acid phosphate ester oxygen (RBT::SP3)
+MASS 168   ON3  15.999400 O ! Nucleic acid =O in phosphate (RBT::SP2)
+MASS 169   ON4  15.999400 O ! Nucleic acid phosphate hydroxyl oxygen (RBT::SP3)
+MASS 170   ON5  15.999400 O ! Nucleic acid ribose hydroxyl oxygen (RBT::SP3)
+MASS 171   ON6  15.999400 O ! Nucleic acid ribose ring oxygen (RBT::SP3)
+MASS 172   ON2b 15.999400 O ! Nucleic acid phosphate ester oxygen, tyr-phosphate (RBT::SP3)
+MASS 182   P    30.974000 P ! phosphorus (RBT::SP2)
+MASS 183   P2   30.974000 P ! pyrophosphate phosphorus
+MASS 192   SOD  22.989770 Na ! Sodium Ion
+MASS 193   MG   24.305000 Mg ! Magnesium Ion
+
+* 1 Nov 2002 (DM) Dummy atom type
+MASS   666 DUM    0.00000 DU ! Dummy atom
+!MASS 199   DUM   0.001    ! dummy atom
+
+* 9 Dec 2002 (SJ) CNX atom types
+* types with the same name but not necessarily with the same functionality
+MASS   701 H      1.00800 H ! polar H (RBT::SP3) 
+MASS   702 HC     1.00800 H ! charged polar H ie in ARG,LYS (RBT::SP3) 
+MASS   703 HA     1.00800 H ! apolar H (RBT::SP3) 
+MASS   704 C     12.01100 C ! amide C (RBT::SP2) 
+MASS   705 CH1E  12.01100 C ! Alpha-carbons with one hydrogen (RBT::SP3)
+MASS   706 CH2E  12.01100 C ! Carbon with two hydrogens (RBT::SP3)
+MASS   707 CH3E  12.01100 C ! Carbon with three hydrogens (RBT::SP3)
+MASS   708 CH2G  12.01100 C ! GLY alpha carbon (RBT::SP3)
+MASS   709 CH2P  12.01100 C ! Gamma and delta carbons in prolin (RBT::SP3)
+MASS   710 C5W   12.01100 C ! TRP gamma carbon in pyrrole ring (RBT::SP2) 
+MASS   711 CW    12.01100 C ! TRP CD2 and CE2 at the fuse of the rings (RBT::SP2) 
+MASS   712 CR1E  12.01100 C ! PHE aromatic deltas epss and zeta (RBT::SP2)
+MASS   713 C5    12.01100 C ! HIS gamma carbon (RBT::SP2)
+MASS   714 CRH   12.01100 C ! HIS doubly protonated CE1 (RBT::SP2) 
+MASS   715 CR1H  12.01100 C ! HIS delta CD2 (RBT::SP2)
+MASS   716 CRHH  12.01100 C ! HIS epsilon CE1 (RBT::SP2) 
+MASS   717 CF    12.01100 C ! PHE gamma carbon (RBT::SP2)
+MASS   718 CY    12.01100 C ! TYR CG (RBT::SP2)
+MASS   719 CY2   12.01100 C ! TYR CZ (RBT::SP2)
+MASS   720 N     14.00700 N ! PRO N (RBT::TRI)
+MASS   721 NR    14.00700 N ! HIS non-protonated ND1 (RBT::SP2)
+MASS   722 NH1   14.00700 N ! amide N (RBT::TRI) 
+MASS   723 NH2   14.00700 N ! ammonium N (RBT::SP3)
+MASS   724 NH3   14.00700 N ! charged N (RBT::SP3)
+MASS   725 NC2   14.00700 N ! guanidinium charged N (RBT::TRI)
+MASS   726 O     15.99900 O ! carbonyl oxygen (RBT::SP2)
+MASS   727 OC    15.99900 O ! carboxylate oxygen (RBT::SP2)
+MASS   728 OH1   15.99900 O ! hydroxyl oxygen (RBT::SP3)
+MASS   729 SH1E  32.06000 S ! CYS SG (RBT::SP3) 
+MASS   730 SM    32.06000 S ! MET SD (RBT::SP3) 

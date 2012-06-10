@@ -1,0 +1,14 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE vdw potential (4-8 functional form, ECUT=1.0)
+VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/calcgrid_vdw1.prm#2 $
+
+SECTION VDW_1
+	SCORING_FUNCTION	RbtVdwIdxSF
+	WEIGHT			1.0	# Free-energy weighting
+	USE_4_8			TRUE	# TRUE = Use 4-8 potential (Ref (16))
+	USE_TRIPOS		FALSE	# FALSE = IP/POL method for kij
+	RMAX			1.5	# Truncate at RMAX*rmin
+	ECUT			1.0	# Switch to quadratic at E=ECUT*kij
+	E0			1.5	# At r=0, E=E0*ECUT*kij
+	TRACE			0
+END_SECTION
