@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+# Sorts SD records by given data field
+use lib "$ENV{'RBT_ROOT'}/lib";
+
+use SDRecord;
+
+my $SDSORTKEY; # sort key
+my $SDSORTASCEND = 1;# 1 = ascending, 0 = descending
+my $SDSORTTEXT = 1;# 1 = text sort, 0 = numeric sort
+
+my $FASTFORMAT = 0;
+my $FASTKEY = "_TITLE1";
+
+#Print help if no command line arguments
+printHelpAndExit() if (scalar(@ARGV) == 0);
+
+#Parse command line arguments
+my @files;
+while (scalar(@ARGV)) {
+  $arg = shift @ARGV;
+  printHelpAndExit() if ($arg eq '-h');
+  if ($arg eq '-r') {
+    $SDSORTASCEND = 0;#descending sort requested
+  }
+  elsif ($arg eq '-n') {
+    $SDSORTTEXT = 0;;#numeric sort requested
+  }
+  elsif (index($arg,'-s')==0) {
+    $FASTFORMAT = 1;
+  }
+  elsif (index($arg,'-id')==0) {
+    $FASTKEY = substr($arg,3);
+  }
+  elsif (index($arg,'-f')==0) {
+    $SDSORTKEY = substr($arg,2);#sort key
+  }
+  else {
+    push @files,$arg;#must be a filename
+  }
+}
+push @ARGV,@files;#put the filenames back in the arg list
+
+#read records
+my $sdRec = new SDRecord;
+my @records;
+my $nRec=0;
+
+my $lastid="";
+while ($sdRec->readRec('DATA'=>1,'LINES'=>1)) {
+  $sdRec->addData('_REC' => ++$nRec);#add record# as temp data field
+  if ($FASTFORMAT) {
+    my $id = $sdRec->{'DATA'}->{$FASTKEY};
+    if (($lastid ne "") && ($lastid ne $id)) {
+      foreach $rec (sort sortSD @records) {
+	$rec->writeRec();
+      }
+      @records = ();#clear the list
+    }
+    $lastid = $id;
+  }
+  push(@records,$sdRec->copy('DATA'=>1,'LINES'=>1));
+}
+
+#write sorted records
+foreach $rec (sort sortSD @records) {
+  $rec->writeRec();
+}
+
+#######################################################
+# sort function to sort SD records by given field
+# handles text/numeric and ascending/descending sort
+sub sortSD {
+  if ($SDSORTTEXT) {
+    return $a->{'DATA'}->{$SDSORTKEY} cmp $b->{'DATA'}->{$SDSORTKEY} if ($SDSORTASCEND);
+    return $b->{'DATA'}->{$SDSORTKEY} cmp $a->{'DATA'}->{$SDSORTKEY};
+  }
+  else {
+    return $a->{'DATA'}->{$SDSORTKEY} <=> $b->{'DATA'}->{$SDSORTKEY} if ($SDSORTASCEND);
+    return $b->{'DATA'}->{$SDSORTKEY} <=> $a->{'DATA'}->{$SDSORTKEY};
+  }
+}
+
+#######################################################################
+sub printHelpAndExit {
+  print "\nSorts SD records by given data field\n";
+  print "\nUsage:\tsdsort [-n] [-r] [-f<DataField>] [sdFiles]\n\n";
+  print "\t-n\t\tnumeric sort (default is text sort)\n";
+  print "\t-r\t\tdescending sort (default is ascending sort)\n";
+  print "\t-f<DataField>\tspecifies sort field\n";
+  print "\t-s\t\tfast mode. Sorts the records for each named compound independently (must be consecutive)\n";
+  print "\t-id<NameField>\tspecifies compound name field (default = 1st title line)\n\n";
+  print "Note:\t_REC (record #) is provided as a pseudo-data field\n";
+  print "\n\tIf SD file list not given, reads from standard input\n";
+  print "\tOutput is to standard output\n";
+  print "\tFast mode can be safely used for partial sorting of huge SD files of raw docking hits\n";
+  print "\twithout running into memory problems.\n\n"; 
+  exit;
+}

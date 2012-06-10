@@ -1,0 +1,3037 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book SYSTEM "http://www.docbook.org/xml/4.4/docbookx.dtd">
+<book id="rDockRef" revision="enspiral_dev/706">
+    <title>rDock Reference Guide</title>
+    <bookinfo>
+        <releaseinfo>rDock/2006.1/901</releaseinfo>
+        <revhistory>
+            <revision>
+                <revnumber>Added Acknowledgements section</revnumber>
+                <date>27/09/2006</date>
+            </revision>
+            <revision>
+                <revnumber>Completed concise reference guide (at least some content in all sections)</revnumber>
+                <date>26/06/2006</date>
+            </revision>
+            <revision>
+                <revnumber>Concise reference guide in progress</revnumber>
+                <date>20/06/2006</date>
+            </revision>
+            <revision>
+                <revnumber>Initial draft describing rDock/enspiral_dev/449 receptor .prm file</revnumber>
+                <date>26/01/2006</date>
+            </revision>
+        </revhistory>
+        <author>
+            <honorific>Dr</honorific>
+            <surname>Morley</surname>
+            <firstname>David</firstname>
+            <affiliation>
+                <orgname>Enspiral Discovery Ltd.</orgname>
+            </affiliation>
+            <email>d.morley@enspiral-discovery.com</email>
+        </author>
+        <copyright>
+            <year>2006</year>
+            <holder>Vernalis</holder>
+        </copyright>
+    </bookinfo>
+    <preface id="Preface">
+        <title>Preface</title>
+        <simpara>It is intended to develop this document into a full reference guide for the
+                <application>rDock</application> platform, describing the software tools, parameter
+            files, scoring functions, and search engines. The reader is encouraged to
+            cross-reference the descriptions with the corresponding source code files to discover
+            the finer implementation details.</simpara>
+    </preface>
+    <preface id="Acknowledgements">
+        <title>Acknowledgements</title>
+        <formalpara>
+            <title>Third-party source code</title>
+            <para>Two third-party C++ libraries are included within the rDock source code, to
+                provide support for specific numerical calculations. The source code for each
+                library can be distributed freely without licensing restrictions and we are grateful
+                to the respective authors for their contributions.<itemizedlist>
+                    <listitem>
+                        <simpara>Nelder-Meads Simplex search, from Prof. Virginia Torczon's group,
+                            College of William and Mary, Department of Computer Science, VA. (<ulink
+                                url="http://www.cs.wm.edu/~va/software/"/>)</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Template Numerical Toolkit, from Roldan Pozo, Mathematical and
+                            Computational Sciences Division, National Institute of Standards and
+                            Technology (<ulink url="http://math.nist.gov/tnt/"/>)</simpara>
+                    </listitem>
+                </itemizedlist></para>
+        </formalpara>
+    </preface>
+    <chapter id="introduction">
+        <title>Introduction</title>
+        <para>The rDock platform is a suite of command-line tools for high-throughput docking and
+            virtual screening. The programs and methods were developed and validated over a number
+            of years at RiboTargets (more recently, Vernalis) for proprietary use. The original
+            program (RiboDock) was designed for high-throughput virtual screening of large ligand
+            libraries against RNA targets, in particular the bacterial ribosome. Since 2002 the
+            programs have been substantially rewritten and validated for docking of drug-like
+            ligands to protein and RNA targets. A variety of experimental restraints can be
+            incorporated into the docking calculation, in support of an integrated Structure-Based
+            Drug Design process.</para>
+    </chapter>
+    <chapter id="configuration">
+        <title>Configuration</title>
+        <para>Before launching rDock, make sure the following environment variable are defined.
+            Precise details are likely to be site-specific.</para>
+        <formalpara>
+            <title>RBT_ROOT environment variable</title>
+            <para><varname>$RBT_ROOT</varname> environment variable should be defined to point to
+                the rDock installation directory.</para>
+        </formalpara>
+        <formalpara>
+            <title>RBT_HOME environment variable</title>
+            <para><varname>$RBT_HOME</varname> environment variable is optional, but can defined to
+                to point to a user project directory containing rDock input files and customised
+                data files.</para>
+        </formalpara>
+        <formalpara>
+            <title>PATH environment variable</title>
+            <para><varname>$RBT_ROOT/bin</varname> should be added to the <varname>$PATH</varname>
+                environment variable.</para>
+        </formalpara>
+        <formalpara>
+            <title>LD_LIBRARY_PATH</title>
+            <para><varname>$RBT_ROOT/lib</varname> should be added to the
+                <varname>$LD_LIBRARY_PATH</varname> environment variable.</para>
+        </formalpara>
+        <formalpara>
+            <title>Input file locations</title>
+            <para>The search path for the majority of input files for rDock is: <itemizedlist>
+                    <listitem>
+                        <simpara>Current working directory</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara><varname>$RBT_HOME</varname>, if defined</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The appropriate subdirectory of <varname>$RBT_ROOT/data/</varname>.
+                            For example, the default location for scoring function files is
+                                <varname>$RBT_ROOT/data/sf/</varname>.</simpara>
+                    </listitem>
+                </itemizedlist>The exception is that input ligand SD files are always specified as
+                an absolute path. If you wish to customise a scoring function or docking protocol,
+                it is sufficient to copy the relevant file to the current working directory or to
+                    <varname>$RBT_HOME</varname>, and to modify the copied file.</para>
+        </formalpara>
+        <formalpara>
+            <title>Launching rDock</title>
+            <para>For small scale experimentation, the rDock executables can be launched directly
+                from the command line. However, serious virtual screening campaigns will likely need
+                access to a compute farm. In common with other docking tools, rDock uses the
+                embarrassingly parallel approach to distributed computing. Large ligand libraries
+                are split into smaller chunks, each of which is docked independently on a single
+                machine. Docking jobs are controlled by a distributed resource manager (DRM) such as
+                Condor. The RBT_TEST suite provides some examples of the generation of Condor
+                command files for rDock.</para>
+        </formalpara>
+    </chapter>
+    <chapter id="molecularFileReference">
+        <title>Molecular files and atom typing</title>
+        <simpara>Macromolecular targets (protein or RNA) are input from Tripos MOL2 files
+                (<classname>RbtMOL2FileSource</classname>) or from pairs of Charmm PSF
+                (<classname>RbtPsfFileSource</classname>) and CRD
+            (<classname>RbtCrdFileSource</classname>) files. Ligands are input from MDL SD files
+                (<classname>RbtMdlFileSource</classname>). Explicit structural waters are input
+            optionally from PDB files (<classname>RbtPdbFileSource</classname>). Ligand docking
+            poses are output to MDL SD files.</simpara>
+        <simpara>The rDock scoring functions have been defined and validated for implicit non-polar
+            hydrogen (extended carbon) models only. If you provide all-atom models, be aware that
+            the non-polar hydrogens will be removed automatically. Polar hydrogens must be defined
+            explicitly in the molecular files, and are not added by rDock. Positive ionisable and
+            negative ionisable groups can be automatically protonated and deprotonated respectively
+            to create common charged groups such as guanidinium and carboxylic acid groups.</simpara>
+        <tip>
+            <simpara>MOL2 is now the preferred file format for rDock as it eliminates many of the
+                atom typing issues inherent in preparing and loading PSF files. The use of PSF/CRD
+                files is strongly discouraged. The recommendation is to prepare an all-atom MOL2
+                file with correct Tripos atom types assigned, and allow rDock to remove non-polar
+                hydrogens on-the-fly.</simpara>
+        </tip>
+        <formalpara>
+            <title>Atomic properties</title>
+            <para>rDock requires the following properties to be defined per atom. Depending on the
+                file format, these properties may be loaded directly from the molecular input file,
+                or derived internally once the model is loaded. <itemizedlist>
+                    <listitem>
+                        <simpara>Cartesian (x,y,z) coordinates</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Element (atomic number)</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Formal hybridisation state (sp, sp2, sp3, aromatic, trigonal
+                            planar)</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Formal charge</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Distributed formal charge (known informally as
+                            <emphasis>group</emphasis> charge)</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Tripos force field type (rDock uses a modified version of the Sybyl
+                            5.2 types, extended to include carbon types with implicit non-polar
+                            hydrogens)</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Atom name</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Substructure (residue) name</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Atomic radius (assigned per element from
+                                <filename>$RBT_ROOT/data/RbtElements.dat</filename>)</simpara>
+                    </listitem>
+                </itemizedlist>
+                <note>
+                    <simpara>The rDock scoring functions do not use partial charges and therefore
+                        partial charges do not have to be defined. The atomic radii are simplified
+                        radii defined per element, and are used for cavity mapping and in the polar
+                        scoring function term, but are <emphasis>not</emphasis> used in the vdW
+                        scoring function term. The latter has its own indepedent parameterisation
+                        based on the Tripos force field types.</simpara>
+                </note>
+            </para>
+        </formalpara>
+        <formalpara>
+            <title>Difference between formal charge and distributed formal charge</title>
+            <para>The formal charge on an atom is always an integer. For example, a charged
+                carboxylic acid group ( <literal>COO-</literal>) can be defined formally as a formal
+                double bond to a neutral oxygen sp2, and a formal single bond to a formally charged
+                oxygen sp3. In reality of course, both oxygens are equivalent. rDock distributes the
+                integer formal charge across all equivalent atoms in the charged group that are
+                topologically equivalent. In negatively charged acid groups, the formal charge is
+                distributed equally between the acid oxygens. In positively charged amines, the
+                formal charge is distributed equally between the hydrogens. In charged guanidinium,
+                amidinium, and imidazole groups, the central carbon also receives an equal portion
+                of the formal charge (in addition to the hydrogens). The distributed formal charge
+                is also known as the group charge. The polar scoring functions in rDock use the
+                distributed formal charge to scale the polar interaction strength of the polar
+                interactions.</para>
+        </formalpara>
+        <formalpara>
+            <title>Parsing a MOL2 file</title>
+            <para><literal>MOLECULE</literal>, <literal>ATOM</literal>, <literal>BOND</literal> and
+                    <literal>SUBSTRUCTURE</literal> records are parsed. The atom name, substructure
+                name, Cartesian coordinates and Tripos atom type are read directly for each atom.
+                The element type (atomic number) and formal hybridisation state are derived from the
+                Tripos type using an internal lookup table. Formal charges are <emphasis>not
+                </emphasis> read from the MOL2 file and do not have to be assigned correctly in the
+                file. Distributed formal charges are assigned directly by rDock based on standard
+                substructure and atom names as described below. </para>
+        </formalpara>
+        <formalpara>
+            <title>Parsing an SD file</title>
+            <para>Cartesian coordinates, element and formal charge are read directly for each atom.
+                Formal bond orders are read for each bond. Atom names are derived from element name
+                and atom ID ( e.g. <literal>C1</literal>, <literal>N2</literal>,
+                <literal>C3</literal> etc). The substructure name is <literal>MOL</literal>. Formal
+                hybridisation states are derived internally for each atom based on connectivity
+                patterns and formal bond orders. The Tripos types are asssigned using internal rules
+                based on atomic number, formal hybridisation state and formal charges. The integer
+                formal charges are distributed automatically across all topologically equivalent
+                atoms in the charged group.</para>
+        </formalpara>
+        <formalpara>
+            <title>Assigning distributed formal charges to the receptor</title>
+            <para>rDock provides a file format independent method for assigning distributed formal
+                charges directly to the receptor atoms, which is used by the MOL2 and PSF/CRD file
+                readers. The method uses a lookup table based on standard substructure and atom
+                names, and does not require the integer formal charges to be assigned to operate
+                correctly. The lookup table file is
+                <filename>$RBT_ROOT/data/sf/RbtIonicAtoms.prm</filename>. Each section name
+                represents a substructure name that contains formally charged atoms. The entries
+                within the section represent the atom names and distributed formal charges for that
+                substructure name. The file provided with rDock contains entries for all standard
+                amino acids and nucleic acids, common metals, and specific entries required for
+                processing the GOLD CCDC/Astex validation sets. <important>
+                    <simpara>You may have to extend <filename>RbtIonicAtoms.prm</filename> if you
+                        are working with non-standard receptor substructure names and/or atom names,
+                        in order for the distributed formal charges to be assigned
+                    correctly.</simpara>
+                </important></para>
+        </formalpara>
+    </chapter>
+    <chapter id="cavityMappingReference">
+        <title>Cavity mapping</title>
+        <para>Virtual screening is very rarely conducted against entire macromolecules. The usual
+            practice is to dock small molecules in a much more confined region of interest. rDock
+            makes a clear distinction between the region the ligand is allowed to explore (known
+            here as the docking site), and the receptor atoms that need to be included in order to
+            calculate the score correctly. The former is controlled by the cavity mapping algorithm,
+            whilst the latter is scoring function dependent as it depends on the distance range of
+            each component term (for example, vdW range >> polar range). For this reason, it is
+            usual practice with rDock to prepare intact receptor files (rather than truncated
+            spheres around the region of interest), and to allow each scoring function term to
+            isolate the relevant receptor atoms within range of the docking site.</para>
+        <para>Dock provides two methods for defining the docking site:<itemizedlist>
+                <listitem>
+                    <para>Two sphere method</para>
+                </listitem>
+                <listitem>
+                    <para>Reference ligand method</para>
+                </listitem>
+            </itemizedlist>
+        </para>
+        <formalpara>
+            <title>Two sphere method</title>
+            <para>The two sphere method aims to find cavities that are accessible to a small sphere
+                (of typical atomic or solvent radius) but are inaccessible to a larger sphere. The
+                larger sphere probe will eliminate flat and convex regions of the receptor surface,
+                and also shallow cavities. The regions that remain and are accessible to the small
+                sphere are likely to be the “nice well defined” cavities of interest for drug design
+                purposes.</para>
+        </formalpara>
+        <procedure id="twoSphereProcedure">
+            <title>Two sphere mapping algorithm</title>
+            <step>
+                <para>A grid is placed over the cavity mapping region, encompassing a sphere of
+                    radius=RADIUS, center=CENTER. Cavity mapping is restricted to this sphere. All
+                    cavities located will be wholly within this sphere. Any cavity that would
+                    otherwise protrude beyond the cavity mapping sphere will be truncated at the
+                    periphery of the sphere.</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/TwoSphere1.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>Grid points within the volume occupied by the receptor are excluded (coloured
+                    red). The radii of the receptor atoms are increased temporarily by VOL_INCR in
+                    this step.</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/TwoSphere2.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>Probes of radii LARGE_SPHERE are placed on each remaining unallocated grid
+                    point and checked for clashes with receptor excluded volume. To eliminate edge
+                    effects, the grid is extended beyond the cavity mapping region by the diameter
+                    of the large sphere (for this step only). This allows the large probe to be
+                    placed on grid points outside of the cavity mapping region, yet partially
+                    protrude into the cavity mapping region.</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/TwoSphere3.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>All grid points within the cavity mapping region that are accessible to the
+                    large probe are excluded (coloured green).</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/TwoSphere4.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>Probes of radii SMALL_SPHERE are placed on each remaining grid point and
+                    checked for clashes with receptor excluded volume (red) or large probe excluded
+                    volume (green)</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/TwoSphere5.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>All grid points that are accessible to the small probe are selected (yellow).</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/TwoSphere6.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>The final selection of cavity grid points is divided into distinct cavities
+                    (contiguous regions). In this example only one distinct cavity is found.
+                    User-defined filters of MIN_VOLUME and MAX_CAVITIES are applied at this stage to
+                    select a subset of cavities if required. Note that the filters will accept or
+                    reject intact cavities only.</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/TwoSphere7.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+        </procedure>
+        <formalpara>
+            <title>Reference ligand method</title>
+            <para>The reference ligand method provides a much easier option to define a docking
+                volume of a given size around the binding mode of a known ligand, and is
+                particularly appropriate for large scale automated validation experiments.</para>
+        </formalpara>
+        <procedure id="refLigandProcedure">
+            <step>
+                <para>Reference coordinates are read from REF_MOL. A grid is placed over the cavity
+                    mapping region, encompassing overlapping spheres of radius=RADIUS, centered on
+                    each atom in REF_MOL. Grid points outside of the overlapping spheres are
+                    excluded (coloured green). Grid points within the volume occupied by the
+                    receptor are excluded (coloured red). The vdW radii of the receptor atoms are
+                    increased by VOL_INCR in this step.</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/RefLigand1.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>Probes of radii SMALL_SPHERE are placed on each remaining grid point and
+                    checked for clashes with red or green regions.</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/RefLigand2.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>All grid points that are accessible to the small probe are selected (yellow).</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/RefLigand3.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+            <step>
+                <para>The final selection of cavity grid points is divided into distinct cavities
+                    (contiguous regions). In this example only one distinct cavity is found.
+                    User-defined filters of MIN_VOLUME and MAX_CAVITIES are applied at this stage to
+                    select a subset of cavities if required. Note that the filters will accept or
+                    reject intact cavities only.</para>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="images/RefLigand4.gif" format="GIF" width="2in"/>
+                    </imageobject>
+                </mediaobject>
+            </step>
+        </procedure>
+    </chapter>
+    <chapter id="useCases">
+        <title>Common use cases</title>
+        <para>This section does not pretend to be a comprehensive User Guide. It does, however,
+            highlight the key steps the user must take for different docking strategies, and may
+            serve as a useful checklist in writing such a guide in the future.</para>
+        <section id="standardDock">
+            <title>Standard docking</title>
+            <para>By standard docking, we refer to docking of a flexible, untethered ligand to a
+                receptor in the absence of explicit structural waters or any experimental
+                restraints.</para>
+            <procedure>
+                <title>Standard docking workflow</title>
+                <step>
+                    <para>Prepare a MOL2 file for the protein or nucleic acid target, taking into
+                        account the atom typing issues described above for MOL2 file parsing. The
+                        recommendation is to prepare an all-atom MOL2 file and allow rDock to remove
+                        the non-polar hydrogens on-the-fly.</para>
+                    <important>
+                        <para>Make sure that any non-standard atom names and substructure names are
+                            defined in <filename>$RBT_ROOT/data/sf/RbtIonicAtoms.prm</filename> in
+                            order for the assignment of distributed formal charges to work
+                            correctly.</para>
+                        <para>Make sure that the Tripos atom types are set correctly. rDock uses the
+                            Tripos types to derive other critical atomic properties such as atomic
+                            number and hybridisation state.</para>
+                    </important>
+                    <note>
+                        <para>The rDock MOL2 parser was developed to read the CCDC/Astex
+                                <filename>protein.mol2</filename> files, therefore this validation
+                            set is the <emphasis>de facto</emphasis> standard reference. You should
+                            compare against the format of the CCDC/Astex MOL2 files if you are in
+                            doubt as to whether a particular MOL2 file is suitable for rDock</para>
+                    </note>
+                </step>
+                <step>
+                    <para>Prepare a system definition file. At a minimum, you need to define the
+                        receptor parameters, the cavity mapping parameters (<literal>SECTION
+                        MAPPER</literal>) and the cavity restraint penalty (<literal>SECTION
+                        CAVITY</literal>). Make sure you define the <literal>RECEPTOR_FLEX</literal>
+                        parameter if you wish to activate sampling of terminal OH and NH3+ groups in
+                        the vicinity of the docking site.</para>
+                </step>
+                <step>
+                    <para>Generate the docking site (.as) file using <filename>rbcavity</filename>.
+                        You will require a reference bound ligand structure in the coordinate space
+                        of the receptor if you wish to use the reference ligand cavity mapping
+                        method.</para>
+                </step>
+                <step>
+                    <para>Prepare the ligand SD files you wish to dock, taking into account the atom
+                        typing issues described above for SD file parsing. In particular, make sure
+                        that formal charges and formal bond order are defined coherently so that
+                        there are no formal valence errors in the file. rDock will report any
+                        perceived valence errors but will dock the structures anyway. Note that
+                        rDock never samples bond lengths, bond angles, ring conformations, or
+                        non-rotatable bonds during docking so initial conformations should be
+                        reasonable.</para>
+                </step>
+                <step>
+                    <para>Run a small test calculation to check that the system is defined
+                        correctly. For example, run <filename>rbdock</filename> from the command
+                        line with a small ligand SD file, with the score-only protocol (<literal>-p
+                            score.prm</literal>) and with the <literal>-T 2</literal> option to
+                        generate verbose output. The output will include receptor atom properties,
+                        ligand atom properties, flexibility parameters, scoring function parameters
+                        and docking protocol parameters.</para>
+                </step>
+                <step>
+                    <para>When satisfied, launch the full-scale calculations. A description of the
+                        various means of launching rDock is beyond the scope of this guide.</para>
+                </step>
+            </procedure>
+        </section>
+        <section id="tetheredDock">
+            <title>Tethered scaffold docking</title>
+            <para>In tethered scaffold docking, the ligand poses are restricted and forced to
+                overlay the substructure coordinates of a reference ligand. The procedure is largely
+                as for standard docking, except that: <itemizedlist>
+                    <listitem>
+                        <para>Ligand SD files must be prepared with the
+                            <filename>rbtether</filename> utility to annotate each record with the
+                            matching substructure atom indices, and to transform the coordinates of
+                            each ligand so that the matching substructure coordinates are overlaid
+                            with the reference substructure coordinates. This requires a Daylight
+                            SMARTS toolkit license.</para>
+                    </listitem>
+                    <listitem>
+                        <para>The system definition file should contain a <literal>SECTION
+                            LIGAND</literal> to define which of the the ligand degrees of freedom
+                            should be tethering to their reference values. Tethering can be applied
+                            to position, orientation and dihedral degrees of freedom independently.
+                            Note that the tethers are applied directly within the chromosome
+                            representation used by the search engine (where they affect the
+                            randomisation and mutation operators), and therefore external restraint
+                            penalty functions to enforce the tethers are not required.</para>
+                        <important>
+                            <para>The reference state values for each tethered degree of freedom are
+                                defined directly from the initial conformation of each ligand as
+                                read from the input SD file, and <emphasis>not</emphasis> from the
+                                reference SD file used by <filename>rbtether</filename>. This is why
+                                the ligand coordinates are transformed by
+                                <filename>rbtether</filename>, such that each ligand record can act
+                                as its own reference state. The reference SD file used by
+                                    <filename>rbtether</filename> is not referred to by the docking
+                                calculation itself.</para>
+                            <para>It follows from the above that tethered ligand docking is
+                                inappropriate for input ligand SD files that have not already been
+                                transformed to the coordinate space of the docking site, either by
+                                    <filename>rbtether</filename> or by some other means.</para>
+                        </important>
+                        <example>
+                            <title>Example ligand definition for tethered scaffold</title>
+                            <para>This definition will tether the position and orientation of the
+                                tethered substructure, but will allow free sampling of ligand
+                                dihedrals.</para>
+                            <programlisting>
+ SECTION LIGAND
+    TRANS_MODE TETHERED
+    ROT_MODE TETHERED
+    DIHEDRAL_MODE FREE
+    MAX_TRANS 1.0
+    MAX_ROT 30.0
+END_SECTION</programlisting>
+                        </example>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+        <section id="pharmaDock">
+            <title>Docking with pharmacophore restraints</title>
+            <para>In pharmacophore restrained docking, ligand poses are biased to fit user-defined
+                pharmacophore points. The bias is introduced through the use of an external penalty
+                restraint, which penalises docking poses that do not match the pharmacophore
+                restraints. Unlike tethered scaffold docking, there is no modification to the
+                chromosome operators themselves, hence the search can be inefficient, particularly
+                for large numbers of restraints and/or for ligands with large numbers of matching
+                features. Pre-screening of ligands is based purely on feature counts, and not on
+                geometric match considerations.</para>
+            <para>The implementation supports both mandatory and optional pharmacophore restraints.
+                The penalty function is calculated over all mandatory restraints, and over (any
+                    <varname>NOPT</varname> from <literal>N</literal>) of the optional restraints.
+                For example, you may wish to ensure that any 4 from 7 optional restraints are
+                satisfied in the generated poses.</para>
+            <para>The procedure is largely as for standard docking, except that: <itemizedlist>
+                    <listitem>
+                        <para>You should prepare separate pharmacophore restraint files for the
+                            mandatory and optional restraints. Note that optional restraints do not
+                            have to be defined, it is sufficient to only define at least one
+                            mandatory restraint.</para>
+                    </listitem>
+                    <listitem>
+                        <para>The system definition file should contain a <literal>SECTION
+                            PHARMA</literal> to add the pharmacophore restraint penalty to the
+                            scoring function.</para>
+                    </listitem>
+                </itemizedlist></para>
+        </section>
+        <section id="waterDock">
+            <title>Docking with explicit waters</title>
+            <para>Explicit structural waters can be loaded from an external PDB file, independently
+                from the main receptor model, by adding a <literal>SECTION SOLVENT</literal> to the
+                system definition file. The user has fine control over the flexibility of each water
+                molecule. A total of 9 flexibility modes are possible, in which the translational
+                and rotational degrees of freedom of each water can be set independently to
+                    <literal>FIXED</literal>, <literal>TETHERED</literal>, or
+                <literal>FREE</literal>. Thus, for example, it is possible to define a water with a
+                fixed oxygen coordinate (presumably at a crystallographically observed position),
+                but freely rotating such that the orientation of the water hydrogens can be
+                optimised by the search engine (and can be ligand-dependent).</para>
+            <note>
+                <simpara>In the current implementation, <wordasword>solvent</wordasword> refers
+                    strictly to <wordasword>water</wordasword> molecules, and the format of the
+                    water PDB file is very strictly defined. In future implementations it is
+                    anticipated that other, larger (and possibly flexible) molecules will be
+                    loadable as solvent, and that other file formats will be supported. </simpara>
+            </note>
+            <procedure>
+                <title>Explicit waters workflow</title>
+                <step>
+                    <simpara>Prepare a separate PDB file for the explicit waters according to the
+                        format prescribed (<xref linkend="waterPDBformat"/>)</simpara>
+                </step>
+                <step>
+                    <simpara>Add a <literal>SECTION SOLVENT</literal> to the system definition file
+                        and define the relevant flexibility parameters (<xref
+                            linkend="solvParamTable"/>). The minimal requirement is to define the
+                            <varname>FILE</varname> parameter. </simpara>
+                </step>
+                <step>
+                    <para>Decide whether you wish to have different per-solvent flexibility modes
+                        (defined via the occupancy values and temperature factor values in the PDB
+                        file (<xref linkend="tempFactorModes"/>)), or whether you wish to have a
+                        single flexibility mode applied to all waters (defined via the
+                            <literal>TRANS_MODE</literal> and <literal>ROT_MODE</literal> values in
+                        the <literal>SECTION SOLVENT</literal> of the receptor .prm file) <important>
+                            <simpara>If you wish to use per-solvent flexibility modes (that is, you
+                                wish to set different modes for different waters) make sure that you
+                                do not define <varname>TRANS_MODE</varname> or
+                                <varname>ROT_MODE</varname> entries in the <literal>SECTION
+                                SOLVENT</literal> as these values will override the per-solvent
+                                values derived from the temperature factors in the PDB
+                            file.</simpara>
+                        </important>
+                    </para>
+                </step>
+                <step>
+                    <simpara>If you have defined any waters with <literal>TETHERED</literal>
+                        translational or rotational degrees of freedom, define
+                        <varname>MAX_TRANS</varname> and/or <varname>MAX_ROT</varname> values as
+                        appropriate (or accept the default values. The tethered ranges are applied
+                        to all tethered waters and can not be defined on a per-solvent basis at
+                        present.</simpara>
+                </step>
+            </procedure>
+        </section>
+    </chapter>
+    <chapter id="scoringFunctions">
+        <title>Scoring function reference</title>
+        <simpara>Scoring functions for docking are constructed at run-time (by class
+                <classname>RbtSFFactory</classname>) from scoring function definition files (rDock
+            .prm format). The default location for scoring function definition files is
+                <filename>$RBT_ROOT/data/sf/</filename>.</simpara>
+        <simpara>The total score is an aggregate of intermolecular ligand-receptor and
+            ligand-solvent interactions (branch <literal>SCORE.INTER</literal>), intra-ligand
+            interactions (branch <literal>SCORE.INTRA</literal>), intra-receptor, intra-solvent and
+            receptor-solvent interactions (branch <literal>SCORE.SYSTEM</literal>), and external
+            restraint penalties (branch <literal>SCORE.RESTR</literal>).</simpara>
+        <simpara>The <literal>SCORE.INTER</literal>, <literal>SCORE.INTRA</literal> and
+                <literal>SCORE.SYSTEM</literal> branches consist of weighted sums of interaction
+            terms as shown below. Note that not all terms appear in all branches. See the rDock
+            draft paper for more details on the implementation of these terms.</simpara>
+        <table>
+            <title>Scoring function terms and C++ implementation classes</title>
+            <tgroup cols="5">
+                <thead>
+                    <row>
+                        <entry>Term</entry>
+                        <entry>Description</entry>
+                        <entry>INTER</entry>
+                        <entry>INTRA</entry>
+                        <entry>SYSTEM</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>VDW</entry>
+                        <entry>van der Waals</entry>
+                        <entry>
+                            <classname>RbtVdwIdxSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtVdwIntraSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtVdwIdxSF</classname>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>VDW</entry>
+                        <entry>van der Waals (grid-based)</entry>
+                        <entry>
+                            <classname>RbtVdwGridSF</classname>
+                        </entry>
+                        <entry> N/A </entry>
+                        <entry> N/A </entry>
+                    </row>
+                    <row>
+                        <entry>POLAR</entry>
+                        <entry>Attractive polar</entry>
+                        <entry>
+                            <classname>RbtPolarIdxSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtPolarIntraSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtPolarIdxSF</classname>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>REPUL</entry>
+                        <entry>Repulsive polar</entry>
+                        <entry>
+                            <classname>RbtPolarIdxSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtPolarIntraSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtPolarIdxSF</classname>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>SOLV</entry>
+                        <entry>Desolvation</entry>
+                        <entry>
+                            <classname>RbtSAIdxSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtSAIdxSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtSAIdxSF</classname>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>DIHEDRAL</entry>
+                        <entry>Dihedral potential</entry>
+                        <entry>N/A</entry>
+                        <entry>
+                            <classname>RbtDihedralIntraSF</classname>
+                        </entry>
+                        <entry>
+                            <classname>RbtDihedralTargetSF</classname>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>CONST</entry>
+                        <entry>Translation/rotational binding entropy penalty</entry>
+                        <entry>
+                            <classname>RbtConstSF</classname>
+                        </entry>
+                        <entry>N/A</entry>
+                        <entry>
+                            <classname>RbtConstSF</classname>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>ROT</entry>
+                        <entry>Torsional binding entropy penalty</entry>
+                        <entry>
+                            <classname>RbtRotSF</classname>
+                        </entry>
+                        <entry>N/A</entry>
+                        <entry>N/A</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <simpara>Two intermolecular scoring functions (<literal>SCORE.INTER</literal> branch) have
+            been validated. These are known informally as the standard scoring function and the
+            desolvation scoring function (referred to as SF3 and SF5 respectively in the rDock draft
+            paper). The standard intermolecular scoring function consists of <literal>VDW</literal>,
+                <literal>POLAR</literal> and <literal>REPUL</literal> terms. In the desolvation
+            scoring function, the <literal>REPUL</literal> term is replaced by a more finely
+            parameterised desolvation potential (<literal>SOLV</literal> term) based on a Weighted
+            Solvent-Accessible Surface Area (WSAS) model. The ligand intramolecular scoring function
+                (<literal>SCORE.INTRA</literal> branch) remains constant in both cases, and has the
+            same terms and weights as the standard intermolecular scoring function.</simpara>
+        <table id="scoringFunctionDataFiles">
+            <title>Scoring function data files</title>
+            <tgroup cols="2">
+                <thead>
+                    <row>
+                        <entry>File</entry>
+                        <entry>Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>RbtInterIdxSF.prm</entry>
+                        <entry>Intermolecular scoring function definition (standard scoring
+                            function, SF3)</entry>
+                    </row>
+                    <row>
+                        <entry>RbtInterGridSF.prm</entry>
+                        <entry>As above, but vdW term uses a precalculated grid</entry>
+                    </row>
+                    <row>
+                        <entry>RbtSolvIdxSF.prm</entry>
+                        <entry>Intermolecular scoring function definition (desolvation scoring
+                            function, SF5)</entry>
+                    </row>
+                    <row>
+                        <entry>RbtSolvGridSF.prm</entry>
+                        <entry>As above, but vdW term uses a precalculated grid</entry>
+                    </row>
+                    <row>
+                        <entry>RbtIntraSF.prm</entry>
+                        <entry>Ligand intramolecular scoring function definition</entry>
+                    </row>
+                    <row>
+                        <entry>RbtTargetSF.prm</entry>
+                        <entry>System scoring function definition (just contains
+                            SCORE.SYSTEM.DIHEDRAL, see Notes below)</entry>
+                    </row>
+                    <row>
+                        <entry>calcgrid_vdw1.prm</entry>
+                        <entry>vdW term only (<literal>ECUT=1</literal>), for calculating vdW grid
+                            (used by <literal>rbcalcgrid</literal>)</entry>
+                    </row>
+                    <row>
+                        <entry>calcgrid_vdw5.prm</entry>
+                        <entry>vdW term only (<literal>ECUT=5</literal>), for calculating vdW grid
+                            (used by <literal>rbcalcgrid</literal>)</entry>
+                    </row>
+                    <row>
+                        <entry>Tripos52_vdw.prm</entry>
+                        <entry>vdW term parameter file</entry>
+                    </row>
+                    <row>
+                        <entry>Tripos52_dihedrals.prm</entry>
+                        <entry>Dihedral term parameter file</entry>
+                    </row>
+                    <row>
+                        <entry>solvation_asp.prm</entry>
+                        <entry>Desolvation term parameter file</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <note>
+            <simpara>External restraint penalty terms are defined by the user in the system
+                definition .prm file.</simpara>
+            <simpara>Originally, rDock did not support flexible receptor dihedrals or explicit
+                structural waters, and the overall scoring function consisted of just the
+                    <literal>SCORE.INTER</literal> and <literal>SCORE.INTRA</literal> branches. At
+                that time, the intermolecular scoring function definition file (e.g.
+                    <filename>RbtInterIdxSF.prm</filename>) represented precisely the SCORE.INTER
+                terms, and the intramolecular definition file (<filename>RbtIntraSF.prm</filename>)
+                represented precisely the SCORE.INTRA terms. With the introduction of receptor
+                flexibility and explicit structural waters (and hence the need for the
+                    <literal>SCORE.SYSTEM</literal> branch), the situation is slightly more complex.
+                For implementation reasons, many of the terms reported under
+                <literal>SCORE.SYSTEM</literal> (with the exception of the dihedral term) are
+                calculated simultaneously with the terms reported under
+                <literal>SCORE.INTER</literal>, and hence their parameterisation is defined
+                implicitly in the intermolecular scoring function definition file. In contrast, the
+                ligand intramolecular scoring function terms can be controlled independently.</simpara>
+            <simpara/>
+        </note>
+    </chapter>
+    <chapter id="dockingProtocols">
+        <title>Docking protocol reference</title>
+        <simpara>Docking protocols are constructed at run-time (by class
+                <classname>RbtTransformFactory</classname>) from docking protocol definition files
+            (rDock .prm format). The default location for docking protocol files is
+                <filename>$RBT_ROOT/data/scripts/</filename>.</simpara>
+        <simpara>The docking protocol definition file defines the sequence of search algorithms that
+            constitute a single docking run for a single ligand record. Each search algorithm
+            component operates either on a single chromosome representing the system degrees of
+            freedom, or on a population of such chromosomes.</simpara>
+        <simpara>The chromosome is constructed (by <classname>RbtChromFactory</classname>) as an
+            aggregate of individual chromosome elements for the receptor, ligand and explicit
+            solvent degrees of freedom, as defined by the flexibility parameters in the system
+            definition file.</simpara>
+        <table id="chromElements">
+            <title>Chromsome elements</title>
+            <tgroup cols="4">
+                <thead>
+                    <row>
+                        <entry>Element</entry>
+                        <entry>Defined by</entry>
+                        <entry>Class</entry>
+                        <entry>Length</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>Position</entry>
+                        <entry>Centre of mass</entry>
+                        <entry>
+                            <classname>RbtChromPositionElement</classname>
+                        </entry>
+                        <entry>3</entry>
+                    </row>
+                    <row>
+                        <entry>Orientation</entry>
+                        <entry>Euler angles for principal axes</entry>
+                        <entry>
+                            <classname>RbtChromPositionElement</classname>
+                        </entry>
+                        <entry>3</entry>
+                    </row>
+                    <row>
+                        <entry>Dihedral</entry>
+                        <entry>Dihedral angle for rotatable bond</entry>
+                        <entry>
+                            <classname>RbtChromDihedralElement</classname>
+                        </entry>
+                        <entry>1 per bond</entry>
+                    </row>
+                    <row>
+                        <entry>Occupancy</entry>
+                        <entry>Explicit water occupancy state</entry>
+                        <entry>
+                            <classname>RbtChromOccupancylElement</classname>
+                        </entry>
+                        <entry>1 per water</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="searchComponents">
+            <title>Search algorithm components and C++ implementation classes</title>
+            <tgroup cols="3">
+                <thead>
+                    <row>
+                        <entry>Component</entry>
+                        <entry>Class</entry>
+                        <entry>Operates on</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>Randomise population</entry>
+                        <entry>
+                            <classname>RbtRandPopTransform</classname>
+                        </entry>
+                        <entry>Chromosome population</entry>
+                    </row>
+                    <row>
+                        <entry>Genetic algorithm search</entry>
+                        <entry>
+                            <classname>RbtGATransform</classname>
+                        </entry>
+                        <entry>Chromosome population</entry>
+                    </row>
+                    <row>
+                        <entry>Monte Carlo simulated annealing</entry>
+                        <entry>
+                            <classname>RbtSimAnnTransform</classname>
+                        </entry>
+                        <entry>Single chromosome</entry>
+                    </row>
+                    <row>
+                        <entry>Simplex minimisation</entry>
+                        <entry>
+                            <classname>RbtSimplexTransform</classname>
+                        </entry>
+                        <entry>Single chromosome</entry>
+                    </row>
+                    <row>
+                        <entry>Null operation</entry>
+                        <entry>
+                            <classname>RbtNullTransform</classname>
+                        </entry>
+                        <entry>N/A</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="protocolDataFiles">
+            <title>Docking protocol data files</title>
+            <tgroup cols="2">
+                <thead>
+                    <row>
+                        <entry>File</entry>
+                        <entry>Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>score.prm</entry>
+                        <entry>Calculates score only for initial conformation (standard scoring
+                            function)</entry>
+                    </row>
+                    <row>
+                        <entry>score_solv.prm</entry>
+                        <entry>As above, but uses desolvation scoring function</entry>
+                    </row>
+                    <row>
+                        <entry>minimise.prm</entry>
+                        <entry>Simplex minimisation of initial conformation (standard scoring
+                            function)</entry>
+                    </row>
+                    <row>
+                        <entry>minimise_solv.prm</entry>
+                        <entry>As above, but uses desolvation scoring function</entry>
+                    </row>
+                    <row>
+                        <entry>dock.prm</entry>
+                        <entry>Full docking search (standard scoring function)</entry>
+                    </row>
+                    <row>
+                        <entry>dock_solv.prm</entry>
+                        <entry>As above, but uses desolvation scoring function</entry>
+                    </row>
+                    <row>
+                        <entry>dock_grid.prm</entry>
+                        <entry>Full docking search (standard scoring function, grid-based vdW
+                        term)</entry>
+                    </row>
+                    <row>
+                        <entry>dock_solv_grid.prm</entry>
+                        <entry>Full docking search (desolvation scoring function, grid-based vdW
+                            term)</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <para>The standard rDock docking protocol consists of three phases of a Genetic Algorithm
+            search, followed by low-temperature Monte Carlo and Simplex minimisation. By way of
+            example, the <filename>dock.prm</filename> script is documented in detail. The other
+            scripts are very similar. <example>
+                <title>Standard rDock docking protocol (<filename>dock.prm</filename>)</title>
+                <programlisting>
+SECTION SCORE
+    INTER    RbtInterIdxSF.prm
+    INTRA    RbtIntraSF.prm
+    SYSTEM   RbtTargetSF.prm
+END_SECTION</programlisting>
+                <para>The scoring function definition is referenced within the docking protocol
+                    definition file itself, in the <literal>SCORE</literal> section. This section
+                    contains entries for the <literal>INTER</literal>, <literal>INTRA</literal> and
+                        <literal>SYSTEM</literal> scoring function definition files. </para>
+                <programlisting>
+SECTION SETSLOPE_1
+    TRANSFORM                       RbtNullTransform
+    WEIGHT@SCORE.RESTR.CAVITY       5.0     # Dock with a high penalty for leaving the cavity
+    WEIGHT@SCORE.INTRA.DIHEDRAL     0.1     # Gradually ramp up dihedral weight from 0.1->0.5
+    ECUT@SCORE.INTER.VDW            1.0     # Gradually ramp up energy cutoff for switching to quadratic
+    USE_4_8@SCORE.INTER.VDW         TRUE    # Start docking with a 4-8 vdW potential
+    DA1MAX@SCORE.INTER.POLAR        180.0   # Broader angular dependence
+    DA2MAX@SCORE.INTER.POLAR        180.0   # Broader angular dependence
+    DR12MAX@SCORE.INTER.POLAR       1.5     # Broader distance range
+END_SECTION</programlisting>
+                <para>All sections that contain the <literal>TRANSFORM</literal> parameter are
+                    interpreted as a search algorithm component. The value of the
+                    <literal>TRANSFORM</literal> parameter is the C++ implementation class name for
+                    that transform. An <classname>RbtNullTransform</classname> can be used to send
+                    messages to the scoring function to modify key scoring function parameters in
+                    order to increase search efficiency. All parameter names that contain the
+                        <literal>@</literal> symbol are interpreted as scoring function messages,
+                    where the string before the <literal>@</literal> is the scoring function
+                    parameter name, the string after the <literal>@</literal> is the scoring
+                    function term, and the parameter value is the new value for the scoring function
+                    parameter. Messages are sent blind, with no success feedback, as the the docking
+                    protocol has no knowledge of the composition of the scoring function terms.</para>
+                <para>Here, we start the docking with a soft 4-8 vdW potential, a reduced dihedral
+                    potential, and extended polar ranges (distances and angles) for the
+                    intermolecular polar potential. These changes are all designed to aid sampling
+                    efficiency by not overpenalising bad contacts in the initial, randomised
+                    population, and by encouraging the formation of intermolecular hydrogen bonds.</para>
+                <programlisting>
+SECTION RANDOM_POP
+    TRANSFORM                       RbtRandPopTransform
+    POP_SIZE                        50
+    SCALE_CHROM_LENGTH              TRUE
+END_SECTION</programlisting>
+                <para>Creates an initial, randomised chromosome population. If
+                        <literal>SCALE_CHROM_LENGTH</literal> is false, the population is of fixed
+                    size, defined by <literal>POP_SIZE</literal>. If
+                    <literal>SCALE_CHROM_LENGTH</literal> is true, the population is proportional to
+                    the overall chromosome length, defined by <literal>POP_SIZE</literal> multiplied
+                    by the chromosome length.</para>
+                <programlisting>
+SECTION GA_SLOPE1
+    TRANSFORM                       RbtGATransform
+    PCROSSOVER                      0.4     # Prob. of crossover
+    XOVERMUT                        TRUE    # Cauchy mutation after each crossover
+    CMUTATE                         FALSE   # True = Cauchy; False = Rectang. for regular mutations
+    STEP_SIZE                       1.0     # Max relative mutation
+END_SECTION</programlisting>
+                <para>First round of GA.</para>
+                <programlisting>
+SECTION SETSLOPE_3
+    TRANSFORM                       RbtNullTransform
+    WEIGHT@SCORE.INTRA.DIHEDRAL     0.2
+    ECUT@SCORE.INTER.VDW            5.0
+    DA1MAX@SCORE.INTER.POLAR        140.0
+    DA2MAX@SCORE.INTER.POLAR        140.0
+    DR12MAX@SCORE.INTER.POLAR       1.2
+END_SECTION</programlisting>
+                <para>Increases the ligand dihedral weight, increases the short-range intermolecular
+                    vdW hardness (<literal>ECUT</literal>), and decreases the range of the
+                    intermolecular polar distances and angles.</para>
+                <programlisting>
+SECTION GA_SLOPE3
+    TRANSFORM                       RbtGATransform
+    PCROSSOVER                      0.4     # Prob. of crossover
+    XOVERMUT                        TRUE    # Cauchy mutation after each crossover
+    CMUTATE                         FALSE   # True = Cauchy; False = Rectang. for regular mutations
+    STEP_SIZE                       1.0     # Max relative mutation
+END_SECTION</programlisting>
+                <para>Second round of GA with revised scoring function parameters.</para>
+                <programlisting>
+SECTION SETSLOPE_5
+    TRANSFORM                       RbtNullTransform
+    WEIGHT@SCORE.INTRA.DIHEDRAL     0.3
+    ECUT@SCORE.INTER.VDW            25.0
+    USE_4_8@SCORE.INTER.VDW         FALSE   # Now switch to a convential 6-12 for final GA, MC, minimisation
+    DA1MAX@SCORE.INTER.POLAR        120.0
+    DA2MAX@SCORE.INTER.POLAR        120.0
+    DR12MAX@SCORE.INTER.POLAR       0.9
+END_SECTION</programlisting>
+                <para>Further increases the ligand dihedral weight, further increases the
+                    short-range intermolecular vdW hardness (<literal>ECUT</literal>), and further
+                    decreases the range of the intermolecular polar distances and angles. Also
+                    switches from softer 4-8 vdW potential to a harder 6-12 potential for final
+                    round of GA, MC and minimisation.</para>
+                <programlisting>                 
+SECTION GA_SLOPE5
+    TRANSFORM                       RbtGATransform
+    PCROSSOVER                      0.4     # Prob. of crossover
+    XOVERMUT                        TRUE    # Cauchy mutation after each crossover
+    CMUTATE                         FALSE   # True = Cauchy; False = Rectang. for regular mutations
+    STEP_SIZE                       1.0     # Max relative mutation
+END_SECTION</programlisting>
+                <para>Final round of GA with revised scoring function parameters.</para>
+                <programlisting>
+SECTION SETSLOPE_10
+    TRANSFORM                       RbtNullTransform
+    WEIGHT@SCORE.INTRA.DIHEDRAL     0.5     # Final dihedral weight matches SF file
+    ECUT@SCORE.INTER.VDW            120.0   # Final ECUT matches SF file
+    DA1MAX@SCORE.INTER.POLAR        80.0
+    DA2MAX@SCORE.INTER.POLAR        100.0
+    DR12MAX@SCORE.INTER.POLAR       0.6
+END_SECTION</programlisting>
+                <para>Resets all the modified scoring function parameters to their final values,
+                    corresponding to the values in the scoring function definition files. It is
+                    important that the final scoring function optimised by the docking search can be
+                    compared directly with the score-only and minimisation-only protocols, in which
+                    the scoring function parameters are not modified.</para>
+                <programlisting>
+SECTION MC_10K
+    TRANSFORM                       RbtSimAnnTransform
+    START_T                         10.0
+    FINAL_T                         10.0
+    NUM_BLOCKS                      5
+    STEP_SIZE                       0.1
+    MIN_ACC_RATE                    0.25
+    PARTITION_DIST                  8.0
+    PARTITION_FREQ                  50
+    HISTORY_FREQ                    0
+END_SECTION</programlisting>
+                <para>Low temperature Monte Carlo sampling, starting from fittest chromosome from
+                    final round of GA.</para>
+                <programlisting>
+SECTION SIMPLEX
+    TRANSFORM                       RbtSimplexTransform
+    MAX_CALLS                       200
+    NCYCLES                         20
+    STOPPING_STEP_LENGTH            10e-4
+    PARTITION_DIST                  8.0
+    STEP_SIZE                       1.0
+    CONVERGENCE                     0.001
+END_SECTION</programlisting>
+                <para>Simplex minimisation, starting from fittest chromosome from low temperature
+                    Monte Carlo sampling.</para>
+                <programlisting>
+SECTION FINAL
+    TRANSFORM                       RbtNullTransform
+    WEIGHT@SCORE.RESTR.CAVITY       1.0     # revert to standard cavity penalty
+END_SECTION</programlisting>
+                <para>Finally, we reset the cavity restraint penalty to 1. The penalty has been held
+                    at a value of 5 throughout the search, to strongly discourage the ligand from
+                    leaving the docking site.</para>
+            </example>
+        </para>
+    </chapter>
+    <chapter id="systemDefinition">
+        <title>System definition file reference</title>
+        <simpara>Although known previously as the <wordasword>receptor</wordasword> .prm file, the
+            system definition file has evolved to contain much more than the receptor information.
+            The system definition file is used to define:</simpara>
+        <itemizedlist>
+            <listitem>
+                <simpara>Receptor input files and flexibility parameters (<xref linkend="receptor"
+                    />)</simpara>
+            </listitem>
+            <listitem>
+                <simpara>Explicit solvent input file and flexibility parameters (<xref
+                        linkend="solvent"/>)</simpara>
+            </listitem>
+            <listitem>
+                <simpara>Ligand flexibility parameters (<xref linkend="ligand"/>).</simpara>
+            </listitem>
+            <listitem>
+                <simpara>External restraint terms to be added to the total scoring function (e.g.
+                    cavity restraint, pharmacophoric restraint)</simpara>
+            </listitem>
+        </itemizedlist>
+        <section id="receptor">
+            <title>Receptor definition</title>
+            <simpara>The receptor can be loaded from a single MOL2 file, or from a combination of
+                Charmm PSF and CRD files. In the former case the MOL2 file provides the topology and
+                reference coordinates simultaneously, whereas in the latter case the topology is
+                loaded from the PSF file and the reference coordinates from the CRD file. </simpara>
+            <simpara>For historical compatibility reasons, receptor definition parameters are all
+                defined in the top-level namespace and should not be placed between
+                    <literal>SECTION</literal>..<literal>END_SECTION</literal> pairs.</simpara>
+            <caution>
+                <simpara> If MOL2 and PSF/CRD parameters are defined together, the MOL2 parameters
+                    take precedence and are used to load the receptor model. </simpara>
+            </caution>
+            <table id="recepParamTable">
+                <title>Receptor definition parameters</title>
+                <tgroup cols="5">
+                    <colspec colnum="1" colname="par" colwidth="2*"/>
+                    <colspec colnum="2" colname="desc" colwidth="2*"/>
+                    <colspec colnum="3" colname="type" colwidth="1*"/>
+                    <colspec colnum="4" colname="def" colwidth="1*"/>
+                    <colspec colnum="5" colname="range" colwidth="1*"/>
+                    <spanspec namest="par" nameend="range" spanname="allCols"/>
+                    <thead>
+                        <row>
+                            <entry>Parameter</entry>
+                            <entry>Description</entry>
+                            <entry>Type</entry>
+                            <entry>Default</entry>
+                            <entry>Range of values</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry spanname="allCols">
+                                <simpara>Parameters specific to loading receptor in MOL2 file
+                                    format. </simpara>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RECEPTOR_FILE</varname>
+                            </entry>
+                            <entry>Name of receptor MOL2 file</entry>
+                            <entry>Filename string</entry>
+                            <entry>No default value</entry>
+                            <entry>Valid MOL2 filename</entry>
+                        </row>
+                        <row>
+                            <entry spanname="allCols">Parameters specific to loading receptor in
+                                Charmm PSF/CRD file format</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RECEPTOR_TOPOL_FILE</varname>
+                            </entry>
+                            <entry>Name of receptor Charmm PSF file</entry>
+                            <entry>Filename string</entry>
+                            <entry>No default value</entry>
+                            <entry>Valid Charmm PSF filename</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RECEPTOR_COORD_FILE</varname>
+                            </entry>
+                            <entry>Name of receptor Charmm CRD file</entry>
+                            <entry>Filename string</entry>
+                            <entry>No default value</entry>
+                            <entry>Valid Charmm CRD filename</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RECEPTOR_MASSES_FILE</varname>
+                            </entry>
+                            <entry>Name of rDock-annotated Charmm masses file</entry>
+                            <entry>Filename string</entry>
+                            <entry>No default value</entry>
+                            <entry>
+                                <simplelist>
+                                    <member>
+                                        <filename>masses.rtf</filename>
+                                    </member>
+                                    <member>
+                                        <filename>top_all2_prot_na.inp</filename>
+                                    </member>
+                                </simplelist>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry spanname="allCols">General receptor parameters, applicable to
+                                either file format</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RECEPTOR_SEGMENT_NAME</varname>
+                            </entry>
+                            <entry>List of molecular segment names to read from either MOL2 or
+                                PSF/CRD file. If this parameter is defined, then any segment/chains
+                                not listed are not loaded. This provides a convenient way to remove
+                                cofactors, counterions and solvent without modifying the original
+                                file.</entry>
+                            <entry>Comma-separated list of segment name strings (without any spaces)</entry>
+                            <entry>Empty (i.e. all segments read from file)</entry>
+                            <entry>Comma-separated list of segment name strings</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RECEPTOR_FLEX</varname>
+                            </entry>
+                            <entry>Defines terminal OH and NH3+ groups within this distance of
+                                docking volume as flexible.</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>Undefined (rigid receptor)</entry>
+                            <entry>> 0.0 (3.0 is a reasonable value)</entry>
+                        </row>
+                        <row>
+                            <entry spanname="allCols">Advanced parameters (should not need to be
+                                changed by the user)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RECEPTOR_ALL_H</varname>
+                            </entry>
+                            <entry>Disables the removal of explicit non-polar hydrogens from the
+                                receptor model. <emphasis>Not recommended</emphasis></entry>
+                            <entry>boolean</entry>
+                            <entry>FALSE</entry>
+                            <entry>TRUE or FALSE</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>DIHEDRAL_STEP</varname>
+                            </entry>
+                            <entry>Maximum mutation step size for receptor dihedral degrees of
+                                freedom</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>30.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+        <section id="ligand">
+            <title>Ligand definition</title>
+            <para>Ligand definition parameters need only be defined if you wish to introduce
+                tethering of some or all of the ligand degrees of freedom. If you are running
+                conventional free docking then this section is not required. All ligand definition
+                parameters should be defined in <literal>SECTION LIGAND</literal>. Note that the
+                ligand input SD file continues to be specified directly on the rbdock command-line
+                and not in the system definition file.</para>
+            <table id="ligParamTable">
+                <title>Ligand definition parameters</title>
+                <tgroup cols="5">
+                    <colspec colnum="1" colname="par" colwidth="2*"/>
+                    <colspec colnum="2" colname="desc" colwidth="2*"/>
+                    <colspec colnum="3" colname="type" colwidth="1*"/>
+                    <colspec colnum="4" colname="def" colwidth="1*"/>
+                    <colspec colnum="5" colname="range" colwidth="1*"/>
+                    <spanspec namest="par" nameend="range" spanname="allCols"/>
+                    <thead>
+                        <row>
+                            <entry>Parameter</entry>
+                            <entry>Description</entry>
+                            <entry>Type</entry>
+                            <entry>Default</entry>
+                            <entry>Range of values</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry spanname="allCols">Main user parameters </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>TRANS_MODE</varname>
+                            </entry>
+                            <entry>Sampling mode for ligand translational degrees of freedom</entry>
+                            <entry>enumerated string literal</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <simplelist>
+                                    <member>
+                                        <literal>FIXED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>TETHERED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>FREE</literal>
+                                    </member>
+                                </simplelist>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>ROT_MODE</varname>
+                            </entry>
+                            <entry>Sampling mode for ligand whole-body rotational degrees of freedom</entry>
+                            <entry>enumerated string literal</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <simplelist>
+                                    <member>
+                                        <literal>FIXED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>TETHERED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>FREE</literal>
+                                    </member>
+                                </simplelist>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>DIHEDRAL_MODE</varname>
+                            </entry>
+                            <entry>Sampling mode for ligand internal dihedral degrees of freedom</entry>
+                            <entry>enumerated string literal</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <simplelist>
+                                    <member>
+                                        <literal>FIXED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>TETHERED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>FREE</literal>
+                                    </member>
+                                </simplelist>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MAX_TRANS</varname>
+                            </entry>
+                            <entry>(for <varname>TRANS_MODE</varname> = <literal>TETHERED</literal>
+                                only) Maximum deviation allowed from reference centre of mass </entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>1.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MAX_ROT</varname>
+                            </entry>
+                            <entry>(for <varname>ROT_MODE</varname> = <literal>TETHERED</literal>
+                                only) Maximum deviation allowed from orientation of reference
+                                principle axes</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>30.0</entry>
+                            <entry>>0.0 - 180.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MAX_DIHEDRAL</varname>
+                            </entry>
+                            <entry>(for <varname>DIHEDRAL_MODE</varname> =
+                                <literal>TETHERED</literal> only) Maximum deviation allowed from
+                                reference dihedral angles for any rotatable bond</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>30.0</entry>
+                            <entry>>0.0 - 180.0</entry>
+                        </row>
+                        <row>
+                            <entry spanname="allCols">Advanced parameters (should not need to be
+                                changed by the user)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>TRANS_STEP</varname>
+                            </entry>
+                            <entry>Maximum mutation step size for ligand translational degrees of
+                                freedom</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>2.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>ROT_STEP</varname>
+                            </entry>
+                            <entry>Maximum mutation step size for ligand whole-body rotational
+                                degrees of freedom</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>30.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>DIHEDRAL_STEP</varname>
+                            </entry>
+                            <entry>Maximum mutation step size for ligand internal dihedral degrees
+                                of freedom</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>30.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+        <section id="solvent">
+            <title>Solvent definition</title>
+            <para>Solvent definition parameters need only be defined if you wish to introduce
+                explicit structural waters into the docking calculation, otherwise this section is
+                not required. All solvent definition parameters should be defined in
+                    <literal>SECTION SOLVENT</literal>.</para>
+            <table id="solvParamTable">
+                <title>Solvent definition parameters</title>
+                <tgroup cols="5">
+                    <colspec colnum="1" colname="par" colwidth="2*"/>
+                    <colspec colnum="2" colname="desc" colwidth="2*"/>
+                    <colspec colnum="3" colname="type" colwidth="1*"/>
+                    <colspec colnum="4" colname="def" colwidth="1*"/>
+                    <colspec colnum="5" colname="range" colwidth="1*"/>
+                    <spanspec namest="par" nameend="range" spanname="allCols"/>
+                    <thead>
+                        <row>
+                            <entry>Parameter</entry>
+                            <entry>Description</entry>
+                            <entry>Type</entry>
+                            <entry>Default</entry>
+                            <entry>Range of values</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry spanname="allCols">Main user parameters </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>FILE</varname>
+                            </entry>
+                            <entry>Name of explicit solvent PDB file</entry>
+                            <entry>File name string</entry>
+                            <entry>No default value (mandatory parameter)</entry>
+                            <entry>Valid PDB filename</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>TRANS_MODE</varname>
+                            </entry>
+                            <entry>Sampling mode for solvent translational degrees of freedom. If
+                                defined here, the value overrides the per-solvent translational
+                                sampling modes defined in the solvent PDB file</entry>
+                            <entry>enumerated string literal</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <simplelist>
+                                    <member>
+                                        <literal>FIXED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>TETHERED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>FREE</literal>
+                                    </member>
+                                </simplelist>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>ROT_MODE</varname>
+                            </entry>
+                            <entry>Sampling mode for solvent whole-body rotational degrees of
+                                freedom. If defined here, the value overrides the per-solvent
+                                rotational sampling modes defined in the solvent PDB file</entry>
+                            <entry>enumerated string literal</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <simplelist>
+                                    <member>
+                                        <literal>FIXED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>TETHERED</literal>
+                                    </member>
+                                    <member>
+                                        <literal>FREE</literal>
+                                    </member>
+                                </simplelist>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MAX_TRANS</varname>
+                            </entry>
+                            <entry>(for <varname>TRANS_MODE</varname> = <literal>TETHERED</literal>
+                                waters only) Maximum deviation allowed from reference water oxygen
+                                positions. The same value is applied to all waters with
+                                    <varname>TRANS_MODE</varname> = <literal>TETHERED</literal>; it
+                                is not possible currently to define per-solvent
+                                <varname>MAX_TRANS</varname> values.</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>1.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MAX_ROT</varname>
+                            </entry>
+                            <entry>(for <varname>ROT_MODE</varname> = <literal>TETHERED</literal>
+                                waters only) Maximum deviation allowed from orientation of reference
+                                principal axes. The same value is applied to all waters with
+                                    <varname>ROT_MODE</varname> = <literal>TETHERED</literal>; it is
+                                not possible currently to define per-solvent
+                                <varname>MAX_ROT</varname> values.</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>30.0</entry>
+                            <entry>>0.0 - 180.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>OCCUPANCY</varname>
+                            </entry>
+                            <entry>Controls occupany state sampling for all explicit solvent. If
+                                defined here, the value overrides the per-solvent occupancy states
+                                defined in the solvent PDB file.</entry>
+                            <entry>float</entry>
+                            <entry>1.0</entry>
+                            <entry>0.0 - 1.0</entry>
+                        </row>
+                        <row>
+                            <entry spanname="allCols">Advanced parameters (should not need to be
+                                changed by the user)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>TRANS_STEP</varname>
+                            </entry>
+                            <entry>Maximum mutation step size for solvent translational degrees of
+                                freedom</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>2.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>ROT_STEP</varname>
+                            </entry>
+                            <entry>Maximum mutation step size for solvent whole-body rotational
+                                degrees of freedom</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>30.0</entry>
+                            <entry>>0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>OCCUPANCY_STEP</varname>
+                            </entry>
+                            <entry>Maximum mutation step size for solvent occupancy state degrees of
+                                freedom.</entry>
+                            <entry>float (degrees)</entry>
+                            <entry>1.0</entry>
+                            <entry>0.0 - 1.0</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <formalpara>
+                <title>Solvent occupancy state sampling</title>
+                <para><varname>OCCUPANCY</varname> = 0 permanently disables all solvent;
+                        <varname>OCCUPANCY</varname> = 1.0 permanently enables all solvent;
+                        <varname>OCCUPANCY</varname> between 0 and 1 activates variable occupancy
+                    state sampling, where the value represents the initial probability that the
+                    solvent molecule is enabled. For example, <varname>OCCUPANCY</varname> = 0.5
+                    means that the solvent is enabled in 50% of the initial GA population. However,
+                    the probability that the solvent is actually enabled in the final docking
+                    solution will depend on the particular ligand, the scoring function terms, and
+                    on the penalty for solvent binding. The occupancy state chromosome value is
+                    managed as a continuous variable between 0.0 and 1.0, with a nominal mutation
+                    step size of 1.0. Chromosome values lower than the occupancy threshold (defined
+                    as <literal>1.0 - OCCUPANCY</literal>) result in the solvent being disabled;
+                    values higher than the threshold result in the solvent being enabled</para>
+            </formalpara>
+        </section>
+        <section id="cavityMapping">
+            <title>Cavity mapping</title>
+            <para>The cavity mapping section is mandatory. You should choose one of the mapping
+                algorithms shown below. All mapping parameters should be defined in <literal>SECTION
+                    MAPPER</literal>. </para>
+            <table id="sphereSiteMapperParamTable">
+                <title>Two sphere site mapping parameters</title>
+                <tgroup cols="5">
+                    <colspec colnum="1" colname="par" colwidth="2*"/>
+                    <colspec colnum="2" colname="desc" colwidth="2*"/>
+                    <colspec colnum="3" colname="type" colwidth="1*"/>
+                    <colspec colnum="4" colname="def" colwidth="1*"/>
+                    <colspec colnum="5" colname="range" colwidth="1*"/>
+                    <spanspec namest="par" nameend="range" spanname="allCols"/>
+                    <thead>
+                        <row>
+                            <entry>Parameter</entry>
+                            <entry>Description</entry>
+                            <entry>Type</entry>
+                            <entry>Default</entry>
+                            <entry>Range of values</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry spanname="allCols">Main user parameters </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>SITE_MAPPER</varname>
+                            </entry>
+                            <entry>Mapping algorithm specifier</entry>
+                            <entry>string literal</entry>
+                            <entry>
+                                <literal>RbtSphereSiteMapper</literal>
+                            </entry>
+                            <entry>fixed</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>CENTER</varname>
+                            </entry>
+                            <entry>(x,y,z) center of cavity mapping region</entry>
+                            <entry>Bracketed cartesian coordinate string (x,y,z)</entry>
+                            <entry>None</entry>
+                            <entry>None</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RADIUS</varname>
+                            </entry>
+                            <entry>Radius of cavity mapping region</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>10.0</entry>
+                            <entry>> 0.0 (10.0-20.0 suggested range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>SMALL_SPHERE</varname>
+                            </entry>
+                            <entry>Radius of small probe</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>1.5</entry>
+                            <entry>> 0.0 (1.0-2.0 suggested range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>LARGE_SPHERE</varname>
+                            </entry>
+                            <entry>Radius of large probe</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>4.0</entry>
+                            <entry>> <varname>SMALL_SPHERE</varname> (3.5 - 6.0 suggested
+                            range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MAX_CAVITIES</varname>
+                            </entry>
+                            <entry>Maximum number of cavities to accept (in descending order of
+                                size)</entry>
+                            <entry>integer</entry>
+                            <entry>99</entry>
+                            <entry>>0</entry>
+                        </row>
+                        <row>
+                            <entry spanname="allCols">Advanced parameters (less frequently changed
+                                by the user)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>VOL_INCR</varname>
+                            </entry>
+                            <entry>Receptor atom radius increment for excluded volume</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>0.0</entry>
+                            <entry>>= 0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>GRID_STEP</varname>
+                            </entry>
+                            <entry>Grid resolution for mapping</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>0.5</entry>
+                            <entry>>0.0 (0.3 - 0.8 suggested range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MIN_VOLUME</varname>
+                            </entry>
+                            <entry>Minimum cavity volume to accept (in A^3, not grid points)</entry>
+                            <entry>float (Angstroms^3)</entry>
+                            <entry>100</entry>
+                            <entry>>0 (100-300 suggested range)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table id="refLigandSiteMapperParamTable">
+                <title>Reference ligand site mapping parameters</title>
+                <tgroup cols="5">
+                    <colspec colnum="1" colname="par" colwidth="2*"/>
+                    <colspec colnum="2" colname="desc" colwidth="2*"/>
+                    <colspec colnum="3" colname="type" colwidth="1*"/>
+                    <colspec colnum="4" colname="def" colwidth="1*"/>
+                    <colspec colnum="5" colname="range" colwidth="1*"/>
+                    <spanspec namest="par" nameend="range" spanname="allCols"/>
+                    <thead>
+                        <row>
+                            <entry>Parameter</entry>
+                            <entry>Description</entry>
+                            <entry>Type</entry>
+                            <entry>Default</entry>
+                            <entry>Range of values</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry spanname="allCols">Main user parameters </entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>SITE_MAPPER</varname>
+                            </entry>
+                            <entry>Mapping algorithm specifier</entry>
+                            <entry>string literal</entry>
+                            <entry>
+                                <literal>RbtLigandSiteMapper</literal>
+                            </entry>
+                            <entry>fixed</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>REF_MOL</varname>
+                            </entry>
+                            <entry>Reference ligand SD file name</entry>
+                            <entry>string</entry>
+                            <entry>ref.sd</entry>
+                            <entry>None</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>RADIUS</varname>
+                            </entry>
+                            <entry>Radius of cavity mapping region</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>10.0</entry>
+                            <entry>> 0.0 (10.0-20.0 suggested range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>SMALL_SPHERE</varname>
+                            </entry>
+                            <entry>Radius of small probe</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>1.5</entry>
+                            <entry>> 0.0 (1.0-2.0 suggested range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>LARGE_SPHERE</varname>
+                            </entry>
+                            <entry>Radius of large probe</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>4.0</entry>
+                            <entry>> <varname>SMALL_SPHERE</varname> (3.5 - 6.0 suggested
+                            range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MAX_CAVITIES</varname>
+                            </entry>
+                            <entry>Maximum number of cavities to accept (in descending order of
+                                size)</entry>
+                            <entry>integer</entry>
+                            <entry>99</entry>
+                            <entry>>0</entry>
+                        </row>
+                        <row>
+                            <entry spanname="allCols">Advanced parameters (less frequently changed
+                                by the user)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>VOL_INCR</varname>
+                            </entry>
+                            <entry>Receptor atom radius increment for excluded volume</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>0.0</entry>
+                            <entry>>= 0.0</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>GRID_STEP</varname>
+                            </entry>
+                            <entry>Grid resolution for mapping</entry>
+                            <entry>float (Angstroms)</entry>
+                            <entry>0.5</entry>
+                            <entry>>0.0 (0.3 - 0.8 suggested range)</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>MIN_VOLUME</varname>
+                            </entry>
+                            <entry>Minimum cavity volume to accept (in A^3, not grid points)</entry>
+                            <entry>float (Angstroms^3)</entry>
+                            <entry>100</entry>
+                            <entry>>0 (100-300 suggested range)</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+        <section id="cavityRestraints">
+            <title>Cavity restraint</title>
+            <para>The cavity restraint penalty function is mandatory and is designed to prevent the
+                ligand from exiting the docking site. The function is calculated over all
+                non-hydrogen atoms in the ligand (and over all explicit water oxygens that can
+                translate). The distance from each atom to the nearest cavity grid point is
+                calculated. If the distance exceeds the value of <literal>RMAX</literal>, a penalty
+                is imposed based on the value of (distance - <literal>RMAX</literal>). The penalty
+                can be either linear or quadratic depending on the value of the
+                <literal>QUADRATIC</literal> parameter.</para>
+            <para>It should not be necessary to change any the parameters in this section. Note that
+                the docking protocol itself will manipulate the <literal>WEIGHT</literal> parameter,
+                so any changes made to <literal>WEIGHT</literal> will have no effect.</para>
+            <programlisting>
+SECTION CAVITY
+    SCORING_FUNCTION        RbtCavityGridSF
+    WEIGHT                  1.0
+    RMAX                    0.1
+    QUADRATIC               FALSE
+END_SECTION</programlisting>
+        </section>
+        <section id="pharmaRestraints">
+            <title>Pharmacophore restraints</title>
+            <para>This section need only be defined if you wish to dock with pharmacophore
+                restraints. If you are running conventional free docking then this section is not
+                required. All pharmacophore definition parameters should be defined in
+                    <literal>SECTION PHARMA</literal>.</para>
+            <table id="pharmaRestraintParamTable">
+                <title>Pharmacophore restraint parameters</title>
+                <tgroup cols="5">
+                    <colspec colnum="1" colname="par" colwidth="2*"/>
+                    <colspec colnum="2" colname="desc" colwidth="2*"/>
+                    <colspec colnum="3" colname="type" colwidth="1*"/>
+                    <colspec colnum="4" colname="def" colwidth="1*"/>
+                    <colspec colnum="5" colname="range" colwidth="1*"/>
+                    <spanspec namest="par" nameend="range" spanname="allCols"/>
+                    <thead>
+                        <row>
+                            <entry>Parameter</entry>
+                            <entry>Description</entry>
+                            <entry>Type</entry>
+                            <entry>Default</entry>
+                            <entry>Range of values</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>
+                                <varname>CONSTRAINTS_FILE</varname>
+                            </entry>
+                            <entry>Mandatory pharmacophore restraints file</entry>
+                            <entry>File name string</entry>
+                            <entry>None (mandatory parameter)</entry>
+                            <entry>Valid file name</entry>
+                        </row>
+                        <row>
+                            <entry>
+                                <varname>OPTIONAL_FILE</varname>
+                            </entry>
+                            <entry>Optional pharmacophore restraints file</entry>
+                            <entry>File name string</entry>
+                            <entry>None (optional parameter)</entry>
+                            <entry>Valid file name, or empty</entry>
+                        </row>
+                        <row>
+                            <entry>NOPT</entry>
+                            <entry>Number of optional restraints that should be met</entry>
+                            <entry>Integer</entry>
+                            <entry>0</entry>
+                            <entry>Between 0 and number of restraints in
+                                <varname>OPTIONAL_FILE</varname></entry>
+                        </row>
+                        <row>
+                            <entry>WRITE_ERRORS</entry>
+                            <entry>Ligands with insufficient pharmacophore features to match the
+                                mandatory restraints are always removed prior to docking. If this
+                                parameter is true, the pre-filtered ligands are written to an error
+                                SD file with the same root name as the docked pose output SD file,
+                                but with an <literal>_errors.sd</literal> suffix. If false, the
+                                pre-filtered ligands are not written.</entry>
+                            <entry>Boolean</entry>
+                            <entry>
+                                <literal>false</literal>
+                            </entry>
+                            <entry><literal>true</literal> or <literal>false</literal></entry>
+                        </row>
+                        <row>
+                            <entry>WEIGHT</entry>
+                            <entry>Overall weight for the pharmacophore penalty function</entry>
+                            <entry>Float</entry>
+                            <entry>1.0</entry>
+                            <entry>>= 0.0</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <formalpara>
+                <title>Calculation of mandatory restraint penalty</title>
+                <para>The list of ligand atoms that matches each restraint type in the mandatory
+                    restraints file is precalculated for each ligand as it is loaded. If the ligand
+                    contains insufficient features to satisfy all of the mandatory restraints the
+                    ligand is rejected and is not docked. Note that the rejection is based purely on
+                    feature counts and does not take into account the possible geometric
+                    arrangements of the features. Rejected ligands are optionally written to an
+                    error SD file. The penalty for each restraint is based on the distance from the
+                    nearest matching ligand atom to the pharmacophore restraint centre. If the
+                    distance is less than the defined tolerance (restraint sphere radius), the
+                    penalty is zero. If the distance is greater than the defined tolerance a
+                    quadratic penalty is applied, equal to (nearest distance - tolerance)^2.</para>
+            </formalpara>
+            <formalpara>
+                <title>Calculation of optional restraint penalty</title>
+                <para>The individual restraint penalties for each restraint in the optional
+                    restraints file are calculated in the same way as for the mandatory penalties.
+                    However, only the <literal>NOPT</literal> lowest scoring (least penalised)
+                    restraints are summed for any given docking pose. Any remaining higher scoring
+                    optional restraints are ignored and do not contribute to the total pharmacophore
+                    restraint penalty.</para>
+            </formalpara>
+            <formalpara>
+                <title>Calculation of overall restraint penalty</title>
+                <para>The overall pharmacophore restraint penalty is the sum of the mandatory
+                    restraint penalties and the <literal>NOPT</literal> lowest scoring optional
+                    restraint penalties, multiplied by the <literal>WEIGHT</literal> parameter
+                    value.</para>
+            </formalpara>
+        </section>
+        <section id="nmrRestraints">
+            <title>NMR restraints</title>
+            <para>To be completed. However, this feature has rarely been used.</para>
+        </section>
+        <section id="examples">
+            <title>Example system definition files</title>
+            <example>
+                <title>Full system definition file with all sections and common parameters
+                    enumerated explicitly</title>
+                <programlisting>
+RBT_PARAMETER_FILE_V1.00
+TITLE HSP90-PU3-lig-cavity, solvent flex=5
+
+RECEPTOR_FILE PROT_W3_flex.mol2
+RECEPTOR_SEGMENT_NAME PROT
+RECEPTOR_FLEX 3.0
+
+SECTION SOLVENT
+    FILE PROT_W3_flex_5.pdb
+    TRANS_MODE TETHERED
+    ROT_MODE TETHERED
+    MAX_TRANS 1.0
+    MAX_ROT 30.0
+    OCCUPANCY 0.5
+END_SECTION
+
+SECTION LIGAND
+    TRANS_MODE FREE
+    ROT_MODE FREE
+    DIHEDRAL_MODE FREE
+    MAX_TRANS 1.0
+    MAX_ROT 30.0
+    MAX_DIHEDRAL 30.0
+ END_SECTION
+                
+SECTION MAPPER
+    SITE_MAPPER RbtLigandSiteMapper
+    REF_MOL ref.sd
+    RADIUS 5.0
+    SMALL_SPHERE 1.0
+    MIN_VOLUME 100
+    MAX_CAVITIES 1
+    VOL_INCR 0.0
+    GRIDSTEP 0.5
+END_SECTION
+
+SECTION CAVITY
+    SCORING_FUNCTION RbtCavityGridSF
+    WEIGHT 1.0
+END_SECTION
+
+SECTION PHARMA
+    SCORING_FUNCTION RbtPharmaSF
+    WEIGHT 1.0
+    CONSTRAINTS_FILE mandatory.const
+    OPTIONAL_FILE optional.const
+    NOPT 3
+    WRITE_ERRORS TRUE
+END_SECTION
+            </programlisting>
+            </example>
+        </section>
+    </chapter>
+    <chapter id="fileFormats">
+        <title>rDock file formats</title>
+        <section id="prmFileFormat">
+            <title>.prm file format</title>
+            <para>The .prm file format is an rDock-specific text format and is used for: <itemizedlist>
+                    <listitem>
+                        <simpara>system definition files (known previously as receptor .prm
+                        files)</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>scoring function definition files</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>search protocol definition files</simpara>
+                    </listitem>
+                </itemizedlist> The format is simple and allows for an arbitrary number of named
+                parameter/value pairs to be defined, optionally divided into named sections.
+                Sections provide a namespace for parameter names, to allow parameter names to be
+                duplicated within different sections.</para>
+            <para>The key features of the format are: <itemizedlist>
+                    <listitem>
+                        <simpara>The first line of the file must be
+                            <code>RBT_PARAMETER_FILE_V1.00</code> with no preceeding
+                        whitespace.</simpara>
+                    </listitem>
+                    <listitem>
+                        <para>Subsequent lines may contain either: <orderedlist>
+                                <listitem>
+                                    <simpara>comment lines</simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>reserved keywords <literal>TITLE</literal>,
+                                            <literal>SECTION</literal>, or
+                                        <literal>END_SECTION</literal></simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>parameter name/value pairs</simpara>
+                                </listitem>
+                            </orderedlist>
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <simpara>Comment lines should start with a <literal>#</literal> character in
+                            the first column with no preceeding whitespace, and are
+                        ignored.</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The reserved words must start in the first column with no
+                            preceeding whitespace.</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The <literal>TITLE</literal> record should occur only once in the
+                            file and is used to provide a title string for display by various
+                            scripts such as run_rbscreen.pl. The keyword should be followed by a
+                            single space character and then the title string, which may contain
+                            spaces. If the <literal>TITLE</literal> line occurs more than once, the
+                            last occurence is used. </simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara><literal>SECTION</literal> records can occur more than once, and
+                            should always be paired with a closing <literal>END_SECTION</literal>
+                            record. The keyword should be followed by a single space character and
+                            then the section name, which may NOT itself contain spaces. All section
+                            names must be unique within a .prm file. All parameter name/value pairs
+                            within the <literal>SECTION</literal> / <literal>END_SECTION</literal>
+                            block belong to that section.</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>Parameter name/value pairs are read as free-format tokenised text
+                            and can have preceeding, trailing, and be separated by arbitrary
+                            whitespace. This implies that the parameter name and value strings
+                            themselves are not allowed to contain any spaces. The value strings are
+                            interpreted as numeric, string, or boolean values as appropriate for
+                            that parameter. Boolean values should be entered as
+                            <literal>TRUE</literal> or <literal>FALSE</literal> uppercase
+                        strings.</simpara>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <caution>
+                <simpara>The current implementation of the .prm file reader does not tolerate a
+                        <literal>TAB</literal> character immediately following the
+                    <literal>TITLE</literal> and <literal>SECTION</literal> keywords. It is very
+                    important that the first character after the <literal>SECTION</literal> keyword
+                    in particular is a true space character, otherwise the reserved word will not be
+                    detected and the parameters for that section will be ignored.</simpara>
+            </caution>
+            <example>
+                <title>Example .prm file</title>
+                <para>In the following example, <literal>RECEPTOR_FILE</literal> is defined in the
+                    top level namespace. The remaining parameters are defined in the
+                    <literal>MAPPER</literal> and <literal>CAVITY</literal> namespaces. The
+                    indentation is for readability, and has no significance in the format.</para>
+                <programlisting>
+RBT_PARAMETER_FILE_V1.00
+TITLE 4dfr oxido-reductase
+
+RECEPTOR_FILE 4dfr.mol2
+
+SECTION MAPPER
+    SITE_MAPPER RbtLigandSiteMapper
+    REF_MOL 4dfr_c.sd
+    RADIUS 6.0
+    SMALL_SPHERE 1.0
+    MIN_VOLUME 100
+    MAX_CAVITIES 1
+    VOL_INCR 0.0
+    GRIDSTEP 0.5
+END_SECTION
+
+SECTION CAVITY
+    SCORING_FUNCTION RbtCavityGridSF
+    WEIGHT 1.0
+END_SECTION
+                </programlisting>
+            </example>
+        </section>
+        <section id="waterPDBformat">
+            <title>Water PDB file format</title>
+            <para>rDock requires explicit water PDB files to be in the style as output by the
+                    <application>Dowser</application> program. In particular: <itemizedlist>
+                    <listitem>
+                        <simpara>Records can be HETATM or ATOM</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The atom names must be <literal>OW</literal>, <literal>H1</literal>
+                            and <literal>H2</literal></simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The atom records for each water molecule must belong to the same
+                            subunit ID</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The subunit IDs for different waters must be distinct, but do not
+                            have to be consecutive.</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The atom IDs are not used and do not have to be consecutive (they
+                            can even be duplicated)</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The order of the atom records within a subunit is
+                        unimportant</simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>The temperature factor field of the water oxygens can be used to
+                            define the per-solvent flexibility modes. The temperature factors of the
+                            water hydrogens are not used.</simpara>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <table id="tempFactorModes">
+                <title>Conversion of temperature factor values to solvent flexibility modes</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>PDB temperature factor</entry>
+                            <entry>Solvent translational flexibility</entry>
+                            <entry>Solvent rotational flexibility</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>0</entry>
+                            <entry>
+                                <literal>FIXED</literal>
+                            </entry>
+                            <entry>
+                                <literal>FIXED</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>1</entry>
+                            <entry>
+                                <literal>FIXED</literal>
+                            </entry>
+                            <entry>
+                                <literal>TETHERED</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>2</entry>
+                            <entry>
+                                <literal>FIXED</literal>
+                            </entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>3</entry>
+                            <entry>
+                                <literal>TETHERED</literal>
+                            </entry>
+                            <entry>
+                                <literal>FIXED</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>4</entry>
+                            <entry>
+                                <literal>TETHERED</literal>
+                            </entry>
+                            <entry>
+                                <literal>TETHERED</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>5</entry>
+                            <entry>
+                                <literal>TETHERED</literal>
+                            </entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>6</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <literal>FIXED</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>7</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <literal>TETHERED</literal>
+                            </entry>
+                        </row>
+                        <row>
+                            <entry>8</entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                            <entry>
+                                <literal>FREE</literal>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <example id="exampleWaterPDB">
+                <title>Valid rDock PDB file for explicit, flexible waters</title>
+                <programlisting>
+REMARK tmp_1YET.pdb xtal_hoh.pdb
+HETATM 3540  OW  HOH W 106      28.929  12.684  20.864  1.00  1.0 
+HETATM 3540  H1  HOH W 106      28.034  12.390  21.200  1.00
+HETATM 3540  H2  HOH W 106      29.139  12.204  20.012  1.00
+HETATM 3542  OW  HOH W 108      27.127  14.068  22.571  1.00  2.0 
+HETATM 3542  H1  HOH W 108      26.632  13.344  23.052  1.00
+HETATM 3542  H2  HOH W 108      27.636  13.673  21.806  1.00
+HETATM 3679  OW  HOH W 245      27.208  10.345  27.250  1.00  3.0 
+HETATM 3679  H1  HOH W 245      27.657  10.045  26.409  1.00
+HETATM 3679  H2  HOH W 245      26.296  10.693  27.036  1.00
+HETATM 3680  OW  HOH W 246      31.737  12.425  21.110  1.00  4.0 
+HETATM 3680  H1  HOH W 246      31.831  12.448  22.106  1.00
+HETATM 3680  H2  HOH W 246      30.775  12.535  20.863  1.00
+                    </programlisting>
+            </example>
+        </section>
+        <section id="ph4Format">
+            <title>Pharmacophore restraints file format</title>
+            <para>Pharmacophore restraints are defined in a simple text file, with one restraint per
+                line. Each line should contain the following values, separated by commas or
+                whitespace:</para>
+            <para>
+                <replaceable>x y z coords of restraint centre</replaceable>, <replaceable>tolerance
+                    (in Angstroms)</replaceable>, <replaceable>restraint type string</replaceable>.</para>
+            <para>The supported restraint types are:</para>
+            <table id="ph4RestraintTypesTable">
+                <title>Pharmacophore restraint types</title>
+                <tgroup cols="3">
+                    <thead>
+                        <row>
+                            <entry>String</entry>
+                            <entry>Description</entry>
+                            <entry>Matches</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>Any</entry>
+                            <entry>Any atom</entry>
+                            <entry>Any non-hydrogen atom</entry>
+                        </row>
+                        <row>
+                            <entry>Don</entry>
+                            <entry>H-bond donor</entry>
+                            <entry>Any neutral donor hydrogen</entry>
+                        </row>
+                        <row>
+                            <entry>Acc</entry>
+                            <entry>H-bond acceptor</entry>
+                            <entry>Any neutral acceptor</entry>
+                        </row>
+                        <row>
+                            <entry>Aro</entry>
+                            <entry>Aromatic</entry>
+                            <entry>Any aromatic ring centre (pseudo atom)</entry>
+                        </row>
+                        <row>
+                            <entry>Hyd</entry>
+                            <entry>Hydrophobic</entry>
+                            <entry>Any non-polar hydrogens (if present), any Csp3 or Ssp3, any C or
+                                S not bonded to Osp2, any Cl, Br, I</entry>
+                        </row>
+                        <row>
+                            <entry>Hal</entry>
+                            <entry>Hydrophobic, aliphatic</entry>
+                            <entry>Subset of Hyd, sp3 atoms only</entry>
+                        </row>
+                        <row>
+                            <entry>Har</entry>
+                            <entry>Hydrophobic, aromatic</entry>
+                            <entry>Subset of Hyd, aromatic atoms only</entry>
+                        </row>
+                        <row>
+                            <entry>Ani</entry>
+                            <entry>Anionic</entry>
+                            <entry>Any atom with negative distributed formal charge</entry>
+                        </row>
+                        <row>
+                            <entry>Cat</entry>
+                            <entry>Cationic</entry>
+                            <entry>Any atom with positive distributed formal charge</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+    </chapter>
+    <chapter id="programs">
+        <title>rDock programs</title>
+        <section id="executables">
+            <title>Executable (binary) programs</title>
+            <table>
+                <title>Core rDock C++ executables</title>
+                <tgroup cols="3">
+                    <colspec colnum="1" colname="exe" colwidth="1*"/>
+                    <colspec colnum="2" colname="used" colwidth="1*"/>
+                    <colspec colnum="3" colname="descr" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Executable</entry>
+                            <entry>Used for</entry>
+                            <entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>rbcavity</entry>
+                            <entry>Preparation</entry>
+                            <entry>Cavity mapping and preparation of docking site (.as) file</entry>
+                        </row>
+                        <row>
+                            <entry>rbcalcgrid</entry>
+                            <entry>Preparation</entry>
+                            <entry>Calculation of vdW grid files (usually called by
+                                    <literal>make_grid.csh</literal> wrapper script)</entry>
+                        </row>
+                        <row>
+                            <entry>rbdock</entry>
+                            <entry>Docking</entry>
+                            <entry>The main rDock docking engine itself.</entry>
+                        </row>
+                        <row>
+                            <entry>rbrms</entry>
+                            <entry>Analysis</entry>
+                            <entry>Calculation of ligand Root Mean Squared Displacement (RMSD)
+                                between reference and docked poses</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>Auxiliary rDock C++ executables</title>
+                <tgroup cols="3">
+                    <colspec colnum="1" colname="exe" colwidth="1*"/>
+                    <colspec colnum="2" colname="used" colwidth="1*"/>
+                    <colspec colnum="3" colname="descr" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Executable</entry>
+                            <entry>Used for</entry>
+                            <entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>rbtether</entry>
+                            <entry>Preparation</entry>
+                            <entry>Prepares a ligand SD file for tethered scaffold docking. Requires
+                                Daylight SMARTS license. Annotates ligand SD file with tethered
+                                substructure atom indices. </entry>
+                        </row>
+                        <row>
+                            <entry>smart_rms</entry>
+                            <entry>Analysis</entry>
+                            <entry>Calculation of ligand Root Mean Squared Displacement (RMSD)
+                                between reference and docked poses, taking into account ligand
+                                topological symmetry. Requires Daylight SMARTS license.</entry>
+                        </row>
+                        <row>
+                            <entry>rbconvgrid</entry>
+                            <entry>Analysis</entry>
+                            <entry>Converts rDock vdW grids to InsightII grid format for
+                                visualisation</entry>
+                        </row>
+                        <row>
+                            <entry>rbmoegrid</entry>
+                            <entry>Analysis</entry>
+                            <entry>Converts rDock vdW grids to MOE grid format for
+                            visualisation</entry>
+                        </row>
+                        <row>
+                            <entry>rblist</entry>
+                            <entry>Analysis</entry>
+                            <entry>Outputs miscellaneous information for ligand SD file
+                            records</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+        <section id="scripts">
+            <title>Scripts</title>
+            <table>
+                <title>Core scripts</title>
+                <tgroup cols="3">
+                    <colspec colnum="1" colname="exe" colwidth="1*"/>
+                    <colspec colnum="2" colname="used" colwidth="1*"/>
+                    <colspec colnum="3" colname="descr" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Script</entry>
+                            <entry>Used for</entry>
+                            <entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>make_grid.csh</entry>
+                            <entry>Preparation</entry>
+                            <entry>Creates the vdW grid files required for grid-based docking
+                                protocols (<literal>dock_grid.prm</literal> and
+                                    <literal>dock_solv_grid.prm</literal>). Simple front-end to
+                                    <literal>rbcalcgrid</literal>.</entry>
+                        </row>
+                        <row>
+                            <entry>run_rbdock.pl</entry>
+                            <entry>Docking</entry>
+                            <entry>Simple front-end to rbdock, suitable for small-scale docking
+                                experiments. Can create command files for a variety of queuing
+                                systems (Condor, SGE, NQS).</entry>
+                        </row>
+                        <row>
+                            <entry>run_rbscreen.pl</entry>
+                            <entry>Docking</entry>
+                            <entry>Front-end to rbdock for launching large-scale virtual screening
+                                campaigns. Creates a command file for Condor queuing system
+                            only.</entry>
+                        </row>
+                        <row>
+                            <entry>sdfilter</entry>
+                            <entry>Analysis</entry>
+                            <entry>Utility for filtering SD files by arbitrary data field
+                                expressions. Useful for simple post-docking filtering by score
+                                components.</entry>
+                        </row>
+                        <row>
+                            <entry>sdsort</entry>
+                            <entry>Analysis</entry>
+                            <entry>Utility for sorting SD files by arbitrary data field. Useful for
+                                simple post-docking filtering by score components.</entry>
+                        </row>
+                        <row>
+                            <entry>sdreport</entry>
+                            <entry>Analysis</entry>
+                            <entry>Utility for reporting SD file data field values. Output in
+                                tab-delimited or csv format.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+            <table>
+                <title>Auxiliary scripts</title>
+                <tgroup cols="3">
+                    <colspec colnum="1" colname="exe" colwidth="1*"/>
+                    <colspec colnum="2" colname="used" colwidth="1*"/>
+                    <colspec colnum="3" colname="descr" colwidth="3*"/>
+                    <thead>
+                        <row>
+                            <entry>Script</entry>
+                            <entry>Used for</entry>
+                            <entry>Description</entry>
+                        </row>
+                    </thead>
+                    <tbody>
+                        <row>
+                            <entry>ht_protocol_finder.csh</entry>
+                            <entry>Preparation</entry>
+                            <entry>Used to optimise a high-throughput docking protocol from an
+                                initial exhaustive docking of a small representative ligand
+                            library.</entry>
+                        </row>
+                        <row>
+                            <entry>sdsplit</entry>
+                            <entry>Utility</entry>
+                            <entry>Splits an SD file into multiple smaller SD files of fixed number
+                                of records.</entry>
+                        </row>
+                        <row>
+                            <entry>sdmodify</entry>
+                            <entry>Utility</entry>
+                            <entry>Sets the molecule title line of each SD record equal to a given
+                                SD data field.</entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </section>
+        <section>
+            <title>Command-line reference</title>
+            <refentry>
+                <refmeta>
+                    <refentrytitle>rbdock</refentrytitle>
+                </refmeta>
+                <refnamediv>
+                    <refname>rbdock</refname>
+                    <refpurpose>the rDock docking engine itself.</refpurpose>
+                </refnamediv>
+                <refsynopsisdiv>
+                    <cmdsynopsis>
+                        <command>$RBT_ROOT/bin/rbdock</command>
+                        <sbr/>
+                        <arg choice="req">-i <replaceable>input ligand MDL SD file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-o <replaceable>output MDL SD file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-r <replaceable>system definition .prm file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-p <replaceable>docking protocol .prm file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="opt">-n <replaceable>number of docking
+                            runs/ligand</replaceable></arg>
+                        <sbr/>
+                        <arg choice="opt">-s <replaceable>random seed</replaceable></arg>
+                        <sbr/>
+                        <arg choice="opt">-T <replaceable>debug trace level</replaceable></arg>
+                        <sbr/>
+                        <group>
+                            <arg choice="opt">-t <replaceable>SCORE.INTER threshold</replaceable></arg>
+                            <arg choice="opt">-t <replaceable>filter definition
+                            file</replaceable></arg>
+                        </group>
+                        <sbr/>
+                        <arg>
+                            <option>-ap</option>
+                            <option>-an</option>
+                            <option>-allH</option>
+                            <option>-cont</option>
+                        </arg>
+                    </cmdsynopsis>
+                </refsynopsisdiv>
+                <refsect1>
+                    <title>Usage</title>
+                    <formalpara>
+                        <title>Simple exhaustive docking</title>
+                        <para>The minimum requirement for <command>rbdock</command> is to specify
+                            the input (<literal>-i</literal>) and output (<literal>-o</literal>)
+                            ligand SD file names, the system definition .prm file
+                            (<literal>-r</literal>) and the docking protocol .prm file
+                            (<literal>-p</literal>). This will perform one docking run per ligand
+                            record in the input SD file and output all docked ligand poses to the
+                            output SD file. Use <literal>-n</literal> to increase the number of
+                            docking runs per ligand record.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>High-throughput docking 1</title>
+                        <para>The <literal>-t</literal> and <literal>-cont</literal> options can be
+                            used to construct high-throughput protocols. If the argument following
+                                <literal>-t</literal> is numeric it is interpreted as a threshold
+                            value for <literal>SCORE.INTER</literal>, the total intermolecular score
+                            between ligand and receptor/solvent. In the absence of
+                            <literal>-cont</literal>, the threshold acts as an early termination
+                            filter, and the docking runs for each ligand will be terminated early
+                            once the threshold value has been exceeded. Note that the threshold is
+                            applied only at the end of each individual docking run, not during the
+                            runs themselves. If the <literal>-cont</literal> (continue) option is
+                            specified as well, the threshold acts as an output pose filter instead
+                            of a termination filter. The docking runs for each ligand run to
+                            completion as in the exhaustive case, but only the docking poses that
+                            exceed the threshold value of <literal>SCORE.INTER</literal> are written
+                            to the output SD file. </para>
+                    </formalpara>
+                    <formalpara>
+                        <title>High throughput docking 2</title>
+                        <para>Alternatively, if the argument following <literal>-t</literal> is
+                            non-numeric it is interpreted as a filter definition file. The filter
+                            definition file can be used to define multiple termination filters and
+                            multiple output pose filters in a generic way. Any docking score
+                            component can be used in the filter definitions.
+                                <literal>run_rbscreen.pl</literal> generates a filter definition
+                            file for multi-stage, high-throughput docking, with progressive score
+                            thresholds for early termination of poorly performing ligands. The use
+                            of filter definition files is preferred over the more limited
+                                <literal>SCORE.INTER</literal> filtering described above, whose use
+                            is now deprecated.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Automated ligand protonation/deprotonation</title>
+                        <para>The <literal>-ap</literal> option activates the automated protonation
+                            of ligand positive ionisable centres, notably amines, guanidines,
+                            imidazoles, and amidines. The <literal>-an</literal> option activates
+                            the automated deprotonation of ligand negative ionisable centres,
+                            notably carboxylic acids, phosphates, phosphonates, sulphates, and
+                            sulphonates. The precise rules used by rDock for protonation and
+                            deprotonation are quite crude, and are not user-customisable. Therefore
+                            these flags are not recommended for detailed validation experiments, in
+                            which care should be taken that the ligand protonation states are set
+                            correctly in the input SD file. Note that rDock is not capable of
+                            converting ionised centres back to the neutral form; these are
+                            unidirectional transformations.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Control of ligand non-polar hydrogens</title>
+                        <para>By default, rDock uses an implicit non-polar hydrogen model for
+                            receptor and ligand, and all of the scoring function validation has been
+                            performed on this basis. If the <literal>-allH</literal> option is not
+                            defined (recommended), all explicit non-polar hydrogens encountered in
+                            the ligand input SD file are removed, and only the polar hydrogens
+                            (bonded to O, N, or S) are retained. If the <literal>-allH</literal>
+                            option is defined (not recommended), no hydrogens are removed from the
+                            ligand. Note that rDock is not capable of <emphasis>adding</emphasis>
+                            explicit non-polar hydrogens, if none exist. In other words, the
+                                <literal>-allH</literal> option disables hydrogen removal, it does
+                            not activate hydrogen addition. You should always make sure that polar
+                            hydrogens are defined explicitly. If the ligand input SD file contains
+                            no explicit non-polar hydrogens, the <literal>-allH</literal> option has
+                            no effect. Receptor protonation is controlled by the system definition
+                            prm file.</para>
+                    </formalpara>
+                </refsect1>
+            </refentry>
+            <refentry>
+                <refmeta>
+                    <refentrytitle>rbcavity</refentrytitle>
+                </refmeta>
+                <refnamediv>
+                    <refname>rbcavity</refname>
+                    <refpurpose>Cavity mapping and preparation of docking site (.as) file
+                    file</refpurpose>
+                </refnamediv>
+                <refsynopsisdiv>
+                    <cmdsynopsis>
+                        <command>$RBT_ROOT/bin/rbcavity</command>
+                        <sbr/>
+                        <arg choice="req">-r <replaceable>system definition .prm file</replaceable></arg>
+                        <sbr/>
+                        <arg>
+                            <option>-ras</option>
+                            <option>-was</option>
+                            <option>-d</option>
+                            <option>-v</option>
+                            <option>-s</option>
+                        </arg>
+                        <sbr/>
+                        <arg choice="opt">-l <replaceable>distance from cavity</replaceable></arg>
+                        <sbr/>
+                        <arg choice="opt">-b <replaceable>border</replaceable></arg>
+                    </cmdsynopsis>
+                </refsynopsisdiv>
+                <refsect1>
+                    <title>Usage</title>
+                    <formalpara>
+                        <title>Exploration of cavity mapping parameters</title>
+                        <para><screen>rbcavity -r <replaceable>.prm file</replaceable></screen>You
+                            can run <literal>rbcavity</literal> with just the <literal>-r</literal>
+                            argument when first preparing a new receptor for docking. This allows
+                            you to explore rapidly the impact of the cavity mapping parameters on
+                            the generated cavities, whilst avoiding the overhead of actually writing
+                            the docking site (.as) file to disk. The number of cavities and volume
+                            of each cavity are written to standard output.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Visualisation of cavities</title>
+                        <para><screen>rbcavity -r <replaceable>.prm file</replaceable> -d</screen>If
+                            you have access to <application>InsightII</application> you can use the
+                                <literal>-d</literal> option to dump the cavity volumes in InsightII
+                            grid file format. There is no need to write the docking site (.as) file
+                            first. The InsightII grid files should be loaded into the reference
+                            coordinate space of the receptor and contoured at a contour level of
+                            0.99.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Writing the docking site (.as) file</title>
+                        <para><screen>rbcavity -r <replaceable>.prm file</replaceable> -was</screen>When
+                            you are happy the mapping parameters, use the <literal>-was</literal>
+                            option to write the docking site (.as) file to disk. The docking site
+                            file is a binary file that contains the cavity volumes in a compact
+                            format, and a pre-calculated cuboid grid extending over the cavities.
+                            The grid represents the distance from each point in space to the nearest
+                            cavity grid point, and is used by the cavity penalty scoring function.
+                            Calculating the distance grid can take a long time (whereas the cavity
+                            mapping itself is usually very fast), hence the <literal>-was</literal>
+                            option should be used sparingly.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Analysis of cavity atoms</title>
+                        <para><screen>rbcavity -r <replaceable>.prm file</replaceable> -ras -l <replaceable>distance</replaceable></screen>
+                            Use the <literal>-l</literal> options to list the receptor atoms within
+                            a given distance of any of the cavity volumes, for example to determine
+                            which receptor OH/NH3+ groups should be flexible. This option requires
+                            access to the pre-calculated distance grid embedded within the docking
+                            site (.as) file, and is best used in combination with the
+                            <literal>-ras</literal> option, which loads a previously generated
+                            docking site file. This avoids the time consuming step of generating the
+                            cavity distance grid again. If <literal>-l</literal> is used without
+                                <literal>-ras</literal>, the cavity distance grid will be calculated
+                            on-the-fly each time.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Miscellaneous options</title>
+                        <para>The <literal>-s</literal> option writes out various statistics on the
+                            cavity and on the receptor atoms in the vicinity of the cavity. These
+                            values have been used in genetic programming model building for docking
+                            pose false positive removal. The <literal>-v</literal> option writes out
+                            the receptor coordinates in PSF/CRD format for use by the rDock Viewer
+                            (not documented here). Note that the PSF/CRD files are not suitable for
+                            simulation purposes, only for visualisation, as the atom types are not
+                            set correctly. The <literal>-b</literal> option controls the size of the
+                            cavity distance grid, and represents the border beyond the actual cavity
+                            volumes. It should not be necessary to vary this parameter (default =
+                            8A) unless longer-range scoring functions are implemented.</para>
+                    </formalpara>
+                </refsect1>
+            </refentry>
+            <refentry>
+                <refmeta>
+                    <refentrytitle>rbcalcgrid</refentrytitle>
+                </refmeta>
+                <refnamediv>
+                    <refname/>
+                    <refpurpose>Calculation of vdW grid files (usually called by
+                            <literal>make_grid.csh</literal> wrapper script)</refpurpose>
+                </refnamediv>
+                <refsynopsisdiv>
+                    <cmdsynopsis>
+                        <command>$RBT_ROOT/bin/rbcalcgrid</command>
+                        <sbr/>
+                        <arg choice="req">-r<replaceable>system definition file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-o<replaceable>output suffix for generated
+                            grids</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-p<replaceable>vdW scoring function prm file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="opt">-g<replaceable>grid step</replaceable></arg>
+                        <sbr/>
+                        <arg choice="opt">-b<replaceable>border</replaceable></arg>
+                    </cmdsynopsis>
+                    <para>Note that, unlike <literal>rbdock</literal> and
+                        <literal>rbcavity</literal>, spaces are not tolerated between the
+                        command-line options and their corresponding arguments.</para>
+                </refsynopsisdiv>
+                <refsect1>
+                    <title>Usage</title>
+                    <para>See <literal>$RBT_ROOT/bin/make_grid.csh</literal> for common
+                    usage.</para>
+                </refsect1>
+            </refentry>
+            <refentry>
+                <refmeta>
+                    <refentrytitle>rbrms</refentrytitle>
+                </refmeta>
+                <refnamediv>
+                    <refname>rbrms</refname>
+                    <refpurpose>Calculation of ligand Root Mean Squared Displacement (RMSD) between
+                        reference and docked poses</refpurpose>
+                </refnamediv>
+                <refsynopsisdiv>
+                    <cmdsynopsis>
+                        <command>$RBT_ROOT/bin/rbrms</command>
+                        <arg choice="req">
+                            <replaceable>reference SD file</replaceable>
+                        </arg>
+                        <arg choice="req">
+                            <replaceable>input SD file</replaceable>
+                        </arg>
+                        <arg choice="opt">
+                            <replaceable>output SD file</replaceable>
+                        </arg>
+                        <arg choice="opt">
+                            <replaceable>RMSD threshold</replaceable>
+                        </arg>
+                    </cmdsynopsis>
+                </refsynopsisdiv>
+                <refsect1>
+                    <title>Usage</title>
+                    <formalpara>
+                        <title>With two arguments</title>
+                        <para><literal>rbrms</literal> calculates the RMSD between each record in
+                            the input SD file and the first record of the reference SD file. If
+                            there is a mismatch in the number of atoms, the record is skipped and
+                            the RMSD is not calculated. The RMSD is calculated over the heavy
+                            (non-hydrogen) atoms only. Results are output to standard output.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>With three arguments</title>
+                        <para>As for two arguments, plus each record in the input SD file is written
+                            to the output SD file with the calculated RMSD value stored as an SD
+                            data field (<literal>RMSD</literal> field).</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>With four arguments</title>
+                        <para>As for three arguments, with an RMSD filter applied to the output SD
+                            file. Records are not written if they have an RMSD less than the
+                            threshold value with any previous record in the input SD file. This
+                            provides a crude way of removing duplicate poses.</para>
+                    </formalpara>
+                </refsect1>
+            </refentry>
+            <refentry>
+                <refmeta>
+                    <refentrytitle>rbtether</refentrytitle>
+                </refmeta>
+                <refnamediv>
+                    <refname>rbtether</refname>
+                    <refpurpose>Prepares a ligand SD file for tethered scaffold docking. Requires
+                        Daylight SMARTS license. Annotates ligand SD file with tethered substructure
+                        atom indices.</refpurpose>
+                </refnamediv>
+                <refsynopsisdiv>
+                    <cmdsynopsis>
+                        <command>$RBT_ROOT/bin/rbtether</command>
+                        <sbr/>
+                        <arg choice="req">-r<replaceable>reference ligand SD file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-i<replaceable>input ligand SD file</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-s<replaceable>SMARTS query</replaceable></arg>
+                        <sbr/>
+                        <arg choice="req">-o<replaceable>output root</replaceable></arg>
+                        <sbr/>
+                        <arg>
+                            <option>-ap</option>
+                            <option>-an</option>
+                            <option>-allH</option>
+                        </arg>
+                    </cmdsynopsis>
+                    <para>Note that, unlike <literal>rbdock</literal> and
+                        <literal>rbcavity</literal>, spaces are not tolerated between the
+                        command-line options and their corresponding arguments.</para>
+                </refsynopsisdiv>
+                <refsect1>
+                    <title>Usage</title>
+                    <formalpara>
+                        <title>Standard options</title>
+                        <para><screen>rbtether -r<replaceable>ref</replaceable> -i<replaceable>input</replaceable> -o<replaceable>output</replaceable> -s<replaceable>query</replaceable></screen>
+                            <literal>rbtether</literal> performs the following actions: <itemizedlist>
+                                <listitem>
+                                    <simpara>Runs the SMARTS query against the reference SD file to
+                                        determine the tethered substructure atom indices and
+                                        coordinates.</simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>If more than one substructure match is retrieved (e.g.
+                                        due to topological symmetry, or if the query is too simple)
+                                        only the first substructure match is retained as the
+                                        reference</simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>Runs the SMARTS query against each record of the input
+                                        ligand SD file in turn. </simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>For each substructure match, the ligand coordinates are
+                                        transformed such that the principal axes of the matching
+                                        substructure coordinates are aligned with the reference
+                                        substructure coordinates.</simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>In addition, an SD data field is added to the ligand
+                                        record which lists the atom indicies of the substructure
+                                        match, for later retrieval by
+                                    <literal>rbdock</literal>.</simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>Each transformed ligand is written to the output SD
+                                        file. </simpara>
+                                </listitem>
+                                <listitem>
+                                    <simpara>Note that if the SMARTS query returns more than one
+                                        substructure match for a ligand, that ligand is written
+                                        multiple times to the output file, once for each match, each
+                                        of which will be docked independently with different
+                                        tethering information</simpara>
+                                </listitem>
+                            </itemizedlist>
+                        </para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Determination of reference SMILES</title>
+                        <para><screen>rbtether -r<replaceable>ref</replaceable></screen> If
+                                <literal>rbtether</literal> is run with only the
+                            <literal>-r</literal> option (with no SMARTS query or ligand input or
+                            output files) the SMILES string for the entire reference ligand is
+                            reported to standard output and the program terminates with no further
+                            action. The SMILES string can often be used as the SMARTS query if the
+                            aim is to tether each ligand to the entire reference ligand
+                            substructure.</para>
+                    </formalpara>
+                    <formalpara>
+                        <title>Miscellaneous options</title>
+                        <para><literal>-ap -an -allH</literal> have the same meaning as described
+                            for <literal>rbdock</literal></para>
+                    </formalpara>
+                </refsect1>
+            </refentry>
+        </section>
+    </chapter>
+</book>

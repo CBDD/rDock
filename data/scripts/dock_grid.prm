@@ -1,0 +1,96 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE Free docking (grid-based VDW)
+
+SECTION SCORE
+    	INTER    RbtInterGridSF.prm
+    	INTRA    RbtIntraSF.prm
+	SYSTEM   RbtTargetSF.prm
+END_SECTION
+
+SECTION SETSLOPE_1
+	TRANSFORM           		RbtNullTransform
+	WEIGHT@SCORE.RESTR.CAVITY	5.0	# Dock with a high penalty for leaving the cavity
+	WEIGHT@SCORE.INTRA.DIHEDRAL	0.1	# Gradually ramp up dihedral weight from 0.1->0.5
+        ENABLED@SCORE.INTER.VDW1	TRUE	# Enable vdW grid with ECUT=1
+        ENABLED@SCORE.INTER.VDW5       	FALSE	# Disable vdW grid with ECUT=5
+        ENABLED@SCORE.INTER.VDW        	FALSE	# Disable indexed vdW
+END_SECTION
+
+SECTION RANDOM_POP
+        TRANSFORM                       RbtRandPopTransform
+        POP_SIZE                        50
+	SCALE_CHROM_LENGTH		TRUE
+END_SECTION
+
+SECTION GA_SLOPE1
+	TRANSFORM			RbtGATransform	
+	PCROSSOVER			0.4	# Prob. of crossover
+	XOVERMUT			TRUE	# Cauchy mutation after each crossover
+	CMUTATE				FALSE	# True = Cauchy; False = Rectang. for regular mutations
+	STEP_SIZE			1.0	# Max translational mutation
+END_SECTION
+
+SECTION SETSLOPE_3
+	TRANSFORM           		RbtNullTransform
+	WEIGHT@SCORE.INTRA.DIHEDRAL	0.2
+        ENABLED@SCORE.INTER.VDW1       	FALSE	# Disable vdW grid with ECUT=1
+        ENABLED@SCORE.INTER.VDW5       	TRUE	# Enable vdW grid with ECUT=5
+END_SECTION
+
+SECTION GA_SLOPE3
+	TRANSFORM			RbtGATransform	
+	PCROSSOVER			0.4	# Prob. of crossover
+	XOVERMUT			TRUE	# Cauchy mutation after each crossover
+	CMUTATE				FALSE	# True = Cauchy; False = Rectang. for regular mutations
+	STEP_SIZE			1.0	# Max torsional mutation
+END_SECTION
+
+SECTION SETSLOPE_5
+	TRANSFORM           		RbtNullTransform
+	WEIGHT@SCORE.INTRA.DIHEDRAL	0.3
+        ENABLED@SCORE.INTER.VDW5       	FALSE	# Disable vdW grid with ECUT=5
+        ENABLED@SCORE.INTER.VDW		TRUE	# Enable indexed vdW
+	ECUT@SCORE.INTER.VDW		25.0
+END_SECTION
+
+SECTION GA_SLOPE5
+	TRANSFORM			RbtGATransform	
+	PCROSSOVER			0.4	# Prob. of crossover
+	XOVERMUT			TRUE	# Cauchy mutation after each crossover
+	CMUTATE				FALSE	# True = Cauchy; False = Rectang. for regular mutations
+	STEP_SIZE			1.0	# Max torsional mutation
+END_SECTION
+
+SECTION SETSLOPE_10
+	TRANSFORM           		RbtNullTransform
+	WEIGHT@SCORE.INTRA.DIHEDRAL	0.5	# Final dihedral weight matches SF file
+	ECUT@SCORE.INTER.VDW		120.0	# Final ECUT matches SF file
+END_SECTION
+
+SECTION MC_10K
+	TRANSFORM           		RbtSimAnnTransform
+	START_T             		10.0
+	FINAL_T             		10.0
+	NUM_BLOCKS          		5
+	STEP_SIZE          		0.1
+	MIN_ACC_RATE            	0.25
+	PARTITION_DIST          	8.0
+	PARTITION_FREQ          	50
+	HISTORY_FREQ            	0
+END_SECTION
+
+SECTION SIMPLEX
+	TRANSFORM			RbtSimplexTransform
+	MAX_CALLS			200
+	NCYCLES				20
+	STOPPING_STEP_LENGTH		10e-4
+	PARTITION_DIST			8.0
+        STEP_SIZE			1.0
+	CONVERGENCE			0.001
+END_SECTION
+
+SECTION FINAL
+	TRANSFORM           		RbtNullTransform
+	WEIGHT@SCORE.RESTR.CAVITY	1.0	# revert to standard cavity penalty
+END_SECTION
+

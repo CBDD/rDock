@@ -1,0 +1,1617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="69">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <df name="data" root="../data">
+      <df name="filters" kind="SOURCE_LOGICAL_FOLDER">
+      </df>
+      <df name="pmf" kind="SOURCE_LOGICAL_FOLDER">
+        <df name="smoothed" kind="SOURCE_LOGICAL_FOLDER">
+          <in>smoother.m</in>
+        </df>
+      </df>
+      <df name="scripts" kind="SOURCE_LOGICAL_FOLDER">
+      </df>
+      <df name="sf" kind="SOURCE_LOGICAL_FOLDER">
+      </df>
+    </df>
+    <df name="fw" root="../fw">
+    </df>
+    <df name="import" root="../import">
+      <df name="simplex" kind="SOURCE_LOGICAL_FOLDER">
+        <df name="include" kind="SOURCE_LOGICAL_FOLDER">
+          <in>NMObjective.h</in>
+          <in>NMSearch.h</in>
+          <in>cmat.h</in>
+          <in>maps_general.h</in>
+          <in>subscrpt.h</in>
+          <in>vec.h</in>
+        </df>
+        <df name="src" kind="SOURCE_LOGICAL_FOLDER">
+          <in>NMSearch.cxx</in>
+        </df>
+      </df>
+      <df name="tnt" kind="SOURCE_LOGICAL_FOLDER">
+        <df name="include" kind="SOURCE_LOGICAL_FOLDER">
+          <in>jama_cholesky.h</in>
+          <in>jama_eig.h</in>
+          <in>jama_lu.h</in>
+          <in>jama_qr.h</in>
+          <in>jama_svd.h</in>
+          <in>tnt.h</in>
+          <in>tnt_array1d.h</in>
+          <in>tnt_array1d_utils.h</in>
+          <in>tnt_array2d.h</in>
+          <in>tnt_array2d_utils.h</in>
+          <in>tnt_array3d.h</in>
+          <in>tnt_array3d_utils.h</in>
+          <in>tnt_cmat.h</in>
+          <in>tnt_fortran_array1d.h</in>
+          <in>tnt_fortran_array1d_utils.h</in>
+          <in>tnt_fortran_array2d.h</in>
+          <in>tnt_fortran_array2d_utils.h</in>
+          <in>tnt_fortran_array3d.h</in>
+          <in>tnt_fortran_array3d_utils.h</in>
+          <in>tnt_i_refvec.h</in>
+          <in>tnt_math_utils.h</in>
+          <in>tnt_sparse_matrix_csr.h</in>
+          <in>tnt_stopwatch.h</in>
+          <in>tnt_subscript.h</in>
+          <in>tnt_vec.h</in>
+          <in>tnt_version.h</in>
+        </df>
+      </df>
+    </df>
+    <df name="include" root="../include">
+      <df name="GP" kind="SOURCE_LOGICAL_FOLDER">
+        <in>RbtCell.h</in>
+        <in>RbtCommand.h</in>
+        <in>RbtGPChromosome.h</in>
+        <in>RbtGPFFCHK1.h</in>
+        <in>RbtGPFFCrossDock.h</in>
+        <in>RbtGPFFGold.h</in>
+        <in>RbtGPFFHSP90.h</in>
+        <in>RbtGPFFSpike.h</in>
+        <in>RbtGPFitnessFunction.h</in>
+        <in>RbtGPGenome.h</in>
+        <in>RbtGPParser.h</in>
+        <in>RbtGPPopulation.h</in>
+        <in>RbtGPTypes.h</in>
+      </df>
+      <in>RandInt.h</in>
+      <in>Rbt.h</in>
+      <in>RbtAlignTransform.h</in>
+      <in>RbtAnnotation.h</in>
+      <in>RbtAnnotationHandler.h</in>
+      <in>RbtAromIdxSF.h</in>
+      <in>RbtAtom.h</in>
+      <in>RbtAtomFuncs.h</in>
+      <in>RbtBaseBiMolTransform.h</in>
+      <in>RbtBaseFileSink.h</in>
+      <in>RbtBaseFileSource.h</in>
+      <in>RbtBaseGrid.h</in>
+      <in>RbtBaseIdxSF.h</in>
+      <in>RbtBaseInterSF.h</in>
+      <in>RbtBaseIntraSF.h</in>
+      <in>RbtBaseMolecularDataSource.h</in>
+      <in>RbtBaseMolecularFileSink.h</in>
+      <in>RbtBaseMolecularFileSource.h</in>
+      <in>RbtBaseObject.h</in>
+      <in>RbtBaseSF.h</in>
+      <in>RbtBaseTransform.h</in>
+      <in>RbtBaseUniMolTransform.h</in>
+      <in>RbtBiMolWorkSpace.h</in>
+      <in>RbtBond.h</in>
+      <in>RbtCavity.h</in>
+      <in>RbtCavityFillSF.h</in>
+      <in>RbtCavityGridSF.h</in>
+      <in>RbtCellTokenIter.h</in>
+      <in>RbtCharmmDataSource.h</in>
+      <in>RbtCharmmTypesFileSource.h</in>
+      <in>RbtChrom.h</in>
+      <in>RbtChromDihedralElement.h</in>
+      <in>RbtChromDihedralRefData.h</in>
+      <in>RbtChromElement.h</in>
+      <in>RbtChromFactory.h</in>
+      <in>RbtChromOccupancyElement.h</in>
+      <in>RbtChromOccupancyRefData.h</in>
+      <in>RbtChromPositionElement.h</in>
+      <in>RbtChromPositionRefData.h</in>
+      <in>RbtCommands.h</in>
+      <in>RbtConfig.h</in>
+      <in>RbtConstSF.h</in>
+      <in>RbtConstraint.h</in>
+      <in>RbtContainers.h</in>
+      <in>RbtContext.h</in>
+      <in>RbtCoord.h</in>
+      <in>RbtCrdFileSink.h</in>
+      <in>RbtCrdFileSource.h</in>
+      <in>RbtDebug.h</in>
+      <in>RbtDihedralIntraSF.h</in>
+      <in>RbtDihedralSF.h</in>
+      <in>RbtDihedralTargetSF.h</in>
+      <in>RbtDirectorySource.h</in>
+      <in>RbtDockingError.h</in>
+      <in>RbtDockingSite.h</in>
+      <in>RbtElementFileSource.h</in>
+      <in>RbtError.h</in>
+      <in>RbtEuler.h</in>
+      <in>RbtFFTGrid.h</in>
+      <in>RbtFileError.h</in>
+      <in>RbtFilter.h</in>
+      <in>RbtFilterExpression.h</in>
+      <in>RbtFilterExpressionVisitor.h</in>
+      <in>RbtFlexAtomFactory.h</in>
+      <in>RbtFlexData.h</in>
+      <in>RbtFlexDataVisitor.h</in>
+      <in>RbtGATransform.h</in>
+      <in>RbtGenome.h</in>
+      <in>RbtInteractionGrid.h</in>
+      <in>RbtInteractionTemplate.h</in>
+      <in>RbtLigandError.h</in>
+      <in>RbtLigandFlexData.h</in>
+      <in>RbtLigandSiteMapper.h</in>
+      <in>RbtMOEGrid.h</in>
+      <in>RbtMOL2FileSource.h</in>
+      <in>RbtMdlFileSink.h</in>
+      <in>RbtMdlFileSource.h</in>
+      <in>RbtModel.h</in>
+      <in>RbtModelError.h</in>
+      <in>RbtModelMutator.h</in>
+      <in>RbtNmrRestraintFileSource.h</in>
+      <in>RbtNmrSF.h</in>
+      <in>RbtNoeRestraint.h</in>
+      <in>RbtNonBondedGrid.h</in>
+      <in>RbtNonBondedHHSGrid.h</in>
+      <in>RbtNullTransform.h</in>
+      <in>RbtObserver.h</in>
+      <in>RbtPMF.h</in>
+      <in>RbtPMFDirSource.h</in>
+      <in>RbtPMFGridSF.h</in>
+      <in>RbtPMFIdxSF.h</in>
+      <in>RbtPRMFactory.h</in>
+      <in>RbtParamHandler.h</in>
+      <in>RbtParameterFileSource.h</in>
+      <in>RbtParser.h</in>
+      <in>RbtPdbFileSource.h</in>
+      <in>RbtPharmaSF.h</in>
+      <in>RbtPlane.h</in>
+      <in>RbtPolarIdxSF.h</in>
+      <in>RbtPolarIntraSF.h</in>
+      <in>RbtPolarSF.h</in>
+      <in>RbtPopulation.h</in>
+      <in>RbtPrincipalAxes.h</in>
+      <in>RbtPseudoAtom.h</in>
+      <in>RbtPsfFileSink.h</in>
+      <in>RbtPsfFileSource.h</in>
+      <in>RbtQuat.h</in>
+      <in>RbtRand.h</in>
+      <in>RbtRandLigTransform.h</in>
+      <in>RbtRandPopTransform.h</in>
+      <in>RbtRealGrid.h</in>
+      <in>RbtReceptorFlexData.h</in>
+      <in>RbtRequest.h</in>
+      <in>RbtRequestHandler.h</in>
+      <in>RbtResources.h</in>
+      <in>RbtRotSF.h</in>
+      <in>RbtSAIdxSF.h</in>
+      <in>RbtSATypes.h</in>
+      <in>RbtSFAgg.h</in>
+      <in>RbtSFFactory.h</in>
+      <in>RbtSFRequest.h</in>
+      <in>RbtSetupPMFSF.h</in>
+      <in>RbtSetupPolarSF.h</in>
+      <in>RbtSetupSASF.h</in>
+      <in>RbtSimAnnTransform.h</in>
+      <in>RbtSimplexTransform.h</in>
+      <in>RbtSiteMapper.h</in>
+      <in>RbtSiteMapperFactory.h</in>
+      <in>RbtSmartPointer.h</in>
+      <in>RbtSmarts.h</in>
+      <in>RbtSolventFlexData.h</in>
+      <in>RbtSphereSiteMapper.h</in>
+      <in>RbtStringTokenIter.h</in>
+      <in>RbtSubject.h</in>
+      <in>RbtTetherSF.h</in>
+      <in>RbtToken.h</in>
+      <in>RbtTokenIter.h</in>
+      <in>RbtTransformAgg.h</in>
+      <in>RbtTransformFactory.h</in>
+      <in>RbtTriposAtomType.h</in>
+      <in>RbtTypes.h</in>
+      <in>RbtVariant.h</in>
+      <in>RbtVble.h</in>
+      <in>RbtVdwGridSF.h</in>
+      <in>RbtVdwIdxSF.h</in>
+      <in>RbtVdwIntraSF.h</in>
+      <in>RbtVdwSF.h</in>
+      <in>RbtWorkSpace.h</in>
+      <in>Singleton.h</in>
+    </df>
+    <df name="lib" root="../lib">
+    </df>
+    <df name="popt" root="../popt">
+      <df name="autom4te.cache" kind="SOURCE_LOGICAL_FOLDER">
+        <in>output.0</in>
+        <in>output.1</in>
+        <in>requests</in>
+        <in>traces.0</in>
+        <in>traces.1</in>
+      </df>
+      <df name="intl" kind="SOURCE_LOGICAL_FOLDER">
+        <in>ChangeLog</in>
+        <in>Makefile.in</in>
+        <in>VERSION</in>
+        <in>bindtextdom.c</in>
+        <in>config.charset</in>
+        <in>dcgettext.c</in>
+        <in>dcigettext.c</in>
+        <in>dcngettext.c</in>
+        <in>dgettext.c</in>
+        <in>dngettext.c</in>
+        <in>eval-plural.h</in>
+        <in>explodename.c</in>
+        <in>finddomain.c</in>
+        <in>gettext.c</in>
+        <in>gettextP.h</in>
+        <in>gmo.h</in>
+        <in>hash-string.h</in>
+        <in>intl-compat.c</in>
+        <in>l10nflist.c</in>
+        <in>libgnuintl.h</in>
+        <in>loadinfo.h</in>
+        <in>loadmsgcat.c</in>
+        <in>localcharset.c</in>
+        <in>locale.alias</in>
+        <in>localealias.c</in>
+        <in>localename.c</in>
+        <in>ngettext.c</in>
+        <in>os2compat.c</in>
+        <in>os2compat.h</in>
+        <in>osdep.c</in>
+        <in>plural-exp.c</in>
+        <in>plural-exp.h</in>
+        <in>plural.c</in>
+        <in>plural.y</in>
+        <in>ref-add.sin</in>
+        <in>ref-del.sin</in>
+        <in>textdomain.c</in>
+      </df>
+      <df name="po" kind="SOURCE_LOGICAL_FOLDER">
+        <in>ChangeLog</in>
+        <in>Makefile.in</in>
+        <in>Makefile.in.in</in>
+        <in>POTFILES.in</in>
+        <in>cs.gmo</in>
+        <in>cs.po</in>
+        <in>da.gmo</in>
+        <in>da.po</in>
+        <in>de.gmo</in>
+        <in>de.po</in>
+        <in>es.gmo</in>
+        <in>es.po</in>
+        <in>eu_ES.gmo</in>
+        <in>eu_ES.po</in>
+        <in>fi.gmo</in>
+        <in>fi.po</in>
+        <in>fr.gmo</in>
+        <in>fr.po</in>
+        <in>gl.gmo</in>
+        <in>gl.po</in>
+        <in>hu.gmo</in>
+        <in>hu.po</in>
+        <in>id.gmo</in>
+        <in>id.po</in>
+        <in>is.gmo</in>
+        <in>is.po</in>
+        <in>it.gmo</in>
+        <in>it.po</in>
+        <in>ja.gmo</in>
+        <in>ja.po</in>
+        <in>ko.gmo</in>
+        <in>ko.po</in>
+        <in>no.gmo</in>
+        <in>no.po</in>
+        <in>pl.gmo</in>
+        <in>pl.po</in>
+        <in>popt.pot</in>
+        <in>pt.gmo</in>
+        <in>pt.po</in>
+        <in>pt_BR.gmo</in>
+        <in>pt_BR.po</in>
+        <in>ro.gmo</in>
+        <in>ro.po</in>
+        <in>ru.gmo</in>
+        <in>ru.po</in>
+        <in>sk.gmo</in>
+        <in>sk.po</in>
+        <in>sl.gmo</in>
+        <in>sl.po</in>
+        <in>sr.gmo</in>
+        <in>sr.po</in>
+        <in>sv.gmo</in>
+        <in>sv.po</in>
+        <in>tr.gmo</in>
+        <in>tr.po</in>
+        <in>uk.gmo</in>
+        <in>uk.po</in>
+        <in>wa.gmo</in>
+        <in>wa.po</in>
+        <in>zh.gmo</in>
+        <in>zh.po</in>
+        <in>zh_CN.gmo</in>
+        <in>zh_CN.po</in>
+        <in>zh_TW.gmo</in>
+        <in>zh_TW.po</in>
+      </df>
+      <df name="test3-data" kind="SOURCE_LOGICAL_FOLDER">
+        <in>01.answer</in>
+        <in>01.input</in>
+        <in>02.answer</in>
+        <in>02.input</in>
+        <in>03.answer</in>
+        <in>03.input</in>
+      </df>
+      <in>ABOUT-NLS</in>
+      <in>CHANGES</in>
+      <in>COPYING</in>
+      <in>Doxyfile.in</in>
+      <in>Makefile.am</in>
+      <in>Makefile.in</in>
+      <in>README</in>
+      <in>aclocal.m4</in>
+      <in>autogen.sh</in>
+      <in>config.guess</in>
+      <in>config.h.in</in>
+      <in>config.sub</in>
+      <in>configure</in>
+      <in>configure.ac</in>
+      <in>depcomp</in>
+      <in>findme.c</in>
+      <in>findme.h</in>
+      <in>install-sh</in>
+      <in>libpopt.vers</in>
+      <in>ltmain.sh</in>
+      <in>missing</in>
+      <in>mkinstalldirs</in>
+      <in>popt.3</in>
+      <in>popt.c</in>
+      <in>popt.h</in>
+      <in>popt.ps</in>
+      <in>popt.spec</in>
+      <in>poptconfig.c</in>
+      <in>popthelp.c</in>
+      <in>poptint.h</in>
+      <in>poptparse.c</in>
+      <in>system.h</in>
+      <in>test-poptrc</in>
+      <in>test1.c</in>
+      <in>test2.c</in>
+      <in>test3.c</in>
+      <in>testit.sh</in>
+    </df>
+    <df name="src" root="../src">
+      <df name="daylight" kind="SOURCE_LOGICAL_FOLDER">
+        <in>RbtSmarts.cxx</in>
+      </df>
+      <df name="exe" kind="SOURCE_LOGICAL_FOLDER">
+        <in>rbcalcgrid.cxx</in>
+        <in>rbcavity.cxx</in>
+        <in>rbconvgrid.cxx</in>
+        <in>rbdock.cxx</in>
+        <in>rblist.cxx</in>
+        <in>rbmoegrid.cxx</in>
+        <in>rbrms.cxx</in>
+        <in>rbtether.cxx</in>
+        <in>smart_rms.cxx</in>
+      </df>
+      <df name="GP" kind="SOURCE_LOGICAL_FOLDER">
+        <in>RbtGPChromosome.cxx</in>
+        <in>RbtGPFFCHK1.cxx</in>
+        <in>RbtGPFFCrossDock.cxx</in>
+        <in>RbtGPFFGold.cxx</in>
+        <in>RbtGPFFHSP90.cxx</in>
+        <in>RbtGPFFSpike.cxx</in>
+        <in>RbtGPFitnessFunction.cxx</in>
+        <in>RbtGPGenome.cxx</in>
+        <in>RbtGPParser.cxx</in>
+        <in>RbtGPPopulation.cxx</in>
+        <in>analyseFunction.cxx</in>
+        <in>chk1.cxx</in>
+        <in>hsp90.cxx</in>
+      </df>
+      <df name="lib" kind="SOURCE_LOGICAL_FOLDER">
+        <in>Rbt.cxx</in>
+        <in>RbtAlignTransform.cxx</in>
+        <in>RbtAnnotation.cxx</in>
+        <in>RbtAnnotationHandler.cxx</in>
+        <in>RbtAromIdxSF.cxx</in>
+        <in>RbtAtom.cxx</in>
+        <in>RbtAtomFuncs.cxx</in>
+        <in>RbtBaseBiMolTransform.cxx</in>
+        <in>RbtBaseFileSink.cxx</in>
+        <in>RbtBaseFileSource.cxx</in>
+        <in>RbtBaseGrid.cxx</in>
+        <in>RbtBaseIdxSF.cxx</in>
+        <in>RbtBaseInterSF.cxx</in>
+        <in>RbtBaseIntraSF.cxx</in>
+        <in>RbtBaseMolecularFileSink.cxx</in>
+        <in>RbtBaseMolecularFileSource.cxx</in>
+        <in>RbtBaseObject.cxx</in>
+        <in>RbtBaseSF.cxx</in>
+        <in>RbtBaseTransform.cxx</in>
+        <in>RbtBaseUniMolTransform.cxx</in>
+        <in>RbtBiMolWorkSpace.cxx</in>
+        <in>RbtBond.cxx</in>
+        <in>RbtCavityFillSF.cxx</in>
+        <in>RbtCavityGridSF.cxx</in>
+        <in>RbtCellTokenIter.cxx</in>
+        <in>RbtCharmmDataSource.cxx</in>
+        <in>RbtCharmmTypesFileSource.cxx</in>
+        <in>RbtChrom.cxx</in>
+        <in>RbtChromDihedralElement.cxx</in>
+        <in>RbtChromDihedralRefData.cxx</in>
+        <in>RbtChromElement.cxx</in>
+        <in>RbtChromFactory.cxx</in>
+        <in>RbtChromOccupancyElement.cxx</in>
+        <in>RbtChromOccupancyRefData.cxx</in>
+        <in>RbtChromPositionElement.cxx</in>
+        <in>RbtChromPositionRefData.cxx</in>
+        <in>RbtConstSF.cxx</in>
+        <in>RbtConstraint.cxx</in>
+        <in>RbtContext.cxx</in>
+        <in>RbtCrdFileSink.cxx</in>
+        <in>RbtCrdFileSource.cxx</in>
+        <in>RbtDebug.cxx</in>
+        <in>RbtDihedralIntraSF.cxx</in>
+        <in>RbtDihedralSF.cxx</in>
+        <in>RbtDihedralTargetSF.cxx</in>
+        <in>RbtDirectorySource.cxx</in>
+        <in>RbtDockingSite.cxx</in>
+        <in>RbtElementFileSource.cxx</in>
+        <in>RbtEuler.cxx</in>
+        <in>RbtFFTGrid.cxx</in>
+        <in>RbtFilter.cxx</in>
+        <in>RbtFilterExpression.cxx</in>
+        <in>RbtFilterExpressionVisitor.cxx</in>
+        <in>RbtFlexAtomFactory.cxx</in>
+        <in>RbtGATransform.cxx</in>
+        <in>RbtGenome.cxx</in>
+        <in>RbtInteractionGrid.cxx</in>
+        <in>RbtLigandFlexData.cxx</in>
+        <in>RbtLigandSiteMapper.cxx</in>
+        <in>RbtMOEGrid.cxx</in>
+        <in>RbtMOL2FileSource.cxx</in>
+        <in>RbtMdlFileSink.cxx</in>
+        <in>RbtMdlFileSource.cxx</in>
+        <in>RbtModel.cxx</in>
+        <in>RbtModelMutator.cxx</in>
+        <in>RbtNmrRestraintFileSource.cxx</in>
+        <in>RbtNmrSF.cxx</in>
+        <in>RbtNoeRestraint.cxx</in>
+        <in>RbtNonBondedGrid.cxx</in>
+        <in>RbtNonBondedHHSGrid.cxx</in>
+        <in>RbtNullTransform.cxx</in>
+        <in>RbtObserver.cxx</in>
+        <in>RbtPMF.cxx</in>
+        <in>RbtPMFDirSource.cxx</in>
+        <in>RbtPMFGridSF.cxx</in>
+        <in>RbtPMFIdxSF.cxx</in>
+        <in>RbtPRMFactory.cxx</in>
+        <in>RbtParamHandler.cxx</in>
+        <in>RbtParameterFileSource.cxx</in>
+        <in>RbtParser.cxx</in>
+        <in>RbtPdbFileSource.cxx</in>
+        <in>RbtPharmaSF.cxx</in>
+        <in>RbtPolarIdxSF.cxx</in>
+        <in>RbtPolarIntraSF.cxx</in>
+        <in>RbtPolarSF.cxx</in>
+        <in>RbtPopulation.cxx</in>
+        <in>RbtPrincipalAxes.cxx</in>
+        <in>RbtPseudoAtom.cxx</in>
+        <in>RbtPsfFileSink.cxx</in>
+        <in>RbtPsfFileSource.cxx</in>
+        <in>RbtRand.cxx</in>
+        <in>RbtRandLigTransform.cxx</in>
+        <in>RbtRandPopTransform.cxx</in>
+        <in>RbtRealGrid.cxx</in>
+        <in>RbtReceptorFlexData.cxx</in>
+        <in>RbtRotSF.cxx</in>
+        <in>RbtSAIdxSF.cxx</in>
+        <in>RbtSATypes.cxx</in>
+        <in>RbtSFAgg.cxx</in>
+        <in>RbtSFFactory.cxx</in>
+        <in>RbtSetupPMFSF.cxx</in>
+        <in>RbtSetupPolarSF.cxx</in>
+        <in>RbtSetupSASF.cxx</in>
+        <in>RbtSimAnnTransform.cxx</in>
+        <in>RbtSimplexTransform.cxx</in>
+        <in>RbtSiteMapper.cxx</in>
+        <in>RbtSiteMapperFactory.cxx</in>
+        <in>RbtSolventFlexData.cxx</in>
+        <in>RbtSphereSiteMapper.cxx</in>
+        <in>RbtStringTokenIter.cxx</in>
+        <in>RbtSubject.cxx</in>
+        <in>RbtTetherSF.cxx</in>
+        <in>RbtToken.cxx</in>
+        <in>RbtTransformAgg.cxx</in>
+        <in>RbtTransformFactory.cxx</in>
+        <in>RbtTriposAtomType.cxx</in>
+        <in>RbtVdwGridSF.cxx</in>
+        <in>RbtVdwIdxSF.cxx</in>
+        <in>RbtVdwIntraSF.cxx</in>
+        <in>RbtVdwSF.cxx</in>
+        <in>RbtWorkSpace.cxx</in>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>../build/Makefile</itemPath>
+      <itemPath>rdock_nb-Makefile.mk</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>../build</Elem>
+    <Elem>../data</Elem>
+    <Elem>../fw</Elem>
+    <Elem>../import</Elem>
+    <Elem>../include</Elem>
+    <Elem>../lib</Elem>
+    <Elem>../src</Elem>
+    <Elem>../popt</Elem>
+  </sourceRootList>
+  <projectmakefile>rdock_nb-Makefile.mk</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>../build</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+        </makeTool>
+      </makefileType>
+      <item path="../src/GP/RbtGPChromosome.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPFFCHK1.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPFFCrossDock.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPFFGold.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPFFHSP90.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPFFSpike.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPFitnessFunction.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPGenome.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPParser.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/RbtGPPopulation.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/chk1.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/GP/hsp90.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/exe/rbcalcgrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/exe/rbcavity.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/exe/rbdock.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/exe/rbmoegrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/exe/rbtether.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/Rbt.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtAlignTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtAnnotation.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtAnnotationHandler.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtAromIdxSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtAtom.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtAtomFuncs.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseBiMolTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseFileSink.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseGrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseIdxSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseInterSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseIntraSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseMolecularFileSink.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseMolecularFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseObject.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBaseUniMolTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBiMolWorkSpace.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtBond.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtCavityFillSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtCavityGridSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtCellTokenIter.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtCharmmDataSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtCharmmTypesFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChrom.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromDihedralElement.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromDihedralRefData.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromElement.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromFactory.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromOccupancyElement.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromOccupancyRefData.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromPositionElement.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtChromPositionRefData.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtConstSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtConstraint.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtContext.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtCrdFileSink.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtCrdFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtDihedralIntraSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtDihedralSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtDihedralTargetSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtDirectorySource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtDockingSite.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtElementFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtEuler.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtFFTGrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtFilter.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtFilterExpression.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtFilterExpressionVisitor.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtFlexAtomFactory.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtGATransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtGenome.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtInteractionGrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtLigandFlexData.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtLigandSiteMapper.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtMOEGrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtMOL2FileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtMdlFileSink.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtMdlFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtModel.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtModelMutator.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtNmrRestraintFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtNmrSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtNoeRestraint.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtNonBondedGrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtNonBondedHHSGrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtNullTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtObserver.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPMF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPMFDirSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPMFGridSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPMFIdxSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPRMFactory.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtParamHandler.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtParameterFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtParser.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPdbFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPharmaSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPolarIdxSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPolarIntraSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPolarSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPopulation.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPrincipalAxes.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../import/tnt/include</pElem>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPseudoAtom.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPsfFileSink.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtPsfFileSource.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtRand.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtRandLigTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtRandPopTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtRealGrid.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtReceptorFlexData.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtRotSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSAIdxSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSATypes.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSFAgg.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSFFactory.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSetupPMFSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSetupPolarSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSetupSASF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSimAnnTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSimplexTransform.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../import/simplex/include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSiteMapper.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSiteMapperFactory.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSolventFlexData.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSphereSiteMapper.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtStringTokenIter.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtSubject.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtTetherSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtToken.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtTransformAgg.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtTransformFactory.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtTriposAtomType.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtVdwGridSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtVdwIdxSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtVdwIntraSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtVdwSF.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <item path="../src/lib/RbtWorkSpace.cxx" ex="false" tool="1">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../include/GP</pElem>
+          </incDir>
+        </ccTool>
+      </item>
+      <folder path="import">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+            <pElem>../import/simplex/include</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <folder path="src/daylight">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <folder path="src/exe">
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+    </conf>
+  </confs>
+</configurationDescriptor>

@@ -1,0 +1,437 @@
+#!/usr/bin/perl
+# Produces text summaries of SD records                                        *
+#                                                                              *
+# Usage:  sdreport [-l] [-t] [-s<DataField>] [sdFiles]                         *
+#                                                                              *
+#         -l output data fields for each record as processed                   *
+#         -t tabulate Rbt.Score.* fields for each record as processed          *
+#         -s summarise data fields for all records                             *
+#         -s<DataField> summarise data fields for each unique value            *
+#                       of <DataField>                                         *
+#                                                                              *
+# Note:   If -l or -t are combined with -s, the listing/table is output        *
+#         within each ligand summary                                           *
+#         If sdFiles not given, reads from standard input                      *
+#         Output is to standard output                                         *
+#         Default is equivalent to sdfilter -l                                 *
+#*******************************************************************************
+use lib "$ENV{'RBT_ROOT'}/lib";
+
+use SDRecord;
+
+# Default field names and headings for RiboDock v4.00 scores
+my @defaultFields = ('SCORE','SCORE.INTER','SCORE.INTRA','SCORE.RESTR','SCORE.INTER.VDW');
+my @defaultHeadings = ('TOTAL','INTER','INTRA','RESTR','VDW');
+
+# Default field names and headings for normalised scores (score / #ligand heavy atoms)
+my @defaultNormFields = ('SCORE.norm','SCORE.INTER.norm','SCORE.INTRA.norm','SCORE.RESTR.norm','SCORE.heavy');
+my @defaultNormHeadings = ('TOTALn','INTERn','INTRAn','RESTRn','#heavy');
+
+# Default field names and headings for RiboDock v3.00 scores
+my @defaultOldFields = ('Rbt.Score.Corrected','Rbt.Score.Inter','Rbt.Score.Intra','Rbt.Score.IntraMin','Rbt.Score.Restraint');
+my @defaultOldHeadings = ('TOTAL','INTER','INTRA','INTRAMIN','RESTR');
+
+my $listFormat = 0;
+my $summaryFormat = 0;
+my $tableFormat = 0;
+my $supplierFormat = 0;
+my $csvFormat = 0;
+my $summaryKey = "_TITLE1";
+my $oldFields = 0;#If true, use old default field names for component scores
+my $headings = 1;#DM 21 Nov 2000, If false, don't output headings
+my @outputFields;
+my @outputHeadings;
+
+#Print help if no command line arguments
+printHelpAndExit() if (scalar(@ARGV) == 0);
+
+#Parse command line arguments
+my $nArgs = scalar(@ARGV);
+
+while (scalar(@ARGV)) {
+  my $arg = shift @ARGV;
+  printHelpAndExit() if ($arg eq '-h');
+  if (index($arg,'-l')==0) {
+    $listFormat = 1;
+  }
+  elsif (index($arg,'-o')==0) {
+    $oldFields = 1;
+  }
+  # 7 Feb 2005 (DM) Option to report normalised aggregate scores
+  elsif (index($arg,'-norm')==0) {
+    $oldFields = 2;
+  }
+  elsif (index($arg,'-sup')==0) {
+    $supplierFormat = 1;
+  }
+  elsif (index($arg,'-s')==0) {
+    $summaryFormat = 1;
+  }
+  elsif (index($arg,'-id')==0) {
+    $summaryKey = substr($arg,3);
+  }
+  elsif (index($arg,'-nh')==0) {
+    $headings = 0;
+  }
+  elsif (index($arg,'-t')==0) {
+    $tableFormat = 1;
+    push @outputFields, split(',',substr($arg,2));
+    push @outputHeadings, @outputFields;
+  }
+  elsif (index($arg,'-c')==0) {
+    $csvFormat = 1;
+    push @outputFields, split(',',substr($arg,2));
+    push @outputHeadings, @outputFields;
+  }
+  else {
+    push @files,$arg;#must be a filename
+  }
+}
+push @ARGV,@files;#put the filenames back in the arg list
+
+#use -l if neither table format is specified
+$listFormat = (!$tableFormat && !$csvFormat && !$supplierFormat);
+
+#If no output fields defined for -t or -c use the defaults (old or new)
+if (scalar(@outputFields)==0) {
+	if ($oldFields == 1) {
+		@outputFields = @defaultOldFields;
+		@outputHeadings = @defaultOldHeadings;
+	}
+	elsif ($oldFields == 2) {
+                @outputFields = @defaultNormFields;
+                @outputHeadings = @defaultNormHeadings;
+	}
+	else {
+		@outputFields = @defaultFields;
+		@outputHeadings = @defaultHeadings;
+	}
+}
+
+my $sdRec = new SDRecord;
+my %summary;#hash of SDRecord lists, indexed by user-defined summary key
+my %indexByName;
+my %indexByNum;
+my $idx = 0;
+my $nRec = 0;
+
+#Column headings for tab and csv format
+#DM 21 Nov 2000 - if $headings is false, then don't output the column headings
+if ($tableFormat && !$summaryFormat && $headings) {
+  tabHeadings($summaryKey,@outputHeadings);
+}
+if ($csvFormat && !$summaryFormat && $headings) {
+  csvHeadings($summaryKey,@outputHeadings);
+}
+
+#read records
+while ($sdRec->readRec('LINES'=>1,'DATA'=>1)) {
+  $sdRec->addData('_REC' => ++$nRec);#add record# as temp data field
+  if ($listFormat && !$summaryFormat) {
+    print "\n\nRECORD #$nRec\n";
+    $sdRec->writeData();
+  }
+  if ($tableFormat && !$summaryFormat) {
+    @recList = ($sdRec);
+    tabScores(\@recList,$summaryKey,@outputFields);
+  }
+  elsif ($csvFormat && !$summaryFormat) {
+    @recList = ($sdRec);
+    csvScores(\@recList,$summaryKey,@outputFields);
+  }
+  elsif ($supplierFormat && !$summaryFormat) {
+    @recList = ($sdRec);
+    tabulateSuppliers(\@recList,$summaryKey);
+  }
+  #add record to summary, indexed by user field value
+  #keep a separate index of unique values of user field values,
+  #indexed by number in the order the values first appear
+  #In this way we can maintain the sorted order of ligands
+  #when we come to print out the summary
+  if ($summaryFormat) {
+    my $summaryValue = $sdRec->{'DATA'}->{$summaryKey};
+    #New data field value encountered
+    if (!defined $indexByName{$summaryValue}) {
+      $idx++;#incr the number of unique values
+      #keep cross-referenced indexes (field value <-> number)
+      $indexByName{$summaryValue} = $idx;
+      $indexByNum{$idx} = $summaryValue;
+    }
+    push @{$summary{$summaryValue}},$sdRec->copy('DATA'=>1);
+  }
+}
+
+#Print summary if required
+if ($summaryFormat) {
+  print "\n===============================================================\n";
+  print "SUMMARY BY $summaryKey\n";
+  foreach $idx (sort {$a<=>$b} keys %indexByNum) {#numberic sort of index numbers
+    my $key = $indexByNum{$idx};#look up corresponding data field value
+    print "\n===============================================================\n";
+    print "$summaryKey = $key (#$idx)\n\n";
+    writeSummary($summary{$key});
+    if ($listFormat) {
+      print "\nIndividual records:\n";
+      foreach $rec (@{$summary{$key}}) {
+        print "\n";
+	      $rec->writeData();
+      }
+    }
+    if ($tableFormat) {
+      print "\nScores:\n";
+      tabHeadings($summaryKey,@outputHeadings);
+      tabScores($summary{$key},$summaryKey,@outputFields);
+    }
+    if ($csvFormat) {
+      print "\nScores:\n";
+      csvHeadings($summaryKey,@outputHeadings);
+      csvScores($summary{$key},$summaryKey,@outputFields);
+    }
+  }
+}
+
+##############################################################
+# writes a summary to STDOUT for a list of SDRecords
+# Input is a reference to an array of SDRecords
+sub writeSummary {
+  my $recListRef = shift;
+
+  #Extract the list of data values for each fieldname into a hash array
+  #(key=fieldname, value=array ref)
+  my %fields;
+  foreach $rec (@{$recListRef}) {
+    my ($key,$value);
+    while ( ($key,$value) = each %{$rec->{'DATA'}}) {
+      push @{$fields{$key}},$value;
+    }
+  }
+
+  #Look for constant fields and store separately
+  my %constFields;
+  foreach $key (keys %fields) {
+    my @values = sort  @{$fields{$key}};
+    my $nVal = scalar(@values);
+    if ($values[0] eq $values[$nVal -1]) {
+      $constFields{$key} = $values[0];#store the field name and the constant value
+      delete $fields{$key};#remove from (non-const) array
+    }
+  }
+
+  #Print constant fields
+  print "\nConstant fields:\n\n";
+  foreach $key (sort keys %constFields) {
+    printf "%-40s%s\n",$key,$constFields{$key};
+  }
+  #Print min and max value for non-const fields
+  print "\nVariable fields:\n\n";
+  foreach $key (sort keys %fields) {
+    my @values = @{$fields{$key}};
+    #Look at first value to decide whether to do text or numeric sort
+    if (isNaN($values[0])) {
+      @values = sort @values;#text sort
+    }
+    else {
+      @values = sort {$a <=> $b} @values;#numeric sort
+    }
+    my $nVal = scalar(@values);
+    printf "%-40s",$key;
+    print "Min = $values[0]\tMax = $values[$nVal-1]\t(N = $nVal)\n";
+  }
+}
+
+##############################################################
+# function isNaN equivalent to the C++, java, javascript isNaN
+# From P Vaglio, ~intranet/lib/rbt_func.pl
+sub isNaN {
+  local($_) = @_;
+  s/\s+//g;         # strip white space
+  # match +or- beginning of line 0 or 1 time
+  # then any numeric 0 or more
+  # then a decimal point 
+  # then any numeric 0 or more after decimal point 
+  # then possibly an e or E then + or - then any numreci at least once
+  if (/^([+-]?)(\d*)(\.(\d*))?([Ee]([+-]?\d+))?$/ && (defined $2 || defined $4)) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+##############################################################
+# output corresponding headings for use with tabScores
+sub tabHeadings {
+  my $summaryKey = shift;
+  my @fieldNames = @_;
+  printf("%-10s%-30s","REC",$summaryKey);
+  foreach $field (@fieldNames) {
+    printf("%10s",$field);
+  }
+  print "\n";
+}
+
+##############################################################
+# tab-delimited output of named data field values
+sub tabScores {
+  my $recListRef = shift;
+  my $summaryKey = shift;
+  my @fieldNames = @_;
+  foreach $rec (@{$recListRef}) {
+    printf("%03d\t%-30.30s",$rec->{'DATA'}->{'_REC'},$rec->{'DATA'}->{$summaryKey});
+    foreach $field (@fieldNames) {
+      my $val = $rec->{'DATA'}->{$field};
+      if (isNaN($val)) {
+        printf("%-10.12s",$val);
+      }
+      else {
+        printf("%10.3f",$val);
+      }
+    }
+    print "\n";
+  }
+}
+
+##############################################################
+# output corresponding headings for use with csvScores
+sub csvHeadings {
+  my $summaryKey = shift;
+  my @fieldNames = @_;
+  printf("%s,%s","REC",$summaryKey);
+  foreach $field (@fieldNames) {
+    printf(",%s",$field);
+  }
+  print "\n";
+}
+
+##############################################################
+# comma-delimited output of named data field values
+sub csvScores {
+  my $recListRef = shift;
+  my $summaryKey = shift;
+  my @fieldNames = @_;
+  foreach $rec (@{$recListRef}) {
+    printf("%d,%s",$rec->{'DATA'}->{'_REC'},$rec->{'DATA'}->{$summaryKey});
+    foreach $field (@fieldNames) {
+      my $val = $rec->{'DATA'}->{$field};
+      if (isNaN($val)) {
+        printf(",%s",$val);
+      }
+      else {
+        printf(",%.3f",$val);
+      }
+    }
+    print "\n";
+  }
+}
+
+
+##############################################################
+# standardised output of Catalyst supplier field
+# Input is a reference to an array of SDRecords
+# and a ligand identifier field to output in column 1 (def=Name)
+sub tabulateSuppliers {
+  my $recListRef = shift;
+  my $summaryKey = shift || 'Name';
+  foreach $rec (@{$recListRef}) {
+    my $suppBase = $rec->{'DATAREF'}->{'Supplier'}+1;
+    my $linesRef = $rec->{'LINES'};
+    my $name = $rec->{'DATA'}->{$summaryKey};
+
+    #Output some useful compound info
+    my $name = $rec->{'DATA'}->{$summaryKey};
+    my $molFormula = $rec->{'DATA'}->{'MolFormula'};
+    my $molWt = $rec->{'DATA'}->{'MolWt'};
+    my $casNum = $rec->{'DATA'}->{'CAS_num'};
+    my $mdlNum = $rec->{'DATA'}->{'MDLNUMBER'};
+    print "\n\n====================================================================================================\n";
+    printf("%-10.10s%s\n","Name:",$name);
+    printf("%-10.10s%s\n","Formula:",$molFormula);
+    printf("%-10.10s%s\n","Mol.wt:",$molWt);
+    printf("%-10.10s%s\n","CAS #:",$casNum);
+    printf("%-10.10s%s\n","MDL #:",$mdlNum);
+
+    #Get all the supplier record lines into a list
+    #Record is terminated by blank line
+    my @lines;
+    my $nLines = 0;
+    for (; $$linesRef[$suppBase+$nLines] ne ""; $nLines++) {
+      push @lines,$$linesRef[$suppBase+$nLines];
+    }
+
+    #Column headings
+    printf("\n%-20.20s%-40.40s%-40.40s\n",
+	   "Supplier",
+	   "Comment",
+	   "Price"
+	  );
+    print "----------------------------------------------------------------------------------------------------\n";
+
+    #Loop over each supplier
+    my $iLine = 0;
+    for (; $iLine < $nLines; $iLine++) {
+      #collect supplier info lines
+      my @supplierInfo = ();
+      for (; $lines[$iLine] ne "." && $iLine < $nLines; $iLine++) {
+	push @supplierInfo,$lines[$iLine];
+      }
+      #Check for incomplete record
+      if ($iLine == $nLines) {
+	print "** INCOMPLETE RECORD **\n";
+	last;
+      }
+      my $nSupplierInfo = scalar(@supplierInfo);
+      my $supplier = $supplierInfo[0];
+      #loop over each grade
+      for ($iLine++; ($lines[$iLine] ne "........................") && ($iLine < $nLines); $iLine++) {
+	#collect grade info lines
+	my @gradeInfo = ();
+	for (; index($lines[$iLine],"_") ne 0 && $iLine < $nLines; $iLine++) {
+	  push @gradeInfo,$lines[$iLine];
+	}
+	#Check for incomplete record
+	if ($iLine == $nLines) {
+	  print "** INCOMPLETE RECORD **\n";
+	  last;
+	}
+	my $grade = $gradeInfo[0];
+	#loop over each price info line
+	for (; index($lines[$iLine],".") ne 0 && $iLine < $nLines; $iLine++) {
+	  my @priceInfo = split(" ",$lines[$iLine]);
+	  my $price = join(" ",@priceInfo);
+	  printf("%-20.20s%-40.39s%-40.40s\n",
+		 $supplier,
+		 $grade,
+		 $price);		 
+	}
+	#Check for incomplete record
+	if ($iLine == $nLines) {
+	  print "** INCOMPLETE RECORD **\n";
+	  last;
+	}
+	last if $lines[$iLine] eq "........................";
+      }
+    }
+  }
+}
+
+
+#######################################################################
+sub printHelpAndExit {
+  print "\nProduces text summaries of SD records\n";
+  print "\nUsage:\tsdreport [-l] [-t[<FieldName,FieldName...>]] [-c<FieldName,FieldName...>] [-id<IDField>] [-nh] [-o] [-s] [-sup] [sdFiles]\n";
+  print "\n\t-l (list format) output all data fields for each record as processed\n";
+  print "\t-t (tab format) tabulate selected fields for each record as processed\n";
+  print "\t-c (csv format) comma delimited output of selected fields for each record as processed\n";
+  print "\t-s (summary format) output summary statistics for each unique value of ligand ID\n";
+  print "\t-sup (supplier format) tabulate supplier details (from Catalyst)\n";
+  print "\t-id<IDField> data field to use as ligand ID\n";
+  print "\t-nh don't output column headings in -t and -c formats\n";
+  print "\t-o use old (v3.00) score field names as default columns in -t and -c formats, else use v4.00 field names\n";
+  print "\t-norm use normalised score field names as default columns in -t and -c formats (normalised = score / #ligand heavy atoms)\n";
+  print "\nNote:\tIf -l, -t or -c are combined with -s, the listing/table is output within each ligand summary\n";
+  print "\t-sup should not be combined with other options\n";
+  print "\tDefault field names for -t and -c are RiboDock score field names\n";
+  print "\tDefault ID field name is Name\n";
+  print "\n\tIf sdFiles not given, reads from standard input\n";
+  print "\tOutput is to standard output\n\n";
+  exit;
+}

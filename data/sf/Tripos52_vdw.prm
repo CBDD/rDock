@@ -1,0 +1,324 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE vdW parameters from Tripos 5.2 forcefield and GOLD paper
+VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/Tripos52_vdw.prm#2 $
+################################################################################
+#
+# Revision history:
+#
+# 15 May 2002 (DM) Added extended types (carbons with implicit Hs,
+#                  plus polar H)
+# 13 May 2002 (DM) Initial version from J Comp Chem, 10 (1989) 982-1012
+#                  and J Mol Biol, 267 (1997) 727-748
+################################################################################
+#
+# Hydrogen
+#
+SECTION H
+	R	1.500
+	K	0.042
+	IP	13.60
+	POL	 4.00
+END_SECTION
+
+SECTION H.P
+	R	1.200
+	K	0.042
+	IP	13.60
+	POL	 4.00
+	isHBD	TRUE
+END_SECTION
+#
+# Carbon
+#
+SECTION C.cat
+	R	1.700
+	K	0.107
+	IP	15.62
+	POL	13.80
+END_SECTION
+
+SECTION C.3
+	R	1.700
+	K	0.107
+	IP	14.61
+	POL	13.80
+END_SECTION
+#
+# Increment R by 0.1 for each implicit hydrogen
+# Need to adjust POL to maintain same well depth
+# Leave K untouched for now
+
+
+SECTION C.3.H1
+	R	1.800
+	K	0.107
+	IP	14.61
+	POL	16.38
+END_SECTION
+
+SECTION C.3.H2
+	R	1.900
+	K	0.107
+	IP	14.61
+	POL	19.27
+END_SECTION
+
+SECTION C.3.H3
+	R	2.000
+	K	0.107
+	IP	14.61
+	POL	22.47
+END_SECTION
+
+SECTION C.2
+	R	1.700
+	K	0.107
+	IP	15.62
+	POL	13.80
+END_SECTION
+
+SECTION C.2.H1
+	R	1.800
+	K	0.107
+	IP	15.62
+	POL	16.38
+END_SECTION
+
+SECTION C.2.H2
+	R	1.900
+	K	0.107
+	IP	15.62
+	POL	19.27
+END_SECTION
+
+SECTION C.ar
+	R	1.700
+	K	0.107
+	IP	15.62
+	POL	13.80
+END_SECTION
+
+SECTION C.ar.H1
+	R	1.800
+	K	0.107
+	IP	15.62
+	POL	16.38
+END_SECTION
+
+SECTION C.1
+	R	1.700
+	K	0.107
+	IP	17.47
+	POL	13.80
+END_SECTION
+
+SECTION C.1.H1
+	R	1.800
+	K	0.107
+	IP	17.47
+	POL	16.38
+END_SECTION
+#
+# Nitrogen
+#
+SECTION N.4
+	R	1.550
+	K	0.095
+	IP	33.29
+	POL	 8.40
+END_SECTION
+
+SECTION N.3
+	R	1.550
+	K	0.095
+	IP	18.93
+	POL	 8.40
+	isHBA	TRUE
+END_SECTION
+
+SECTION N.pl3
+	R	1.550
+	K	0.095
+	IP	19.72
+	POL	 8.40
+END_SECTION
+
+SECTION N.am
+	R	1.550
+	K	0.095
+	IP	19.72
+	POL	 8.40
+END_SECTION
+
+SECTION N.2
+	R	1.550
+	K	0.095
+	IP	22.10
+	POL	 8.40
+	isHBA	TRUE
+END_SECTION
+
+SECTION N.ar
+	R	1.550
+	K	0.095
+	IP	22.10
+	POL	 8.40
+	isHBA	TRUE
+END_SECTION
+
+SECTION N.1
+	R	1.550
+	K	0.095
+	IP	23.91
+	POL	 8.40
+	isHBA	TRUE
+END_SECTION
+#
+# Oxygen
+#
+SECTION O.co2
+	R	1.520
+	K	0.116
+	IP	35.12
+	POL	5.4
+	isHBA	TRUE
+END_SECTION
+
+SECTION O.3
+	R	1.520
+	K	0.116
+	IP	24.39
+	POL	 5.40
+	isHBA	TRUE
+END_SECTION
+
+SECTION O.2
+	R	1.520
+	K	0.116
+	IP	26.65
+	POL	 5.40
+	isHBA	TRUE
+END_SECTION
+#
+# Sulphur
+#
+SECTION S.3
+	R	1.800
+	K	0.314
+	IP	15.50
+	POL	29.40
+END_SECTION
+
+SECTION S.o
+	R	1.700
+	K	0.314
+	IP	15.50
+	POL	29.40
+END_SECTION
+
+SECTION S.o2
+	R	1.700
+	K	0.314
+	IP	15.50
+	POL	29.40
+END_SECTION
+
+SECTION S.2
+	R	1.800
+	K	0.314
+	IP	17.78
+	POL	29.40
+END_SECTION
+#
+# Phosphorous
+#
+SECTION P.3
+	R	1.800
+	K	0.314
+	IP	16.78
+	POL	40.6
+END_SECTION
+#
+# Halides
+#
+SECTION F
+	R	1.470
+	K	0.109
+	IP	20.86
+	POL	 3.70
+END_SECTION
+
+SECTION Cl
+	R	1.750
+	K	0.314
+	IP	15.03
+	POL	21.80
+END_SECTION
+
+SECTION Br
+	R	1.850
+	K	0.434
+	IP	13.10
+	POL	31.20
+END_SECTION
+
+SECTION I
+	R	1.980
+	K	0.623
+	IP	12.67
+	POL	49.00
+END_SECTION
+#
+# Metals
+#
+SECTION Na
+	R	1.200
+	K	0.400
+END_SECTION
+
+SECTION K
+	R	1.200
+	K	0.400
+END_SECTION
+
+SECTION Ca
+	R	1.200
+	K	0.600
+END_SECTION
+
+SECTION Mg
+	R	1.200
+	K	0.600
+END_SECTION
+
+SECTION Li
+	R	1.200
+	K	0.400
+END_SECTION
+
+SECTION Al
+	R	1.200
+	K	0.042
+END_SECTION
+
+SECTION Si
+	R	1.200
+	K	0.042
+END_SECTION
+#
+# Undefined types
+#
+SECTION UNDEFINED
+	R	1.200
+	K	0.600
+END_SECTION
+
+SECTION Du
+	R	1.200
+	K	0.042
+END_SECTION
+
+SECTION LP
+	R	1.200
+	K	0.042
+END_SECTION

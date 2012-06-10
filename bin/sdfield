@@ -1,0 +1,31 @@
+#!/usr/bin/perl 
+# add extra fields to SD records
+use lib "$ENV{'RBT_ROOT'}/lib";
+use SDRecord;
+
+printHelpAndExit() if (scalar(@ARGV) == 0);
+#Parse command line arguments
+my @files;
+my $arg = shift @ARGV;
+printHelpAndExit() if ($arg eq '-h');
+#read records
+my $sdRec = new SDRecord;
+my $nRec=0;
+# if not -h, then must be the FieldName
+my $FieldName = $arg;
+my $FieldVal  = shift @ARGV; # and this must be the filed value
+# rest are the filenames
+while ($sdRec->readRec('DATA'=>1,'LINES'=>1)) {
+	$sdRec->addData('_REC' => ++$nRec);#add record# as temp data field
+	$sdRec->addData('_FILE' => $ARGV);#add filename as temp data field
+	$sdRec->addDataAndLines($FieldName => $FieldVal);
+	$sdRec->writeRec();#write record
+}
+
+sub printHelpAndExit {
+	print "\nAdding fields to SD files\n";
+	print "Usage:\n";
+	print "\tsdfield <Fieldname> <value> <infile[s]>\n";
+	print "\t-h\tthis help\n";
+	print "\t\n";
+}

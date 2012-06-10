@@ -1,0 +1,104 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE Intermolecular scoring function (with SOLVATION, grid-based VDW)
+VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/RbtSolvGridSF.prm#3 $
+
+################################################################################
+# Constant scoring function
+# Represents loss of translation, rotational entropy of ligand
+SECTION CONST
+	SCORING_FUNCTION	RbtConstSF
+	WEIGHT			+5.4
+END_SECTION
+
+################################################################################
+# Rotational scoring function
+# Represents loss of torsional entropy of ligand
+SECTION ROT
+	SCORING_FUNCTION	RbtRotSF
+	WEIGHT			+1.0
+END_SECTION
+
+################################################################################
+# Pseudo SFs for setting up atomic attributes for polar and lipo atoms
+SECTION SETUP_POLAR
+	SCORING_FUNCTION	RbtSetupPolarSF
+	RADIUS			5.0
+	NORM			25
+	POWER			0.5
+	CHGFACTOR		0.5
+	GUANFACTOR		0.5
+END_SECTION
+
+################################################################################
+# Hydrogen-bond scoring function (also Metal-acceptor, C.cat - acceptor)
+SECTION POLAR
+	SCORING_FUNCTION	RbtPolarIdxSF
+	WEIGHT			5.0
+	R12FACTOR		1.0
+	R12INCR			0.05
+	DR12MIN		 	0.25
+	DR12MAX		 	0.6
+	A1			180.0
+	DA1MIN			30.0
+	DA1MAX			80.0
+	A2			180.0
+	DA2MIN			60.0
+	DA2MAX			100.0
+	INCMETAL		TRUE
+	INCHBD			TRUE
+	INCHBA			TRUE
+	INCGUAN			TRUE
+	GUAN_PLANE		TRUE
+	ABS_DR12		TRUE
+	GRIDSTEP		0.5
+	RANGE			4.41
+	INCR			2.46
+	ATTR			TRUE
+	LP_OSP2			TRUE
+	LP_PHI			45
+	LP_DPHIMIN		15
+	LP_DPHIMAX		30	
+	LP_DTHETAMIN		20
+	LP_DTHETAMAX		60
+END_SECTION
+
+################################################################################
+#
+# VDW SCORING FUNCTIONS
+# Two precalculated grids are loaded with different values of ECUT
+# Each is initially disabled
+# We also load an indexed-grid version which is enabled
+#
+SECTION VDW1
+	SCORING_FUNCTION	RbtVdwGridSF
+	WEIGHT			1.5
+        GRID		        _vdw1.grd
+	SMOOTHED		FALSE
+        ENABLED			FALSE
+END_SECTION
+
+SECTION VDW5
+	SCORING_FUNCTION	RbtVdwGridSF
+	WEIGHT			1.5
+        GRID		        _vdw5.grd
+	SMOOTHED		FALSE
+        ENABLED			FALSE
+END_SECTION
+
+SECTION VDW
+	SCORING_FUNCTION	RbtVdwIdxSF
+	WEIGHT			1.5
+	USE_4_8			FALSE
+	USE_TRIPOS		FALSE
+	RMAX			1.5
+	ECUT			120.0
+	E0			1.5
+END_SECTION
+
+################################################################################
+# Desolvation scoring function
+SECTION SOLV
+        SCORING_FUNCTION        RbtSAIdxSF
+	WEIGHT			0.5
+	GRIDSTEP		0.5
+END_SECTION 

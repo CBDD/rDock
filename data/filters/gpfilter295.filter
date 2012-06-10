@@ -1,0 +1,15 @@
++ * log - + SCORE.INTRA.VDW SCORE.INTRA.VDW.0 0.9913
+    exp * SCORE.INTER.AROM.narom
+        * exp SCORE.INTER.POLAR.nhbd
+          LIG_POS_CHG
+- * 684
+    if SCORE.INTER.REPUL.nhba
+       LIG_NEG_CHG
+       / SCORE.INTER.VDW.nrep
+           SITE_PERC_AROMATOMS
+  if + - SCORE.INTER.POLAR.nhbd
+         + SCORE.INTRA.REPUL SCORE.INTRA.REPUL.0
+       LIG_TOT_CHG
+     SITE_NLIPOC
+     - exp SITE_NEG_CHG
+       log LIG_NHBD
