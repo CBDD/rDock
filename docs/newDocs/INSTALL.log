@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/openSUSE) (format=pdflatex 2012.3.15)  1 JUL 2012 23:16
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/openSUSE) (format=pdflatex 2012.3.15)  1 JUL 2012 23:46
 entering extended mode
  %&-line parsing enabled.
 **INSTALL.tex
@@ -480,29 +480,48 @@ l.38 \include{Introduction}
 ]
 \openout2 = `Installation.aux'.
 
- (./Installation.tex) [2
+ (./Installation.tex
+Underfull \hbox (badness 10000) in paragraph at lines 13--17
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--17
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 19--39
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--39
+
+ []
+
+[2
 
 
 
 
-] (./INSTALL.aux
-(./Introduction.aux) (./Installation.aux)) ) 
+] (./INSTALL.aux (./Introduction.aux) (./Installation.aux)) ) 
 Here is how much of TeX's memory you used:
- 7461 strings out of 493848
- 109030 string characters out of 3155814
- 207001 words of memory out of 3500000
- 10585 multiletter control sequences out of 15000+200000
+ 7464 strings out of 493848
+ 109074 string characters out of 3155814
+ 208001 words of memory out of 3500000
+ 10586 multiletter control sequences out of 15000+200000
  9496 words of font info for 36 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 38i,6n,39p,323b,297s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texmf/fonts/type1/publi
-c/amsfonts/cm/cmbx12.pfb></usr/share/texmf/fonts/type1/public/amsfonts/cm/cmr10
-.pfb></usr/share/texmf/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/tex
-mf/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf/fonts/type1/publi
-c/amsfonts/cm/cmsy10.pfb>
-Output written on INSTALL.pdf (3 pages, 64774 bytes).
+ 38i,6n,39p,323b,299s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf/
+fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf/fonts/type1/public/
+amsfonts/cm/cmr10.pfb></usr/share/texmf/fonts/type1/public/amsfonts/cm/cmr12.pf
+b></usr/share/texmf/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on INSTALL.pdf (3 pages, 71900 bytes).
 PDF statistics:
- 61 PDF objects out of 1000 (max. 8388607)
- 8 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 66 PDF objects out of 1000 (max. 8388607)
+ 10 named destinations out of 1000 (max. 500000)
+ 49 words of extra memory for PDF output out of 10000 (max. 10000000)
 
