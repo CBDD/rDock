@@ -1,0 +1,34 @@
+DEPENDENCIES :
+
+For installation of rdock you need :
+valid c and c++ compilers
+g++
+gcc
+
+gettext and popt (shipped with the source code)
+
+
+
+OPTIONAL :
+cppunit for building unit tests
+
+
+INSTALL : 
+
+////////////////////////
+1 - INSTALLING GETTEXT :
+first install gettext, if you do not have it already installed on your system. On modern linux systems like Ubuntu, OpenSuse Fedora etc you should find gettext via the package manager (synaptic, Yast, yum).
+In case you want to compile gettext, it is shipped with the rdock code and you can compile it and install it using the following sequence of commands :
+
+# tar xzf gettext-0.18.tar.gz
+# cd gettext-0.18
+# ./configure; make; sudo make install
+
+///////////////////////
+///////////////////////
+2 - INSTALLING POPT : 
+next you need to install popt, a library used by rdock for parsing command line arguments:
+
+
+
+///////////////////////

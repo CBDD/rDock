@@ -1,2 +1,19 @@
 \clearpage 
 \section{Installation} \index{Installation} \label{Installation}
+Rdock currently has several prerequisites, you have to install prior to Rdock. 
+\subsection{Gettext}
+First you have to install gettext, which can be either done in different ways :
+
+\begin{itemize}
+\item Ubuntu : sudo apt-get install gettext
+\item OpenSuse : zypper install gettext
+\item Fedora/CentOs/Redhat : yum install gettext
+\end{itemize}
+
+In case you have another distribution or you prefer to compile gettext for your machine, you can do so. Gettext version 0.18 is shipped with the rdock source code. You can install by going to the rdock directory and triggering the following commands :\newline\newline
+tar xzf gettext-0.18.tar.gz\newline
+cd gettext-0.18\newline
+./configure; \newline make; \newline sudo make install\newline
+
+\subsection{Popt}
+The last mandatory dependency of Rdock is popt. popt is shipped with the Rdock code and can be installed the following way : \newline\newline
