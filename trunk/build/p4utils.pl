@@ -60,7 +60,7 @@ sub codeline {
   chomp $pwd;
   my @pathElements = split("/", $pwd);
   my $n = scalar(@pathElements);
-  return ($n > 1) ? $pathElements[$n-2] : "2006.1";
+  return ($n > 1) ? $pathElements[$n-2] : "2013.1";
 }
 
 #Requires p4, returns dummy value otherwise

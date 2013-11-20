@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtVdwIntraSF.cxx#3 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 #include "RbtVdwIntraSF.h"
 #include "RbtSFRequest.h"
@@ -110,7 +102,9 @@ RbtDouble RbtVdwIntraSF::RawScore() const {
   //Loop over all ligand atoms
   for (RbtAtomRListConstIter iter = m_ligAtomList.begin(); iter != m_ligAtomList.end(); iter++) {
     RbtInt id = (*iter)->GetAtomId()-1;
-    RbtDouble s = VdwScore(*iter,m_prtIntns[id]);
+//XB changed call from "VdwScore" to "VdwScoreIntra" and created new function
+// in "RbtVdwSF.cxx" to avoid using reweighting terms for intra
+    RbtDouble s = VdwScoreIntra(*iter,m_prtIntns[id]);
     score += s;
   }
   return score;

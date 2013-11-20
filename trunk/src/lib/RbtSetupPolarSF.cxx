@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtSetupPolarSF.cxx#3 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 #include <iomanip>
 using std::setw;
@@ -128,11 +120,19 @@ void RbtSetupPolarSF::SetupAtomList(RbtAtomList& atomList,
     if (bIsGuan(*iter)) {
       charge *= guanFactor;//Adjustable weight for "IONIC" interactions with guanidinium carbons
     }
-    (*iter)->SetUser1Value(fNeighb*charge);
+// XB apply reweighting factor for receptor's polar atoms:
+    if (traceTriggerLevel == 1) {
+      RbtDouble wxb = (*iter)->GetReweight();
+      (*iter)->SetUser1Value(fNeighb*charge*wxb);
+     // cout << "Atom: " << (*iter)->GetAtomName() << " Polar_User1Value: " << (*iter)->GetUser1Value() << " weigth: " << wxb << endl;
+    }else{
+      (*iter)->SetUser1Value(fNeighb*charge);
+    }
+// XB END MODIFICATIONS
     (*iter)->SetUser1Flag(bIsLipo(*iter));
     if (iTrace > traceTriggerLevel) {
-      cout << _CT << ": " << (*iter)->GetFullAtomName() << "\t," << setw(10) << fNeighb << "," << setw(10) << charge
-	   << "," << setw(7) << (*iter)->GetUser1Flag() << "," << setw(7) << bIsHBA(*iter) << "," << setw(7) << bIsHBD(*iter) << endl;
+   //   cout << _CT << ": " << (*iter)->GetFullAtomName() << "\t," << setw(10) << fNeighb << "," << setw(10) << charge
+//	   << "," << setw(7) << (*iter)->GetUser1Flag() << "," << setw(7) << bIsHBA(*iter) << "," << setw(7) << bIsHBD(*iter) << endl;
     }
   }
   cout.flags(oldflags);

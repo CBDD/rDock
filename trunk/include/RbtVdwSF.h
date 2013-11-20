@@ -42,6 +42,8 @@ class RbtVdwSF : public virtual RbtBaseSF, public virtual RbtAnnotationHandler
   RbtDouble VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
   //As above, but with additional checks for enabled state of each atom
   RbtDouble VdwScoreEnabledOnly(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
+  //Same as above, used to calcutate intra terms without the reweighting factors
+  RbtDouble VdwScoreIntra(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
   //Looks up the maximum range (rmax_sq) for any interaction
   //i.e. from across a row of m_vdwTable
   RbtDouble MaxVdwRange(const RbtAtom* pAtom) const;

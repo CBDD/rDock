@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtVdwSF.cxx#4 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 #include "RbtVdwSF.h"
 #include "RbtModel.h"
@@ -96,6 +88,12 @@ RbtDouble RbtVdwSF::VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList)
       //iter2 points to the vdw params for this atom type pair
       RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
       RbtDouble s = f4_8(R_sq,*iter2);
+// XB NOTE: Apply weight here
+      RbtDouble wxb = (*iter)->GetReweight();
+     // cout << "4-8vdw " << (*iter)->GetAtomName() << " weight: " << wxb << " score " << s;
+      s *=  wxb;
+     // cout << " score*w " << s << endl;
+// XB END MODIFICATIONS
       score += s;
     }
   }
@@ -108,6 +106,12 @@ RbtDouble RbtVdwSF::VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList)
       //iter2 points to the vdw params for this atom type pair
       RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
       RbtDouble s = f6_12(R_sq,*iter2);
+// XB NOTE: Apply weight here
+      RbtDouble wxb = (*iter)->GetReweight();
+   //   cout << "6-12vdw " << (*iter)->GetAtomName() << " weight: " << wxb << " score " << s;
+      s *=  wxb;
+   //   cout << " score*w " << s << endl;
+// XB END MODIFICATIONS
       if (s != 0.0) {
 	score += s;
 	RbtAnnotationPtr spAnnotation(new RbtAnnotation(pAtom,*iter,sqrt(R_sq),s));
@@ -124,6 +128,12 @@ RbtDouble RbtVdwSF::VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList)
       //iter2 points to the vdw params for this atom type pair
       RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
       RbtDouble s = f6_12(R_sq,*iter2);
+// XB NOTE: Apply weight here
+      RbtDouble wxb = (*iter)->GetReweight();
+   //   cout << "6-12vdw " << (*iter)->GetAtomName() << " weight: " << wxb << " score " << s;
+      s *=  wxb;
+   //   cout << " score*w " << s << endl;
+// XB END MODIFICATIONS
       score += s;
     }
   }
@@ -191,6 +201,60 @@ RbtDouble RbtVdwSF::VdwScoreEnabledOnly(const RbtAtom* pAtom, const RbtAtomRList
   return score;
 }
 
+//This is the old  VdwScore, without reweighting factors
+RbtDouble RbtVdwSF::VdwScoreIntra(const RbtAtom* pAtom, const RbtAtomRList& atomList) const {
+  RbtDouble score = 0.0;
+  if (atomList.empty()) {
+    return score;
+  }
+
+  const RbtCoord& c1 = pAtom->GetCoords();
+  //Get the iterator into the appropriate row of the vdw table for this atom type
+  RbtTriposAtomType::eType type1 = pAtom->GetTriposType();
+  RbtVdwTableConstIter iter1 = m_vdwTable.begin() + type1;
+
+  //4-8 potential, never annotated
+  if (m_use_4_8) {
+    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
+      const RbtCoord& c2 = (*iter)->GetCoords();
+      RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
+      RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
+      //iter2 points to the vdw params for this atom type pair
+      RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
+      RbtDouble s = f4_8(R_sq,*iter2);
+      score += s;
+    }
+  }
+  //6-12 with annotation
+  else if (isAnnotationEnabled()) {
+    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
+      const RbtCoord& c2 = (*iter)->GetCoords();
+      RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
+      RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
+      //iter2 points to the vdw params for this atom type pair
+      RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
+      RbtDouble s = f6_12(R_sq,*iter2);
+      if (s != 0.0) {
+	score += s;
+	RbtAnnotationPtr spAnnotation(new RbtAnnotation(pAtom,*iter,sqrt(R_sq),s));
+	AddAnnotation(spAnnotation);
+      }
+    }
+  }
+  //6-12 without annotation
+  else {
+    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
+      const RbtCoord& c2 = (*iter)->GetCoords();
+      RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
+      RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
+      //iter2 points to the vdw params for this atom type pair
+      RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
+      RbtDouble s = f6_12(R_sq,*iter2);
+      score += s;
+    }
+  }
+  return score;
+}
 RbtDouble RbtVdwSF::MaxVdwRange(const RbtAtom* pAtom) const {
   return m_maxRange[pAtom->GetTriposType()];
 }

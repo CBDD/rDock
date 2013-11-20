@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtVdwIdxSF.cxx#3 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 #include "RbtVdwIdxSF.h"
 #include "RbtWorkSpace.h"
@@ -51,15 +43,18 @@ RbtVdwIdxSF::~RbtVdwIdxSF() {
 	
 void RbtVdwIdxSF::ScoreMap(RbtStringVariantMap& scoreMap) const {
   if (isEnabled()) {
-    //EnableAnnotations(m_bAnnotate);//DM 10 Apr 2003 - only annotate if required
-    //EnableAnnotations(false);//DM 17 Jan 2006 - disable for now (terse mode)
-    //ClearAnnotationList();
+//XB uncommented next line
+//    EnableAnnotations(m_bAnnotate);//DM 10 Apr 2003 - only annotate if required
+//  EnableAnnotations(false);//DM 17 Jan 2006 - disable for now (terse mode)
+//XB uncommented next line
+    ClearAnnotationList();
     //We can only annotate the ligand-receptor interactions
     //as the rDock Viewer annotation format is hardwired to expect
     //ligand-receptor atom indices
     //Divide the total raw score into "system" and "inter" components.
     RbtDouble rs = InterScore();
-    //EnableAnnotations(false);
+    EnableAnnotations(false);
+//XB uncommented next line
     rs += LigandSolventScore();//lig-solvent belongs with the receptor-ligand inter component
     
     //First deal with the inter score which is stored in its natural location in the map
@@ -78,14 +73,15 @@ void RbtVdwIdxSF::ScoreMap(RbtStringVariantMap& scoreMap) const {
         scoreMap[RbtBaseSF::_SYSTEM_SF] = parentScore;
     }
 
-    //scoreMap[name+".nattr"] = m_nAttr;
-    //scoreMap[name+".nrep"] = m_nRep;
-    //if (m_bAnnotate) {
-    //  RbtStringList annList;
-    //  RenderAnnotationsByResidue(annList);//Summarised by residue
-    //  scoreMap[RbtAnnotationHandler::_ANNOTATION_FIELD] += annList;
-    //  ClearAnnotationList();
-    //}
+//XB uncomented next 8 lines
+    scoreMap[name+".nattr"] = m_nAttr;
+    scoreMap[name+".nrep"] = m_nRep;
+    if (m_bAnnotate) {
+      RbtStringList annList;
+      RenderAnnotationsByResidue(annList);//Summarised by residue
+      scoreMap[RbtAnnotationHandler::_ANNOTATION_FIELD] += annList;
+      ClearAnnotationList();
+    }
   }
 }
 
@@ -422,7 +418,9 @@ RbtDouble RbtVdwIdxSF::ReceptorScore() const {
   //Loop over all flexible site atoms
   for (RbtAtomRListConstIter iter = m_recFlexAtomList.begin(); iter != m_recFlexAtomList.end(); iter++) {
     RbtInt id = (*iter)->GetAtomId()-1;
-    RbtDouble s = VdwScore(*iter,m_recFlexPrtIntns[id]);
+//XB changed call from "VdwScore" to "VdwScoreIntra" and created new function
+// in "RbtVdwSF.cxx" to avoid using reweighting terms for intra
+    RbtDouble s = VdwScoreIntra(*iter,m_recFlexPrtIntns[id]);
     score += s;
   }
   return score;
@@ -462,7 +460,9 @@ RbtDouble RbtVdwIdxSF::ReceptorSolventScore() const {
     if ((*iter)->GetEnabled()) {
       const RbtCoord& c = (*iter)->GetCoords();
       const RbtAtomRList& recepAtomList = m_spGrid->GetAtomList(c);
-      score += VdwScore(*iter,recepAtomList);
+//XB changed call from "VdwScore" to "VdwScoreIntra" and created new function
+// in "RbtVdwSF.cxx" to avoid using reweighting terms for intra
+      score += VdwScoreIntra(*iter,recepAtomList);
     }
   }
   return score;

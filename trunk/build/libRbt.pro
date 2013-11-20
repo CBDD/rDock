@@ -193,12 +193,7 @@ HEADERS		= ../import/simplex/include/NMObjective.h \
 		  ../include/RbtVdwIntraSF.h \
 		  ../include/RbtVdwSF.h \
 		  ../include/RbtWorkSpace.h \
-		  ../include/Singleton.h \
-		  ../popt/config.h \
-		  ../popt/findme.h \
-		  ../popt/popt.h \
-		  ../popt/poptint.h \
-		  ../popt/system.h
+		  ../include/Singleton.h
 SOURCES		= ../import/simplex/src/NMSearch.cxx \
 		  ../src/GP/RbtGPChromosome.cxx \
 		  ../src/GP/RbtGPFFCHK1.cxx \
@@ -331,7 +326,7 @@ SOURCES		= ../import/simplex/src/NMSearch.cxx \
 		  ../src/lib/RbtVdwIntraSF.cxx \
 		  ../src/lib/RbtVdwSF.cxx \
 		  ../src/lib/RbtWorkSpace.cxx
-VERSION		= rdock.0
+VERSION		= rDock_2013_SRC.0
 INCLUDEPATH	= ../include;../include/GP;../import/simplex/include;../import/tnt/include
 DEPENDPATH	= $INCLUDEPATH
 DEFINES		+= _NDEBUG

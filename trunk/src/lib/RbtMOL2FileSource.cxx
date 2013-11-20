@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtMOL2FileSource.cxx#2 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 #include <sstream>
 using std::stringstream;
@@ -240,6 +232,8 @@ void RbtMOL2FileSource::ParseRecordATOM(const RbtString& aLine) {
   RbtString sID,sName;
   GetSSIDandName(subst_name,subst_id,sID,sName);
   RbtDouble charge = (tokens.size() > 8) ? atof(tokens[8].c_str()) : 0.0;
+// XB reweighting parameters
+  RbtDouble wxb = (tokens.size() > 9) ? atof(tokens[9].c_str()) : 1.0;
 
   //Derived atom params (some may be updated later)
   RbtTriposAtomType::eType tt = m_typer.Str2Type(atom_type);
@@ -272,6 +266,7 @@ void RbtMOL2FileSource::ParseRecordATOM(const RbtString& aLine) {
   newAtom->SetPartialCharge(charge);
   newAtom->SetHybridState(hybrid_state);
   newAtom->SetAtomicMass(elementData.mass);
+  newAtom->SetReweight(wxb);
 
   m_atomList.push_back(newAtom);
   m_ssAtoms[subst_id].push_back(newAtom);

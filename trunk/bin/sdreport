@@ -42,9 +42,6 @@ my $headings = 1;#DM 21 Nov 2000, If false, don't output headings
 my @outputFields;
 my @outputHeadings;
 
-#Print help if no command line arguments
-printHelpAndExit() if (scalar(@ARGV) == 0);
-
 #Parse command line arguments
 my $nArgs = scalar(@ARGV);
 
