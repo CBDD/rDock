@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtPolarIdxSF.cxx#4 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 #include "RbtPolarIdxSF.h"
 #include "RbtWorkSpace.h"
@@ -54,13 +46,16 @@ RbtPolarIdxSF::~RbtPolarIdxSF() {
 //Override RbtBaseSF::ScoreMap to provide additional raw descriptors
 void RbtPolarIdxSF::ScoreMap(RbtStringVariantMap& scoreMap) const {
   if (isEnabled()) {
-    //EnableAnnotations(true);
-    //ClearAnnotationList();
+//XB uncommented next line
+  //  EnableAnnotations(true);
+//XB uncommented next line
+  //  ClearAnnotationList();
     //We can only annotate the ligand-receptor interactions
     //as the rDock Viewer annotation format is hardwired to expect
     //ligand-receptor atom indices
     RbtDouble rs = InterScore();
-    //EnableAnnotations(false);
+//XB uncommented next line
+    EnableAnnotations(false);
     rs += LigandSolventScore();
     
     //First deal with the inter score which is stored in its natural location in the map
@@ -79,12 +74,13 @@ void RbtPolarIdxSF::ScoreMap(RbtStringVariantMap& scoreMap) const {
         scoreMap[RbtBaseSF::_SYSTEM_SF] = parentScore;
     }
 
-    //scoreMap[name+".nhbd"] = m_nPos;
-    //scoreMap[name+".nhba"] = m_nNeg;
-    //RbtStringList annList;
-    //RenderAnnotationList(GetName(),annList);
-    //scoreMap[RbtAnnotationHandler::_ANNOTATION_FIELD] += annList;
-    //ClearAnnotationList();
+//XB uncommented next 6 lines
+//    scoreMap[name+".nhbd"] = m_nPos;
+//    scoreMap[name+".nhba"] = m_nNeg;
+//    RbtStringList annList;
+//    RenderAnnotationList(GetName(),annList);
+//    scoreMap[RbtAnnotationHandler::_ANNOTATION_FIELD] += annList;
+//    ClearAnnotationList();
   }
 }
 

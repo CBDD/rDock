@@ -13,7 +13,7 @@
 #include "RbtTypes.h"
 #include "VERSION"
 
-const RbtString IDS_COPYRIGHT = "Copyright (C) RiboTargets 1998-2003, Vernalis (R&D) Ltd 2003-2006";
+const RbtString IDS_COPYRIGHT = "rDock is an open-source software licensed under GNU-LGPL version 3.0 - http://rdock.sourceforge.net/";
 #ifdef _DEBUG
 const RbtString IDS_PRODUCT   = "libRbtD.so";
 #else

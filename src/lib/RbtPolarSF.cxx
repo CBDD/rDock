@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtPolarSF.cxx#4 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 #include "RbtPolarSF.h"
 #include "RbtWorkSpace.h"
@@ -478,8 +470,9 @@ RbtDouble RbtPolarSF::PolarScore(const RbtInteractionCenter* pIC1, const RbtInte
 	  }
 	}
 	if (f > 0.0) {
-	  //cout << pAtom1_1->GetFullAtomName() << "\t" << pAtom2_1->GetFullAtomName() << "\t" << pAtom2_1->GetUser1Value()
-	  //     << "\t" << f << endl;
+ // XB uncommented next 2 lines
+//	  cout << pAtom1_1->GetFullAtomName() << "\t" << pAtom1_1->GetUser1Value() << "\t" 
+  //             << pAtom2_1->GetFullAtomName() << "\t" << pAtom2_1->GetUser1Value() << "\t" << f << endl;
 	  s += pAtom2_1->GetUser1Value()*f;
 	  if (bAnnotate) {
 	    //DM 6 Feb 2003. Include the charge and receptor density scaling factors in the polar annotation score

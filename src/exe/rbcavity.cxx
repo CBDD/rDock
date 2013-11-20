@@ -1,17 +1,9 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* $Id: //depot/dev/client3/rdock/2006.1/src/exe/rbcavity.cxx#3 $
+* Copyright (C) Vernalis (R&D) Ltd 2006
+* This file is released under the terms of the End User License Agreement
+* in ../../docs/EULA.txt
+***********************************************************************/
 
 //Standalone executable for generating docking site .as files for rbdock
 
@@ -62,8 +54,8 @@ int main(int argc,const char* argv[])
 		{"receptor",	'r',POPT_ARG_STRING|POPT_ARGFLAG_ONEDASH,&prmFile ,    0,  "receptor file"},
 		{"was",			'W',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'W',"write active site"},
 		{"ras",			'R',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'R',"read active site"},
-		{"dump-insight",'d',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'd',"dump InsightII/PyMol grids"},
-		//{"dump-moe",    'm',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'm',"dump MOE grids"}, //not working right now so commenting it
+		{"dump-insight",'d',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'd',"dump InsightII grids"},
+		{"dump-moe",    'm',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'm',"dump MOE grids"},
 		{"viewer",      'v',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'v',"dump Viewer PSF/CRD files"},
 		{"list",        'l',POPT_ARG_STRING|POPT_ARGFLAG_ONEDASH,&listDist,  'l',"list receptor atoms within <dist>"},
 		{"site",        's',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          's',"print site descriptors"},

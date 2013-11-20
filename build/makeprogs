@@ -10,7 +10,7 @@ LINKLIBS	= -lRbt -lm -lpopt
 CC		= $(TMAKE_CC)
 CFLAGS		= $(TMAKE_CFLAGS_CONFIG)
 CXX		= $(TMAKE_CXX)
-CXXFLAGS	= $(TMAKE_CXXFLAGS_CONFIG) $(DEFINES) -I../include -I../include/GP -I../popt -L$(LIBDIR)
+CXXFLAGS	= $(TMAKE_CXXFLAGS_CONFIG) $(DEFINES) -I../include -I../include/GP -L$(LIBDIR)
 #
 # Extra include and lib directories for Daylight exes
 #
