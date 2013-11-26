@@ -137,18 +137,17 @@ if __name__ == "__main__":
         mappose = npy.array(mappose)
         mappose = mappose[npy.argsort(mappose[:,0])][:,1]
         posecoords = npy.array([atom.coords for atom in dockedpose])[mappose]
-        minrmsd = 999999999999
-        minfitrmsd = 999999999999
+        resultrmsd = 999999999999
         for mapping in mappings:
             automorph_coords = [None] * len(xtalcoords)
             for x, y in mapping:
                 automorph_coords[lookup.index(x)] = xtalcoords[lookup.index(y)]
             mapping_rmsd = rmsd(posecoords, automorph_coords)
-            if mapping_rmsd < minrmsd:
+            if mapping_rmsd < resultrmsd:
                 resultrmsd = mapping_rmsd
             if fit: 
 		fitted_pose, fitted_rmsd = superpose3D(npy.array(automorph_coords), npy.array(posecoords))
-            	if fitted_rmsd < minfitrmsd:
+            	if fitted_rmsd < resultrmsd:
                 	resultrmsd = fitted_rmsd
 	
 	print "%d\t%.2f"%((i+1),resultrmsd)
