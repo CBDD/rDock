@@ -1,10 +1,17 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtMOL2FileSource.cxx#2 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
+//XB cctype for check atom in MOL2 is number
+//#include <cctype>
 #include <sstream>
 using std::stringstream;
 
@@ -233,7 +240,15 @@ void RbtMOL2FileSource::ParseRecordATOM(const RbtString& aLine) {
   GetSSIDandName(subst_name,subst_id,sID,sName);
   RbtDouble charge = (tokens.size() > 8) ? atof(tokens[8].c_str()) : 0.0;
 // XB reweighting parameters
-  RbtDouble wxb = (tokens.size() > 9) ? atof(tokens[9].c_str()) : 1.0;
+//	RbtDouble wxb = (tokens.size() > 9) ? atof(tokens[9].c_str()) : 1.0;
+//XB mod for only doing if number, not characters	
+	RbtDouble wxb;
+  if (tokens.size() > 9 && isdigit(tokens[9][0])){
+	  wxb = atof(tokens[9].c_str());
+	} else {
+	  wxb = 1.0;
+	}
+//end XB reweighting parameters
 
   //Derived atom params (some may be updated later)
   RbtTriposAtomType::eType tt = m_typer.Str2Type(atom_type);

@@ -1,8 +1,13 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtVdwIdxSF.cxx#3 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 #include "RbtVdwIdxSF.h"
@@ -45,15 +50,15 @@ void RbtVdwIdxSF::ScoreMap(RbtStringVariantMap& scoreMap) const {
   if (isEnabled()) {
 //XB uncommented next line
 //    EnableAnnotations(m_bAnnotate);//DM 10 Apr 2003 - only annotate if required
-//  EnableAnnotations(false);//DM 17 Jan 2006 - disable for now (terse mode)
+//    EnableAnnotations(false);//DM 17 Jan 2006 - disable for now (terse mode)
 //XB uncommented next line
-    ClearAnnotationList();
+//    ClearAnnotationList();
     //We can only annotate the ligand-receptor interactions
     //as the rDock Viewer annotation format is hardwired to expect
     //ligand-receptor atom indices
     //Divide the total raw score into "system" and "inter" components.
     RbtDouble rs = InterScore();
-    EnableAnnotations(false);
+//    EnableAnnotations(false);
 //XB uncommented next line
     rs += LigandSolventScore();//lig-solvent belongs with the receptor-ligand inter component
     
@@ -74,14 +79,14 @@ void RbtVdwIdxSF::ScoreMap(RbtStringVariantMap& scoreMap) const {
     }
 
 //XB uncomented next 8 lines
-    scoreMap[name+".nattr"] = m_nAttr;
-    scoreMap[name+".nrep"] = m_nRep;
-    if (m_bAnnotate) {
-      RbtStringList annList;
-      RenderAnnotationsByResidue(annList);//Summarised by residue
-      scoreMap[RbtAnnotationHandler::_ANNOTATION_FIELD] += annList;
-      ClearAnnotationList();
-    }
+//    scoreMap[name+".nattr"] = m_nAttr;
+//    scoreMap[name+".nrep"] = m_nRep;
+//    if (m_bAnnotate) {
+//      RbtStringList annList;
+//      RenderAnnotationsByResidue(annList);//Summarised by residue
+//      scoreMap[RbtAnnotationHandler::_ANNOTATION_FIELD] += annList;
+//      ClearAnnotationList();
+//    }
   }
 }
 

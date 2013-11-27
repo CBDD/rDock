@@ -1,8 +1,16 @@
-//Ancillary Software from Vernalis
-//Converts RbtVdwGridSF binary grid file to InsightII ascii grid file
-//$Id: //depot/dev/client3/rdock/2006.1/src/exe/rbconvgrid.cxx#4 $
+/***********************************************************************
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
+***********************************************************************/
 
-#include <fstream.h>
+#include <fstream>
 
 #include "RbtVdwGridSF.h"
 #include "RbtFileError.h"

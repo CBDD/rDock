@@ -1,5 +1,14 @@
-//Ancillary Software from Vernalis
-//$Id: //depot/dev/client3/rdock/2006.1/src/exe/rbtether.cxx#5 $
+/***********************************************************************
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
+***********************************************************************/
 
 //Filters a ligand library with a SMARTS query and writes down the
 //corresponding tethered atoms in the sd files
@@ -14,7 +23,7 @@
 #include "RbtPRMFactory.h"
 #include "RbtSmarts.h"
 const RbtString EXEVERSION = 
-      " ($Id: //depot/dev/client3/rdock/2006.1/src/exe/rbtether.cxx#5 $)";
+      " ($Id: //depot/dev/client3/rdock/2013.1/src/exe/rbtether.cxx#5 $)";
 
 void print_atoms(RbtAtomList &atoms, ostrstream &ost);
 /////////////////////////////////////////////////////////////////////

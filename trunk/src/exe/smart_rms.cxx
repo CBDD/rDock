@@ -1,5 +1,14 @@
-//Ancillary Software from Vernalis
-//$Id: //depot/dev/client3/rdock/2006.1/src/exe/smart_rms.cxx#5 $
+/***********************************************************************
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
+***********************************************************************/
 
 //Calculates atomic RMSD of each SD record with reference structure
 //Requires Daylight SMARTS toolkit to check all symmetry-related atomic numbering paths
@@ -63,7 +72,7 @@ int main(int argc,char* argv[])
     RbtMolecularFileSourcePtr spRefFileSource(new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands",strRefSDFile),false,false,true));
     //DM 16 June 2006 - remove any solvent fragments from reference
     //The largest fragment in each SD record always has segment name="H"
-    //for reasons lost in the mists of RiboDock history
+    //for reasons lost in the mists of rDock history
     spRefFileSource->SetSegmentFilterMap(Rbt::ConvertStringToSegmentMap("H"));
     //Get reference ligand (first record)
     RbtModelPtr spRefModel(new RbtModel(spRefFileSource));

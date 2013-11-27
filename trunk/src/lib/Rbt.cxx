@@ -1,8 +1,13 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/src/lib/Rbt.cxx#2 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 //Misc non-member functions in Rbt namespace
@@ -80,7 +85,7 @@ RbtString Rbt::GetCurrentDirectory()
 }
 
 //Rbt::GetRbtDirName
-//Returns the full path to a subdirectory in the Ribodock directory structure
+//Returns the full path to a subdirectory in the rDock directory structure
 //
 //For example, if RBT_ROOT environment variable is ~dave/ribodev/molmod/ribodev
 //then GetRbtDirName("data") would return ~dave/ribodev/molmod/ribodev/data/
@@ -99,7 +104,7 @@ RbtString Rbt::GetRbtDirName(const RbtString& strSubDir)
 //DM 17 Dec 1998 - slightly different behaviour
 //First check if the file exists in the CWD, if so return this path
 //Next check RBT_HOME directory, if so return this path
-//Finally, return the path to the file in the Ribodock directory structure
+//Finally, return the path to the file in the rDock directory structure
 //(without checking if the file is actually present)
 RbtString Rbt::GetRbtFileName(const RbtString& strSubdir, const RbtString& strFile)
 {

@@ -1,8 +1,13 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/include/RbtMdlFileSource.h#3 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 //Handles retrieval of molecular info from MDL Mol and SD files.
@@ -67,11 +72,11 @@ class RbtMdlFileSource : public RbtBaseMolecularFileSource
   //SetupIonicGroups sets the "group charge" attribute of the atoms. The idea is that the "group charge" is
   //file-format independent, and eliminates the need for the scoring function setup to have any knowledge of
   //the input file format. For example, PSF files represent COO- as OC-C-OC (both oxygens charged) whereas
-  //SD files represent it as the formal resonance structure O=C-O-. For RiboDock we actually want the negative
+  //SD files represent it as the formal resonance structure O=C-O-. For rDock we actually want the negative
   //charge on the central carbon!
   //
   //It is envisaged each molecular file source will have a version of SetupIonicGroups to convert from the native
-  //representation to the RiboDock representation. The FormalCharge and PartialCharge attributes should be left
+  //representation to the rDock representation. The FormalCharge and PartialCharge attributes should be left
   //untouched to allow the model to be rewritten back in the same format.
   void SetupIonicGroups();
   void SetupNSP3Plus();//Helper function to set up protonated amines

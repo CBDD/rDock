@@ -1,6 +1,6 @@
 RBT_PARAMETER_FILE_V1.00
 TITLE vdw potential (4-8 functional form, ECUT=5.0)
-VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/calcgrid_vdw5.prm#2 $
+VERSION $Id: //depot/dev/client3/rdock/2013.1/data/sf/calcgrid_vdw5.prm#2 $
 
 SECTION VDW_5
 	SCORING_FUNCTION	RbtVdwIdxSF
