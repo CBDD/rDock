@@ -19,7 +19,7 @@ use lib "$ENV{'RBT_ROOT'}/lib";
 
 use SDRecord;
 
-# Default field names and headings for RiboDock v4.00 scores
+# Default field names and headings for rDock v4.00 scores
 my @defaultFields = ('SCORE','SCORE.INTER','SCORE.INTRA','SCORE.RESTR','SCORE.INTER.VDW');
 my @defaultHeadings = ('TOTAL','INTER','INTRA','RESTR','VDW');
 
@@ -27,7 +27,7 @@ my @defaultHeadings = ('TOTAL','INTER','INTRA','RESTR','VDW');
 my @defaultNormFields = ('SCORE.norm','SCORE.INTER.norm','SCORE.INTRA.norm','SCORE.RESTR.norm','SCORE.heavy');
 my @defaultNormHeadings = ('TOTALn','INTERn','INTRAn','RESTRn','#heavy');
 
-# Default field names and headings for RiboDock v3.00 scores
+# Default field names and headings for rDock v3.00 scores
 my @defaultOldFields = ('Rbt.Score.Corrected','Rbt.Score.Inter','Rbt.Score.Intra','Rbt.Score.IntraMin','Rbt.Score.Restraint');
 my @defaultOldHeadings = ('TOTAL','INTER','INTRA','INTRAMIN','RESTR');
 
@@ -41,6 +41,9 @@ my $oldFields = 0;#If true, use old default field names for component scores
 my $headings = 1;#DM 21 Nov 2000, If false, don't output headings
 my @outputFields;
 my @outputHeadings;
+
+#Print help if no command line arguments
+printHelpAndExit() if (scalar(@ARGV) == 0);
 
 #Parse command line arguments
 my $nArgs = scalar(@ARGV);
@@ -426,7 +429,7 @@ sub printHelpAndExit {
   print "\t-norm use normalised score field names as default columns in -t and -c formats (normalised = score / #ligand heavy atoms)\n";
   print "\nNote:\tIf -l, -t or -c are combined with -s, the listing/table is output within each ligand summary\n";
   print "\t-sup should not be combined with other options\n";
-  print "\tDefault field names for -t and -c are RiboDock score field names\n";
+  print "\tDefault field names for -t and -c are rDock score field names\n";
   print "\tDefault ID field name is Name\n";
   print "\n\tIf sdFiles not given, reads from standard input\n";
   print "\tOutput is to standard output\n\n";

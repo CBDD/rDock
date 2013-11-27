@@ -1,8 +1,13 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/include/Rbt.h#3 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 //Miscellaneous non-member functions in Rbt namespace                      
@@ -43,7 +48,7 @@ namespace Rbt
   //FILE/DIRECTORY HANDLING FUNCTIONS
   //
   //GetRbtDirName
-  //Returns the full path to a subdirectory in the Ribodock directory structure
+  //Returns the full path to a subdirectory in the rDock directory structure
   //
   //For example, if RBT_ROOT environment variable is ~dave/ribodev/molmod/ribodev
   //then GetRbtDirName("data") would return ~dave/ribodev/molmod/ribodev/data/
@@ -54,7 +59,7 @@ namespace Rbt
   RbtString GetRbtDirName(const RbtString& strSubdir="");
 
   //GetRbtFileName
-  //As GetRbtDirName but returns the full path to a file in the Ribodock directory structure
+  //As GetRbtDirName but returns the full path to a file in the rDock directory structure
   RbtString GetRbtFileName(const RbtString& strSubdir, const RbtString& strFile);
 
   //GetFileType

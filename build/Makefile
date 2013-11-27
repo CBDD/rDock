@@ -29,7 +29,7 @@ PROJECT		= libRbt.pro	# tmake project file to create
 BINDIR		= ../bin	# Install location for exes
 LIBDIR		= ../lib	# Install location for libs
 CP		= cp -df
-PARALLEL	= 2		# Uses make -j to build across 2 processors
+PARALLEL	= 4		# Uses make -j to build across 2 processors
 
 # Configurations
 RELEASE		= release
@@ -40,7 +40,7 @@ DEBUG_DEFINES	= _DEBUG
 # Default platform, configuration, and version
 # PLATFORM must define a valid tmake configuration
 # i.e. ./tmakelib/$(PLATFORM)/tmake.conf must exist.
-PLATFORM	= linux-g++
+PLATFORM	= linux-g++-64
 CONFIG		= $(RELEASE)
 VERSION		= enspiral_dev
 

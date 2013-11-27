@@ -1,15 +1,20 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/src/exe/rbcalcgrid.cxx#3 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 //Calculates vdW grids for use by RbtVdwGridSF scoring function class
 
-#include <fstream.h>
-#include <iomanip.h>
-
+#include <fstream>
+#include <iomanip>
+#include <cstring>
 #include "RbtBiMolWorkSpace.h"
 #include "RbtParameterFileSource.h"
 #include "RbtPRMFactory.h"
@@ -17,7 +22,7 @@
 #include "RbtRealGrid.h"
 #include "RbtTriposAtomType.h"
 
-const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2006.1/src/exe/rbcalcgrid.cxx#3 $)";
+const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2013.1/src/exe/rbcalcgrid.cxx#3 $)";
 const RbtString _ROOT_SF = "SCORE";
 
 //Creates list of probe models

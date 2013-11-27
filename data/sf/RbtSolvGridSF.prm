@@ -1,6 +1,6 @@
 RBT_PARAMETER_FILE_V1.00
 TITLE Intermolecular scoring function (with SOLVATION, grid-based VDW)
-VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/RbtSolvGridSF.prm#3 $
+VERSION $Id: //depot/dev/client3/rdock/2013.1/data/sf/RbtSolvGridSF.prm#3 $
 
 ################################################################################
 # Constant scoring function

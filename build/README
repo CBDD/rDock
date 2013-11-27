@@ -29,8 +29,8 @@ Step 1) BUILD
 
 Either:
 
-$ make linux-g++           for 32-bit INTEL build with g++ compiler
-$ make linux-g++-64        for 64-bit AMD Opteron build with g++ compiler
+$ make linux-g++           for 32-bit build with g++ compiler
+$ make linux-g++-64        for 64-bit build with g++ compiler
 or
 $ make linux-pathCC-64     for 64-bit AMD Opteron build with PathScale compiler
 

@@ -1,8 +1,13 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/include/RbtVdwSF.h#4 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 //Base implementation class for all vdW scoring functions
@@ -42,7 +47,7 @@ class RbtVdwSF : public virtual RbtBaseSF, public virtual RbtAnnotationHandler
   RbtDouble VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
   //As above, but with additional checks for enabled state of each atom
   RbtDouble VdwScoreEnabledOnly(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
-  //Same as above, used to calcutate intra terms without the reweighting factors
+  //XB Same as above, used to calcutate intra terms without the reweighting factors
   RbtDouble VdwScoreIntra(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
   //Looks up the maximum range (rmax_sq) for any interaction
   //i.e. from across a row of m_vdwTable

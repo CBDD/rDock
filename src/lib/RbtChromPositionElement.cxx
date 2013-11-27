@@ -1,8 +1,13 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/src/lib/RbtChromPositionElement.cxx#2 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 #include "RbtChromPositionElement.h"
@@ -214,10 +219,24 @@ void RbtChromPositionElement::GetVector(RbtXOverList& v) const {
 void RbtChromPositionElement::SetVector(const RbtDoubleList& v, RbtInt& i) throw (RbtError) {
     if (VectorOK(v,i)) {
         if (!m_spRefData->IsTransFixed()) {
-            m_com = RbtCoord(v[i++], v[i++], v[i++]);
+            //2013Nov26 (DM) Bug fix to unsafe code.
+            //We cannot assume that the multiple increments will be processed left->right.
+            //This assumption is broken in g++ 4. Safer to break into separate statements.
+            //m_com = RbtCoord(v[i++], v[i++], v[i++]);
+            RbtDouble x(v[i++]);
+            RbtDouble y(v[i++]);
+            RbtDouble z(v[i++]);
+            m_com = RbtCoord(x, y, z);
         }
         if (!m_spRefData->IsRotFixed()) {
-            m_orientation = RbtEuler(v[i++], v[i++], v[i++]);
+            //2013Nov26 (DM) Bug fix to unsafe code.
+            //We cannot assume that the multiple increments will be processed left->right.
+            //This assumption is broken in g++ 4. Safer to break into separate statements.
+            //m_orientation = RbtEuler(v[i++], v[i++], v[i++]);
+            RbtDouble heading(v[i++]);
+            RbtDouble attitude(v[i++]);
+            RbtDouble bank(v[i++]);
+            m_orientation = RbtEuler(heading, attitude, bank);
             m_orientation.Standardise();
         }
     }
@@ -277,7 +296,14 @@ RbtDouble RbtChromPositionElement::CompareVector(const RbtDoubleList& v, RbtInt&
     RbtDouble retVal(0.0);
     if (VectorOK(v,i)) {
         if (!m_spRefData->IsTransFixed()) {
-            RbtCoord otherCom = RbtCoord(v[i++], v[i++], v[i++]);
+            //2013Nov26 (DM) Bug fix to unsafe code.
+            //We cannot assume that the multiple increments will be processed left->right.
+            //This assumption is broken in g++ 4. Safer to break into separate statements.
+            //RbtCoord otherCom = RbtCoord(v[i++], v[i++], v[i++]);
+            RbtDouble x(v[i++]);
+            RbtDouble y(v[i++]);
+            RbtDouble z(v[i++]);
+            RbtCoord otherCom = RbtCoord(x, y, z);
             RbtDouble transStepSize = m_spRefData->GetTransStepSize();
             //Compare distance between centres of mass
             if (transStepSize > 0.0) {
@@ -287,7 +313,14 @@ RbtDouble RbtChromPositionElement::CompareVector(const RbtDoubleList& v, RbtInt&
             }
         }
         if (!m_spRefData->IsRotFixed()) {
-            RbtEuler otherOrientation = RbtEuler(v[i++], v[i++], v[i++]);
+            //2013Nov26 (DM) Bug fix to unsafe code.
+            //We cannot assume that the multiple increments will be processed left->right.
+            //This assumption is broken in g++ 4. Safer to break into separate statements.
+            //RbtEuler otherOrientation = RbtEuler(v[i++], v[i++], v[i++]);
+            RbtDouble heading(v[i++]);
+            RbtDouble attitude(v[i++]);
+            RbtDouble bank(v[i++]);
+            RbtEuler otherOrientation = RbtEuler(heading, attitude, bank);
             RbtDouble rotStepSize = m_spRefData->GetRotStepSize();
             //Compare orientations
             if (rotStepSize > 0.0) {

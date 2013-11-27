@@ -1,6 +1,6 @@
 RBT_PARAMETER_FILE_V1.00
 TITLE vdW parameters from Tripos 5.2 forcefield and GOLD paper
-VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/Tripos52_vdw.prm#2 $
+VERSION $Id: //depot/dev/client3/rdock/2013.1/data/sf/Tripos52_vdw.prm#2 $
 ################################################################################
 #
 # Revision history:
@@ -286,6 +286,11 @@ SECTION Ca
 	K	0.600
 END_SECTION
 
+SECTION Mg
+	R	1.200
+	K	0.600
+END_SECTION
+
 SECTION Li
 	R	1.200
 	K	0.400
@@ -305,7 +310,7 @@ END_SECTION
 #
 SECTION UNDEFINED
 	R	1.200
-	K	0.042
+	K	0.600
 END_SECTION
 
 SECTION Du

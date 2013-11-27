@@ -1,6 +1,6 @@
 RBT_PARAMETER_FILE_V1.00
 TITLE Params for quick SASA calculation and ASP solvation
-VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/solvation_asp.prm#2 $
+VERSION $Id: //depot/dev/client3/rdock/2013.1/data/sf/solvation_asp.prm#2 $
 
 SECTION UNDEFINED
 	R	1.200

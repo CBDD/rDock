@@ -326,7 +326,7 @@ SOURCES		= ../import/simplex/src/NMSearch.cxx \
 		  ../src/lib/RbtVdwIntraSF.cxx \
 		  ../src/lib/RbtVdwSF.cxx \
 		  ../src/lib/RbtWorkSpace.cxx
-VERSION		= rDock_2013_SRC.0
+VERSION		= rDock_2013.1
 INCLUDEPATH	= ../include;../include/GP;../import/simplex/include;../import/tnt/include
 DEPENDPATH	= $INCLUDEPATH
 DEFINES		+= _NDEBUG

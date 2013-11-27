@@ -1,6 +1,6 @@
 RBT_PARAMETER_FILE_V1.00
 TITLE vdW parameters from Tripos 5.2 forcefield and GOLD paper
-VERSION $Id: //depot/dev/client3/rdock/2006.1/data/sf/Tripos52_vdw.prm#2 $
+VERSION $Id: //depot/dev/client3/rdock/2013.1/data/sf/Tripos52_vdw.prm#2 $
 ################################################################################
 #
 # Revision history:

@@ -23,7 +23,9 @@ UNITTEST_CXXFLAGS	= $(CXXFLAGS) -I$(UNITTESTDIR)
 UNITTEST_LINKLIBS	= -lRbt -ldl -lcppunit
 #
 # Build targets
-all: exe dt_exe unit_test
+#all: exe dt_exe unit_test
+# XB Build targets except the ones requiring daylight toolkits
+all: exe unit_test
 
 # Standalone rDock executables
 exe:	$(DESTDIR)/rbdock \
@@ -62,12 +64,12 @@ $(DESTDIR)/rbrms: $(SRCDIR)/rbrms.cxx $(DEPLIBS)
 	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbrms.cxx $(LINKLIBS) -o $@
 
 # These exes depend on the Daylight SMARTS/SMILES toolkit libraries
+# XB comment following lines as daylight is not needed in 2013
+#$(OBJECTS_DIR)/RbtSmarts.o : ../src/daylight/RbtSmarts.cxx
+#	$(CXX) $(DT_CXXFLAGS) ../src/daylight/RbtSmarts.cxx -c -o $@
 
-$(OBJECTS_DIR)/RbtSmarts.o : ../src/daylight/RbtSmarts.cxx
-	$(CXX) $(DT_CXXFLAGS) ../src/daylight/RbtSmarts.cxx -c -o $@
+#$(DESTDIR)/rbtether: $(OBJECTS_DIR)/RbtSmarts.o $(SRCDIR)/rbtether.cxx $(DEPLIBS)
+#	$(CXX) $(DT_CXXFLAGS) $(SRCDIR)/rbtether.cxx $(OBJECTS_DIR)/RbtSmarts.o $(DT_LINKLIBS) -o $@
 
-$(DESTDIR)/rbtether: $(OBJECTS_DIR)/RbtSmarts.o $(SRCDIR)/rbtether.cxx $(DEPLIBS)
-	$(CXX) $(DT_CXXFLAGS) $(SRCDIR)/rbtether.cxx $(OBJECTS_DIR)/RbtSmarts.o $(DT_LINKLIBS) -o $@
-
-$(DESTDIR)/smart_rms: $(OBJECTS_DIR)/RbtSmarts.o $(SRCDIR)/smart_rms.cxx $(DEPLIBS)
-	$(CXX) $(DT_CXXFLAGS) $(SRCDIR)/smart_rms.cxx $(OBJECTS_DIR)/RbtSmarts.o $(DT_LINKLIBS) -o $@
+#$(DESTDIR)/smart_rms: $(OBJECTS_DIR)/RbtSmarts.o $(SRCDIR)/smart_rms.cxx $(DEPLIBS)
+#	$(CXX) $(DT_CXXFLAGS) $(SRCDIR)/smart_rms.cxx $(OBJECTS_DIR)/RbtSmarts.o $(DT_LINKLIBS) -o $@

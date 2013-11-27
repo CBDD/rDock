@@ -1,8 +1,13 @@
 /***********************************************************************
-* $Id: //depot/dev/client3/rdock/2006.1/include/RbtResources.h#3 $
-* Copyright (C) Vernalis (R&D) Ltd 2006
-* This file is released under the terms of the End User License Agreement
-* in ../docs/EULA.txt
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
 ***********************************************************************/
 
 //Miscellaneous string constants
@@ -13,7 +18,7 @@
 #include "RbtTypes.h"
 #include "VERSION"
 
-const RbtString IDS_COPYRIGHT = "rDock is an open-source software licensed under GNU-LGPL version 3.0 - http://rdock.sourceforge.net/";
+const RbtString IDS_COPYRIGHT = "The rDock program is licensed under GNU-LGPLv3.0. http://rdock.sourceforge.net/";
 #ifdef _DEBUG
 const RbtString IDS_PRODUCT   = "libRbtD.so";
 #else

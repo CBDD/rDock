@@ -7,7 +7,7 @@ refcoords=ref[4:48]
 testcoords=test[4:48]
 
 refscore=float(ref[123][0])
-testscore=float(test[125][0])
+testscore=float(test[123][0])
 
 checkcoords=[]
 for i in range(0,len(refcoords)):

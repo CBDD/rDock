@@ -4,6 +4,12 @@
 # it will add a TETHERED ATOM property field to the output SDF that is correctly understood by rDock 
 # rDock will restrain the matching atom positions to the reference molecule coordinates.
 #
+# Initially implemented with a conformational search algorithm to better match target coordinates.
+# But had problems with OBabel FF generating non-sense conformers. So in this version the conformer search is commented out.
+# Now if the input molecule do not have a good conformation, might not align well with the target. This effect will be 
+# dimished or even vanish if the SMARTS string is defined for a rigid region (like a ring).
+# I'm still trying to incorporate somehow this conformational search.
+#
 # Script distributed under GNU LGPL 3.0 along rDock software.
 # 
 # Author: Daniel Alvarez-Garcia
@@ -101,10 +107,11 @@ def mapToCrystal(xtal, pose):
     return mappingpose[0]
 
 def takeCoords(obmol):
+    """Take coordinates of an OBMol as a npy array"""
     return npy.array([atom.coords for atom in obmol])
 
 def updateCoords(obmol, newcoords):
-    "newcoords as numpy array"
+    "Update OBMol coordinates. newcoords is a numpy array"
     for i,atom in enumerate(obmol):
         atom.OBAtom.SetVector(*newcoords[i])
 
@@ -130,21 +137,20 @@ if __name__ == "__main__":
     outsdf = sys.argv[3]
     smarts = pybel.Smarts(sys.argv[4])
 
-    # Logging
-    sys.stdout = open(outsdf.replace('sdf','log'), 'w', 0)
-    sys.stderr = open(outsdf.replace('sdf','err'), 'w', 0)
-
     # Read reference pose and get atom list matching smarts query
     # if more than 1 match, take the first one
     ref = next(pybel.readfile("sdf", refsdf))
     refMatchIds = smarts.findall(ref)
-    if len(refMatchIds) > 1: refMatchIds = refMatchIds[0]
-    else: refMatchIds = refMatchIds[0]
-    refMatchIndx = npy.array(refMatchIds) - 1
+    numRefMatchs = len(refMatchIds)
+
+    if numRefMatchs > 1: 
+	print "More than one match in the reference molecule for the SMARTS string given. Will tether each input molecule all possible ways."
+
+    refIndxPerMatch = [npy.array(rmi) - 1 for rmi in refMatchIds]
 
     # Take coordinates for the reference matched atoms
     refCoords = takeCoords(ref)
-    refMatchCoords = npy.take(refCoords, refMatchIndx, axis=0)
+    refMatchCoords = [npy.take(refCoords, refIndx, axis=0) for refIndx in refIndxPerMatch]
 
     # Do the same for molecule in molsdf
     out=pybel.Outputfile('sdf', outsdf, overwrite=True)
@@ -154,76 +160,98 @@ if __name__ == "__main__":
 	print "## Molecule %i"%(i+1)
 	mol.OBMol.DeleteNonPolarHydrogens()
    	molMatchAllIds = smarts.findall(mol)
+	numMatchs = len(molMatchAllIds)
+	
+	if numMatchs == 0:
+		print "No match"
+		continue
+	elif numMatchs ==1:
+		print "Match"
+	elif numMatchs > 1: 
+                print "Multiple SMART Matches for this molecule (%d)"%numMatchs
+
+	# If more than one match, write an output of the same molecule for each match
+	# Start a default bestcoord and rmsd for later looping for each pose
+	bestCoordPerMatch = [[0 for i in range(numMatchs)] for i in range(numRefMatchs)]
+	bestRMSPerMatch = [[999 for i in range(numMatchs)] for i in range(numRefMatchs)]	
+
         # Will do a randomrotorsearch to find conformer with the lower rmsd when superposing
         # At least 20 when possible
-        ff.Setup(mol.OBMol)
-	numats = mol.OBMol.NumAtoms()
-	numrot = mol.OBMol.NumRotors()
-	print "Atoms: %i, Rotors: %i"%(numats, numrot)
-        bestCoord = 0
-        bestrms = 100
-	geomopt = 300
-	genconf = 100
-	if numats > 40 and numrot > 5: 
-		geomopt = 300
-		genconf = 150
-	if numats > 55 and numrot > 7: 
-		genconf = 100
-		geomopt = 500
-        print "\tDoing conformational search with WeightedRotorSearch (%i, %i)..."%(genconf, geomopt),
-	ff.SteepestDescent(500, 1.0e-4)
-        ff.WeightedRotorSearch(genconf,geomopt)
-	ff.ConjugateGradients(500, 1.0e-6)
-	ff.GetConformers(mol.OBMol)
-	numconf = mol.OBMol.NumConformers()
-	print "%i conformers generated"%numconf
+        #ff.Setup(mol.OBMol)
+	#numats = mol.OBMol.NumAtoms()
+	#numrot = mol.OBMol.NumRotors()
+	#print "Atoms: %i, Rotors: %i"%(numats, numrot)
+	#geomopt = 300
+	#genconf = 100
+	# increase iterations if bigger molecule or bigger number of rotatable bonds
+	# for allowing better sampling
+	#if numats > 40 and numrot > 5: 
+	#	geomopt = 300
+	#	genconf = 150
+	#if numats > 55 and numrot > 7: 
+	#	genconf = 100
+	#	geomopt = 500
+        #print "\tDoing conformational search with WeightedRotorSearch (%i, %i)..."%(genconf, geomopt),
+	#ff.SteepestDescent(500, 1.0e-4)
+        #ff.WeightedRotorSearch(genconf,geomopt)
+	#ff.ConjugateGradients(500, 1.0e-6)
+	#ff.GetConformers(mol.OBMol)
+	#numconf = mol.OBMol.NumConformers()
+	numconf = 1
+	#print "%i conformers generated"%numconf
         if numconf > 1:
             # Doing conf search
-            for i in range(numconf):
-                mol.OBMol.SetConformer(i)
-                confCoords = takeCoords(mol)
-		print 'coord:',confCoords[0,:]
-                
-                for molMatchIds in molMatchAllIds:
-                    molMatchIndx = npy.array(molMatchIds) - 1
-                    confMatchCoords = npy.take(confCoords, molMatchIndx, axis=0)
-                    
-                    # Align: Get rotation matrix between the two sets of coords
-                    # Apply rotation to the whole target molecule
-                    # change molecule coordinates, set TETHERED ATOMS property and save
-                    rotMat, targetCentroid, refCentroid, rmsd = superpose3D(confMatchCoords, refMatchCoords, returnRotMat=True)
-                    if rmsd < bestrms: 
-                        newcoords = npy.dot((confCoords - targetCentroid), rotMat) + refCentroid
-                        bestrms = rmsd
-                        bestCoord = newcoords
-		if bestrms < 0.1: break
-        
+            #for i in range(numconf):
+            #    mol.OBMol.SetConformer(i)
+            #    confCoords = takeCoords(mol)
+	    # 	print 'coord:',confCoords[0,:]
+            #    
+            #    for imatch, molMatchIds in enumerate(molMatchAllIds):
+            #        molMatchIndx = npy.array(molMatchIds) - 1
+            #        confMatchCoords = npy.take(confCoords, molMatchIndx, axis=0)
+            #        
+            #        # Align: Get rotation matrix between the two sets of coords
+            #        # Apply rotation to the whole target molecule
+            #        rotMat, targetCentroid, refCentroid, rmsd = superpose3D(confMatchCoords, refMatchCoords, returnRotMat=True)
+            #        if rmsd < bestRMSPerMatch[imatch]: 
+            #            newcoords = npy.dot((confCoords - targetCentroid), rotMat) + refCentroid
+            #            bestRMSPerMatch[imatch] = rmsd
+            #            bestCoordPerMatch[imatch] = newcoords
+	    #	#if bestrms < 0.01: break
+       	    pass 
         else:
             molCoords = takeCoords(mol)
-            for molMatchIds in molMatchAllIds:
+            for imatch, molMatchIds in enumerate(molMatchAllIds):
+		    # loop in each matching way for the input molecule
                     molMatchIndx = npy.array(molMatchIds) - 1
                     molMatchCoords = npy.take(molCoords, molMatchIndx, axis=0)
                     
+		    # Loop over the reference matches
                     # Align: Get rotation matrix between the two sets of coords
                     # Apply rotation to the whole target molecule
-                    # change molecule coordinates, set TETHERED ATOMS property and save
-                    rotMat, targetCentroid, refCentroid, rmsd = superpose3D(molMatchCoords, refMatchCoords, returnRotMat=True)
-                    if rmsd < bestrms:
-                        newcoords = npy.dot((molCoords - targetCentroid), rotMat) + refCentroid
-                        bestrms = rmsd
-                        bestCoord = newcoords
+		    for ir, refMatchCoord in enumerate(refMatchCoords):
+                    	rotMat, targetCentroid, refCentroid, rmsd = superpose3D(molMatchCoords, refMatchCoord, returnRotMat=True)
+                    	if rmsd < bestRMSPerMatch[ir][imatch]:
+                        	newcoords = npy.dot((molCoords - targetCentroid), rotMat) + refCentroid
+                        	bestRMSPerMatch[ir][imatch] = rmsd
+                        	bestCoordPerMatch[ir][imatch] = newcoords
             
         # Finally update molecule coordinates with the best matching coordinates found
-        print "\tBest RMSD reached: %.2f"%bestrms
-        updateCoords(mol, bestCoord)
-            
-        # Add TETHERED ATOM property field to SDF
-        newData = pybel.ob.OBPairData()
-        newData.SetAttribute("TETHERED ATOMS")
-        newData.SetValue(prepareAtomString(molMatchIds))
-        mol.OBMol.CloneData(newData)
-    
-        out.write(mol)
+	# change molecule coordinates, set TETHERED ATOMS property and save
+	for imatch in range(numMatchs):
+		for irefmatch in range(numRefMatchs):
+			bestCoord = bestCoordPerMatch[irefmatch][imatch]
+			bestRMS = bestRMSPerMatch[irefmatch][imatch]
+        		print "\tBest RMSD reached (match %d, refmatch %d): %s"%(imatch, irefmatch, bestRMS)
+			molMatchID = molMatchAllIds[imatch]
+        		updateCoords(mol, bestCoord)
+        		newData = pybel.ob.OBPairData()
+        		newData.SetAttribute("TETHERED ATOMS")
+        		newData.SetValue(prepareAtomString(molMatchID))
+
+			mol.OBMol.DeleteData("TETHERED ATOMS") # Remove Previous DATA
+        		mol.OBMol.CloneData(newData)	       # Add new data
+        		out.write(mol)
     
     out.close()
    

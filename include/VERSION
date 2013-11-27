@@ -2,6 +2,6 @@
 #ifndef _RBTVERSION_H_
 #define _RBTVERSION_H_
 #include "RbtTypes.h"
-const RbtString IDS_VERSION = "2006.1";
-const RbtString IDS_BUILDNUM = "901 2006/09/27";
+const RbtString IDS_VERSION = "2013.1";
+const RbtString IDS_BUILDNUM = "901 2013/11/27";
 #endif //_RBTVERSION_H_
