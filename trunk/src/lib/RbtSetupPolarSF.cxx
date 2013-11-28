@@ -126,13 +126,13 @@ void RbtSetupPolarSF::SetupAtomList(RbtAtomList& atomList,
       charge *= guanFactor;//Adjustable weight for "IONIC" interactions with guanidinium carbons
     }
 // XB apply reweighting factor for receptor's polar atoms:
-    if (traceTriggerLevel == 1) {
-      RbtDouble wxb = (*iter)->GetReweight();
-      (*iter)->SetUser1Value(fNeighb*charge*wxb);
+   // if (traceTriggerLevel == 1) {
+    //  RbtDouble wxb = (*iter)->GetReweight();
+    //  (*iter)->SetUser1Value(fNeighb*charge*wxb);
      // cout << "Atom: " << (*iter)->GetAtomName() << " Polar_User1Value: " << (*iter)->GetUser1Value() << " weigth: " << wxb << endl;
-    }else{
+    //}else{
       (*iter)->SetUser1Value(fNeighb*charge);
-    }
+   // }
 // XB END MODIFICATIONS
     (*iter)->SetUser1Flag(bIsLipo(*iter));
     if (iTrace > traceTriggerLevel) {

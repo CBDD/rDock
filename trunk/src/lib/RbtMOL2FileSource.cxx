@@ -242,12 +242,12 @@ void RbtMOL2FileSource::ParseRecordATOM(const RbtString& aLine) {
 // XB reweighting parameters
 //	RbtDouble wxb = (tokens.size() > 9) ? atof(tokens[9].c_str()) : 1.0;
 //XB mod for only doing if number, not characters	
-	RbtDouble wxb;
-  if (tokens.size() > 9 && isdigit(tokens[9][0])){
-	  wxb = atof(tokens[9].c_str());
-	} else {
-	  wxb = 1.0;
-	}
+//	RbtDouble wxb;
+//  if (tokens.size() > 9 && isdigit(tokens[9][0])){
+//	  wxb = atof(tokens[9].c_str());
+//	} else {
+//	  wxb = 1.0;
+//	}
 //end XB reweighting parameters
 
   //Derived atom params (some may be updated later)
@@ -281,7 +281,7 @@ void RbtMOL2FileSource::ParseRecordATOM(const RbtString& aLine) {
   newAtom->SetPartialCharge(charge);
   newAtom->SetHybridState(hybrid_state);
   newAtom->SetAtomicMass(elementData.mass);
-  newAtom->SetReweight(wxb);
+//  newAtom->SetReweight(wxb); //XB
 
   m_atomList.push_back(newAtom);
   m_ssAtoms[subst_id].push_back(newAtom);
