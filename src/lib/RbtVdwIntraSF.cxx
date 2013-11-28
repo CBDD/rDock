@@ -109,7 +109,8 @@ RbtDouble RbtVdwIntraSF::RawScore() const {
     RbtInt id = (*iter)->GetAtomId()-1;
 //XB changed call from "VdwScore" to "VdwScoreIntra" and created new function
 // in "RbtVdwSF.cxx" to avoid using reweighting terms for intra
-    RbtDouble s = VdwScoreIntra(*iter,m_prtIntns[id]);
+    //RbtDouble s = VdwScoreIntra(*iter,m_prtIntns[id]);
+    RbtDouble s = VdwScore(*iter,m_prtIntns[id]);
     score += s;
   }
   return score;

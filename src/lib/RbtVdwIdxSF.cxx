@@ -425,7 +425,8 @@ RbtDouble RbtVdwIdxSF::ReceptorScore() const {
     RbtInt id = (*iter)->GetAtomId()-1;
 //XB changed call from "VdwScore" to "VdwScoreIntra" and created new function
 // in "RbtVdwSF.cxx" to avoid using reweighting terms for intra
-    RbtDouble s = VdwScoreIntra(*iter,m_recFlexPrtIntns[id]);
+    //RbtDouble s = VdwScoreIntra(*iter,m_recFlexPrtIntns[id]);
+    RbtDouble s = VdwScore(*iter,m_recFlexPrtIntns[id]);
     score += s;
   }
   return score;
@@ -467,7 +468,8 @@ RbtDouble RbtVdwIdxSF::ReceptorSolventScore() const {
       const RbtAtomRList& recepAtomList = m_spGrid->GetAtomList(c);
 //XB changed call from "VdwScore" to "VdwScoreIntra" and created new function
 // in "RbtVdwSF.cxx" to avoid using reweighting terms for intra
-      score += VdwScoreIntra(*iter,recepAtomList);
+      //score += VdwScoreIntra(*iter,recepAtomList);
+      score += VdwScore(*iter,recepAtomList);
     }
   }
   return score;

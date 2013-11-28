@@ -251,8 +251,8 @@ class RbtAtom
 
 // XB
 // reweighting factor
-  RbtDouble GetReweight() const {return m_dReweight;}
-  void SetReweight(const RbtDouble dReweight) {m_dReweight = dReweight;}
+//  RbtDouble GetReweight() const {return m_dReweight;}
+//  void SetReweight(const RbtDouble dReweight) {m_dReweight = dReweight;}
 // XB END MODIFICATIONS
 
 
@@ -327,7 +327,7 @@ class RbtAtom
   RbtDouble m_dAtomicMass; //atomic mass
   RbtDouble m_dVdwRadius; //atomic mass
   RbtString m_strFFType; //force field atom type
-  RbtDouble m_dReweight; // XB reweighting factor
+//  RbtDouble m_dReweight; // XB reweighting factor
 
   RbtUIntCoordMap m_savedCoords; //DM 08 Feb 1999 - now store all saved coords in a map<RbtUInt,RbtCoord>
 };
