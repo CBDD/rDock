@@ -106,7 +106,7 @@ int main(int argc,char* argv[])
     cout << endl << "Usage:\trbcalcgrid -o<OutputRoot> -r<ReceptorPrmFile> -p<SFPrmFile> [-g<GridStep>]" << endl;
     cout << endl << "Options:\t-o<OutputSuffix> - suffix for grid (.grd IS required)" << endl;
     cout << "\t\t-r<ReceptorPrmFile> - receptor param file (contains active site params)" << endl;
-    cout << "\t\t-p<SFPrmFile> - scoring function param file (either calcgrid_attr.prm or calcgrid_repul.prm)" << endl;
+    cout << "\t\t-p<SFPrmFile> - scoring function param file (either calcgrid_vdw1.prm or calcgrid_vdw5.prm)" << endl;
     cout << "\t\t-g<GridStep> - grid step (default=0.5A)" << endl;
     cout << "\t\t-b<Border> - grid border around docking site (default=1.0A)" << endl;
     return 1;
