@@ -27,13 +27,22 @@ UNITTEST_LINKLIBS	= -lRbt -ldl -lcppunit
 # XB Build targets except the ones requiring daylight toolkits
 all: exe unit_test
 
+#XB 2013 version removed rbrms, new sdrmsd script makes it all
 # Standalone rDock executables
 exe:	$(DESTDIR)/rbdock \
         $(DESTDIR)/rbcavity \
-        $(DESTDIR)/rbrms \
 	$(DESTDIR)/rbmoegrid \
 	$(DESTDIR)/rblist \
 	$(DESTDIR)/rbcalcgrid
+
+#old version 
+## Standalone rDock executables
+#exe:	$(DESTDIR)/rbdock \
+#       $(DESTDIR)/rbcavity \
+#       $(DESTDIR)/rbrms \ 
+#	$(DESTDIR)/rbmoegrid \
+#	$(DESTDIR)/rblist \
+#	$(DESTDIR)/rbcalcgrid
 
 # These exes require the Daylight SMARTS/SMILES toolkits
 dt_exe: $(DESTDIR)/rbtether \
@@ -60,8 +69,9 @@ $(DESTDIR)/rbdock: $(SRCDIR)/rbdock.cxx $(DEPLIBS)
 $(DESTDIR)/rbcalcgrid: $(SRCDIR)/rbcalcgrid.cxx $(DEPLIBS)
 	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbcalcgrid.cxx $(LINKLIBS) -o $@
 
-$(DESTDIR)/rbrms: $(SRCDIR)/rbrms.cxx $(DEPLIBS)
-	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbrms.cxx $(LINKLIBS) -o $@
+# XB comment following lines as rbrms is deprecated. sdrmsd makes it all
+#$(DESTDIR)/rbrms: $(SRCDIR)/rbrms.cxx $(DEPLIBS)
+#	$(CXX) $(CXXFLAGS) $(SRCDIR)/rbrms.cxx $(LINKLIBS) -o $@
 
 # These exes depend on the Daylight SMARTS/SMILES toolkit libraries
 # XB comment following lines as daylight is not needed in 2013
