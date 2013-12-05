@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 #
 # Calculate SMART RMSD with or without molecular superposition (FIT or NOFIT) 
-# Script distributed under GNU LGPL 3.0 along RDOCK software.
+# Script distributed under GNU LGPL 3.0 along rDock software.
 # 
 # This algorithm takes into account molecular automorphism. That is, it identifies
 # molecules which are the same but might have atom orders changed and still be able to 
