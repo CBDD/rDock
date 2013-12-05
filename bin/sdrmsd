@@ -1,14 +1,19 @@
 #! /usr/bin/env python
 #
 # Calculate SMART RMSD with or without molecular superposition (FIT or NOFIT) 
-# Script distributed under GNU LGPL 3.0 along rDock software.
+# Script distributed under GNU LGPL 3.0 along RDOCK software.
 # 
+# This algorithm takes into account molecular automorphism. That is, it identifies
+# molecules which are the same but might have atom orders changed and still be able to 
+# match the pairs and correctly calculate the RMSD.
+#
 # Author: Daniel Alvarez-Garcia
 # Date: 08-11-2013
 
 import math
 import pybel
 import numpy as npy
+import optparse
 
 def superpose3D(ref, target, weights=None,refmask=None,targetmask=None,returnRotMat=False):
     """superpose3D performs 3d superposition using a weighted Kabsch algorithm : http://dx.doi.org/10.1107%2FS0567739476001873 & doi: 10.1529/biophysj.105.066654
@@ -97,26 +102,44 @@ def mapToCrystal(xtal, pose):
     exit=mapper.MapUnique(pose.OBMol,mappingpose)
     return mappingpose[0]
 
+def parseArguments():
+	optparse.OptionParser.format_epilog = lambda self, formatter: self.epilog
+	epilog = """Args:
+	reference.sdf		SDF file with the reference molecule.
+	input.sdf		SDF file with the molecules to be compared to reference.\n"""
+	parser = optparse.OptionParser("usage: %prog [options] reference.sdf input.sdf", epilog=epilog)
+	parser.add_option("-f", "--fit",dest="fit", action="store_true", default=False,
+                  help="Superpose molecules before RMSD calculation")
+	parser.add_option("-o","--out", dest="outfilename", metavar="FILE", default=False,
+                  help="If declared, write an output SDF file with the input molecules with a new sdfield <RMSD>. If molecule was fitted, the fitted molecule coordinates will be saved.")
+	(options, args) =  parser.parse_args()
+	
+	#Check we have two arguments
+	if len(args) < 2:
+		parser.error("Incorrect number of arguments. Use -h or --help options to print help.")
+
+	return options, args
+
+def updateCoords(obmol, newcoords):
+    "Update OBMol coordinates. newcoords is a numpy array"
+    for i,atom in enumerate(obmol):
+        atom.OBAtom.SetVector(*newcoords[i])
+
     
 if __name__ == "__main__":
     import sys
-    
-    if len(sys.argv) < 3:
-	sys.exit("USAGE: smartRMSD.py reference.sd poses.sd [fit]")
+   
+    (opts, args) = parseArguments() 
 	
-    xtal = sys.argv[1]
-    poses = sys.argv[2]
-
-    fit = False
-    try:
-	fit=sys.argv[3]
-	if fit == 'fit': fit=True
-    except:
-	fit = False
+    xtal = args[0]
+    poses = args[1]
+    fit = opts.fit
+    outfname = opts.outfilename
 
     # Read crystal pose
     crystal = next(pybel.readfile("sdf", xtal))
     crystal.removeh()
+    crystalnumatoms = len(crystal.atoms)
 
     # Find automorphisms involving only non-H atoms
     mappings = pybel.ob.vvpairUIntUInt()
@@ -126,13 +149,22 @@ if __name__ == "__main__":
         lookup.append(i)
     success = pybel.ob.FindAutomorphisms(crystal.OBMol, mappings)
 
+    #If outfname is defined, prepare an output SDF sink to write molecules
+    if outfname:
+	outsdf = pybel.Outputfile('sdf', outfname, overwrite=True)
+
     # Find the RMSD between the crystal pose and each docked pose
     xtalcoords = [atom.coords for atom in crystal]
     dockedposes = pybel.readfile("sdf", poses)
     if fit: print "POSE\tRMSD_FIT"
     else: print "POSE\tRMSD_NOFIT"
+    skipped = []
     for i, dockedpose in enumerate(dockedposes):
         dockedpose.removeh()
+	natoms = len(dockedpose.atoms)
+	if natoms != crystalnumatoms: 
+		skipped.append(i)
+		continue
         mappose = mapToCrystal(crystal, dockedpose)
         mappose = npy.array(mappose)
         mappose = mappose[npy.argsort(mappose[:,0])][:,1]
@@ -145,9 +177,28 @@ if __name__ == "__main__":
             mapping_rmsd = rmsd(posecoords, automorph_coords)
             if mapping_rmsd < resultrmsd:
                 resultrmsd = mapping_rmsd
+		fitted_result = False
             if fit: 
 		fitted_pose, fitted_rmsd = superpose3D(npy.array(automorph_coords), npy.array(posecoords))
             	if fitted_rmsd < resultrmsd:
                 	resultrmsd = fitted_rmsd
+			fitted_result = fitted_pose
 	
+	# Write molecule to ousdf if demanded
+	if outfname:
+		# Add RMSD field and save molecule
+		newData = pybel.ob.OBPairData()	
+		newData.SetAttribute("RMSD")
+                newData.SetValue('%.3f'%resultrmsd)
+		dockedpose.OBMol.CloneData(newData)           # Add new data
+
+		# Update position if fit option
+		if npy.any(fitted_result): updateCoords(dockedpose, fitted_result)
+
+                outsdf.write(dockedpose)
+
+
+
 	print "%d\t%.2f"%((i+1),resultrmsd)
+
+    if skipped: print >> sys.stderr, "SKIPPED input molecules due to number of atom missmatch: %d"%skipped

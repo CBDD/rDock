@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 #
-# Substitute for rbtether of rDock. Will align input molecules to a reference fragment defined by a smarts string, 
-# it will add a TETHERED ATOM property field to the output SDF that is correctly understood by rDock 
-# rDock will restrain the matching atom positions to the reference molecule coordinates.
+# Substitute for rbtether of RDock. Will align input molecules to a reference fragment defined by a smarts string, 
+# it will add a TETHERED ATOM property field to the output SDF that is correctly understood by RDOCK 
+# RDock will restrain the matching atom positions to the reference molecule coordinates.
 #
 # Initially implemented with a conformational search algorithm to better match target coordinates.
 # But had problems with OBabel FF generating non-sense conformers. So in this version the conformer search is commented out.
@@ -10,7 +10,7 @@
 # dimished or even vanish if the SMARTS string is defined for a rigid region (like a ring).
 # I'm still trying to incorporate somehow this conformational search.
 #
-# Script distributed under GNU LGPL 3.0 along rDock software.
+# Script distributed under GNU LGPL 3.0 along RDOCK software.
 # 
 # Author: Daniel Alvarez-Garcia
 # Date: 08-11-2013
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     import sys
     
     if len(sys.argv) != 5:
-        sys.exit("USAGE: tetherSDF.py reference.sdf input.sdf output.sdf 'SMARTS'")
+        sys.exit("USAGE: %s reference.sdf input.sdf output.sdf 'SMARTS'"%sys.argv[0])
     
     refsdf = sys.argv[1]
     molsdf = sys.argv[2]
