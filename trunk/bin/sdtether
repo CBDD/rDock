@@ -143,6 +143,9 @@ if __name__ == "__main__":
     refMatchIds = smarts.findall(ref)
     numRefMatchs = len(refMatchIds)
 
+    if not numRefMatchs:
+	sys.exit("No match found in the reference structure and the SMARTS string given. Please check it.")
+
     if numRefMatchs > 1: 
 	print "More than one match in the reference molecule for the SMARTS string given. Will tether each input molecule all possible ways."
 
@@ -157,18 +160,18 @@ if __name__ == "__main__":
     molSupp = pybel.readfile("sdf", molsdf)
     ff = pybel.ob.OBForceField_FindForceField('MMFF94')
     for i,mol in enumerate(molSupp):
-	print "## Molecule %i"%(i+1)
+	print "## Molecule %i"%(i+1),
 	mol.OBMol.DeleteNonPolarHydrogens()
    	molMatchAllIds = smarts.findall(mol)
 	numMatchs = len(molMatchAllIds)
 	
 	if numMatchs == 0:
-		print "No match"
+		print "No_Match",
 		continue
 	elif numMatchs ==1:
-		print "Match"
+		print "Match", 
 	elif numMatchs > 1: 
-                print "Multiple SMART Matches for this molecule (%d)"%numMatchs
+                print "Multiple_Match SMART Matches for this molecule (%d)"%numMatchs,
 
 	# If more than one match, write an output of the same molecule for each match
 	# Start a default bestcoord and rmsd for later looping for each pose

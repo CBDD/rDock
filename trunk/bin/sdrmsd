@@ -127,12 +127,16 @@ def updateCoords(obmol, newcoords):
 
     
 if __name__ == "__main__":
-    import sys
+    import sys, os
    
     (opts, args) = parseArguments() 
 	
     xtal = args[0]
     poses = args[1]
+
+    if not os.path.exists(xtal) or not os.path.exists(poses):
+	sys.exit("Input files not found. Please check the path given is correct.")
+	
     fit = opts.fit
     outfname = opts.outfilename
 
