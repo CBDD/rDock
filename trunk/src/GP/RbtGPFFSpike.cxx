@@ -1,17 +1,14 @@
-/*This file is part of Rdock.
-
-    Rdock is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Rdock is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Rdock.  If not, see <http://www.gnu.org/licenses/>.*/
+/***********************************************************************
+* The rDock program was developed from 1998 - 2006 by the software team 
+* at RiboTargets (subsequently Vernalis (R&D) Ltd).
+* In 2006, the software was licensed to the University of York for 
+* maintenance and distribution.
+* In 2012, Vernalis and the University of York agreed to release the 
+* program as Open Source software.
+* This version is licensed under GNU-LGPL version 3.0 with support from
+* the University of Barcelona.
+* http://rdock.sourceforge.net/
+***********************************************************************/
 
 #include "RbtGPFFSpike.h"
 #include "RbtGPGenome.h"
