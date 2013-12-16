@@ -22,7 +22,6 @@
 #include <strstream>
 #include <fstream>
 #include <cassert>
-using namespace std;
 
 RbtString RbtGPFFSpike::_CT("RbtGPFFSpike");
 void RbtGPFFSpike::ReadTables(istream& in, RbtReturnTypeArray& it,
