@@ -110,6 +110,8 @@ def parseArguments():
 	parser = optparse.OptionParser("usage: %prog [options] reference.sdf input.sdf", epilog=epilog)
 	parser.add_option("-f", "--fit",dest="fit", action="store_true", default=False,
                   help="Superpose molecules before RMSD calculation")
+	parser.add_option("--threshold","-t",dest="threshold", action="store", nargs=1, 
+                  help="Discard poses with RMSD < THRESHOLD with respect previous poses which where not rejected based on same principle. A Population SDField will be added to output SD with the population number.", type=float)
 	parser.add_option("-o","--out", dest="outfilename", metavar="FILE", default=False,
                   help="If declared, write an output SDF file with the input molecules with a new sdfield <RMSD>. If molecule was fitted, the fitted molecule coordinates will be saved.")
 	(options, args) =  parser.parse_args()
@@ -125,6 +127,58 @@ def updateCoords(obmol, newcoords):
     for i,atom in enumerate(obmol):
         atom.OBAtom.SetVector(*newcoords[i])
 
+def getAutomorphRMSD(target, molec, fit=False):
+    """
+    Use Automorphism to reorder target coordinates to match ref coordinates atom order
+    for correct RMSD comparison. Only the lowest RMSD will be returned.
+    
+    Returns:
+      If fit=False: 	bestRMSD	(float)					RMSD of the best matching mapping.
+      If fit=True:	(bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.	
+    """
+    mappings = pybel.ob.vvpairUIntUInt()
+    bitvec = pybel.ob.OBBitVec()
+    lookup = []
+    for i, atom in enumerate(target):
+        lookup.append(i)
+    success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
+    targetcoords = [atom.coords for atom in target]
+    mappose = npy.array(mapToCrystal(target, molec))
+    mappose = mappose[npy.argsort(mappose[:,0])][:,1]
+    posecoords = npy.array([atom.coords for atom in molec])[mappose]
+    resultrmsd = 999999999999
+    for mapping in mappings:
+	automorph_coords = [None] * len(targetcoords)
+	for x, y in mapping:
+	    automorph_coords[lookup.index(x)] = targetcoords[lookup.index(y)]
+	mapping_rmsd = rmsd(posecoords, automorph_coords)
+	if mapping_rmsd < resultrmsd:
+	    resultrmsd = mapping_rmsd
+	    fitted_result = False
+	if fit: 
+	    fitted_pose, fitted_rmsd = superpose3D(npy.array(automorph_coords), npy.array(posecoords))
+	    if fitted_rmsd < resultrmsd:
+		resultrmsd = fitted_rmsd
+		fitted_result = fitted_pose
+    
+    if fit:
+      return (resultrmsd, fitted_pose)
+    else:
+      return resultrmsd
+
+def saveMolecWithRMSD(outsdf, molec, rmsd, population=False):
+    newData = pybel.ob.OBPairData()	
+    newData.SetAttribute("RMSD")
+    newData.SetValue('%.3f'%rmsd)
+    
+    if population:
+	popData = pybel.ob.OBPairData()
+	popData.SetAttribute("Population")
+	popData.SetValue('%i'%population)
+	molec.OBMol.CloneData(popData)
+	
+    molec.OBMol.CloneData(newData)           # Add new data
+    outsdf.write(molec)
     
 if __name__ == "__main__":
     import sys, os
@@ -139,70 +193,79 @@ if __name__ == "__main__":
 	
     fit = opts.fit
     outfname = opts.outfilename
+    threshold = opts.threshold
 
     # Read crystal pose
     crystal = next(pybel.readfile("sdf", xtal))
     crystal.removeh()
     crystalnumatoms = len(crystal.atoms)
 
-    # Find automorphisms involving only non-H atoms
-    mappings = pybel.ob.vvpairUIntUInt()
-    bitvec = pybel.ob.OBBitVec()
-    lookup = []
-    for i, atom in enumerate(crystal):
-        lookup.append(i)
-    success = pybel.ob.FindAutomorphisms(crystal.OBMol, mappings)
-
     #If outfname is defined, prepare an output SDF sink to write molecules
     if outfname:
 	outsdf = pybel.Outputfile('sdf', outfname, overwrite=True)
 
     # Find the RMSD between the crystal pose and each docked pose
-    xtalcoords = [atom.coords for atom in crystal]
     dockedposes = pybel.readfile("sdf", poses)
     if fit: print "POSE\tRMSD_FIT"
     else: print "POSE\tRMSD_NOFIT"
     skipped = []
-    for i, dockedpose in enumerate(dockedposes):
+    moleclist = {}	# Save all poses with their dockid
+    population = {}	# Poses to be written
+    outlist = {}
+    for docki, dockedpose in enumerate(dockedposes):
         dockedpose.removeh()
 	natoms = len(dockedpose.atoms)
 	if natoms != crystalnumatoms: 
-		skipped.append(i)
+		skipped.append(docki+1)
 		continue
-        mappose = mapToCrystal(crystal, dockedpose)
-        mappose = npy.array(mappose)
-        mappose = mappose[npy.argsort(mappose[:,0])][:,1]
-        posecoords = npy.array([atom.coords for atom in dockedpose])[mappose]
-        resultrmsd = 999999999999
-        for mapping in mappings:
-            automorph_coords = [None] * len(xtalcoords)
-            for x, y in mapping:
-                automorph_coords[lookup.index(x)] = xtalcoords[lookup.index(y)]
-            mapping_rmsd = rmsd(posecoords, automorph_coords)
-            if mapping_rmsd < resultrmsd:
-                resultrmsd = mapping_rmsd
-		fitted_result = False
-            if fit: 
-		fitted_pose, fitted_rmsd = superpose3D(npy.array(automorph_coords), npy.array(posecoords))
-            	if fitted_rmsd < resultrmsd:
-                	resultrmsd = fitted_rmsd
-			fitted_result = fitted_pose
+	if fit: 
+	    resultrmsd, fitted_result = getAutomorphRMSD(crystal, dockedpose, fit=True)
+	    updateCoords(dockedpose, fitted_result)
+	else:
+	    resultrmsd = getAutomorphRMSD(crystal, dockedpose, fit=False)
 	
-	# Write molecule to ousdf if demanded
-	if outfname:
-		# Add RMSD field and save molecule
-		newData = pybel.ob.OBPairData()	
-		newData.SetAttribute("RMSD")
-                newData.SetValue('%.3f'%resultrmsd)
-		dockedpose.OBMol.CloneData(newData)           # Add new data
+	if threshold:
+	    # Calculate RMSD between all previous poses
+	    # Discard if rmsd < FILTER threshold
+	    if moleclist:
+		match = None
+		bestmatchrmsd = 999999
+		for did,prevmol in moleclist.iteritems():
+		    tmprmsd = getAutomorphRMSD(prevmol, dockedpose)
+		    if tmprmsd < threshold:
+			if tmprmsd < bestmatchrmsd:
+			    bestmatchrmsd = tmprmsd
+			    match = did
+			
+		if match != None:
+		    # Do not write this one
+		    # sum one up to the matching previous molecule id
+		    print >> sys.stderr, "Pose %i matches pose %i with %.3f RMSD"%(docki+1, match+1, bestmatchrmsd)
+		    population[match] += 1
+		else:
+		    # There's no match. Print info for this one and write to outsdf if needed
+		    # Save this one!
+		    if outfname: outlist[docki] = (dockedpose, resultrmsd)
+		    print "%d\t%.2f"%((docki+1),resultrmsd)
+		    moleclist[docki] = dockedpose
+		    population[docki] = 1
+	    else:
+		# First molecule in list. Append for sure
+		moleclist[docki] = dockedpose
+		population[docki] = 1
+		if outfname: outlist[docki] = (dockedpose, resultrmsd)
+	else:
+	    # Just write best rmsd found and the molecule to outsdf if demanded
+	    if outfname: saveMolecWithRMSD(outsdf, dockedpose, resultrmsd)
+	    print "%d\t%.2f"%((docki+1),resultrmsd)
 
-		# Update position if fit option
-		if npy.any(fitted_result): updateCoords(dockedpose, fitted_result)
-
-                outsdf.write(dockedpose)
-
-
-
-	print "%d\t%.2f"%((i+1),resultrmsd)
-
-    if skipped: print >> sys.stderr, "SKIPPED input molecules due to number of atom missmatch: %d"%skipped
+    if outlist:
+	# Threshold applied and outlist need to be written
+	for docki, molrmsd in outlist.iteritems():
+	    # Get number of matchs in thresholding operation
+	    pop = population.get(docki)
+	    if not pop: pop = 1
+	    # Save molecule
+	    saveMolecWithRMSD(outsdf, molrmsd[0], molrmsd[1], pop)
+	    
+    if skipped: print >> sys.stderr, "SKIPPED input molecules due to number of atom missmatch: %s"%skipped
