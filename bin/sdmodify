@@ -13,7 +13,7 @@ use SDRecord;
 my $SDMODKEY = "ID";
 
 #Print help if no command line arguments
-#printHelpAndExit() if (scalar(@ARGV) == 0);
+printHelpAndExit() if (scalar(@ARGV) == 0);
 
 #Parse command line arguments
 my @files;
@@ -40,4 +40,20 @@ while ($sdRec->readRec('DATA'=>1,'LINES'=>1)) {
     ${$sdRec->{'LINES'}}[0] = $sdRec->{'DATA'}->{$SDMODKEY};
   }
   $sdRec->writeRec();
+}
+
+#!/usr/bin/perl
+# Script to set the first title line equal to a given data field
+#
+# Usage:  sdmodify -f<DataField> [sdFiles]
+#
+#         If sdFiles not given, reads from standard input
+#         Output is to standard output
+
+sub printHelpAndExit {
+  print "\nScript to set the first title line equal to a given data field.\n";
+  print "\nUsage:\tsdmodify -f<DataField> [sdFiles]\n";
+  print "\n\tIf sdFiles not given, reads from standard input.\n";
+  print "\n\tOutput is to standard output.\n\n";
+  exit;
 }
