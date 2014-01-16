@@ -261,7 +261,8 @@ if __name__ == "__main__":
 
     if outlist:
 	# Threshold applied and outlist need to be written
-	for docki, molrmsd in outlist.iteritems():
+	for docki in sorted(outlist.iterkeys()):
+	    molrmsd = outlist[docki]
 	    # Get number of matchs in thresholding operation
 	    pop = population.get(docki)
 	    if not pop: pop = 1
