@@ -1,4 +1,0 @@
-\gdef \the@ipfilectr {@-1}
-\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
-\contentsline {section}{Introduction}{2}{section.1}
-\gdef \the@ipfilectr {}
