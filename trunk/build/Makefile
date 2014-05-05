@@ -100,5 +100,4 @@ rdock-lib:
 					'DESTDIR = $(BUILDDIR)/lib' \
 					$(SRC_FILES)
 	./tmake 'TMAKEPATH = ./tmakelib/$(PLATFORM)' $(PROJECT) -o $(MAKEFILE_LIB)
-	./buildnum.csh
 	$(MAKE) -j $(PARALLEL) -f $(MAKEFILE_LIB)
