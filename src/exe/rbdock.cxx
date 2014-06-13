@@ -367,6 +367,14 @@ int main(int argc, const char* argv[])
     spWS->SetDockingSite(spDS);
     cout << endl << "DOCKING SITE" << endl << (*spDS) << endl;
 
+    //Prepare the SD file sink for saving the docked conformations for each ligand
+    //DM 3 Dec 1999 - replaced ostrstream with RbtString in determining SD file name
+    //SRC 2014 moved here this block to allow WRITE_ERROR TRUE
+    if (bOutput) {
+      RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(strRunName+".sd",RbtModelPtr()));
+      spWS->SetSink(spMdlFileSink);
+    }
+    
     RbtPRMFactory prmFactory(spRecepPrmSource, spDS);
     prmFactory.SetTrace(iTrace);
     //Create the receptor model from the file names in the receptor parameter file
@@ -384,12 +392,7 @@ int main(int argc, const char* argv[])
  		cout << endl << "No solvent" << endl;
  	}
  	
-    //Prepare the SD file sink for saving the docked conformations for each ligand
-    //DM 3 Dec 1999 - replaced ostrstream with RbtString in determining SD file name
-    if (bOutput) {
-      RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(strRunName+".sd",RbtModelPtr()));
-      spWS->SetSink(spMdlFileSink);
-    }
+    //SRC 2014 removed sector bOutput from here to some blocks above, for WRITEERRORS TRUE
     
     //Seed the random number generator
     RbtRand& theRand = Rbt::GetRbtRand();//ref to random number generator
