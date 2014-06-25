@@ -10,7 +10,7 @@ if (@ARGV < 4)
 	print "2nd) Store the result of sdreport -t over that exhaustive dock.\n";
 	print "     in file <sdreport_file> that will be the input of this\n";
 	print "     script.\n";
-	print "3rd) ht_protocol_finder.pl <sdreport_file> <output_file> <thr1max>";
+	print "3rd) rbhtfinder <sdreport_file> <output_file> <thr1max>";
 	print " <thr1min> <ns1> <ns2>\n";
 	print "     <ns1> and <ns2> are the number of steps in stage 1 and in\n";
 	print "     stage 2. If not present, the default values are 5 and 15\n";
