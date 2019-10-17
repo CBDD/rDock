@@ -1,9 +1,10 @@
 # rDOCK BUILD INSTRUCTIONS
 
-` In this file you have the basic commands for installing rDock in 32- or 64-bits linux computers.
+```
+In this file you have the basic commands for installing rDock in 32- or 64-bits linux computers.
  For a more detailed explanation, please open the Getting Started guide or full documentation 
  in our webpage or in docs folder.
-`
+```
 
 ## BACKGROUND
 
@@ -39,15 +40,15 @@ After installing these dependencies, please follow the following steps:
 ### Step 1) BUILD
 
 * Change current directory to build folder:
-`
+```
 $ cd rDock_2013.1_src/build
-`
+```
 And run, either:
 
-`
+```
 $ make linux-g++           #for 32-bit build with g++ compiler
 $ make linux-g++-64        #for 64-bit build with g++ compiler
-`
+```
 
 If wish to use a different compiler/architecture combination, or if you wish to
 change the compiler flags, see below.
@@ -57,9 +58,9 @@ The built libraries and executables are copied to their run-time locations
 
 ### Step 2) TEST
 
-`
-$ make test                Runs rDock unit tests
-`
+```
+$ make test                #Runs rDock unit tests
+```
 
 If the test has succeed, you are done, enjoy using rDock!
 Otherwise, please check your dependencies and all the previous commands or go to 
@@ -73,14 +74,17 @@ install the binaries and data files to a new location.
 Set the necessary environmental variables for running rDock in the command line.
 (for example, in a bash shell):
 
-`
+```
 $ export RBT_ROOT=/path/to/rDock/installation/
 $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$RBT_ROOT/lib
 $ export PATH=$PATH:$RBT_ROOT/bin
-`
+```
 
 ### OTHER MAKE TARGETS
 
 `make src_dist` 		Creates source distribution
+
 `make clean`              Removes all intermediate build files
+
 `make distclean`         Also removes installed libs and exes in ../lib and ../bin
+
