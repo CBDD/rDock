@@ -7,7 +7,7 @@ export LIBRARY_PATH=${PREFIX}/lib
 
 patch -p1 < bioconda.patch
 
-# patch from https://aur.archlinux.org/cgit/aur.git/tree/rdock-2013.1.patch?h=rdock
+# patch from https://aur.archlinux.org/cgit/aur.git/tree/rdock-2021.1.patch?h=rdock
 patch -p0 < gcc_compat.patch
 
 # patch from my changes

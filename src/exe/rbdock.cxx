@@ -33,7 +33,7 @@ using std::setw;
 #include "RbtSFRequest.h"
 #include "RbtFileError.h"
 
-const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2013.1/src/exe/rbdock.cxx#4 $)";
+const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rbdock.cxx#4 $)";
 //Section name in docking prm file containing scoring function definition
 const RbtString _ROOT_SF = "SCORE";
 const RbtString _RESTRAINT_SF = "RESTR";

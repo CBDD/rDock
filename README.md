@@ -41,7 +41,7 @@ After installing these dependencies, please follow the following steps:
 
 * Change current directory to build folder:
 ```
-$ cd rDock_2013.1_src/build
+$ cd rDock_2021.1_src/build
 ```
 And run, either:
 

@@ -21,7 +21,7 @@
 #include "RbtTriposAtomType.h"
 #include "RbtMOEGrid.h"
 
-const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2013.1/src/exe/rbmoegrid.cxx#4 $)";
+const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rbmoegrid.cxx#4 $)";
 const RbtString _ROOT_SF = "SCORE";
 
 //Creates list of probe models

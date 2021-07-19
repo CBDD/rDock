@@ -23,7 +23,7 @@
 #include "RbtPRMFactory.h"
 #include "RbtSmarts.h"
 const RbtString EXEVERSION = 
-      " ($Id: //depot/dev/client3/rdock/2013.1/src/exe/rbtether.cxx#5 $)";
+      " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rbtether.cxx#5 $)";
 
 void print_atoms(RbtAtomList &atoms, ostrstream &ost);
 /////////////////////////////////////////////////////////////////////
