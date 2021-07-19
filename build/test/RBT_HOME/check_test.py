@@ -21,6 +21,6 @@ if abs(refscore - testscore) > 0.01:
 	error = 1
 
 if error == 1:
-	print "The test failed, please check the compilation is OK and no errors were raised."
+	print("The test failed, please check the compilation is OK and no errors were raised.")
 else:
-	print "The test succeeded! The results agree with the reference ones.\nHave fun using rDock!!"
+	print("The test succeeded! The results agree with the reference ones.\nHave fun using rDock!!")
