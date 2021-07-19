@@ -1,0 +1,61 @@
+--- include/RbtContainers.h.orig	2020-04-08 14:22:00.605918479 +0200
++++ include/RbtContainers.h	2020-04-08 14:03:12.688862094 +0200
+@@ -34,6 +34,7 @@
+ 
+ #include <algorithm>
+ //DM 9 Dec 1998 - add copy_if template to std namespace (not included in STL)
++#if __cplusplus < 201103L
+ namespace std
+ {
+   template <class InputIterator, class OutputIterator, class Predicate>
+@@ -47,6 +48,7 @@
+     return result;
+   }
+ }
++#endif
+ 
+ // Container Typedefs
+ 	
+--- import/simplex/src/NMSearch.cxx.orig	2020-04-08 14:22:22.486053829 +0200
++++ import/simplex/src/NMSearch.cxx	2020-04-08 14:04:54.396177205 +0200
+@@ -388,7 +388,7 @@
+ 
+ void NMSearch::ReadSimplexFile(istream& fp)
+ {
+-   if(fp == NULL) {
++   if(!fp) {
+       cerr<<"No Input Stream in ReadSimplexFile()!\n";
+       return; // There's no file handle!!
+    }
+
+--- build/tmakelib/linux-g++-64/tmake.conf.orig	2020-06-16 14:24:21.594463000 +1000
++++ build/tmakelib/linux-g++-64/tmake.conf	2020-07-13 16:43:27.738420660 +1000
+@@ -7,7 +7,7 @@
+ TEMPLATE		= app
+ CONFIG			= qt warn_on release
+ 
+-TMAKE_CC		= /usr/bin/gcc
++TMAKE_CC		= gcc
+ TMAKE_CFLAGS		= -pipe -m64
+ TMAKE_CFLAGS_WARN_ON	= -Wall -W
+ TMAKE_CFLAGS_WARN_OFF	=
+@@ -16,7 +16,7 @@
+ TMAKE_CFLAGS_SHLIB	= -fPIC
+ TMAKE_CFLAGS_YACC	= -Wno-unused -Wno-parentheses
+ 
+-TMAKE_CXX		= /usr/bin/g++
++TMAKE_CXX		= g++
+ TMAKE_CXXFLAGS		= $$TMAKE_CFLAGS -fpermissive
+ TMAKE_CXXFLAGS_WARN_ON	= $$TMAKE_CFLAGS_WARN_ON
+ TMAKE_CXXFLAGS_WARN_OFF	= $$TMAKE_CFLAGS_WARN_OFF -Wno-deprecated
+@@ -34,8 +34,8 @@
+ TMAKE_INCDIR_OPENGL	= /usr/X11R6/include
+ TMAKE_LIBDIR_OPENGL	= /usr/X11R6/lib
+ 
+-TMAKE_LINK		= /usr/bin/g++
+-TMAKE_LINK_SHLIB	= /usr/bin/g++
++TMAKE_LINK		= g++
++TMAKE_LINK_SHLIB	= g++
+ TMAKE_LFLAGS		= -m64
+ TMAKE_LFLAGS_RELEASE	=
+ TMAKE_LFLAGS_DEBUG	=

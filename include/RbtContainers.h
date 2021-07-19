@@ -34,6 +34,7 @@ using std::set;
 
 #include <algorithm>
 //DM 9 Dec 1998 - add copy_if template to std namespace (not included in STL)
+#if __cplusplus < 201103L
 namespace std
 {
   template <class InputIterator, class OutputIterator, class Predicate>
@@ -47,6 +48,7 @@ namespace std
     return result;
   }
 }
+#endif
 
 // Container Typedefs
 	

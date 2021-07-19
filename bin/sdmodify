@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Script to set the first title line equal to a given data field
 #
 # Usage:  sdmodify -f<DataField> [sdFiles]
@@ -42,7 +42,7 @@ while ($sdRec->readRec('DATA'=>1,'LINES'=>1)) {
   $sdRec->writeRec();
 }
 
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Script to set the first title line equal to a given data field
 #
 # Usage:  sdmodify -f<DataField> [sdFiles]

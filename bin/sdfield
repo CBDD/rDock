@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/env perl
 # add extra fields to SD records
 use lib "$ENV{'RBT_ROOT'}/lib";
 use SDRecord;

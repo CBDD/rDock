@@ -80,7 +80,6 @@ rdock-install-dt-exe: rdock-dt-exe
 rdock-exe: rdock-lib
 	./exemake -t"$(PLATFORM)" -c"$(CONFIG)" -o"$(MAKEFILE_EXE)"
 	$(MAKE) -j $(PARALLEL) -f $(MAKEFILE_EXE) exe
-	$(MAKE) -j $(PARALLEL) -f $(MAKEFILE_EXE) unit_test
 
 # Include Daylight-dependent progs, not built by default
 rdock-dt-exe: rdock-lib

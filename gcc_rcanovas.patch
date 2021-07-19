@@ -1,0 +1,40 @@
+--- src/lib/RbtBaseMolecularFileSource.cxx.orig	2014-05-05 20:18:04.149045543 +1000
++++ src/lib/RbtBaseMolecularFileSource.cxx	2020-07-15 16:18:03.118078654 +1000
+@@ -261,6 +261,8 @@
+ 
+   //First remove all bonds from the atom
+   for (RbtBondMapConstIter mapIter = bondMap.begin(); mapIter != bondMap.end(); mapIter++) {
++    if(bondMap.begin() == bondMap.end())
++	break;
+     RbtBondListIter bIter = Rbt::FindBond(m_bondList,Rbt::isBond_eq((*mapIter).first));
+     if (bIter != m_bondList.end()) {
+ #ifdef _DEBUG
+@@ -428,18 +428,20 @@
+   }
+   
+   for (RbtStringListConstIter aIter = atList.begin(); aIter != atList.end(); aIter++) {
+-    RbtDouble partialCharge(spParamSource->GetParameterValue(*aIter));//Get the partial charge value
++    if (*aIter != ""){
++        RbtDouble partialCharge(spParamSource->GetParameterValue(*aIter));//Get the partial charge value
+ #ifdef _DEBUG
+-    cout << endl << "Trying to match " << *aIter << endl;
++        cout << endl << "Trying to match " << *aIter << endl;
+ #endif //_DEBUG
+-    //Find the atoms which match the specifier string
+-    RbtAtomList selectedAtoms = Rbt::GetMatchingAtomList(atoms,*aIter);
+-    //Now we've got the matching atoms, set the group charge on each atom
+-    for (RbtAtomListIter iter = selectedAtoms.begin(); iter != selectedAtoms.end(); iter++) {
+-      (*iter)->SetGroupCharge(partialCharge);
++        //Find the atoms which match the specifier string
++        RbtAtomList selectedAtoms = Rbt::GetMatchingAtomList(atoms,*aIter);
++        //Now we've got the matching atoms, set the group charge on each atom
++        for (RbtAtomListIter iter = selectedAtoms.begin(); iter != selectedAtoms.end(); iter++) {
++            (*iter)->SetGroupCharge(partialCharge);
+ #ifdef _DEBUG
+-      cout << "INFO Setting group charge on " << (*iter)->GetFullAtomName() << " to " << partialCharge << endl;
++            cout << "INFO Setting group charge on " << (*iter)->GetFullAtomName() << " to " << partialCharge << endl;
+ #endif //_DEBUG
++        }
+     }
+   }
+ }

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Perl functions for the run_rb* collection of automated docking scripts
 
 use strict;

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 use lib "$ENV{'RBT_ROOT'}/lib";
 require "run_rbfuncs.pl";
 
@@ -7,7 +7,6 @@ my $rbthome = $ENV{'RBT_HOME'};
 my $recepDir = "$rbtroot/data/receptors";
 my $scriptDir = "$rbtroot/data/scripts";
 my $libraryDir = "$rbtroot/data/libraries";
-my $binDir = "$rbtroot/bin";
 
 #override default directories
 #Parse command line arguments
@@ -75,7 +74,7 @@ foreach $libFile (@libList) {
   print NQSHANDLE "source \$RBT_ROOT/bin/setlibrbt.com\n";
   print NQSHANDLE "cd $pwd\n";
   print NQSHANDLE "if (-e $logFile) rm -f $logFile\n";
-  print NQSHANDLE "\$RBT_ROOT/bin/rbdock -i$libFile -o${runName} -r$receptor -p$script -n$runs $flags > $logFile\n";
+  print NQSHANDLE "rbdock -i$libFile -o${runName} -r$receptor -p$script -n$runs $flags > $logFile\n";
   close NQSHANDLE;
 
   chmod 0755,$nqsFile;

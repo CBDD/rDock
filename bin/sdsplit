@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Splits SD records into multiple files of equal no. of records
 use lib "$ENV{'RBT_ROOT'}/lib";
 

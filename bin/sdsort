@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Sorts SD records by given data field
 use lib "$ENV{'RBT_ROOT'}/lib";
 

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Called by Makefile (DO NOT CALL DIRECTLY)
 #
 # Generates a platform-specific makefile for compiling

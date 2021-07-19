@@ -388,7 +388,7 @@ void NMSearch::InitGeneralSimplex(const RbtMatrix *plex)
 
 void NMSearch::ReadSimplexFile(istream& fp)
 {
-   if(fp == NULL) {
+   if(!fp) {
       cerr<<"No Input Stream in ReadSimplexFile()!\n";
       return; // There's no file handle!!
    }

@@ -143,7 +143,8 @@ int main(int argc,const char* argv[])
 	}
 	else {
 		cout << "Missing receptor parameter file name"<<endl;
-		poptPrintUsage(optCon, stderr, 0);
+		//SRC poptPrintUsage(optCon, stderr, 0);
+		PrintUsage();
 		exit(1);
 	}
 	// writing command line arguments

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Misc Perforce-related scripts to dynamically detect
 # product, codeline and version
 # Must be run in situ in the build directory

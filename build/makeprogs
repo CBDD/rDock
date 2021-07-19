@@ -25,7 +25,7 @@ UNITTEST_LINKLIBS	= -lRbt -ldl -lcppunit
 # Build targets
 #all: exe dt_exe unit_test
 # XB Build targets except the ones requiring daylight toolkits
-all: exe unit_test
+all: exe 
 
 #XB 2013 version removed rbrms, new sdrmsd script makes it all
 # Standalone rDock executables

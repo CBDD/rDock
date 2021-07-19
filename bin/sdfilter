@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 # Filters SD records by given data field                                       *
 #                                                                              *
 # Usage:  sdfilter -f'$<DataField> <Operator> <Value>'  [sdFiles]              *

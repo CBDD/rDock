@@ -181,7 +181,8 @@ int main(int argc, const char* argv[])
 	// input ligand file, receptor and parameter is compulsory
 	cout << endl << "Command line args:" << endl;
 	if(!inputFile || !receptorFile || !protocolFile) { // if any of them is missing
-		poptPrintUsage(optCon, stderr, 0);
+		//SRC poptPrintUsage(optCon, stderr, 0);
+		PrintUsage();
 		exit(1);
 	} else {
 		strLigandMdlFile	= inputFile;
