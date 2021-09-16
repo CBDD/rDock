@@ -22,7 +22,7 @@
 //  _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
 //}
 
-RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName) : m_bMultiRec(false), m_bFileOpen(false)
+RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName) : m_bFileOpen(false), m_bMultiRec(false)
 {
 	m_strFileName = fileName;
 	m_szBuf = new char[MAXLINELENGTH+1];//DM 24 Mar - allocate line buffer
@@ -31,8 +31,8 @@ RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName) : m_bMultiRec(fa
 }
 
 //Multi-record constructor
-	RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName, const RbtString& strRecDelim) :
-m_bMultiRec(true), m_strRecDelim(strRecDelim), m_bFileOpen(false)
+RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName, const RbtString& strRecDelim) :
+m_bFileOpen(false), m_bMultiRec(true), m_strRecDelim(strRecDelim)
 {
 	m_strFileName = fileName;
 	m_szBuf = new char[MAXLINELENGTH+1];//DM 24 Mar - allocate line buffer

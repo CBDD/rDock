@@ -24,10 +24,23 @@ RbtString RbtBaseGrid::_CT("RbtBaseGrid");
 ////////////////////////////////////////
 //Constructors/destructors
 //Construct a NXxNYxNZ grid running from gridMin at gridStep resolution
-RbtBaseGrid::RbtBaseGrid(const RbtCoord& gridMin, const RbtCoord& gridStep,
-		       RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad) :
-  m_step(gridStep),m_NX(NX),m_NY(NY),m_NZ(NZ),m_N(NX*NY*NZ),
-  m_SX(NY*NZ),m_SY(NZ),m_SZ(1),m_NPad(NPad)
+RbtBaseGrid::RbtBaseGrid(
+    const RbtCoord& gridMin,
+    const RbtCoord& gridStep,
+	RbtUInt NX,
+    RbtUInt NY,
+    RbtUInt NZ,
+    RbtUInt NPad
+) :
+    m_NX(NX),
+    m_NY(NY),
+    m_NZ(NZ),
+    m_N(NX*NY*NZ),
+    m_SX(NY*NZ),
+    m_SY(NZ),
+    m_SZ(1),
+    m_step(gridStep),
+    m_NPad(NPad)
 {
   //Set the logical (real-world) dimensions of the grid
   SetGridMin(gridMin);
