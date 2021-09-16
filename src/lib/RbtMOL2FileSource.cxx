@@ -23,7 +23,7 @@ using std::stringstream;
 RbtString RbtMOL2FileSource::_CT("RbtMOL2FileSource"); 
 // record delimiter strings
 RbtString RbtMOL2FileSource::_TRIPOS_DELIM("@<TRIPOS>"); 
-RbtInt RbtMOL2FileSource::_TRIPOS_DELIM_SIZE(RbtMOL2FileSource::_TRIPOS_DELIM.size());
+RbtUInt RbtMOL2FileSource::_TRIPOS_DELIM_SIZE(RbtMOL2FileSource::_TRIPOS_DELIM.size());
 RbtString RbtMOL2FileSource::_IDS_MOL2_RECDELIM("@<TRIPOS>MOLECULE");
 
 // straightforward ctor 
@@ -296,9 +296,9 @@ void RbtMOL2FileSource::ParseRecordBOND(const RbtString& aLine) {
     throw RbtFileParseError(_WHERE_, "Corrupted MOL2 file: not enough fields in BOND");
 
   //Compulsory fields
-  RbtInt bond_id = atoi(tokens[0].c_str()); 
-  RbtInt origin_bond_id	= atoi(tokens[1].c_str());	
-  RbtInt target_bond_id = atoi(tokens[2].c_str());
+  RbtUInt bond_id = (RbtUInt)atoi(tokens[0].c_str()); 
+  RbtUInt origin_bond_id	= (RbtUInt)atoi(tokens[1].c_str());	
+  RbtUInt target_bond_id = (RbtUInt)atoi(tokens[2].c_str());
   RbtString bond_type = tokens[3];
 
   //In rDock we only have integer bond order

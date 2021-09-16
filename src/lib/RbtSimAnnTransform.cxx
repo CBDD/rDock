@@ -117,7 +117,7 @@ void RbtSimAnnTransform::SetupTransform() {
     RbtWorkSpace* pWorkSpace = GetWorkSpace();
     if (pWorkSpace) {
         m_chrom = new RbtChrom(pWorkSpace->GetModels());
-        RbtInt chromLength = m_chrom->GetLength();
+        RbtUInt chromLength = m_chrom->GetLength();
         m_lastGoodVector.reserve(chromLength);
         m_minVector.reserve(chromLength);
     }
@@ -151,7 +151,7 @@ void RbtSimAnnTransform::Execute()
   RbtDouble minAccRate = GetParameter(_MIN_ACC_RATE);
 
   if (bScale) {
-    RbtInt chromLength = m_chrom->GetLength();
+    RbtUInt chromLength = m_chrom->GetLength();
     blockLen *= chromLength;
   }
   if (iTrace > 0) {

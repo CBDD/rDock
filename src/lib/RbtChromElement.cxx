@@ -71,18 +71,18 @@ void RbtChromElement::Add(RbtChromElement*) {
         "Add(RbtChromElement*) invalid for non-aggregate chromosome element");
 }
 
-RbtBool RbtChromElement::VectorOK(const RbtDoubleList& v, RbtInt i) const {
-    RbtInt length = GetLength();
+RbtBool RbtChromElement::VectorOK(const RbtDoubleList& v, RbtUInt i) const {
+    RbtUInt length = GetLength();
     //if the element is empty then any vector is valid
     return (length == 0)
-            || ( (i >= 0) && (i < v.size()) && (length <= (v.size() - i) ));
+            || ((i < v.size()) && (length <= (v.size() - i) ));
 }
 
-RbtBool RbtChromElement::VectorOK(const RbtXOverList& v, RbtInt i) const {
-    RbtInt length = GetXOverLength();
+RbtBool RbtChromElement::VectorOK(const RbtXOverList& v, RbtUInt i) const {
+    RbtUInt length = GetXOverLength();
     //if the element is empty then any vector is valid
     return (length == 0)
-            || ( (i >= 0) && (i < v.size()) && (length <= (v.size() - i) ));
+            || ((i < v.size()) && (length <= (v.size() - i) ));
 }
 
 void RbtChromElement::CauchyMutate(RbtDouble mean, RbtDouble variance) {
@@ -99,7 +99,7 @@ RbtDouble RbtChromElement::Compare(const RbtChromElement& c) const {
     }
     else {
         RbtDoubleList v;
-        RbtInt i(0);
+        RbtUInt i(0);
         c.GetVector(v);
         retVal = CompareVector(v,i);
     }
@@ -112,12 +112,12 @@ RbtBool RbtChromElement::Equals(const RbtChromElement& c, RbtDouble threshold) c
 }
 
 void RbtChromElement::SetVector(const RbtDoubleList& v) {
-    RbtInt i(0);
+    RbtUInt i(0);
     SetVector(v,i);
 }
 
 void RbtChromElement::SetVector(const RbtXOverList& v) {
-    RbtInt i(0);
+    RbtUInt i(0);
     SetVector(v,i);
 }
 

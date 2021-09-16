@@ -72,7 +72,7 @@ void RbtPsfFileSource::Parse()
     
       //////////////////////////////////////////////////////////
       //2a Read number of title lines and check for correct title key...
-      RbtInt nTitleRec;
+      RbtUInt nTitleRec;
       fileIter+=2;
       istringstream((*fileIter).c_str()) >> nTitleRec >> strKey;
       if (strKey != strTitleKey)
@@ -91,7 +91,7 @@ void RbtPsfFileSource::Parse()
 
       //////////////////////////////////////////////////////////
       //3a. Read number of atoms and check for correct atom key...
-      RbtInt nAtomRec;
+      RbtUInt nAtomRec;
       fileIter++;
       istringstream((*fileIter).c_str()) >> nAtomRec >> strKey;
       if (strKey != strAtomKey)
@@ -159,7 +159,7 @@ void RbtPsfFileSource::Parse()
 
       //////////////////////////////////////////////////////////
       //4a. Read number of bonds and check for correct bond key...
-      RbtInt nBondRec;
+      RbtUInt nBondRec;
       fileIter++;
       //istringstream((*fileIter).c_str()) >> nBondRec >> strKey;
       istringstream((*fileIter).c_str()) >> nBondRec >> strKey;

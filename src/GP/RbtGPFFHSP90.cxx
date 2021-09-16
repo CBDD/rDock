@@ -94,13 +94,14 @@ RbtDouble RbtGPFFHSP90::CalculateFitness(
     RbtParser p2;
     RbtCellTokenIterPtr ti(new RbtCellTokenIter(c, contextp));
     RbtFilterExpressionPtr fe(p2.Parse(ti, contextp));
-    for (RbtInt i = 0 ; i < it.size() ; i++)
+    for (size_t i = 0 ; i < it.size() ; i++)
     {
         RbtReturnTypeList inputs(it[i]);
         RbtReturnTypeList pred;
         pred.clear();
-        for (RbtInt j = 0 ; j < inputs.size() ; j++)
+        for (size_t j = 0 ; j < inputs.size() ; j++){
             contextp->Assign(j, *(inputs[j]));
+        }
         RbtReturnTypeList SFValues = sft[i];
         EvaluateVisitor visitor(contextp);
         fe->Accept(visitor);
@@ -145,13 +146,14 @@ RbtDouble RbtGPFFHSP90::CalculateFitness(
     RbtCellTokenIterPtr ti(new RbtCellTokenIter(c, contextp));
     RbtFilterExpressionPtr fe(p2.Parse(ti, contextp));
     RbtDouble meanReal = 0.0, meanPred = 0.0;
-    for (RbtInt i = 0 ; i < it.size() ; i++)
+    for (size_t i = 0 ; i < it.size() ; i++)
     {
         RbtReturnTypeList inputs(it[i]);
         RbtReturnTypeList pred;
         pred.clear();
-        for (RbtInt j = 0 ; j < inputs.size() ; j++)
+        for (size_t j = 0 ; j < inputs.size() ; j++){
             contextp->Assign(j, *(inputs[j]));
+        }
         RbtReturnTypeList SFValues = sft[i];
         EvaluateVisitor visitor(contextp);
         fe->Accept(visitor);
@@ -166,8 +168,7 @@ RbtDouble RbtGPFFHSP90::CalculateFitness(
     
     meanReal = meanReal / it.size();
     meanPred = meanPred / it.size();
-//    cout << endl;
-    for (RbtInt i = 0 ; i < it.size() ; i++)
+    for (size_t i = 0 ; i < it.size() ; i++)
     {
       RbtDouble t1 = *sft[i][0] - meanReal;
       RbtDouble t2 = *o[i][0] - meanPred;

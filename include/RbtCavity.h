@@ -44,7 +44,7 @@ class RbtCavity
   }
 
   //Destructor
-  ~RbtCavity() {}; 
+  virtual ~RbtCavity() {};
 
   ///////////////////////////////////////////////
   //Stream functions

@@ -65,7 +65,7 @@ ostream& operator<<(ostream& s, const RbtDockingSite& site) {
 //Derived classes can override if required
 void RbtDockingSite::Print(ostream& s) const {
     s << "Total volume " << GetVolume() << " A^3" << endl;
-    for(RbtInt i = 0; i < m_cavityList.size(); i++) {
+    for(size_t i = 0; i < m_cavityList.size(); i++) {
         s << "Cavity #" << i+1 << "\t" << *(m_cavityList[i]) << endl;
     }
 }

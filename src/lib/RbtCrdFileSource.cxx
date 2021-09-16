@@ -59,7 +59,7 @@ void RbtCrdFileSource::Parse()
 
       //////////////////////////////////////////////////////////
       //3a. Read number of atoms
-      RbtInt nAtomRec;
+      RbtUInt nAtomRec;
       fileIter++;
       istringstream((*fileIter).c_str()) >> nAtomRec;
       

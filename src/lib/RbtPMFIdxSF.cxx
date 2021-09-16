@@ -56,7 +56,7 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName)
 	vector<RbtPMFValue>					theSlopeIndex;	// contains the first value where plateau starts
 	theSrcDir.ReadFiles(&thePMF,&theFileNames,&theSlopeIndex);
 	// convert vector to grid
-	for(int i=0; i<thePMF.size(); i++) {
+	for(size_t i=0; i<thePMF.size(); i++) {
 #ifdef _DEBUG1
 		cout << _CT << " " << theFileNames[i]; 
 		cout << " " << theFileNames[i].substr(0,2) << " " << Rbt::PMFStr2Type( theFileNames[i].substr(0,2) );
@@ -65,7 +65,7 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName)
 #endif	// _DEBUG1
 
 		// iterate through each individual PMF
-		for(int j=0; j<thePMF[i].size(); j++) {
+		for(size_t j=0; j<thePMF[i].size(); j++) {
 			RbtPMFType rType = Rbt::PMFStr2Type( theFileNames[i].substr(0,2));		// receptor type
 			RbtPMFType lType = Rbt::PMFStr2Type( theFileNames[i].substr(2,2));		// ligand type
 			thePMFGrid->SetValue( thePMFGrid->GetIX((RbtDouble)thePMF[i][j].distance),	// distance
@@ -75,7 +75,7 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName)
 		}
 	}
 	// fill slope grid
-	for(int i=0; i<theSlopeIndex.size(); i++) {
+	for(size_t i=0; i<theSlopeIndex.size(); i++) {
 		RbtPMFType rType = Rbt::PMFStr2Type( theFileNames[i].substr(0,2));		// receptor type
 		RbtPMFType lType = Rbt::PMFStr2Type( theFileNames[i].substr(2,2));		// ligand type
 		theSlopeGrid->SetValue( cPlStart,		// index 1 for the distance where the		

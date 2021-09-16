@@ -154,18 +154,18 @@ void RbtModelMutator::Setup() {
     //Loop over selected atom list
     //and append the unselected atom list to the interaction list for each atom
     for (RbtAtomRListConstIter sIter = sList.begin(); sIter != sList.end(); sIter++) {
-      RbtInt id = (*sIter)->GetAtomId()-1;
+      RbtUInt id = (*sIter)->GetAtomId()-1;
       //Assertion - check id is within range
-      Assert<RbtAssert>(!MUT_CHECK || (id >= 0 && id < m_flexIntns.size()));
+      Assert<RbtAssert>(!MUT_CHECK || (id != (RbtUInt) -1 && id < m_flexIntns.size()));
       RbtAtomRListListIter lIter = m_flexIntns.begin() + id;
       std::copy(uList.begin(),uList.end(),std::back_inserter(*lIter));
     }
 
     //Ditto for unselected atom list
     for (RbtAtomRListConstIter uIter = uList.begin(); uIter != uList.end(); uIter++) {
-      RbtInt id = (*uIter)->GetAtomId()-1;
+      RbtUInt id = (*uIter)->GetAtomId()-1;
       //Assertion - check id is within range
-      Assert<RbtAssert>(!MUT_CHECK || (id >= 0 && id < m_flexIntns.size()));
+      Assert<RbtAssert>(!MUT_CHECK || (id != (RbtUInt) -1 && id < m_flexIntns.size()));
       RbtAtomRListListIter lIter = m_flexIntns.begin() + id;
       std::copy(sList.begin(),sList.end(),std::back_inserter(*lIter));
     }

@@ -118,6 +118,7 @@ class RbtVariant
   operator RbtStringList() const {return StringList();}
   operator RbtBool() const {return Bool();}
   operator RbtCoord() const {return Coord();}
+  operator RbtUInt() const {return RbtUInt(Double());}
 
   ////////////////////////////////////////
   //Public methods

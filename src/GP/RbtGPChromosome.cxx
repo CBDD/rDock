@@ -38,10 +38,12 @@ RbtGPChromosome::RbtGPChromosome(const RbtGPChromosome& c)
 {
     chrom = RbtIntList(c.chrom.size());
     cells = RbtCellList(c.cells.size());
-    for (RbtInt i = 0 ; i < cells.size() ; i++)
+    for (size_t i = 0 ; i < cells.size() ; i++) {
         cells[i] = c.cells[i];
-    for (RbtInt i = 0 ; i < chrom.size() ; i++)
+    }
+    for (size_t i = 0 ; i < chrom.size() ; i++) {
         chrom[i] = c.chrom[i];
+    }
     nProgramInputs = c.nProgramInputs;
     nFunctionsInputs = c.nFunctionsInputs;
     nProgramOutputs = c.nProgramOutputs;
@@ -54,15 +56,16 @@ RbtGPChromosome::~RbtGPChromosome(){}
 
 void RbtGPChromosome::Clear()
 {
-    for (RbtInt i = 0 ; i < cells.size() ; i++)
-        cells[i]->Clear();
+    for (auto iter: cells){
+        iter->Clear();
+    }
     RbtCommand::Clear();
 }
 RbtGPChromosome& RbtGPChromosome::operator=(const RbtGPChromosome& c)
 {
-    for (RbtInt i = 0 ; i < cells.size() ; i++)
+    for (size_t i = 0 ; i < cells.size() ; i++)
         *(cells[i]) = *(c.cells[i]);
-    for (RbtInt i = 0 ; i < chrom.size() ; i++)
+    for (size_t i = 0 ; i < chrom.size() ; i++)
         chrom[i] = c.chrom[i];
     nProgramInputs = c.nProgramInputs;
     nFunctionsInputs = c.nFunctionsInputs;
@@ -72,7 +75,7 @@ RbtGPChromosome& RbtGPChromosome::operator=(const RbtGPChromosome& c)
 
 istream& operator>>(istream& s, RbtGPChromosome &p)
 {
-    for (RbtInt i = 0 ; i < p.chrom.size() ; i++)
+    for (size_t i = 0 ; i < p.chrom.size() ; i++)
         s >> p.chrom[i];
     RbtInt cell; 
 	RbtReturnType value;
@@ -97,12 +100,15 @@ ostream& RbtGPChromosome::Print(ostream& s) const
         }
         s << endl;
     }
-    for (RbtInt i = 0 ; i < nProgramOutputs ; i++)
+    for (RbtInt i = 0 ; i < nProgramOutputs ; i++) {
         s << chrom[g++] << " ";
+    }
     s << endl;
-    for (RbtInt i = 0 ; i < cells.size() ; i++)
-        if (cells[i]->Constant())
+    for (size_t i = 0 ; i < cells.size() ; i++) {
+        if (cells[i]->Constant()) {
             s << i << "\t" << cells[i]->GetResult() << endl;
+        }
+    }
     return s;
 }
 

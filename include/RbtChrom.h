@@ -39,14 +39,14 @@ class RbtChrom : public RbtChromElement {
     virtual void SyncFromModel();
     virtual void SyncToModel();
     virtual RbtChromElement* clone() const;
-    virtual RbtInt GetLength() const;
+    virtual RbtUInt GetLength() const;
     virtual RbtInt GetXOverLength() const;
     virtual void GetVector(RbtDoubleList& v) const;
     virtual void GetVector(RbtXOverList& v) const;
-    virtual void SetVector(const RbtDoubleList& v, RbtInt& i);
-    virtual void SetVector(const RbtXOverList& v, RbtInt& i);
+    virtual void SetVector(const RbtDoubleList& v, RbtUInt& i);
+    virtual void SetVector(const RbtXOverList& v, RbtUInt& i);
     virtual void GetStepVector(RbtDoubleList& v) const;
-    virtual RbtDouble CompareVector(const RbtDoubleList& v, RbtInt& i) const;
+    virtual RbtDouble CompareVector(const RbtDoubleList& v, RbtUInt& i) const;
     virtual void Print(ostream& s) const;
     
     //Aggregate methods

@@ -44,7 +44,7 @@ class RbtMOL2FileSource : public RbtBaseMolecularFileSource {
   static RbtString _CT;
   // record delimiter strings
   static RbtString _TRIPOS_DELIM; 
-  static RbtInt _TRIPOS_DELIM_SIZE;
+  static RbtUInt _TRIPOS_DELIM_SIZE;
   static RbtString _IDS_MOL2_RECDELIM;
 
   RbtMOL2FileSource(const RbtString& fileName, RbtBool bImplHydrogens=true);
@@ -88,11 +88,11 @@ class RbtMOL2FileSource : public RbtBaseMolecularFileSource {
 
   int m_NL;//No. of lines
   // data fields in MOLECULE
-  RbtInt nAtoms;// number of atoms
-  RbtInt nBonds;//           bonds
-  RbtInt nSubstructures;//substructures
-  RbtInt nFeatures;//features
-  RbtInt nSets;//sets
+  RbtUInt nAtoms;// number of atoms
+  RbtUInt nBonds;//           bonds
+  RbtUInt nSubstructures;//substructures
+  RbtUInt nFeatures;//features
+  RbtUInt nSets;//sets
 
   // helper data structures used to lookup chain names for each substructure
   //and to sort atom list into a more sensible order (ordered by substructure ID)

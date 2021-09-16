@@ -59,11 +59,13 @@ RbtGPPopulation::RbtGPPopulation(const RbtGPPopulation & p)
     sfttrain = p.sfttrain;
     c = 2.0;        // default value for the sigma truncation multiplier
     pop = RbtGPGenomeList(popsize);
-    for (RbtInt i = 0 ; i < p.popsize ; i++)
+    for (RbtInt i = 0 ; i < p.popsize ; i++) {
         pop[i] = p.pop[i];
+    }
     newpop = RbtGPGenomeList (p.newpop.size());
-    for (RbtInt i = 0 ; i < p.newpop.size() ; i++)
+    for (size_t i = 0 ; i < p.newpop.size() ; i++) {
         newpop[i] = p.newpop[i];
+    }
     psum = new RbtDouble [popsize];
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
@@ -176,7 +178,7 @@ void RbtGPPopulation::GAstep(RbtString selector, RbtDouble pcross,
       // calculate the objective values and 
       // sort newpop  newpop = RbtGPGenomeList (p.newpop.size());
     RbtDouble bestFitness = -FLT_MAX, fit;
-    for (RbtInt i = 0 ; i < newpop.size() ; i++)
+    for (size_t i = 0 ; i < newpop.size() ; i++)
     {
         *(pop[i]) = *(newpop[i]);
         fit = ff->CalculateFitness(pop[i],ittrain,sfttrain,function);
@@ -203,7 +205,7 @@ void RbtGPPopulation::EPstep(RbtString, RbtDouble,
       // calculate the objective values and 
       // sort newpop  newpop = RbtGPGenomeList (p.newpop.size());
     RbtDouble bestFitness = -FLT_MAX, fit;
-    for (RbtInt i = 0 ; i < newpop.size() ; i++)
+    for (size_t i = 0 ; i < newpop.size() ; i++)
     {
         *(pop[i]) = *(newpop[i]);
         fit = ff->CalculateFitness(pop[i],ittrain,sfttrain,function);
@@ -224,7 +226,7 @@ RbtGPGenomePtr RbtGPPopulation::Best() const
 
 ostream& RbtGPPopulation::Print(ostream& s) const
 {
-    for (RbtInt i = 0 ; i < pop.size() ; i++)
+    for (size_t i = 0 ; i < pop.size() ; i++)
     {
         pop[i]->Print(s);
         s << pop[i]->GetFitness() << endl;

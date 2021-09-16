@@ -49,7 +49,7 @@ class RbtChromPositionRefData {
         RbtChromElement::eMode GetTransMode() const {return m_transMode;}
         RbtChromElement::eMode GetRotMode() const {return m_rotMode;}
         //Chromosome length, excluding FIXED modes (0, 3 or 6)
-        RbtInt GetLength() const {return m_length;}
+        RbtUInt GetLength() const {return m_length;}
         //Chromosome length for crossover, excluding FIXED modes (0, 1 or 2)
         RbtInt GetXOverLength() const {return m_xOverLength;}
         RbtBool IsTransFixed() const {return m_transMode == RbtChromElement::FIXED;}

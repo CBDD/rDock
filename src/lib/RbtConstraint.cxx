@@ -19,15 +19,15 @@ using std::ends;
 
 // initialization of the static data of RbtConstraint
 RbtString RbtConstraint::_CT("RbtConstraint");
-RbtInt RbtHeavyConstraint::counter = 0;//7 Feb 2005 (DM) new constraint type
-RbtInt RbtHBAConstraint::counter = 0;
-RbtInt RbtHBDConstraint::counter = 0;
-RbtInt RbtHydroConstraint::counter = 0;
-RbtInt RbtHydroAliphaticConstraint::counter = 0;
-RbtInt RbtHydroAromaticConstraint::counter = 0;
-RbtInt RbtNegChargeConstraint::counter = 0;
-RbtInt RbtPosChargeConstraint::counter = 0;
-RbtInt RbtRingAromaticConstraint::counter = 0;
+RbtUInt RbtHeavyConstraint::counter = 0;//7 Feb 2005 (DM) new constraint type
+RbtUInt RbtHBAConstraint::counter = 0;
+RbtUInt RbtHBDConstraint::counter = 0;
+RbtUInt RbtHydroConstraint::counter = 0;
+RbtUInt RbtHydroAliphaticConstraint::counter = 0;
+RbtUInt RbtHydroAromaticConstraint::counter = 0;
+RbtUInt RbtNegChargeConstraint::counter = 0;
+RbtUInt RbtPosChargeConstraint::counter = 0;
+RbtUInt RbtRingAromaticConstraint::counter = 0;
 
 RbtConstraint::RbtConstraint(RbtCoord c, RbtDouble t)
 {

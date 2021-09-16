@@ -65,7 +65,7 @@ RbtDouble RbtGPFFGold::CalculateFitness(
     RbtDouble good = 0.0;
     RbtDouble bad = 0.0;
     RbtDouble hitlimit = 2.0;
-    for (RbtInt i = 0 ; i < it.size() ; i++)
+    for (size_t i = 0 ; i < it.size() ; i++)
     {
         RbtReturnTypeList inputs(it[i]);
         RbtReturnTypeList SFValues = sft[i];
@@ -122,7 +122,7 @@ RbtDouble RbtGPFFGold::CalculateFitness(
     RbtDouble falsehits = 0.0;
     RbtDouble truemisses = 0.0;
     RbtDouble falsemisses = 0.0;
-    for (RbtInt i = 0 ; i < it.size() ; i++)
+    for (size_t i = 0 ; i < it.size() ; i++)
     {
         RbtReturnTypeList inputs = it[i];
         RbtReturnTypeList SFValues = sft[i];

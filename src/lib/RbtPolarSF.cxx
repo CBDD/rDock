@@ -217,8 +217,8 @@ void RbtPolarSF::BuildIntraMap(const RbtInteractionCenterList& ICList1,
     //Reason is that some interactions have an angular dependence: the primary distance may be rigid, but the angular
     //dependence may not be
     RbtAtom* pAtom = (*iter)->GetAtom1Ptr();
-    RbtInt id = pAtom->GetAtomId()-1;
-    Assert<RbtAssert>(id >= 0 && id < intns.size());
+    RbtUInt id = pAtom->GetAtomId()-1;
+    Assert<RbtAssert>(id != (RbtUInt) -1 && id < intns.size());
     //2. Deselect all atoms in the same model as the current atom
     pAtom->GetModelPtr()->SetAtomSelectionFlags(false);
     //3. Set the selection flags for all atoms in the model whose distance can vary to *any* of the

@@ -71,7 +71,7 @@ class RbtChromElement {
 	virtual RbtChromElement* clone() const = 0;
     //Gets the number of double values needed to represent this
     //chromosome element
-    virtual RbtInt GetLength() const = 0;
+    virtual RbtUInt GetLength() const = 0;
     //Gets the number of vectors of double values needed to represent this
     //chromosome element for crossover purposes
     //e.g. an orientation vector consists of 3 doubles, but should be crossed over
@@ -89,12 +89,12 @@ class RbtChromElement {
     //Number of double values read should match GetLength().
     //v = vector of doubles to extract from
     //i = index of next vector element to read (should be updated by method)
-    virtual void SetVector(const RbtDoubleList& v, RbtInt& i) = 0;
+    virtual void SetVector(const RbtDoubleList& v, RbtUInt& i) = 0;
     //Updates chromosome element from a vector of XOverElements,
     //Number of XOverElements read should match GetXOverLength().
     //v = vector of XOverElements to extract from
     //i = index of next vector element to read (should be updated by method)
-    virtual void SetVector(const RbtXOverList& v, RbtInt& i) = 0;
+    virtual void SetVector(const RbtXOverList& v, RbtUInt& i) = 0;
     //Gets the vector of absolute step sizes that correspond to each double value.
     virtual void GetStepVector(RbtDoubleList& v) const = 0;
     //Gets the maximum relative difference between this element and another element
@@ -103,7 +103,7 @@ class RbtChromElement {
     //This method is provided to allow better comparisons between values
     //that are difficult to compare by simple numerical differences. e.g.
     //Dihedral angles are cyclical, therefore -180 and + 179 only differ by 1 deg.
-    virtual RbtDouble CompareVector(const RbtDoubleList& v, RbtInt& i) const = 0;
+    virtual RbtDouble CompareVector(const RbtDoubleList& v, RbtUInt& i) const = 0;
     //
     //IMPLEMENTED VIRTUAL METHODS
     //
@@ -144,11 +144,11 @@ class RbtChromElement {
     //Helper method to check that index i is in range [0,v.size()}
     //and that v has sufficient elements remaining to satisfy
     //GetLength()
-    RbtBool VectorOK(const RbtDoubleList& v, RbtInt i) const;
+    RbtBool VectorOK(const RbtDoubleList& v, RbtUInt i) const;
     //Helper method to check that index i is in range [0,v.size()}
     //and that v has sufficient elements remaining to satisfy
     //GetXOverLength()
-    RbtBool VectorOK(const RbtXOverList& v, RbtInt i) const;
+    RbtBool VectorOK(const RbtXOverList& v, RbtUInt i) const;
     
     private:
     RbtRand& m_rand;//Reference to singleton random number generator

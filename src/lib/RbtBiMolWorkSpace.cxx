@@ -76,7 +76,7 @@ void RbtBiMolWorkSpace::UpdateModelCoordsFromChromRecords(RbtBaseMolecularFileSo
         if (spModel.Ptr()) {
             RbtChromElementPtr spChrom = spModel->GetChrom();
             if (spChrom.Ptr()) {
-                RbtInt chromLength = spChrom->GetLength();
+                size_t chromLength = (size_t)spChrom->GetLength();
                 if (chromLength > 0) {
                     ostringstream ostr;
                     ostr << "CHROM." << iModel;

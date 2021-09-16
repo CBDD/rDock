@@ -49,7 +49,7 @@ void RbtMdlFileSource::Parse()
 
       //////////////////////////////////////////////////////////
       //1a. Store title lines (first 3)..
-      RbtInt nTitleRec = 3;
+      RbtUInt nTitleRec = 3;
       m_titleList.reserve(nTitleRec);//Allocate enough memory for the vector
       while ( (m_titleList.size() < nTitleRec) && (fileIter != fileEnd)) {
 	m_titleList.push_back(*fileIter++);
@@ -67,8 +67,8 @@ void RbtMdlFileSource::Parse()
 
       //////////////////////////////////////////////////////////
       //2. Read number of atoms and bonds
-      RbtInt nAtomRec;
-      RbtInt nBondRec;
+      RbtUInt nAtomRec;
+      RbtUInt nBondRec;
       if (fileIter != fileEnd) {
 	//The SD file format only uses a field width of 3 to store nAtoms, nBonds
 	//so for values over 99 the two fields coalesce.
