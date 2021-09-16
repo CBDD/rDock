@@ -3,7 +3,7 @@ TITLE Free docking (indexed VDW)
 
 SECTION SCORE
 	INTER	 RbtInterIdxSF.prm
-    	INTRA    RbtIntraSF.prm
+    INTRA    RbtIntraSF.prm
 	SYSTEM   RbtTargetSF.prm
 END_SECTION
 
