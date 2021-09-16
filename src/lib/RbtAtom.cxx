@@ -400,11 +400,12 @@ RbtString Rbt::ConvertFormalChargeToString(RbtInt nCharge)
     return "--";
   default:
     //For higher charges, return as +3,-3 etc
-    ostrstream ostr;
+    ostringstream ostr;
     ostr.setf(ios_base::showpos);
     ostr << nCharge << ends;
     RbtString strCharge(ostr.str());
-    delete ostr.str();
+    // this is no longer needed after moving from strstream to sstream
+    //delete ostr.str();
     return strCharge;
   }
 }

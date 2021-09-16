@@ -14,7 +14,7 @@
 #include "RbtGPGenome.h"
 #include "RbtGPParser.h"
 #include "RbtDebug.h"
-#include <strstream>
+#include <sstream>
 #include <fstream>
 
 RbtString RbtGPFFCrossDock::_CT("RbtGPFFCrossDock");

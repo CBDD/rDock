@@ -52,7 +52,7 @@ public:
         {result = r; evaluated = true;};
     void SetConstant(RbtReturnType r)
         {result = r; evaluated = true; constant = true;
-        ostrstream nm; nm << r << ends; name = nm.str();};
+        ostringstream nm; nm << r << ends; name = nm.str();};
     void ResetConstant() 
         { evaluated = false; name = ""; 
             if (constant) constant = false; else cout <<"ERROR\n";};

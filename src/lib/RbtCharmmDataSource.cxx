@@ -77,6 +77,7 @@ RbtString RbtCharmmDataSource::AtomTypeString(RbtInt nAtomType) throw (RbtError)
     ostringstream ostr;
     ostr << "CHARMm atom type #" << nAtomType << " not found in CharmmDataSource" << ends;
     RbtString strError(ostr.str());
+    // this is no longer needed after moving from strstream to sstream
     //delete ostr.str();
     throw RbtFileMissingParameter(_WHERE_,strError);
   }

@@ -19,7 +19,7 @@
 #include "RbtFilterExpressionVisitor.h"
 #include "RbtCellTokenIter.h"
 #include "RbtTokenIter.h"
-#include <strstream>
+#include <sstream>
 #include <fstream>
 #include <cassert>
 

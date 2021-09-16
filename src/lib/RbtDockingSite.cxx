@@ -15,22 +15,9 @@
 #include <cstring> 
 
 //Less than operator for sorting coords
-class RbtCoordCmp {
-public:
-  RbtBool operator()(const RbtCoord& c1, const RbtCoord& c2) const {
-    if (c1.x < c2.x)
-      return true;
-    else if (c1.x == c2.x) {
-      if (c1.y < c2.y)
-	return true;
-      else if (c1.y == c2.y) {
-	if (c1.z < c2.z)
-	  return true;
-      }
-    }
-    return false;
-  }
-};
+RbtBool RbtCoordLT(const RbtCoord& c1, const RbtCoord& c2) {
+    return c1.x < c2.x || (c1.x == c2.x && (c1.y < c2.y || (c1.y == c2.y && c1.z < c2.z)));
+}
 
 //Static data members
 RbtString RbtDockingSite::_CT("RbtDockingSite");
@@ -38,18 +25,18 @@ RbtString RbtDockingSite::_CT("RbtDockingSite");
 //STL predicate for selecting atoms within a defined distance range from nearest cavity coords
 //Uses precalculated distance grid
 RbtBool RbtDockingSite::isAtomInRange::operator() (RbtAtom* pAtom) const {
-  const RbtCoord& c = pAtom->GetCoords();
-  if (!m_pGrid->isValid(c)) {
-    return false;
-  }
-  RbtDouble dist = m_pGrid->GetSmoothedValue(c);
-  return (dist >= m_minDist && dist <= m_maxDist);
+    const RbtCoord& c = pAtom->GetCoords();
+    if (!m_pGrid->isValid(c)) {
+        return false;
+    }
+    RbtDouble dist = m_pGrid->GetSmoothedValue(c);
+    return (dist >= m_minDist && dist <= m_maxDist);
 }
 
 ////////////////////////////////////////
 //Constructors/destructors
 RbtDockingSite::RbtDockingSite(const RbtCavityList& cavList, RbtDouble border) : m_cavityList(cavList),m_border(border) {
-  if (!m_cavityList.empty()) {
+    if (m_cavityList.empty()) return;
     RbtCoordList minCoords;
     RbtCoordList maxCoords;
     std::transform(m_cavityList.begin(),m_cavityList.end(),std::back_inserter(minCoords),Rbt::ExtractCavityMinCoord);
@@ -57,31 +44,30 @@ RbtDockingSite::RbtDockingSite(const RbtCavityList& cavList, RbtDouble border) :
     m_minCoord = Rbt::Min(minCoords);
     m_maxCoord = Rbt::Max(maxCoords);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
-  }
 }
 
 RbtDockingSite::RbtDockingSite(istream& istr) {
-  Read(istr);
-  _RBTOBJECTCOUNTER_CONSTR_(_CT);
+    Read(istr);
+    _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtDockingSite::~RbtDockingSite() {
-  _RBTOBJECTCOUNTER_DESTR_(_CT);
+    _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
 //Insertion operator
 ostream& operator<<(ostream& s, const RbtDockingSite& site) {
-  site.Print(s);
-  return s;
+    site.Print(s);
+    return s;
 }
 
 //Virtual function for dumping docking site details to an output stream
 //Derived classes can override if required
 void RbtDockingSite::Print(ostream& s) const {
-  s << "Total volume " << GetVolume() << " A^3" << endl;
-  for(RbtInt i =0; i < m_cavityList.size(); i++) {
-    s << "Cavity #" << i+1 << "\t" << *(m_cavityList[i]) << endl;
-  }
+    s << "Total volume " << GetVolume() << " A^3" << endl;
+    for(RbtInt i = 0; i < m_cavityList.size(); i++) {
+        s << "Cavity #" << i+1 << "\t" << *(m_cavityList[i]) << endl;
+    }
 }
 
 //Public methods
@@ -185,7 +171,7 @@ void RbtDockingSite::GetCoordList(RbtCoordList& retVal) const {
     retVal.reserve(retVal.size()+cavCoords.size());
     std::copy(cavCoords.begin(),cavCoords.end(),std::back_inserter(retVal));
     //Sort the coords so we can remove any dups
-    std::sort(retVal.begin(),retVal.end(),RbtCoordCmp());
+    std::sort(retVal.begin(), retVal.end(), RbtCoordLT);
     RbtCoordListIter uniqIter = std::unique(retVal.begin(),retVal.end());
     retVal.erase(uniqIter,retVal.end());
     //cout << "Cav = " << cavCoords.size() << "; total = " << retVal.size() << endl;
@@ -268,7 +254,7 @@ void RbtDockingSite::CreateGrid() {
     }
     //Sort the coords so we can remove any dups
 
-    std::sort(allCoords.begin(),allCoords.end(),RbtCoordCmp());
+    std::sort(allCoords.begin(), allCoords.end(), RbtCoordLT);
     RbtCoordListIter uniqIter = std::unique(allCoords.begin(),allCoords.end());
     allCoords.erase(uniqIter,allCoords.end());
     cout << "Cav = " << cavCoords.size() << "; total = " << allCoords.size() << endl;

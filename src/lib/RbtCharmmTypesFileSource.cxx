@@ -67,7 +67,7 @@ void RbtCharmmTypesFileSource::Parse() throw (RbtError)
 	  //We have a match so read in the line and store in the types list
 	  CharmmType chrmType;
 	  RbtString strDummy;
-	  istrstream istr((*fileIter).c_str());
+	  istringstream istr((*fileIter).c_str());
 	  istr >> strDummy
 	       >> chrmType.nAtomType
 	       >> chrmType.strAtomType

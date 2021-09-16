@@ -71,10 +71,11 @@ void RbtCrdFileSink::Render() throw (RbtError)
       AddLine("*");
 
       //2. Write number of atoms
-      ostrstream ostr;
+      ostringstream ostr;
       ostr << setw(5) << spModel->GetNumAtoms() << ends;
       AddLine(ostr.str());
-      delete ostr.str();//DM 24 Mar 1999 - fix memory leak
+      // this is no longer needed after moving from strstream to sstream
+      //delete ostr.str();//DM 24 Mar 1999 - fix memory leak
       //Remember the line number containing the number of atoms
       //as we'll need to update the total num atoms after each Render when we are in multiconf mode
       //m_numAtomsLineRec = titleList.size()+1;
@@ -104,7 +105,7 @@ void RbtCrdFileSink::Render() throw (RbtError)
       }
 
       //Render the atom to a string stream
-      ostrstream ostr;
+      ostringstream ostr;
       ostr.precision(5);
       ostr.setf(ios_base::fixed,ios_base::floatfield);
       ostr.setf(ios_base::right,ios_base::adjustfield);
@@ -144,16 +145,18 @@ void RbtCrdFileSink::Render() throw (RbtError)
       ostr << setw(10) << 0.0
 	   << ends;
       AddLine(ostr.str());
-      delete ostr.str();//DM 24 Mar 1999 - fix memory leak
+      // this is no longer needed after moving from strstream to sstream
+      //delete ostr.str();//DM 24 Mar 1999 - fix memory leak
     }
 
     //In multiconf mode, we need to update the total number of atoms in the cache
     //then write the file without clearing the cache
     if (GetMultiConf()) {
-      ostrstream ostr;
+      ostringstream ostr;
       ostr << setw(5) << m_nAtomId << ends;
       ReplaceLine(ostr.str(),m_numAtomsLineRec);
-      delete ostr.str();//DM 24 Mar 1999 - fix memory leak
+      // this is no longer needed after moving from strstream to sstream
+      //delete ostr.str(();//DM 24 Mar 1999 - fix memory leak
       Write(false);
     }
     else

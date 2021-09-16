@@ -18,15 +18,15 @@
 #include <iostream>
 
 //For g++ 3.4.3 (libstdc++)
-#include <strstream>
+#include <sstream>
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::ends;
 using std::istream;
 using std::ostream;
-using std::ostrstream;
-using std::istrstream;
+using std::ostringstream;
+using std::istringstream;
 using std::ios_base;
 
 #ifndef _RBTTYPES_H_

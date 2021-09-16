@@ -61,6 +61,7 @@ void RbtPsfFileSink::Render() throw (RbtError)
     ostringstream ostr;
     ostr << setw(8) << titleList.size() << setw(0) << " " << strTitleKey << ends;
     AddLine(ostr.str());
+    // this is no longer needed after moving from strstream to sstream
     //delete ostr.str();
     for (RbtStringListConstIter iter=titleList.begin(); iter != titleList.end(); iter++) {
 			//Add an initial star if the title does not already commence with a star
@@ -113,6 +114,7 @@ void RbtPsfFileSink::Render() throw (RbtError)
       //ostr << setw(10) << spAtom->GetAtomicMass();
       //ostr << setw(12) << 0.0 << ends;
       //AddLine(ostr.str());
+      // this is no longer needed after moving from strstream to sstream
       //delete ostr.str();
 		}
 		delete [] line;
@@ -144,7 +146,8 @@ void RbtPsfFileSink::Render() throw (RbtError)
 			bIter++;
 			ostr << ends;
 			AddLine(ostr.str());
-			//delete ostr.str();
+			// this is no longer needed after moving from strstream to sstream
+      //delete ostr.str();
 		}
 		//Remaining bonds on final incomplete line
 		if (nRem>0) {
@@ -155,7 +158,8 @@ void RbtPsfFileSink::Render() throw (RbtError)
 			}
 			ostr << ends;
 			AddLine(ostr.str());
-			//delete ostr.str();
+			// this is no longer needed after moving from strstream to sstream
+      //delete ostr.str();
 		}
     
 		Write();//Commit the cache to the file

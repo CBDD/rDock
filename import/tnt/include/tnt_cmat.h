@@ -195,7 +195,7 @@ class Matrix
     Matrix(Subscript M, Subscript N, const char *s)
     {
         initialize(M,N);
-        //std::istrstream ins(s);
+        //std::istringstream ins(s);
         std::istringstream ins(s);
 
         Subscript i, j;

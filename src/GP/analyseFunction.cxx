@@ -15,7 +15,7 @@
 #include "../inc/RbtGPGenome.h"
 #include "../inc/RbtGPPopulation.h"
 #include <fstream>
-#include <strstream>
+#include <sstream>
 void main(int argc,char* argv[])
 {
     /*cout << "Genome file: \n";

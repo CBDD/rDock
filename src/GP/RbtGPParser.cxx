@@ -13,9 +13,9 @@
 #include "RbtGPParser.h"
 #include "RbtCommand.h"
 #include "RbtCell.h"
-#include <strstream>
+#include <sstream>
 #include <fstream>
-using std::ostrstream;
+using std::ostringstream;
 
 RbtString RbtGPParser::_CT("RbtGPParser");
 RbtInt RbtCommand::ntabs = 0;
@@ -112,7 +112,7 @@ RbtString RbtGPParser::PrintEval(RbtGPChromosomePtr chrom, RbtInt n,
     if (!(chrom->Cells(n)->Named()))
     {
         RbtString o(PrintParse1Output(chrom, n,numbers,ins));
-        ostrstream nm;
+        ostringstream nm;
         if (numbers)
         {
             nm << "(" ;

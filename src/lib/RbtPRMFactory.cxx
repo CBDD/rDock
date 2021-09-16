@@ -141,10 +141,11 @@ RbtModelPtr RbtPRMFactory::CreateReceptor() throw (RbtError) {
            << endl << endl;
     }
     for (RbtInt i = 1; i <= n; i++) {
-      ostrstream ostr;
+      ostringstream ostr;
       ostr << _REC_COORD_FILE << "_" << i << ends;
       RbtString paramName(ostr.str());
-      delete ostr.str();
+      // this is no longer needed after moving from strstream to sstream
+      //delete ostr.str();
       RbtString strCoordFile = m_pParamSource->GetParameterValueAsString(paramName);
       if (m_iTrace > 0) {
         cout << endl << "I=" << i << endl;

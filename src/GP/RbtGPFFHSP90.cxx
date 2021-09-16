@@ -20,7 +20,7 @@
 #include "RbtCellTokenIter.h"
 #include "RbtTokenIter.h"
 #include "RbtRand.h"
-#include <strstream>
+#include <sstream>
 #include <fstream>
 #include <cassert>
 

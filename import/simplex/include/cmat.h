@@ -230,8 +230,7 @@ class Matrix
     Matrix(Subscript M, Subscript N, char *s)
     {
         initialize(M,N);
-        //        std::istrstream ins(s);
-        istrstream ins(s);        
+        istringstream ins(s);        
 
         Subscript i, j;
 

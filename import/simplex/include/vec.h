@@ -50,7 +50,7 @@
 //#include <stdlib.h>
 //#include <assert.h>
 #include <iostream>
-#include <strstream>
+#include <sstream>
 #include <iomanip>
 
 #define D_PRECISION 16
@@ -205,8 +205,8 @@ class Vector
     Vector(Subscript N, char *s) :  v_(0), vm1_(0), n_(0)
     {
         initialize(N);
-        istrstream ins(s);
-        //        std::istrstream ins(s);        
+        istringstream ins(s);
+        //        std::istringstream ins(s);        
 
         Subscript i;
 

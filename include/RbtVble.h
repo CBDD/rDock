@@ -17,7 +17,7 @@
 
 #include "RbtTypes.h"
 #include "RbtGPTypes.h"
-#include <strstream>
+#include <sstream>
 
 class RbtVble
 {
@@ -49,7 +49,7 @@ public:
     value = val;
 		if (name == "")
 		{
-			ostrstream s;
+			ostringstream s;
 			s << value << ends;
 			name = s.str();
 		}

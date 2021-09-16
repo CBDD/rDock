@@ -71,7 +71,7 @@ void RbtMdlFileSink::Render() throw (RbtError)
     AddLine(Rbt::GetProduct()+"/"+Rbt::GetVersion()+"/"+Rbt::GetBuild());
     
     //Write number of atoms and bonds
-    ostrstream ostr;
+    ostringstream ostr;
     ostr << setw(3) << modelAtomList.size() + solventAtomList.size()
 	 << setw(3) << modelBondList.size() + solventBondList.size()
 	 << setw(3) << 0 << setw(3) << 0 << setw(3) << 0
@@ -79,7 +79,8 @@ void RbtMdlFileSink::Render() throw (RbtError)
 	 << setw(3) << 0 << setw(3) << 0 << setw(3) << 999 << " V2000"
 	 << ends;
     AddLine(ostr.str());
-    delete ostr.str();
+    // this is no longer needed after moving from strstream to sstream
+	//delete ostr.str();
     
     //DM 19 June 2006 - clear the map of logical atom IDs each time
     //we render a model
@@ -122,7 +123,7 @@ void RbtMdlFileSink::RenderAtomList(const RbtAtomList& atomList) {
 	  RbtInt nFormalCharge = spAtom->GetFormalCharge();
 	  if (nFormalCharge != 0)
 		nFormalCharge = 4 - nFormalCharge;
-	  ostrstream ostr;
+	  ostringstream ostr;
 	  ostr.precision(4);
 	  ostr.setf(ios_base::fixed,ios_base::floatfield);
 	  ostr.setf(ios_base::right,ios_base::adjustfield);
@@ -141,7 +142,8 @@ void RbtMdlFileSink::RenderAtomList(const RbtAtomList& atomList) {
 	   << setw(3) << 0 //valence (0 = no marking)
 	   << ends;//Mass diff, formal charge, stereo parity, num hydrogens, center
 	  AddLine(ostr.str());
-	  delete ostr.str();
+	  // this is no longer needed after moving from strstream to sstream
+	  //delete ostr.str();
 	}
 }
 
@@ -158,7 +160,7 @@ void RbtMdlFileSink::RenderBondList(const RbtBondList& bondList) {
 	    //	 << spBond->GetAtom2Ptr()->GetFullAtomName()
 	    //	 << "; file ID1=" << id1
 	    //	 << "; file ID2=" << id2 << endl;
-	    ostrstream ostr;
+	    ostringstream ostr;
 	    ostr.setf(ios_base::right,ios_base::adjustfield);
 	    ostr << setw(3) << id1
 		 << setw(3) << id2
@@ -168,7 +170,8 @@ void RbtMdlFileSink::RenderBondList(const RbtBondList& bondList) {
 		 << setw(3) << 0
 		 << ends;//Atom1, Atom2, bond order, stereo designator, unused, topology code
 	    AddLine(ostr.str());
-	    delete ostr.str();
+	    // this is no longer needed after moving from strstream to sstream
+		//delete ostr.str();
 	  }
 	  else {
 	    //Should never happen. Probably best to throw an error at this point.

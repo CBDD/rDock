@@ -86,7 +86,7 @@ void RbtNmrRestraintFileSource::Parse() throw (RbtError)
 	RbtString strAtomNames1;
 	RbtString strAtomNames2;
 	RbtDouble maxDist(0.0);
-	istrstream istr((*fileIter).c_str());
+	istringstream istr((*fileIter).c_str());
 	istr >> strAtomNames1 >> strAtomNames2 >> maxDist;
 	//Check if we read all the fields OK
 	if (!istr)

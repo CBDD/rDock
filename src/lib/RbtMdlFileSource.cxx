@@ -74,7 +74,7 @@ void RbtMdlFileSource::Parse() throw (RbtError)
 	//Workaround is to insert a space between the two fields (or use sscanf)
 	if ( (*fileIter).size() > 3)
 	  (*fileIter).insert(3," ");
-	istrstream istr((*fileIter++).c_str());
+	istringstream istr((*fileIter++).c_str());
 	istr >> nAtomRec >> nBondRec;
 #ifdef _DEBUG
 	//cout << nAtomRec << " atoms, " << nBondRec << " bonds" << endl;
@@ -101,7 +101,7 @@ void RbtMdlFileSource::Parse() throw (RbtError)
       char* szAtomName(new char[lenAtomName+1]);
 
       while ( (m_atomList.size() < nAtomRec) && (fileIter != fileEnd)) {
-	istrstream istr((*fileIter++).c_str());
+	istringstream istr((*fileIter++).c_str());
 	istr >> coord.x
 	     >> coord.y
 	     >> coord.z
@@ -121,7 +121,7 @@ void RbtMdlFileSource::Parse() throw (RbtError)
 
 	//Compose the atom name from element+atomID (i.e. C1, N2, C3 etc)
 	nAtomId++;
-	ostrstream ostr(szAtomName,lenAtomName);
+	ostringstream ostr(szAtomName,lenAtomName);
 	ostr << strElementName << nAtomId << ends;
 	RbtString strAtomName(szAtomName);
 
@@ -169,7 +169,7 @@ void RbtMdlFileSource::Parse() throw (RbtError)
 	//Workaround is to insert a space between the two fields (or use sscanf)
 	if ( (*fileIter).size() > 3)
 	  (*fileIter).insert(3," ");
-	istrstream istr((*fileIter++).c_str());
+	istringstream istr((*fileIter++).c_str());
 	istr >> idxAtom1
 	     >> idxAtom2
 	     >> nBondOrder;
@@ -744,10 +744,11 @@ void RbtMdlFileSource::AddHydrogen(RbtAtomPtr spAtom) throw (RbtError)
 
   //Construct the new hydrogen atom (constructor only accepts the 2D params)
   RbtInt nAtomId = m_atomList.size()+1;
-  ostrstream ostr;
+  ostringstream ostr;
   ostr << "H" << nAtomId << ends;
   RbtString strAtomName(ostr.str());
-  delete ostr.str();
+  // this is no longer needed after moving from strstream to sstream
+  //delete ostr.str();
   RbtAtomPtr spHAtom(new RbtAtom(nAtomId,
 				 1,//nAtomicNo,
 				 strAtomName,
@@ -964,10 +965,11 @@ void RbtMdlFileSource::SetupSegmentNames()
        seed != m_atomList.end();
        nSeg++,seed = Rbt::FindAtom(m_atomList,Rbt::isSegmentName_eq("H"))) {
     //New segment name (H1, H2 etc)
-    ostrstream ostr;
+    ostringstream ostr;
     ostr << "H" << nSeg << ends;
     RbtString strSegName(ostr.str());
-    delete ostr.str();
+    // this is no longer needed after moving from strstream to sstream
+    //delete ostr.str();
     //Temporary atom list containing atoms to be processed
     //Note: this is a true list (not a vector) as we will be making numerous insertions and deletions
     (*seed)->SetSegmentName(strSegName);

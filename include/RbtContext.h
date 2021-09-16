@@ -73,7 +73,7 @@ public:
           vm[key]->SetValue(val);
         else
         {
-            ostrstream s;
+            ostringstream s;
             s << val << ends;
             vm[key] = new RbtVble(s.str(), val);
         }
