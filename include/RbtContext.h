@@ -78,7 +78,7 @@ public:
             vm[key] = new RbtVble(s.str(), val);
         }
     }
-    void Assign (RbtString s, RbtReturnType val)
+    void Assign (RbtString, RbtReturnType)
     {
         throw RbtError (_WHERE_, "This is not a string context");
     }
@@ -88,7 +88,7 @@ public:
 //    RbtReturnType GetValue(RbtString){return 0.0;}
     const RbtVble& GetVble(RbtInt key){ return *(vm[key]);};
     void SetVble(RbtInt key, const RbtVble& v){ *(vm[key]) = v;};
-    const RbtVble& GetVble(RbtString key)
+    const RbtVble& GetVble(RbtString)
     { 
         throw RbtError (_WHERE_, "This is not a string context");
     }
@@ -118,7 +118,7 @@ public:
         vm[key] = new RbtVble(key, val);
       }
     }
-    void Assign (RbtInt i, RbtReturnType val)
+    void Assign (RbtInt, RbtReturnType)
     {
       throw RbtError (_WHERE_, "This is not a cell context");
     }
@@ -134,11 +134,11 @@ public:
     { 
       return *(vm[key]);
     }
-    const RbtVble& GetVble(RbtInt key)
+    const RbtVble& GetVble(RbtInt)
     { 
         throw RbtError (_WHERE_, "This is not a cell context");
     }
-    void SetVble(RbtInt key, const RbtVble& v){ *(vm[""]) = v;};
+    void SetVble(RbtInt, const RbtVble& v){ *(vm[""]) = v;};
     void UpdateLigs(RbtModelPtr lig);
     void UpdateSite(RbtModelPtr rec, RbtDockingSitePtr site);
     void UpdateScores(RbtBaseSF* spSF, RbtModelPtr lig);

@@ -115,7 +115,7 @@ void RbtTransformAgg::Unregister() {
 //Override RbtObserver pure virtual
 //Notify observer that subject has changed
 //Does nothing in RbtTransformAgg as aggregates do not require updating
-void RbtTransformAgg::Update(RbtSubject* theChangedSubject) {
+void RbtTransformAgg::Update(RbtSubject*) {
   //	if (theChangedSubject == GetWorkSpace()) {
   //#ifdef _DEBUG
   //		cout << _CT << "::Update(): " << GetName() << " received update from workspace" << endl;

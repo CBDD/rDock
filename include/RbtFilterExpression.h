@@ -65,7 +65,7 @@ public:
     void Print(){cout << "v" << vble.GetName() << " ";};
     RbtInt GetNOps() { return 0;}
     const RbtVble& GetVble() const { return vble;}
-    RbtFilterExpressionPtr GetOp(RbtInt i)
+    RbtFilterExpressionPtr GetOp(RbtInt)
     {
         throw RbtError(_WHERE_, "Vble Expressions don't have operands");
     }

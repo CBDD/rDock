@@ -128,7 +128,7 @@ RbtCavityGridSF::HeavyAtomFactory::HeavyAtomFactory(RbtModelList modelList) {
 }
 
 
-void RbtCavityGridSF::HeavyAtomFactory::VisitReceptorFlexData(RbtReceptorFlexData* pFlexData) {
+void RbtCavityGridSF::HeavyAtomFactory::VisitReceptorFlexData(RbtReceptorFlexData*) {
     //Receptor atoms: do nothing (the only movable atoms are hydrogens at present)    
 }
 

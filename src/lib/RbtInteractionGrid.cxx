@@ -251,7 +251,7 @@ void RbtInteractionGrid::OwnPrint(ostream& ostr) const {
 
 //Protected method for writing data members for this class to binary stream
 //(Serialisation)
-void RbtInteractionGrid::OwnWrite(ostream& ostr) const {
+void RbtInteractionGrid::OwnWrite(ostream&) const {
   //Write all the data members
   //NO MEANS OF WRITING THE INTERACTION LISTS IN A WAY WHICH CAN BE READ BACK IN
   //i.e. we are holding pointers to atoms which would need to be recreated
@@ -265,7 +265,7 @@ void RbtInteractionGrid::OwnWrite(ostream& ostr) const {
 //Protected method for reading data members for this class from binary stream
 //WARNING: Assumes grid data array has already been created
 //and is of the correct size
-void RbtInteractionGrid::OwnRead(istream& istr) {
+void RbtInteractionGrid::OwnRead(istream&) {
   //Read all the data members
   //NOTHING TO READ - see above
   CreateMap();

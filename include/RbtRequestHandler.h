@@ -30,7 +30,7 @@ class RbtRequestHandler
 	////////////////////////////////////////
 	//Public methods
 	////////////////
-	virtual void HandleRequest(RbtRequestPtr spRequest) {};
+	virtual void HandleRequest(RbtRequestPtr) {};
 };
 
 #endif //_RBTREQUESTHANDLER_H_

@@ -117,7 +117,7 @@ void RbtBaseSF::Remove(RbtBaseSF*) {
   throw RbtInvalidRequest(_WHERE_,"Remove() invalid for non-aggregate scoring functions");
 }
 
-RbtBaseSF* RbtBaseSF::GetSF(RbtUInt iSF) const {
+RbtBaseSF* RbtBaseSF::GetSF(RbtUInt) const {
   throw RbtInvalidRequest(_WHERE_,"GetSF() invalid for non-aggregate scoring functions");
 }
 RbtBool RbtBaseSF::isAgg() const {return false;}

@@ -22,7 +22,7 @@ RbtInt RbtCommand::ntabs = 0;
 RbtBool RbtCommand::inside = false;
 
 // Constructors
-RbtGPParser::RbtGPParser(RbtInt npi, RbtInt nfi, RbtInt nn, RbtInt no)
+RbtGPParser::RbtGPParser(RbtInt npi, RbtInt nfi, RbtInt, RbtInt no)
 {
     nProgramInputs = npi;
     nFunctionsInputs = nfi;
@@ -82,7 +82,7 @@ RbtReturnType RbtGPParser::Parse1Output(RbtGPChromosomePtr chrom, RbtInt output)
         args[i] = Eval(chrom, (*chrom)[startCell + i]);
     for (RbtInt i = 0 ; i < nargs ; i++)
         commands[ncomm]->SetArg(i, args[i]);
-    RbtReturnType f2 = commands[ncomm]->Execute();
+    commands[ncomm]->Execute();
     return (commands[ncomm]->Execute());
 }
 

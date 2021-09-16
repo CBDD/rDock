@@ -27,7 +27,7 @@ RbtContext::RbtContext()
 #endif //_DEBUG
 }
 
-RbtContext::RbtContext(const RbtContext& c)
+RbtContext::RbtContext(const RbtContext&)
 {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
@@ -54,7 +54,7 @@ RbtStringContext::~RbtStringContext()
 }
 
 
-RbtStringContext::RbtStringContext(SmartPtr<ifstream> ifile)
+RbtStringContext::RbtStringContext(SmartPtr<ifstream>)
 {
 /*    RbtInt nvbles, nctes;
     (*ifile) >> nvbles >> nctes;
@@ -130,8 +130,6 @@ RbtDouble RbtStringContext::Get(RbtModelPtr lig, RbtString name)
     if (name == "LIG_NATOMS")
         return lig->GetNumAtoms();
     RbtInt nAtoms= lig->GetNumAtoms();
-    RbtInt nBonds = lig->GetNumBonds();
-    RbtInt nSegs = lig->GetNumSegments();
     RbtAtomList atomList = lig->GetAtomList();
     RbtBondList bondList = lig->GetBondList();
     if (name == "LIG_NLIPOC")
@@ -318,8 +316,11 @@ RbtDouble RbtStringContext::Get(RbtModelPtr spReceptor,
     return 0.;
 }
 
-RbtDouble RbtStringContext::Get(RbtBaseSF* spSF, RbtString name, 
-                                RbtModelPtr lig)
+RbtDouble RbtStringContext::Get(
+    RbtBaseSF* spSF,
+    RbtString name, 
+    RbtModelPtr
+)
 {
     RbtStringVariantMap scoreMap;
     spSF->ScoreMap(scoreMap);
@@ -347,7 +348,7 @@ void RbtStringContext::UpdateSite(RbtModelPtr spReceptor,
   }
 }
 
-void RbtStringContext::UpdateScores(RbtBaseSF* spSF, RbtModelPtr lig)
+void RbtStringContext::UpdateScores(RbtBaseSF* spSF, RbtModelPtr)
 {
   RbtStringVariantMap scoreMap;
   spSF->ScoreMap(scoreMap);

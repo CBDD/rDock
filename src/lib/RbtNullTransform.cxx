@@ -38,7 +38,7 @@ RbtNullTransform::~RbtNullTransform() {
 ////////////////////////////////////////
 //Public methods
 ////////////////
-void RbtNullTransform::Update(RbtSubject* theChangedSubject) {}
+void RbtNullTransform::Update(RbtSubject*) {}
 
 ////////////////////////////////////////
 //Private methods

@@ -78,7 +78,7 @@ void RbtGPFFCHK1::ReadTables(istream& in, RbtReturnTypeArray& it,
 RbtDouble RbtGPFFCHK1::CalculateFitness(RbtGPGenomePtr g, 
                                          RbtReturnTypeArray& it,
                                          RbtReturnTypeArray& sft,
-                                         RbtBool function)
+                                         RbtBool)
 {
     RbtDouble tp = 0.0; // True Positives
     RbtDouble fp = 0.0; // False Positives
@@ -93,7 +93,6 @@ RbtDouble RbtGPFFCHK1::CalculateFitness(RbtGPGenomePtr g,
     for (RbtInt i = 0 ; i < it.size(); i++)
     {
         RbtReturnTypeList inputs(it[i]);
-        RbtReturnType pred;
         for (RbtInt j = 0 ; j < inputs.size() ; j++)
             contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];
@@ -132,7 +131,7 @@ RbtDouble RbtGPFFCHK1::CalculateFitness(RbtGPGenomePtr g,
     
 RbtDouble RbtGPFFCHK1::CalculateFitness(
         RbtGPGenomePtr g, RbtReturnTypeArray& it,
-        RbtReturnTypeArray& sft, RbtDouble hitlimit,RbtBool function)
+        RbtReturnTypeArray& sft, RbtDouble hitlimit,RbtBool)
 {
     RbtDouble tp = 0.0; // True Positives
     RbtDouble fp = 0.0; // False Positives
@@ -146,7 +145,6 @@ RbtDouble RbtGPFFCHK1::CalculateFitness(
     for (RbtInt i = 0 ; i < it.size(); i++)
     {
         RbtReturnTypeList inputs(it[i]);
-        RbtReturnType pred;
         for (RbtInt j = 0 ; j < inputs.size() ; j++)
             contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];

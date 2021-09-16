@@ -86,7 +86,7 @@ RbtInt RbtGPPopulation::GetNrepl()
 }
 
        // Initialises the population by calling the initializer for each genome
-void RbtGPPopulation::Initialise(RbtDouble hitlimit,RbtBool function)
+void RbtGPPopulation::Initialise(RbtDouble, RbtBool function)
 {
     RbtDouble bestFitness = -FLT_MAX, fit;
     for (RbtInt i = 0 ; i < popsize ; i++)
@@ -106,7 +106,7 @@ void RbtGPPopulation::Initialise(RbtDouble hitlimit,RbtBool function)
 // indidivual is created. But we need to make a call to this function when the 
 // slope is changed, to make sure all the individuals get the new value for 
 // their scoring function before continuing with the GA
-void RbtGPPopulation::Eval(RbtDouble hitlimit, RbtBool function)
+void RbtGPPopulation::Eval(RbtDouble, RbtBool function)
 {
     for (RbtInt i = 0 ; i < popsize ; i++)
         ff->CalculateFitness(pop[i],ittrain,sfttrain,function);
@@ -141,15 +141,15 @@ RbtGPGenomePtr RbtGPPopulation::TSelect(RbtDouble tp) const
 
 
  
-RbtGPGenomePtr RbtGPPopulation::Select(RbtString selector) const
+RbtGPGenomePtr RbtGPPopulation::Select(RbtString) const
 {
     return TSelect(0.7);
 }
 
 void RbtGPPopulation::GAstep(RbtString selector, RbtDouble pcross,
                              RbtDouble pmut, 
-                             RbtDouble mean, RbtDouble variance,
-                             RbtDouble hitlimit, RbtBool function) 
+                             RbtDouble, RbtDouble,
+                             RbtDouble, RbtBool function) 
 {
     RbtGPGenomePtr mother, father;
     for (RbtInt i = 0 ; i < nrepl-1 ; i++)
@@ -188,10 +188,10 @@ void RbtGPPopulation::GAstep(RbtString selector, RbtDouble pcross,
     }
 }
 
-void RbtGPPopulation::EPstep(RbtString selector, RbtDouble pcross,
+void RbtGPPopulation::EPstep(RbtString, RbtDouble,
                              RbtDouble pmut, 
-                             RbtDouble mean, RbtDouble variance,
-                             RbtDouble hitlimit, RbtBool function) 
+                             RbtDouble, RbtDouble,
+                             RbtDouble, RbtBool function) 
 {
     *(newpop[0]) = *(pop[bestInd]);
     for (RbtInt i = 1 ; i < popsize ; i++)

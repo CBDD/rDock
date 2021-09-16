@@ -341,6 +341,6 @@ void RbtFFTGrid::OwnRead(istream& istr) {
 
 //Helper function called by copy constructor and assignment operator
 //No longer required
-void RbtFFTGrid::CopyGrid(const RbtFFTGrid& grid) {
+void RbtFFTGrid::CopyGrid(const RbtFFTGrid&) {
 }
 

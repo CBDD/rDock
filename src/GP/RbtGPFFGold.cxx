@@ -62,7 +62,6 @@ RbtDouble RbtGPFFGold::CalculateFitness(
                 RbtGPGenome::GetNN(), RbtGPGenome::GetNO());
     RbtReturnTypeList o;
     RbtDouble tot = 0.0;
-    RbtDouble range = 10.0;
     RbtDouble good = 0.0;
     RbtDouble bad = 0.0;
     RbtDouble hitlimit = 2.0;

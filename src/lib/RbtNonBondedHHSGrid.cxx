@@ -144,10 +144,10 @@ void RbtNonBondedHHSGrid::OwnPrint(ostream& ostr) const {
 }
 
 
-void RbtNonBondedHHSGrid::OwnWrite(ostream& ostr) const {
+void RbtNonBondedHHSGrid::OwnWrite(ostream&) const {
 }
 
-void RbtNonBondedHHSGrid::OwnRead(istream& istr) {
+void RbtNonBondedHHSGrid::OwnRead(istream&) {
 }
 
 void RbtNonBondedHHSGrid::CopyGrid(const RbtNonBondedHHSGrid& grid) {

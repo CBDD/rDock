@@ -66,7 +66,7 @@ RbtChromElement::~RbtChromElement() {
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
-void RbtChromElement::Add(RbtChromElement* pChromElement) {
+void RbtChromElement::Add(RbtChromElement*) {
     throw RbtInvalidRequest(_WHERE_,
         "Add(RbtChromElement*) invalid for non-aggregate chromosome element");
 }

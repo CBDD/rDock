@@ -83,23 +83,17 @@ void RbtGPFFHSP90::ReadTables(istream& in, RbtReturnTypeArray& it,
 
 }
 
-RbtDouble RbtGPFFHSP90::CalculateFitness(RbtGPGenomePtr g, 
-                                         RbtReturnTypeArray& it,
-                                         RbtReturnTypeArray& sft,
-//                                         RbtDouble limit,
-																				 RbtBool function)
-{
+RbtDouble RbtGPFFHSP90::CalculateFitness(
+    RbtGPGenomePtr g, 
+    RbtReturnTypeArray& it,
+    RbtReturnTypeArray& sft,
+    RbtBool
+) {
     RbtReturnTypeArray o;
-//    o.push_back(new RbtReturnType(1.1));
-    RbtReturnType oldo;
-    RbtDouble tot = 0.0;
-    RbtDouble good = 0.0;
-    RbtDouble bad = 0.0;
     RbtGPChromosomePtr c(g->GetChrom());
     RbtParser p2;
     RbtCellTokenIterPtr ti(new RbtCellTokenIter(c, contextp));
     RbtFilterExpressionPtr fe(p2.Parse(ti, contextp));
-    RbtDouble meanReal = 0.0, meanPred = 0.0;
     for (RbtInt i = 0 ; i < it.size() ; i++)
     {
         RbtReturnTypeList inputs(it[i]);
@@ -108,12 +102,10 @@ RbtDouble RbtGPFFHSP90::CalculateFitness(RbtGPGenomePtr g,
         for (RbtInt j = 0 ; j < inputs.size() ; j++)
             contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];
-        RbtDouble hit = *(SFValues[SFValues.size()-1]);
         EvaluateVisitor visitor(contextp);
         fe->Accept(visitor);
         pred.push_back(new RbtReturnType(fe->GetValue()));
         o.push_back(pred);
-//        cout << *(SFValues[0]) << "\t" << *(o[i][0]) << endl;
     }
 		RbtInt ninv = nInversions(0, o);
 //		cout << "n inversions " << ninv << endl;
@@ -145,13 +137,9 @@ RbtDouble RbtGPFFHSP90::CalculateFitness(RbtGPGenomePtr g,
     
 RbtDouble RbtGPFFHSP90::CalculateFitness(
         RbtGPGenomePtr g, RbtReturnTypeArray& it,
-        RbtReturnTypeArray& sft, RbtDouble limit,RbtBool function)
+        RbtReturnTypeArray& sft, RbtDouble, RbtBool)
 {
     RbtReturnTypeArray o;
-    RbtReturnType oldo;
-    RbtDouble tot = 0.0;
-    RbtDouble good = 0.0;
-    RbtDouble bad = 0.0;
     RbtGPChromosomePtr c(g->GetChrom());
     RbtParser p2;
     RbtCellTokenIterPtr ti(new RbtCellTokenIter(c, contextp));
@@ -165,7 +153,6 @@ RbtDouble RbtGPFFHSP90::CalculateFitness(
         for (RbtInt j = 0 ; j < inputs.size() ; j++)
             contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];
-        RbtDouble hit = *(SFValues[SFValues.size()-1]);
         EvaluateVisitor visitor(contextp);
         fe->Accept(visitor);
         pred.push_back(new RbtReturnType(fe->GetValue()));

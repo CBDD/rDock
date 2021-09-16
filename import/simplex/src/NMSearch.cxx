@@ -14,7 +14,7 @@
 int NMSearch::maxCalls = -1;
 double NMSearch::stoppingStepLength = 1e-8;
 
-RbtMatrix::RbtMatrix(int M, int N, const double& value/* = 0.0*/)
+RbtMatrix::RbtMatrix(int M, int N, const double&/* = 0.0*/)
 {
    vector<double> aux(N, 0.0);
    m = new vector<vector<double> >; 
@@ -279,7 +279,7 @@ bool NMSearch::Stop()
       return false;
 } // Stop()
 
-void NMSearch::fcnCall(int n, vector<double> *x, double& f, int& flag)
+void NMSearch::fcnCall(int, vector<double> *x, double& f, int& flag)
 {
     //TODO: Surround SetVector with try/catch
     c->SetVector(*x);

@@ -34,13 +34,16 @@ RbtBond::RbtBond(RbtInt nBondId,
   //DM 04 Dec 1998  Register the bond back with the constituent atoms
   RbtBool bOK1 = m_spAtom1->AddBond(this);
   RbtBool bOK2 = m_spAtom2->AddBond(this);
-#ifdef _DEBUG
-  if (!bOK1)
-    cout << "FAILED to add bond " << m_nBondId << " to atom " << m_spAtom1->GetAtomId() << endl;
-  if (!bOK2)
+  if (!bOK1) {
+    #ifdef _DEBUG
+      cout << "FAILED to add bond " << m_nBondId << " to atom " << m_spAtom1->GetAtomId() << endl;
+    #endif //_DEBUG
+  }
+  if (!bOK2) {
+    #ifdef _DEBUG
     cout << "FAILED to add bond " << m_nBondId << " to atom " << m_spAtom2->GetAtomId() << endl;
-#endif //_DEBUG
-
+    #endif //_DEBUG
+  }
   _RBTOBJECTCOUNTER_CONSTR_("RbtBond");
 }
   
@@ -50,13 +53,16 @@ RbtBond::~RbtBond()
   //DM 04 Dec 1998  Unregister the bond with the constituent atoms
   RbtBool bOK1 = m_spAtom1->RemoveBond(this);
   RbtBool bOK2 = m_spAtom2->RemoveBond(this);
-#ifdef _DEBUG
-  if (!bOK1)
-    cout << "FAILED to remove bond " << m_nBondId << " from atom " << m_spAtom1->GetAtomId() << endl;
-  if (!bOK2)
-    cout << "FAILED to remove bond " << m_nBondId << " from atom " << m_spAtom2->GetAtomId() << endl;
-#endif //_DEBUG
-
+  if (!bOK1) {
+    #ifdef _DEBUG
+      cout << "FAILED to remove bond " << m_nBondId << " from atom " << m_spAtom1->GetAtomId() << endl;
+    #endif //_DEBUG
+  }
+  if (!bOK2) {
+    #ifdef _DEBUG
+      cout << "FAILED to remove bond " << m_nBondId << " from atom " << m_spAtom2->GetAtomId() << endl;
+    #endif //_DEBUG
+  }
   _RBTOBJECTCOUNTER_DESTR_("RbtBond");
 }
 

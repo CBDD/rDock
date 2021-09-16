@@ -144,7 +144,7 @@ RbtDouble RbtGPFFCrossDock::CalculateFitness(RbtGPGenomePtr g,
     
 RbtDouble RbtGPFFCrossDock::CalculateFitness(
         RbtGPGenomePtr g, RbtReturnTypeArray& it,
-        RbtReturnTypeArray& sft, RbtDouble hitlimit,RbtBool function)
+        RbtReturnTypeArray& sft, RbtDouble hitlimit,RbtBool)
 {
     RbtGPParser p(g->GetNIP(), g->GetNIF(), g->GetNN(), g->GetNO());
     RbtReturnTypeList o;

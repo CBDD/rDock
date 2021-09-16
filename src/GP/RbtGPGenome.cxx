@@ -109,7 +109,6 @@ void RbtGPGenome::SetStructure(RbtInt inpi, RbtInt infi,
 
 void RbtGPGenome::Initialise()
 {
-    RbtInt s = chrom->size();
     RbtInt g = 0, max, min;
     for (RbtInt i = 0 ; i < nc ; i++)
     {
@@ -220,7 +219,6 @@ void RbtGPGenome::Crossover(RbtGPGenome&){}
 
 ostream& RbtGPGenome::Print(ostream& s) const
 {
-    RbtInt g = 0;
     // Print structure
     s << npi << " " << nfi << " " << nsfi << " " << no << " " <<
          nf  << " " << nr   << " " << nc << " " << l   << endl;

@@ -99,9 +99,10 @@ void RbtParamHandler::ClearParameters()
 
 //Virtual function for dumping parameters to an output stream
 //Called by operator <<
-void RbtParamHandler::Print(ostream& s) const {
-	for (RbtStringVariantMapConstIter iter = m_parameters.begin(); iter != m_parameters.end(); iter++) {
-		cout << (*iter).first << "\t" << (*iter).second << endl;
+void RbtParamHandler::Print(ostream& ost) const {
+	for (auto iter : m_parameters) {
+		// WARNING: changed hard-coded cout for the argument stream
+		ost << iter.first << "\t" << iter.second << endl;
 	}
 }
 
@@ -111,6 +112,6 @@ void RbtParamHandler::Print(ostream& s) const {
 //Insertion operator (primarily for debugging)
 ostream& operator<<(ostream& s, const RbtParamHandler& ph) {
 	ph.Print(s);
-  return s;
+  	return s;
 }
 

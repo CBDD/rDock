@@ -65,7 +65,7 @@ class RbtParamHandler
 		//Useful for performance purposes as there is quite an overhead in finding a string
 		//in a map, then converting from a Variant to the native datatype
 		//Base class version does nothing
-		virtual void ParameterUpdated(const RbtString& strName) {};
+		virtual void ParameterUpdated(const RbtString&) {};
 	
 	private:
 		////////////////////////////////////////

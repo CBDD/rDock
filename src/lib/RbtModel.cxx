@@ -824,7 +824,7 @@ RbtBondList RbtModel::GetCyclicBondList()
 
 //Get min and max x,y,z coords
 //DM 28 Jul 1999 - use new RbtCoordList Min,Max functions. bInit is ignored
-void RbtModel::GetMinMaxCoords(RbtCoord& minCoord, RbtCoord& maxCoord, RbtBool bInit/*=true*/)
+void RbtModel::GetMinMaxCoords(RbtCoord& minCoord, RbtCoord& maxCoord, RbtBool/*=true*/)
 {
   RbtCoordList coordList = Rbt::GetCoordList(m_atomList);
   minCoord = Rbt::Min(coordList);

@@ -23,7 +23,6 @@ RbtGPChromosome::RbtGPChromosome(RbtInt npi, RbtInt nfi, RbtInt nn,
                                  RbtInt no, RbtInt nr, RbtInt nc)
 {
     chrom = RbtIntList(nn * (nfi + 1) + no);
-    RbtInt i = 0, n;
     nProgramInputs = npi;
     nFunctionsInputs = nfi;
     RbtInt ncells = nn + npi; // number of nodes + inputs

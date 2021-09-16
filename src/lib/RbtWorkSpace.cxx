@@ -122,7 +122,7 @@ void RbtWorkSpace::SetSink(RbtMolecularFileSinkPtr spSink) {m_spSink = spSink;}
 //Saves models to file sink
 //Base workspace does nothing
 //It is up to subclasses to decide what action to take
-void RbtWorkSpace::Save(RbtBool bSaveScores) {}
+void RbtWorkSpace::Save(RbtBool) {}
 
 //Get/set the history file sink
 RbtMolecularFileSinkPtr RbtWorkSpace::GetHistorySink() const {return m_spHisSink;}
@@ -130,7 +130,7 @@ void RbtWorkSpace::SetHistorySink(RbtMolecularFileSinkPtr spHisSink) {m_spHisSin
 //Saves models to file sink
 //Base workspace does nothing
 //It is up to subclasses to decide what action to take
-void RbtWorkSpace::SaveHistory(RbtBool bSaveScores) {}
+void RbtWorkSpace::SaveHistory(RbtBool) {}
 
 //Scoring function handling
 //SetSF automatically registers the scoring function with the workspace

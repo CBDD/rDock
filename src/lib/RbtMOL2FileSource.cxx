@@ -343,7 +343,7 @@ void RbtMOL2FileSource::ParseRecordSUBSTRUCTURE(const RbtString& aLine) {
   //     << chain << "," << sub_type << endl;
 }
 
-void RbtMOL2FileSource::ParseRecordUNSUPPORTED(const RbtString& aLine)
+void RbtMOL2FileSource::ParseRecordUNSUPPORTED(const RbtString&)
 {
   //	do nothing...
 }
