@@ -11,6 +11,7 @@
 ***********************************************************************/
 
 #include <iomanip>
+#include <algorithm>
 
 #include "RbtMdlFileSource.h"
 #include "RbtFileError.h"
@@ -98,7 +99,6 @@ void RbtMdlFileSource::Parse()
 
       //DM 24 Mar 1999 - allocate a C-string for streaming the atom name into
       RbtInt lenAtomName(10);
-      char* szAtomName(new char[lenAtomName+1]);
 
       while ( (m_atomList.size() < nAtomRec) && (fileIter != fileEnd)) {
 	istringstream istr((*fileIter++).c_str());
@@ -123,7 +123,10 @@ void RbtMdlFileSource::Parse()
 	nAtomId++;
 	ostringstream ostr;
 	ostr << strElementName << nAtomId << ends;
-	RbtString strAtomName(szAtomName);
+  RbtString fullAtomName{ostr.str()};
+  size_t allowedSize{std::min((size_t)lenAtomName, fullAtomName.size())};
+  RbtString sizedName(fullAtomName.substr(0, allowedSize));
+	RbtString strAtomName(sizedName);
 
 	//Construct a new atom (constructor only accepts the 2D params)
 	RbtAtomPtr spAtom(new RbtAtom(nAtomId,
@@ -146,8 +149,6 @@ void RbtMdlFileSource::Parse()
 	m_atomList.push_back(spAtom);
 	m_segmentMap[strSegmentName]++;//increment atom count in segment map
       }
-
-      delete [] szAtomName;//Tidy up the C-string
 
       //3b ..and check we read them all before reaching the end of the file
       if (m_atomList.size() != nAtomRec)
