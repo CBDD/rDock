@@ -69,7 +69,7 @@ RbtError RbtBaseFileSink::Status()
 //Protected methods
 ///////////////////
 //DM 11 Feb 1999 - add flag to allow the cache to be written without clearing it
-void RbtBaseFileSink::Write(RbtBool bClearCache) throw (RbtError)
+void RbtBaseFileSink::Write(RbtBool bClearCache)
 {
   //Only write the file if there is anything in the cache
   if (isCacheEmpty())
@@ -114,7 +114,7 @@ void RbtBaseFileSink::ReplaceLine(const RbtString& fileRec, RbtUInt nRec)
 ////////////////////////////////////////
 //Private methods
 /////////////////
-void RbtBaseFileSink::Open(RbtBool bAppend) throw (RbtError)
+void RbtBaseFileSink::Open(RbtBool bAppend)
 {
   std::_Ios_Openmode openMode = ios_base::out;
   if (bAppend)

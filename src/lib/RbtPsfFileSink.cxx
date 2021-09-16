@@ -39,7 +39,7 @@ RbtPsfFileSink::~RbtPsfFileSink()
 //
 ////////////////////////////////////////
 //Override public methods from RbtBaseFileSink
-void RbtPsfFileSink::Render() throw (RbtError)
+void RbtPsfFileSink::Render()
 {
   //String constants in PSF files
   const RbtString strPsfKey("PSF");

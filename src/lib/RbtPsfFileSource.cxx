@@ -43,7 +43,7 @@ RbtPsfFileSource::~RbtPsfFileSource()
   _RBTOBJECTCOUNTER_DESTR_("RbtPsfFileSource");
 }
 
-void RbtPsfFileSource::Parse() throw (RbtError)
+void RbtPsfFileSource::Parse()
 {
   //Expected string constants in PSF files
   const RbtString strPsfKey("PSF");
@@ -218,7 +218,7 @@ void RbtPsfFileSource::Parse() throw (RbtError)
 }
 
 //Sets up all the atomic attributes that are not explicitly stored in the PSF file
-void RbtPsfFileSource::SetupAtomParams() throw (RbtError)
+void RbtPsfFileSource::SetupAtomParams()
 {
   //In the PSF file we have:
   //  Force field type
@@ -244,7 +244,7 @@ void RbtPsfFileSource::SetupAtomParams() throw (RbtError)
 }
 
 //Defines vdW radius, correcting for extended atoms and H-bond donor hydrogens
-void RbtPsfFileSource::SetupVdWRadii() throw (RbtError)
+void RbtPsfFileSource::SetupVdWRadii()
 {
   //Radius increment for atoms with implicit hydrogens
   //DM 22 Jul 1999 - only increase the radius for sp3 atoms with implicit hydrogens

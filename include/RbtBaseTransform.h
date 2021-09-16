@@ -47,11 +47,11 @@ class RbtBaseTransform : public RbtBaseObject
   void Go();
   
   //Aggregate handling methods
-  virtual void Add(RbtBaseTransform*) throw (RbtError);
-  virtual void Remove(RbtBaseTransform*) throw (RbtError);
+  virtual void Add(RbtBaseTransform*);
+  virtual void Remove(RbtBaseTransform*);
   virtual RbtBool isAgg() const;
   virtual RbtUInt GetNumTransforms() const;
-  virtual RbtBaseTransform* GetTransform(RbtUInt) const throw (RbtError);
+  virtual RbtBaseTransform* GetTransform(RbtUInt) const;
   void Orphan();//Force removal from the parent aggregate
   RbtBaseTransform* GetParentTransform() const;
 	

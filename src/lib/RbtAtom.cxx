@@ -311,7 +311,7 @@ void RbtAtom::SaveCoords(RbtUInt coordNum)
   m_savedCoords[coordNum] = m_coord;
 }
 
-void RbtAtom::RevertCoords(RbtUInt coordNum) throw (RbtError)
+void RbtAtom::RevertCoords(RbtUInt coordNum)
 {
   RbtUIntCoordMapConstIter iter = m_savedCoords.find(coordNum);
   if (iter != m_savedCoords.end()) {

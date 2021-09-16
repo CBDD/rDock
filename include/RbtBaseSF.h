@@ -62,11 +62,11 @@ class RbtBaseSF : public RbtBaseObject
   virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
       
   //Aggregate handling methods
-  virtual void Add(RbtBaseSF*) throw (RbtError);
-  virtual void Remove(RbtBaseSF*) throw (RbtError);
+  virtual void Add(RbtBaseSF*);
+  virtual void Remove(RbtBaseSF*);
   virtual RbtBool isAgg() const;
   virtual RbtUInt GetNumSF() const;
-  virtual RbtBaseSF* GetSF(RbtUInt iSF) const throw (RbtError);
+  virtual RbtBaseSF* GetSF(RbtUInt iSF) const;
   void Orphan();//Force removal from the parent aggregate
   RbtBaseSF* GetParentSF() const;
   

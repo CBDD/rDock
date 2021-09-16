@@ -67,7 +67,7 @@ RbtStdRestraintNamesList RbtNmrRestraintFileSource::GetStdRestraintList()
 /////////////////
 
 //Pure virtual in RbtBaseFileSource - needs to be defined here
-void RbtNmrRestraintFileSource::Parse() throw (RbtError)
+void RbtNmrRestraintFileSource::Parse()
 {
   const RbtString strDelimiter(",");//DM 23 Sept 1999
 

@@ -49,9 +49,9 @@ public:
   void SelectionUpdate(RbtString);
   
   void GAstep(RbtString, RbtDouble, RbtDouble, RbtDouble, 
-		      RbtDouble, RbtDouble,RbtBool) throw (RbtError);
+		      RbtDouble, RbtDouble,RbtBool);
   void EPstep(RbtString, RbtDouble, RbtDouble, RbtDouble, 
-		      RbtDouble, RbtDouble,RbtBool) throw (RbtError);
+		      RbtDouble, RbtDouble,RbtBool);
   RbtGPGenomePtr Best() const;
   ostream& Print(ostream&) const;
   friend ostream& operator<<(ostream& , const RbtGPPopulation &);

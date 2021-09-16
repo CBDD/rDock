@@ -59,9 +59,9 @@ class RbtElementFileSource : public RbtBaseFileSource
   RbtStringList GetElementNameList();//List of element names
   RbtIntList GetAtomicNumberList();//List of atomic numbers
   //Get element data for a given element name, throws error if not found
-  RbtElementData GetElementData(const RbtString& strElementName) throw (RbtError);
+  RbtElementData GetElementData(const RbtString& strElementName);
   //Get element data for a given atomic number, throws error if not found
-  RbtElementData GetElementData(RbtInt nAtomicNumber) throw (RbtError);
+  RbtElementData GetElementData(RbtInt nAtomicNumber);
   //Check if given element name is present
   RbtBool isElementNamePresent(const RbtString& strElementName);
   //Check if given atomic number is present
@@ -82,7 +82,7 @@ class RbtElementFileSource : public RbtBaseFileSource
   RbtElementFileSource& operator=(const RbtElementFileSource&);//Copy assignment disabled by default
 
   //Pure virtual in RbtBaseFileSource - needs to be defined here
-  virtual void Parse() throw (RbtError);
+  virtual void Parse();
   void ClearElementDataCache();
 
  protected:

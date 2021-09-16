@@ -17,7 +17,7 @@
 using std::cout;
 using std::endl;
 
-RbtPMFDirSource::RbtPMFDirSource(const RbtString& aDir) throw (RbtError): 
+RbtPMFDirSource::RbtPMFDirSource(const RbtString& aDir): 
 RbtDirectorySource(aDir)
 {
 #ifdef _DEBUG

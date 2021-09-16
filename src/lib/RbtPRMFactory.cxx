@@ -44,7 +44,7 @@ RbtPRMFactory::RbtPRMFactory(RbtParameterFileSource* pParamSource,
             : m_pParamSource(pParamSource), m_pDS(pDS), m_iTrace(0)
 {
 }
-RbtModelPtr RbtPRMFactory::CreateReceptor() throw (RbtError) {
+RbtModelPtr RbtPRMFactory::CreateReceptor() {
   RbtModelPtr retVal;
   m_pParamSource->SetSection(_REC_SECTION);
   //Detect if we have an ensemble of receptor coordinate files defined
@@ -177,7 +177,7 @@ RbtModelPtr RbtPRMFactory::CreateReceptor() throw (RbtError) {
   return retVal;
 }
 
-RbtModelPtr RbtPRMFactory::CreateLigand(RbtBaseMolecularFileSource* pSource) throw (RbtError) {
+RbtModelPtr RbtPRMFactory::CreateLigand(RbtBaseMolecularFileSource* pSource) {
     RbtModelPtr retVal;
     //TODO: Move some of the status checks from rbdock to here.
     retVal = new RbtModel(pSource);
@@ -189,7 +189,7 @@ RbtModelPtr RbtPRMFactory::CreateLigand(RbtBaseMolecularFileSource* pSource) thr
     return retVal;
 }
 
-RbtModelList RbtPRMFactory::CreateSolvent() throw (RbtError) {
+RbtModelList RbtPRMFactory::CreateSolvent() {
   RbtModelList retVal;
   m_pParamSource->SetSection(_SOLV_SECTION);
   if (m_pParamSource->isParameterPresent(_SOLV_FILE)) {
@@ -390,7 +390,7 @@ void RbtPRMFactory::AttachSolventFlexData(RbtModel* pSolvent) {
 }
             
 RbtMolecularFileSourcePtr RbtPRMFactory::CreateMolFileSource(
-                const RbtString& fileName) throw (RbtError)
+                const RbtString& fileName)
 {
   RbtMolecularFileSourcePtr retVal;
   RbtString fileType = Rbt::GetFileType(fileName);

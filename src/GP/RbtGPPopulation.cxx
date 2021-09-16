@@ -150,7 +150,6 @@ void RbtGPPopulation::GAstep(RbtString selector, RbtDouble pcross,
                              RbtDouble pmut, 
                              RbtDouble mean, RbtDouble variance,
                              RbtDouble hitlimit, RbtBool function) 
-                                throw (RbtError)
 {
     RbtGPGenomePtr mother, father;
     for (RbtInt i = 0 ; i < nrepl-1 ; i++)
@@ -193,7 +192,6 @@ void RbtGPPopulation::EPstep(RbtString selector, RbtDouble pcross,
                              RbtDouble pmut, 
                              RbtDouble mean, RbtDouble variance,
                              RbtDouble hitlimit, RbtBool function) 
-                                throw (RbtError)
 {
     *(newpop[0]) = *(pop[bestInd]);
     for (RbtInt i = 1 ; i < popsize ; i++)

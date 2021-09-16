@@ -40,7 +40,7 @@ class RbtTransformFactory
 	
 	//Creates a single transform object of type strTransformClass, and name strName
 	//e.g. strTransformClass = RbtSimAnnTransform
-	virtual RbtBaseTransform* Create(const RbtString& strTransformClass, const RbtString& strName) throw (RbtError);
+	virtual RbtBaseTransform* Create(const RbtString& strTransformClass, const RbtString& strName);
 	
 	//Creates an aggregate transform from a parameter file source
 	//Each component transform is in a named section, which should minimally contain a TRANSFORM parameter
@@ -50,7 +50,7 @@ class RbtTransformFactory
 	//Transform parameters and scoring function requests are set from the list of parameters in each named section
 	virtual RbtTransformAgg* CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource,
 																			const RbtString& strName,
-																			const RbtString& strTransformClasses = RbtString()) throw (RbtError);
+																			const RbtString& strTransformClasses = RbtString());
       
 
 	protected:

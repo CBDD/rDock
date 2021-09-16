@@ -319,7 +319,7 @@ void RbtFFTGrid::OwnWrite(ostream& ostr) const {
 }
 
 //Protected method for reading data members for this class from binary stream
-void RbtFFTGrid::OwnRead(istream& istr) throw (RbtError) {
+void RbtFFTGrid::OwnRead(istream& istr) {
   //Read title
   RbtInt length;
   Rbt::ReadWithThrow(istr, (char*) &length, sizeof(length));

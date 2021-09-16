@@ -84,7 +84,7 @@ RbtIntList RbtElementFileSource::GetAtomicNumberList()
 
 
 //Get element data for a given element name, throws error if not found
-RbtElementData RbtElementFileSource::GetElementData(const RbtString& strElementName) throw (RbtError)
+RbtElementData RbtElementFileSource::GetElementData(const RbtString& strElementName)
 {
   Parse();
   RbtStringElementDataMapIter iter = m_elementNameMap.find(strElementName);
@@ -95,7 +95,7 @@ RbtElementData RbtElementFileSource::GetElementData(const RbtString& strElementN
 }
 
 //Get element data for a given atomic number, throws error if not found
-RbtElementData RbtElementFileSource::GetElementData(RbtInt nAtomicNumber) throw (RbtError)
+RbtElementData RbtElementFileSource::GetElementData(RbtInt nAtomicNumber)
 {
   Parse();
   RbtIntElementDataMapIter iter = m_atomicNumberMap.find(nAtomicNumber);
@@ -149,7 +149,7 @@ RbtDouble RbtElementFileSource::GetImplicitRadiusIncr()
 
 //Private methods
 //Pure virtual in RbtBaseFileSource - needs to be defined here
-void RbtElementFileSource::Parse() throw (RbtError)
+void RbtElementFileSource::Parse()
 {
   const RbtString strRbtKey = "RBT_ELEMENT_FILE_V1.01";
   const RbtString strTitleKey = "TITLE ";

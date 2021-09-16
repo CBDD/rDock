@@ -38,11 +38,11 @@ class RbtCharmmDataSource
   ////////////////////////////////////////
   //Public methods
   ////////////////
-  RbtString AtomTypeString(RbtInt nAtomType) throw (RbtError);
-  RbtInt ImplicitHydrogens(const RbtString& strFFType) throw (RbtError);
-  RbtInt AtomicNumber(const RbtString& strFFType) throw (RbtError);
-  RbtInt FormalCharge(const RbtString& strFFType) throw (RbtError);//DM 24 Mar 1999 - changed from double to int
-  RbtAtom::eHybridState HybridState(const RbtString& strFFType) throw (RbtError);//DM 8 Dec 1998
+  RbtString AtomTypeString(RbtInt nAtomType);
+  RbtInt ImplicitHydrogens(const RbtString& strFFType);
+  RbtInt AtomicNumber(const RbtString& strFFType);
+  RbtInt FormalCharge(const RbtString& strFFType);//DM 24 Mar 1999 - changed from double to int
+  RbtAtom::eHybridState HybridState(const RbtString& strFFType);//DM 8 Dec 1998
 
  protected:
   ////////////////////////////////////////

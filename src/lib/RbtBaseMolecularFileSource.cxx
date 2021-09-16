@@ -51,7 +51,7 @@ void RbtBaseMolecularFileSource::Reset()
   ClearMolCache();
 }
 
-RbtInt RbtBaseMolecularFileSource::GetNumTitles() throw (RbtError)
+RbtInt RbtBaseMolecularFileSource::GetNumTitles()
 {
   if (isTitleListSupported()) {
     Parse();
@@ -61,7 +61,7 @@ RbtInt RbtBaseMolecularFileSource::GetNumTitles() throw (RbtError)
     throw RbtInvalidRequest(_WHERE_,"Title list not supported by " + GetName());
 }
 
-RbtInt RbtBaseMolecularFileSource::GetNumAtoms() throw (RbtError)
+RbtInt RbtBaseMolecularFileSource::GetNumAtoms()
 {
   if (isAtomListSupported()) {
     Parse();
@@ -74,7 +74,7 @@ RbtInt RbtBaseMolecularFileSource::GetNumAtoms() throw (RbtError)
     throw RbtInvalidRequest(_WHERE_,"Atom list not supported by " + GetName());
 }
 
-RbtInt RbtBaseMolecularFileSource::GetNumBonds() throw (RbtError)
+RbtInt RbtBaseMolecularFileSource::GetNumBonds()
 {
   if (isBondListSupported()) {
     Parse();
@@ -88,7 +88,7 @@ RbtInt RbtBaseMolecularFileSource::GetNumBonds() throw (RbtError)
 }
 
 
-RbtInt RbtBaseMolecularFileSource::GetNumSegments() throw (RbtError)
+RbtInt RbtBaseMolecularFileSource::GetNumSegments()
 {
   if (isAtomListSupported()) {
     Parse();
@@ -98,7 +98,7 @@ RbtInt RbtBaseMolecularFileSource::GetNumSegments() throw (RbtError)
     throw RbtInvalidRequest(_WHERE_,"Atom list not supported by " + GetName());
 }
 
-RbtStringList RbtBaseMolecularFileSource::GetTitleList() throw (RbtError)
+RbtStringList RbtBaseMolecularFileSource::GetTitleList()
 {
   if (isTitleListSupported()) {
     Parse();
@@ -108,7 +108,7 @@ RbtStringList RbtBaseMolecularFileSource::GetTitleList() throw (RbtError)
     throw RbtInvalidRequest(_WHERE_,"Title list not supported by " + GetName());
 }
 
-RbtAtomList RbtBaseMolecularFileSource::GetAtomList() throw (RbtError)
+RbtAtomList RbtBaseMolecularFileSource::GetAtomList()
 {
   if (isAtomListSupported()) {
     Parse();
@@ -122,7 +122,7 @@ RbtAtomList RbtBaseMolecularFileSource::GetAtomList() throw (RbtError)
 }
 
 
-RbtBondList RbtBaseMolecularFileSource::GetBondList() throw (RbtError)
+RbtBondList RbtBaseMolecularFileSource::GetBondList()
 {
   if (isBondListSupported()) {
     Parse();
@@ -136,7 +136,7 @@ RbtBondList RbtBaseMolecularFileSource::GetBondList() throw (RbtError)
 }
 
 
-RbtSegmentMap RbtBaseMolecularFileSource::GetSegmentMap() throw (RbtError)
+RbtSegmentMap RbtBaseMolecularFileSource::GetSegmentMap()
 {
   if (isAtomListSupported()) {
     Parse();
@@ -148,7 +148,7 @@ RbtSegmentMap RbtBaseMolecularFileSource::GetSegmentMap() throw (RbtError)
  
 //DM 12 May 1999 - support for data records (e.g. SD file)
 //Get number of data fields
-RbtInt RbtBaseMolecularFileSource::GetNumData() throw (RbtError)
+RbtInt RbtBaseMolecularFileSource::GetNumData()
 {
   if (isDataSupported()) {
     Parse();
@@ -159,7 +159,7 @@ RbtInt RbtBaseMolecularFileSource::GetNumData() throw (RbtError)
 }
 
 //Get list of field names as string list
-RbtStringList RbtBaseMolecularFileSource::GetDataFieldList() throw (RbtError)
+RbtStringList RbtBaseMolecularFileSource::GetDataFieldList()
 {
   if (isDataSupported()) {
     Parse();
@@ -174,7 +174,7 @@ RbtStringList RbtBaseMolecularFileSource::GetDataFieldList() throw (RbtError)
 }
 
 //Get all data as map of key=field name, value=variant (double,string or string list)
-RbtStringVariantMap RbtBaseMolecularFileSource::GetDataMap() throw (RbtError)
+RbtStringVariantMap RbtBaseMolecularFileSource::GetDataMap()
 {
   if (isDataSupported()) {
     Parse();
@@ -196,7 +196,7 @@ RbtBool RbtBaseMolecularFileSource::isDataFieldPresent(const RbtString& strDataF
 }
 
 //Get a particular data value
-RbtVariant RbtBaseMolecularFileSource::GetDataValue(const RbtString& strDataField) throw (RbtError)
+RbtVariant RbtBaseMolecularFileSource::GetDataValue(const RbtString& strDataField)
 {
   if (isDataSupported()) {
     Parse();

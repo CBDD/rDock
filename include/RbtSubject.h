@@ -40,8 +40,8 @@ public:
 	////////////////////////////////////////
 	//Public methods
 	////////////////
-	virtual void Attach(RbtObserver*) throw (RbtError);
-	virtual void Detach(RbtObserver*) throw (RbtError);
+	virtual void Attach(RbtObserver*);
+	virtual void Detach(RbtObserver*);
 	virtual void Notify();
 	
 protected:

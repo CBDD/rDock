@@ -308,7 +308,7 @@ std::ostream& Rbt::PrintStdHeader(std::ostream& s, const RbtString& strExecutabl
 //Throws error if stream state is not Good() before and after the read/write
 //It appears the STL ios_base exception throwing is not yet implemented
 //at least on RedHat 6.1, so this is a temporary workaround (yeah right)
-void Rbt::WriteWithThrow(std::ostream& ostr, const char* p, streamsize n) throw (RbtError) {
+void Rbt::WriteWithThrow(std::ostream& ostr, const char* p, streamsize n) {
   if (!ostr)
         throw RbtFileWriteError(_WHERE_,"Error writing to output stream");
   ostr.write(p,n);
@@ -316,7 +316,7 @@ void Rbt::WriteWithThrow(std::ostream& ostr, const char* p, streamsize n) throw 
         throw RbtFileWriteError(_WHERE_,"Error writing to output stream");
 }
 
-void Rbt::ReadWithThrow(std::istream& istr, char* p, streamsize n) throw (RbtError) {
+void Rbt::ReadWithThrow(std::istream& istr, char* p, streamsize n) {
   if (!istr)
         throw RbtFileReadError(_WHERE_,"Error reading from input stream");
   istr.read(p,n);

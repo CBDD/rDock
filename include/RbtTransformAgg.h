@@ -43,11 +43,11 @@ class RbtTransformAgg : public RbtBaseTransform
 	////////////////
 
 	//Aggregate handling methods
-	virtual void Add(RbtBaseTransform*) throw (RbtError);
-	virtual void Remove(RbtBaseTransform*) throw (RbtError);
+	virtual void Add(RbtBaseTransform*);
+	virtual void Remove(RbtBaseTransform*);
 	virtual RbtBool isAgg() const;
 	virtual RbtUInt GetNumTransforms() const;
-	virtual RbtBaseTransform* GetTransform(RbtUInt iTransform) const throw (RbtError);
+	virtual RbtBaseTransform* GetTransform(RbtUInt iTransform) const;
 	
 	//WorkSpace handling methods
 	//Register scoring function with a workspace

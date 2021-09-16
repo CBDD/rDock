@@ -240,7 +240,7 @@ RbtPrincipalAxes Rbt::GetPrincipalAxes(const RbtCoordList& coordList)
 //If required (bAlignCOM=true), also aligns the center of mass with refAxes.com
 //
 //LIMITATION: does not check for non-orthogonal alignAxes
-RbtQuat Rbt::AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& refAxes, RbtBool bAlignCOM) throw (RbtError)
+RbtQuat Rbt::AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& refAxes, RbtBool bAlignCOM)
 {
   RbtPrincipalAxes prAxes = Rbt::GetPrincipalAxes(atomList);
   RbtQuat q = Rbt::GetQuatFromAlignAxes(prAxes,refAxes);
@@ -257,7 +257,7 @@ RbtQuat Rbt::AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& r
 }
 
 RbtQuat Rbt::GetQuatFromAlignAxes(const RbtPrincipalAxes& prAxes,
-                                    const RbtPrincipalAxes& refAxes) throw (RbtError) {
+                                    const RbtPrincipalAxes& refAxes) {
   //1) Determine the quaternion needed to align axis1 with reference
   RbtQuat q1 = Rbt::GetQuatFromAlignVectors(prAxes.axis1, refAxes.axis1);
   //2) Apply the transformation to axis2 
@@ -268,7 +268,7 @@ RbtQuat Rbt::GetQuatFromAlignAxes(const RbtPrincipalAxes& prAxes,
   return q2 * q1;
 }
 
-RbtQuat Rbt::GetQuatFromAlignVectors(const RbtVector& v, const RbtVector& ref) throw (RbtError) {
+RbtQuat Rbt::GetQuatFromAlignVectors(const RbtVector& v, const RbtVector& ref) {
   RbtQuat retVal;
   //Unitise the two vectors
   RbtDouble len = Rbt::Length(v);

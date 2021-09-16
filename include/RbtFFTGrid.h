@@ -101,7 +101,7 @@ class RbtFFTGrid : public RbtRealGrid
   //Protected method for writing data members for this class to binary stream
 	void OwnWrite(ostream& ostr) const;
 	//Protected method for reading data members for this class from binary stream
-	void OwnRead(istream& istr) throw (RbtError);
+	void OwnRead(istream& istr);
 
 
  private:

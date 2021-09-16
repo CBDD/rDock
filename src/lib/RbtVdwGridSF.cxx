@@ -165,7 +165,7 @@ RbtDouble RbtVdwGridSF::RawScore() const {
 }
 
 //Read grids from input stream, checking that header string matches RbtVdwGridSF
-void RbtVdwGridSF::ReadGrids(istream& istr) throw (RbtError)
+void RbtVdwGridSF::ReadGrids(istream& istr)
 {
   m_grids.clear();
   RbtInt iTrace = GetTrace();

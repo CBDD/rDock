@@ -39,7 +39,7 @@ class RbtSFFactory
 	
 	//Creates a single scoring function object of type strSFClass, and name strName
 	//e.g. strSFClass = RbtHBondIntnSF
-	virtual RbtBaseSF* Create(const RbtString& strSFClass, const RbtString& strName) throw (RbtError);
+	virtual RbtBaseSF* Create(const RbtString& strSFClass, const RbtString& strName);
 	
 	//Creates an aggregate scoring function from a parameter file source
 	//Each component SF is in a named section, which should minimally contain a SCORING_FUNCTION parameter
@@ -49,7 +49,7 @@ class RbtSFFactory
 	//SF parameters are set from the list of parameters in each named section
 	virtual RbtSFAgg* CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource,
 																			const RbtString& strName,
-																			const RbtString& strSFClasses = RbtString()) throw (RbtError);
+																			const RbtString& strSFClasses = RbtString());
       
 
 	protected:

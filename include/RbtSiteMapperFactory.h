@@ -36,14 +36,14 @@ class RbtSiteMapperFactory
   ////////////////
   
   //Creates a single site mapper object of named class
-  virtual RbtSiteMapper* Create(const RbtString& strMapperClass, const RbtString& strName) throw (RbtError);
+  virtual RbtSiteMapper* Create(const RbtString& strMapperClass, const RbtString& strName);
 
   //Creates a single site mapper object whose class is defined
   //as the value of the SITE_MAPPER parameter in the strName section of the
   //parameter file source argument. Also sets the site mapper parameters from the
   //remaining parameter values in the current section
   //Note: the current section is restored to its original value upon exit
-  virtual RbtSiteMapper* CreateFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName) throw (RbtError);
+  virtual RbtSiteMapper* CreateFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName);
   
   
  protected:

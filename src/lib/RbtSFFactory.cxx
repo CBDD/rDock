@@ -71,7 +71,7 @@ RbtSFFactory::~RbtSFFactory() {
 ////////////////////////////////////////
 //Public methods
 ////////////////
-RbtBaseSF* RbtSFFactory::Create(const RbtString& strSFClass, const RbtString& strName) throw (RbtError) {
+RbtBaseSF* RbtSFFactory::Create(const RbtString& strSFClass, const RbtString& strName) {
   //Precalculated-grid scoring functions
 	if (strSFClass == RbtVdwGridSF::_CT) return new RbtVdwGridSF(strName);
 	if (strSFClass == RbtCavityGridSF::_CT) return new RbtCavityGridSF(strName);
@@ -129,7 +129,7 @@ RbtBaseSF* RbtSFFactory::Create(const RbtString& strSFClass, const RbtString& st
 //SF parameters are set from the list of parameters in each named section
 RbtSFAgg* RbtSFFactory::CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource,
 																						const RbtString& strName,
-																						const RbtString& strSFClasses) throw (RbtError) {
+																						const RbtString& strSFClasses) {
 	//Get list of scoring function objects to create
 	RbtStringList sfList = Rbt::ConvertDelimitedStringToList(strSFClasses);
 	//If strSFClasses is empty, then default to reading all sections of the

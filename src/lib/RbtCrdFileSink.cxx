@@ -44,7 +44,7 @@ RbtCrdFileSink::~RbtCrdFileSink()
 //
 ////////////////////////////////////////
 //Override public methods from RbtBaseFileSink
-void RbtCrdFileSink::Render() throw (RbtError)
+void RbtCrdFileSink::Render()
 {
   //Reset() has the intelligence to only reset the counters when required
   //so we can simply call it each time here

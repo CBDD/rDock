@@ -47,7 +47,7 @@ class RbtNonBondedHHSGrid : public RbtBaseGrid
 	protected:
 		void	OwnPrint(ostream& ostr) const;
 		void	OwnWrite(ostream& ostr) const;
-		void	OwnRead(istream& istr) throw (RbtError);
+		void	OwnRead(istream& istr);
 		
 	private:
 		RbtNonBondedHHSGrid();

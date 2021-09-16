@@ -19,7 +19,7 @@
 class RbtPMFDirSource : public RbtDirectorySource
 {
 	public:
-		RbtPMFDirSource(const RbtString&) throw (RbtError);
+		RbtPMFDirSource(const RbtString&);
 		virtual ~RbtPMFDirSource() {};
 
 		virtual void 	ReadFiles(vector< vector<RbtPMFValue> > *aVect, vector<string> *aNameVect, vector<RbtPMFValue> *aSlopeVect);
