@@ -73,9 +73,9 @@ void RbtVdwSF::OwnParameterUpdated(const RbtString& strName) {
 }
 
 //Used by subclasses to calculate vdW potential between pAtom and all atoms in atomList
-RbtDouble RbtVdwSF::VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList) const {
+RbtDouble RbtVdwSF::VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList, bool onlyEnabled) const {
   RbtDouble score = 0.0;
-  if (atomList.empty()) {
+  if (atomList.empty() || (onlyEnabled && !pAtom->GetEnabled())) {
     return score;
   }
 
@@ -84,126 +84,30 @@ RbtDouble RbtVdwSF::VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList)
   RbtTriposAtomType::eType type1 = pAtom->GetTriposType();
   RbtVdwTableConstIter iter1 = m_vdwTable.begin() + type1;
 
-  //4-8 potential, never annotated
-  if (m_use_4_8) {
-    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-      const RbtCoord& c2 = (*iter)->GetCoords();
-      RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
-      RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
-      //iter2 points to the vdw params for this atom type pair
-      RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
-      RbtDouble s = f4_8(R_sq,*iter2);
-// XB NOTE: Apply weight here
-   //   RbtDouble wxb = (*iter)->GetReweight();
-     // cout << "4-8vdw " << (*iter)->GetAtomName() << " weight: " << wxb << " score " << s;
-   //   s *=  wxb;
-     // cout << " score*w " << s << endl;
-// XB END MODIFICATIONS
-      score += s;
+  RbtDouble (*potential)(RbtDouble R_sq, const vdwprms& prms) = (m_use_4_8) ? &RbtVdwSF::f4_8 : &RbtVdwSF::f6_12;
+  // 4-8 potential is never annotated
+  bool annotate = !m_use_4_8 && isAnnotationEnabled();
+  for (auto iter : atomList) {
+    if (onlyEnabled && !iter->GetEnabled()) continue;
+    const RbtCoord& c2 = iter->GetCoords();
+    RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
+    RbtTriposAtomType::eType type2 = iter->GetTriposType();
+    //iter2 points to the vdw params for this atom type pair
+    RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
+    RbtDouble s = potential(R_sq,*iter2);
+    score += s;
+    if (s != 0.0 && annotate) {
+      RbtAnnotationPtr spAnnotation(new RbtAnnotation(pAtom, iter, sqrt(R_sq), s));
+      AddAnnotation(spAnnotation);
     }
   }
-  //6-12 with annotation
-  else if (isAnnotationEnabled()) {
-    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-      const RbtCoord& c2 = (*iter)->GetCoords();
-      RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
-      RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
-      //iter2 points to the vdw params for this atom type pair
-      RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
-      RbtDouble s = f6_12(R_sq,*iter2);
-// XB NOTE: Apply weight here
-      //RbtDouble wxb = (*iter)->GetReweight();
-   //   cout << "6-12vdw " << (*iter)->GetAtomName() << " weight: " << wxb << " score " << s;
-     // s *=  wxb;
-   //   cout << " score*w " << s << endl;
-// XB END MODIFICATIONS
-      if (s != 0.0) {
-	score += s;
-	RbtAnnotationPtr spAnnotation(new RbtAnnotation(pAtom,*iter,sqrt(R_sq),s));
-	AddAnnotation(spAnnotation);
-      }
-    }
-  }
-  //6-12 without annotation
-  else {
-    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-      const RbtCoord& c2 = (*iter)->GetCoords();
-      RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
-      RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
-      //iter2 points to the vdw params for this atom type pair
-      RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
-      RbtDouble s = f6_12(R_sq,*iter2);
-// XB NOTE: Apply weight here
-   //   RbtDouble wxb = (*iter)->GetReweight();
-   //   cout << "6-12vdw " << (*iter)->GetAtomName() << " weight: " << wxb << " score " << s;
-   //   s *=  wxb;
-   //   cout << " score*w " << s << endl;
-// XB END MODIFICATIONS
-      score += s;
-    }
-  }
+
   return score;
 }
 
 //As above, but score is calculated only between enabled atoms
 RbtDouble RbtVdwSF::VdwScoreEnabledOnly(const RbtAtom* pAtom, const RbtAtomRList& atomList) const {
-  RbtDouble score = 0.0;
-  if (!pAtom->GetEnabled() || atomList.empty()) {
-    return score;
-  }
-
-  const RbtCoord& c1 = pAtom->GetCoords();
-  //Get the iterator into the appropriate row of the vdw table for this atom type
-  RbtTriposAtomType::eType type1 = pAtom->GetTriposType();
-  RbtVdwTableConstIter iter1 = m_vdwTable.begin() + type1;
-
-  //4-8 potential, never annotated
-  if (m_use_4_8) {
-    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-      if ((*iter)->GetEnabled()) {
-	const RbtCoord& c2 = (*iter)->GetCoords();
-	RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
-	RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
-	//iter2 points to the vdw params for this atom type pair
-	RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
-	RbtDouble s = f4_8(R_sq,*iter2);
-	score += s;
-      }
-    }
-  }
-  //6-12 with annotation
-  else if (isAnnotationEnabled()) {
-    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-      if ((*iter)->GetEnabled()) {
-	const RbtCoord& c2 = (*iter)->GetCoords();
-	RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
-	RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
-	//iter2 points to the vdw params for this atom type pair
-	RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
-	RbtDouble s = f6_12(R_sq,*iter2);
-	if (s != 0.0) {
-	  score += s;
-	  RbtAnnotationPtr spAnnotation(new RbtAnnotation(pAtom,*iter,sqrt(R_sq),s));
-	  AddAnnotation(spAnnotation);
-	}
-      }
-    }
-  }
-  //6-12 without annotation
-  else {
-    for (RbtAtomRListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-      if ((*iter)->GetEnabled()) {
-	const RbtCoord& c2 = (*iter)->GetCoords();
-	RbtDouble R_sq = Rbt::Length2(c1,c2);//Distance squared
-	RbtTriposAtomType::eType type2 = (*iter)->GetTriposType();
-	//iter2 points to the vdw params for this atom type pair
-	RbtVdwRowConstIter iter2 = (*iter1).begin() + type2;
-	RbtDouble s = f6_12(R_sq,*iter2);
-	score += s;
-      }
-    }
-  }
-  return score;
+  return VdwScore(pAtom, atomList, true);
 }
 
 //XB This is the old  VdwScore, without reweighting factors

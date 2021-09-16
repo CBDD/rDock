@@ -44,7 +44,7 @@ class RbtVdwSF : public virtual RbtBaseSF, public virtual RbtAnnotationHandler
   void OwnParameterUpdated(const RbtString& strName);
 
   //Used by subclasses to calculate vdW potential between pAtom and all atoms in atomList
-  RbtDouble VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
+  RbtDouble VdwScore(const RbtAtom* pAtom, const RbtAtomRList& atomList, bool onlyEnabled = false) const;
   //As above, but with additional checks for enabled state of each atom
   RbtDouble VdwScoreEnabledOnly(const RbtAtom* pAtom, const RbtAtomRList& atomList) const;
   //XB Same as above, used to calcutate intra terms without the reweighting factors
@@ -80,7 +80,7 @@ class RbtVdwSF : public virtual RbtBaseSF, public virtual RbtAnnotationHandler
   typedef RbtVdwTable::const_iterator RbtVdwTableConstIter;
 
   //Generic scoring function primitive for 6-12
-  inline RbtDouble f6_12(RbtDouble R_sq, const vdwprms& prms) const {
+  static inline RbtDouble f6_12(RbtDouble R_sq, const vdwprms& prms) {
     //Zero well depth or long range: return zero
     if ( (prms.kij == 0.0) || (R_sq > prms.rmax_sq) ) {
       return 0.0;
@@ -97,7 +97,7 @@ class RbtVdwSF : public virtual RbtBaseSF, public virtual RbtAnnotationHandler
   };
   
   //Generic scoring function primitive for 4-8
-  inline RbtDouble f4_8(RbtDouble R_sq, const vdwprms& prms) const {
+  static inline RbtDouble f4_8(RbtDouble R_sq, const vdwprms& prms) {
     //Zero well depth or long range: return zero
     if ( (prms.kij == 0.0) || (R_sq > prms.rmax_sq) ) {
       return 0.0;
