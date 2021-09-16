@@ -20,16 +20,19 @@ RbtString RbtStringTokenIter::_CT("RbtStringTokenIter");
     ///////////////////
     // Constructors
     ///////////////////
-RbtStringTokenIter::RbtStringTokenIter(const istreamPtr fn, RbtContextPtr co) 
-                    : filep(fn), contextp(co)
+RbtStringTokenIter::RbtStringTokenIter(const istreamPtr fn, RbtContextPtr co) :
+    filep(fn),
+    contextp(co)
 {
-  (istream&)(*filep) >> strtok;
+    (istream&)(*filep) >> strtok;
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
-RbtStringTokenIter::RbtStringTokenIter(const RbtStringTokenIter& ti) 
-  : current(ti.current), filep(ti.filep), 
-    strtok(ti.strtok), contextp(ti.contextp)
+RbtStringTokenIter::RbtStringTokenIter(const RbtStringTokenIter& ti) :
+    filep(ti.filep), 
+    current(ti.current),
+    strtok(ti.strtok),
+    contextp(ti.contextp)
 {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
@@ -41,62 +44,63 @@ RbtStringTokenIter::~RbtStringTokenIter()
   
 void RbtStringTokenIter::Next(RbtContextPtr)
 {
-  (*filep) >> strtok;
+    (*filep) >> strtok;
 }
 
 RbtTokenPtr RbtStringTokenIter::Current() 
 { 
-  current = translate (strtok);
-  return current;
+    current = translate (strtok);
+    return current;
 }
 
 void RbtStringTokenIter::copy(const RbtStringTokenIter & ti) 
 {
-  strtok = ti.strtok;
-  current = ti.current;
-  filep = ti.filep;
-  contextp = ti.contextp;
+    filep = ti.filep;
+    current = ti.current;
+    strtok = ti.strtok;
+    contextp = ti.contextp;
 }
 
 RbtTokenPtr RbtStringTokenIter::translate(RbtString s)
 {
-  if (s.length() == 0)
-    throw RbtError(_WHERE_, "Missing token, can't translate the expression");
-  if (s == "+")
-    return new RbtToken(RbtCommands(RbtCommands::ADD)); 
-  if (s == "-")
-    return new RbtToken(RbtCommands(RbtCommands::SUB));
-  if (s == "*")
-    return new RbtToken(RbtCommands(RbtCommands::MUL));
-  if (s == "/")
-    return new RbtToken(RbtCommands(RbtCommands::DIV));
-  if (s == "if")
-  {
-    return new RbtToken(RbtCommands(RbtCommands::IF));
-  }
-  if (s == "log")
-    return new RbtToken(RbtCommands(RbtCommands::LOG));
-  if (s == "exp")
-    return new RbtToken(RbtCommands(RbtCommands::EXP));
-  if (s == "and")
-    return new RbtToken(RbtCommands(RbtCommands::AND));
-  if ((string::npos != s.find("SCORE")) ||
-    (string::npos != s.find("SITE")) ||
-    (string::npos != s.find("LIG")))
-  {
-		contextp->Assign(s, 0.0);
-    return new RbtToken(contextp->GetVble(s));
-  }
-  else // I assume is a double. If it is not, need to send an RbtError
-  {
-    char *error;
-    errno = 0;
-    RbtDouble val = strtod(s.c_str(), &error);
-    if (!errno && !*error)  // This checks for errors 
+    if (s.length() == 0)
+        throw RbtError(_WHERE_, "Missing token, can't translate the expression");
+    if (s == "+")
+        return new RbtToken(RbtCommands(RbtCommands::ADD)); 
+    if (s == "-")
+        return new RbtToken(RbtCommands(RbtCommands::SUB));
+    if (s == "*")
+        return new RbtToken(RbtCommands(RbtCommands::MUL));
+    if (s == "/")
+        return new RbtToken(RbtCommands(RbtCommands::DIV));
+    if (s == "if")
     {
-      contextp->Assign(s, val);
-      return new RbtToken(contextp->GetVble(s));
+        return new RbtToken(RbtCommands(RbtCommands::IF));
     }
-  }
-  throw RbtError(_WHERE_, "Can't read " + s);
+    if (s == "log")
+        return new RbtToken(RbtCommands(RbtCommands::LOG));
+    if (s == "exp")
+        return new RbtToken(RbtCommands(RbtCommands::EXP));
+    if (s == "and")
+        return new RbtToken(RbtCommands(RbtCommands::AND));
+    if (
+        (string::npos != s.find("SCORE"))
+        || (string::npos != s.find("SITE"))
+        || (string::npos != s.find("LIG"))
+    ) {
+            contextp->Assign(s, 0.0);
+        return new RbtToken(contextp->GetVble(s));
+    }
+    else // I assume is a double. If it is not, need to send an RbtError
+    {
+        char *error;
+        errno = 0;
+        RbtDouble val = strtod(s.c_str(), &error);
+        if (!errno && !*error)  // This checks for errors 
+        {
+            contextp->Assign(s, val);
+            return new RbtToken(contextp->GetVble(s));
+        }
+    }
+    throw RbtError(_WHERE_, "Can't read " + s);
 }

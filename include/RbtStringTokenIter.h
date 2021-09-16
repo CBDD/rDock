@@ -27,42 +27,42 @@
 typedef SmartPtr<istream> istreamPtr;
 class RbtStringTokenIter : public RbtTokenIter
 {
-public:
+ public:
 
-  static RbtString _CT;
+    static RbtString _CT;
     ///////////////////
     // Constructors
     ///////////////////
-  RbtStringTokenIter(const RbtStringTokenIter&);
-  RbtStringTokenIter(const istreamPtr, RbtContextPtr);
+    RbtStringTokenIter(const RbtStringTokenIter&);
+    RbtStringTokenIter(const istreamPtr, RbtContextPtr);
  
     ///////////////////
     // Destructor
     //////////////////
-  virtual ~RbtStringTokenIter();
+    virtual ~RbtStringTokenIter();
   
-  void copy(const RbtStringTokenIter &);
-  //void First();
-  void Next(RbtContextPtr);
-  //RbtBool IsDone() const;
-  RbtTokenPtr Current(); 
- 
-//  RbtBool operator==(const RbtStringTokenIter&) const;
-//  ostream& Print(ostream&) const;
-//  friend ostream& operator<<(ostream& s, const RbtStringTokenIter &p);
+    void copy(const RbtStringTokenIter &);
+    //void First();
+    void Next(RbtContextPtr);
+    //RbtBool IsDone() const;
+    RbtTokenPtr Current(); 
+    
+    //  RbtBool operator==(const RbtStringTokenIter&) const;
+    //  ostream& Print(ostream&) const;
+    //  friend ostream& operator<<(ostream& s, const RbtStringTokenIter &p);
 
-    ////////////////////
-    // Private methods
-    ////////////////////
+ ////////////////////
+ // Private methods
+ ////////////////////
 
-private:
-  RbtStringTokenIter();  // Default constructor disabled
-  RbtTokenPtr translate(RbtString);
+ private:
+    RbtStringTokenIter();  // Default constructor disabled
+    RbtTokenPtr translate(RbtString);
 
-  istreamPtr filep;
-  RbtTokenPtr current;
-  RbtString strtok;
-  RbtContextPtr contextp;
+    istreamPtr filep;
+    RbtTokenPtr current;
+    RbtString strtok;
+    RbtContextPtr contextp;
   
 };
 
