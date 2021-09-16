@@ -754,24 +754,22 @@ namespace Rbt
   //First constructor checks total coordination number
   //Other constructors check atomic number, force field type and hybridisation state coordination numbers
   class isCoordinationNumber_eq : public std::unary_function<RbtAtom*,RbtBool> {
-    enum {TOTAL,ATNO,FFTYPE,HYBRID} eCNType;//Type of coordination number to check
-    RbtInt n;//Coordination number value to check
+    enum RbtECoordinationNumberType{TOTAL,ATNO,FFTYPE,HYBRID} eCNType;//Type of coordination number to check
+    RbtUInt n;//Coordination number value to check
     RbtInt atNo;
     RbtString ffType;
     RbtAtom::eHybridState hybrid;
   public:
     //Total coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn) :
-      n(nn),eCNType(TOTAL),atNo(0),ffType(""),hybrid(RbtAtom::UNDEFINED) {}
+    explicit isCoordinationNumber_eq(RbtUInt nn) : isCoordinationNumber_eq(TOTAL, nn, 0, "", RbtAtom::UNDEFINED) {}
     //Atomic number coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn, RbtInt nAt) :
-      n(nn),eCNType(ATNO),atNo(nAt),ffType(""),hybrid(RbtAtom::UNDEFINED) {}
+    explicit isCoordinationNumber_eq(RbtUInt nn, RbtInt nAt) : isCoordinationNumber_eq(ATNO, nn, nAt, "", RbtAtom::UNDEFINED) {}
     //Force field type coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn, const RbtString& strType) :
-      n(nn),eCNType(FFTYPE),atNo(0),ffType(strType),hybrid(RbtAtom::UNDEFINED) {}
+    explicit isCoordinationNumber_eq(RbtUInt nn, const RbtString& strType) : isCoordinationNumber_eq(FFTYPE, nn, 0, strType, RbtAtom::UNDEFINED) {}
     //Hybridisation state coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn, RbtAtom::eHybridState eState) :
-      n(nn),eCNType(HYBRID),atNo(0),ffType(""),hybrid(eState) {}
+    explicit isCoordinationNumber_eq(RbtUInt nn, RbtAtom::eHybridState eState) : isCoordinationNumber_eq(HYBRID, nn, 0, "", eState) {}
+    explicit isCoordinationNumber_eq(RbtECoordinationNumberType ecntype, RbtUInt nn, RbtInt nAt, const RbtString& strType, RbtAtom::eHybridState eState) :
+    eCNType(ecntype), n(nn), atNo(nAt), ffType(strType), hybrid(eState) {}
     RbtBool operator() (RbtAtom* pAtom) const {
       switch (eCNType) {
       case TOTAL:

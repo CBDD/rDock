@@ -27,8 +27,8 @@ using std::bind2nd;
 //Initialise 2-D attributes to suitable defaults
 //Initialise 3-D attributes to zero/null
 RbtAtom::RbtAtom() :
-  m_nAtomId(0),
   m_nAtomicNo(6),
+  m_nAtomId(0),
   m_strAtomName("C"),
   m_strSubunitId("1"),
   m_strSubunitName("RES"),
@@ -36,12 +36,6 @@ RbtAtom::RbtAtom() :
   m_eState(UNDEFINED),//DM 8 Dec 1998 Changed from SP3 to UNDEFINED
   m_nHydrogens(0),
   m_nFormalCharge(0),
-  m_coord(0.0,0.0,0.0),
-  m_dPartialCharge(0.0),
-  m_dGroupCharge(0.0),
-  m_dAtomicMass(0.0),
-  m_dVdwRadius(0.0),
-  m_strFFType(""),
   m_pModel(NULL),
   m_bCyclic(false),
   m_bSelected(false),
@@ -49,46 +43,53 @@ RbtAtom::RbtAtom() :
   m_dUser1(1.0),//DM 27 Jul 2000 - initialise user values to 1 as they are commonly used as weightings
   m_dUser2(1.0),
   m_nPMFType(PMF_UNDEFINED),
-  m_triposType(RbtTriposAtomType::UNDEFINED)
+  m_triposType(RbtTriposAtomType::UNDEFINED),
+  m_coord(0.0,0.0,0.0),
+  m_dPartialCharge(0.0),
+  m_dGroupCharge(0.0),
+  m_dAtomicMass(0.0),
+  m_dVdwRadius(0.0),
+  m_strFFType("")
 {
   _RBTOBJECTCOUNTER_CONSTR_("RbtAtom");
 }
 
 //Constructor supplying all 2-D parameters
 //Initialise 3-D attributes to zero/null
-RbtAtom::RbtAtom(RbtInt nAtomId,
-		 RbtInt nAtomicNo /*= 6*/,
-		 RbtString strAtomName /*= "C"*/,
-		 RbtString strSubunitId /*= "1"*/,
-		 RbtString strSubunitName /*= "RES"*/,
-		 RbtString strSegmentName /*= "SEG1"*/,
-		 eHybridState eState /*= UNDEFINED*/,
-		 RbtUInt nHydrogens /*= 0*/,
-		 RbtInt nFormalCharge /*= 0.0*/
-		 ) :
-  m_nAtomId(nAtomId),
-  m_nAtomicNo(nAtomicNo),
-  m_strAtomName(strAtomName),
-  m_strSubunitId(strSubunitId),
-  m_strSubunitName(strSubunitName),
-  m_strSegmentName(strSegmentName),
-  m_eState(eState),
-  m_nHydrogens(nHydrogens),
-  m_nFormalCharge(nFormalCharge),
-  m_coord(0.0,0.0,0.0),
-  m_dPartialCharge(0.0),
-  m_dGroupCharge(0.0),
-  m_dAtomicMass(0.0),
-  m_dVdwRadius(0.0),
-  m_strFFType(""),
-  m_pModel(NULL),
-  m_bCyclic(false),
-  m_bSelected(false),
-  m_bUser1(false),
-  m_dUser1(1.0),//DM 27 Jul 2000 - initialise user values to 1 as they are commonly used as weightings
-  m_dUser2(1.0),
-  m_nPMFType(PMF_UNDEFINED),
-  m_triposType(RbtTriposAtomType::UNDEFINED)
+RbtAtom::RbtAtom(
+    RbtInt nAtomId,
+    RbtInt nAtomicNo /*= 6*/,
+    RbtString strAtomName /*= "C"*/,
+    RbtString strSubunitId /*= "1"*/,
+    RbtString strSubunitName /*= "RES"*/,
+    RbtString strSegmentName /*= "SEG1"*/,
+    eHybridState eState /*= UNDEFINED*/,
+    RbtUInt nHydrogens /*= 0*/,
+    RbtInt nFormalCharge /*= 0.0*/
+) :
+    m_nAtomicNo(nAtomicNo),
+    m_nAtomId(nAtomId),
+    m_strAtomName(strAtomName),
+    m_strSubunitId(strSubunitId),
+    m_strSubunitName(strSubunitName),
+    m_strSegmentName(strSegmentName),
+    m_eState(eState),
+    m_nHydrogens(nHydrogens),
+    m_nFormalCharge(nFormalCharge),
+    m_pModel(NULL),
+    m_bCyclic(false),
+    m_bSelected(false),
+    m_bUser1(false),
+    m_dUser1(1.0),//DM 27 Jul 2000 - initialise user values to 1 as they are commonly used as weightings
+    m_dUser2(1.0),
+    m_nPMFType(PMF_UNDEFINED),
+    m_triposType(RbtTriposAtomType::UNDEFINED),
+    m_coord(0.0,0.0,0.0),
+    m_dPartialCharge(0.0),
+    m_dGroupCharge(0.0),
+    m_dAtomicMass(0.0),
+    m_dVdwRadius(0.0),
+    m_strFFType("")
 {
   _RBTOBJECTCOUNTER_CONSTR_("RbtAtom");
 }
@@ -111,6 +112,11 @@ RbtAtom::RbtAtom(const RbtAtom& atom)
   m_eState = atom.m_eState;
   m_nHydrogens = atom.m_nHydrogens;
   m_nFormalCharge = atom.m_nFormalCharge;
+  m_bUser1 = atom.m_bUser1;
+  m_dUser1 = atom.m_dUser1;
+  m_dUser2 = atom.m_dUser2;
+  m_nPMFType = atom.m_nPMFType;
+  m_triposType = atom.m_triposType;
   m_coord = atom.m_coord;
   m_dPartialCharge = atom.m_dPartialCharge;
   m_dGroupCharge = atom.m_dGroupCharge;
@@ -118,11 +124,6 @@ RbtAtom::RbtAtom(const RbtAtom& atom)
   m_dVdwRadius = atom.m_dVdwRadius;
   m_strFFType = atom.m_strFFType;
   m_savedCoords = atom.m_savedCoords;
-  m_bUser1 = atom.m_bUser1;
-  m_dUser1 = atom.m_dUser1;
-  m_dUser2 = atom.m_dUser2;
-  m_nPMFType = atom.m_nPMFType;
-  m_triposType = atom.m_triposType;
   //Copied atoms no longer belong to the model so set to NULL here
   SetModelPtr(NULL);
   //Copied atoms no longer belong to the bonds so erase the bond map
