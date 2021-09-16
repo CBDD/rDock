@@ -76,6 +76,7 @@ RbtGPGenome& RbtGPGenome::operator=(const RbtGPGenome& g)
         *chrom = *(g.chrom);
         fitness = g.fitness;
     }
+    return *this;
 }
 
 
