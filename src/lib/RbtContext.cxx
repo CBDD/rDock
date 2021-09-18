@@ -43,7 +43,7 @@ RbtStringContext::RbtStringContext()
     throw RbtError(_WHERE_, "Can't construct string context by default");
 }
 
-RbtStringContext::RbtStringContext(const RbtStringContext& c) : vm(c.vm)
+RbtStringContext::RbtStringContext(const RbtStringContext& c) : RbtContext(c), vm(c.vm)
 {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
@@ -79,7 +79,7 @@ RbtCellContext::RbtCellContext()
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
-RbtCellContext::RbtCellContext(const RbtCellContext& c) : vm(c.vm)
+RbtCellContext::RbtCellContext(const RbtCellContext& c) : RbtContext(c), vm(c.vm)
 {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
