@@ -18,6 +18,7 @@ using std::bind2nd;
 #include "RbtPseudoAtom.h"
 #include "RbtBond.h"
 #include "RbtModel.h"
+#include "RbtMacros.h"
 
 ///////////////////////////////////////////////
 //Constructors / destructors
@@ -737,69 +738,70 @@ RbtUInt Rbt::GetNumMatchingAtoms(const RbtAtomList& atomList, const RbtString& s
 
 RbtAtomList Rbt::GetMatchingAtomList(const RbtAtomList& atomList, const RbtString& strFullName)
 {
-  RbtAtomList matchingAtoms = atomList;
+    RbtAtomList matchingAtoms = atomList;
 
-  //Split the name into it's constituent subunit and atom names
-  RbtStringList componentList = Rbt::ConvertDelimitedStringToList(strFullName,":");
-  RbtUInt idx(0);//Index into constituent list
-  //Switch on how many constituent names are specified
-  switch (componentList.size()) {      
+    //Split the name into it's constituent subunit and atom names
+    RbtStringList componentList = Rbt::ConvertDelimitedStringToList(strFullName,":");
+    RbtUInt idx(0);//Index into constituent list
+    //Switch on how many constituent names are specified
+    switch (componentList.size()) {      
 
-  case 3://we have segment, subunit and atom names
-    if (!componentList[idx].empty()) {
-      matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isSegmentName_eq(componentList[idx]));
-#ifdef _DEBUG
-      //cout << "Matching segment name=" << componentList[idx] << ", #atoms=" << matchingAtoms.size() << endl;
-#endif //_DEBUG
+        case 3://we have segment, subunit and atom names
+            if (!componentList[idx].empty()) {
+                matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isSegmentName_eq(componentList[idx]));
+                #ifdef _DEBUG
+                    //cout << "Matching segment name=" << componentList[idx] << ", #atoms=" << matchingAtoms.size() << endl;
+                #endif //_DEBUG
+            }
+            idx++;
+            __FALLTHROUGH__;
+        case 2://Fall-through!! We have subunit and atom names
+            //Check if the subunit name also specifies a subunit ID
+            if (!componentList[idx].empty()) {
+                RbtStringList subunitList =  Rbt::ConvertDelimitedStringToList(componentList[idx],"_");
+                switch (subunitList.size()) {
+                    case 2://Subunit ID and name are specified
+                        if (!subunitList[1].empty()) {
+                            matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isSubunitId_eq(subunitList[1]));
+                            #ifdef _DEBUG
+                                //cout << "Matching subunit id=" << subunitList[1] << ", #atoms=" << matchingAtoms.size() << endl;
+                            #endif //_DEBUG
+                        }
+                        __FALLTHROUGH__;
+                    case 1://Fall-through!! Only the subunit name is specified
+                        if (!subunitList[0].empty()) {
+                            matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isSubunitName_eq(subunitList[0]));
+                            #ifdef _DEBUG
+                                //cout << "Matching subunit name=" << subunitList[0] << ", #atoms=" << matchingAtoms.size() << endl;
+                            #endif //_DEBUG
+                        }
+                        break;
+                    default:
+                        #ifdef _DEBUG
+                            //cout << "Invalid subunit string in " << strFullName << endl;
+                        #endif //_DEBUG
+                        break;
+                }
+            }
+            idx++;
+            __FALLTHROUGH__;
+        case 1://Fall-through!! We only have an atom name specifier
+            if (!componentList[idx].empty()) {
+                matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isAtomName_eq(componentList[idx]));
+                #ifdef _DEBUG
+                    //cout << "Matching atom name=" << componentList[idx] << ", #atoms=" << matchingAtoms.size() << endl;
+                #endif //_DEBUG
+            }
+            break;
+
+        default:
+            #ifdef _DEBUG
+                //cout << "Too many colons (:) in " << strFullName << endl;
+            #endif //_DEBUG
+            break;
     }
-    idx++;
 
-  case 2://Fall-through!! We have subunit and atom names
-    //Check if the subunit name also specifies a subunit ID
-    if (!componentList[idx].empty()) {
-      RbtStringList subunitList =  Rbt::ConvertDelimitedStringToList(componentList[idx],"_");
-      switch (subunitList.size()) {
-      case 2://Subunit ID and name are specified
-	if (!subunitList[1].empty()) {
-	  matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isSubunitId_eq(subunitList[1]));
-#ifdef _DEBUG
-	  //cout << "Matching subunit id=" << subunitList[1] << ", #atoms=" << matchingAtoms.size() << endl;
-#endif //_DEBUG
-	}
-      case 1://Fall-through!! Only the subunit name is specified
-	if (!subunitList[0].empty()) {
-	  matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isSubunitName_eq(subunitList[0]));
-#ifdef _DEBUG
-	  //cout << "Matching subunit name=" << subunitList[0] << ", #atoms=" << matchingAtoms.size() << endl;
-#endif //_DEBUG
-	}
-	break;
-      default:
-#ifdef _DEBUG
-	//cout << "Invalid subunit string in " << strFullName << endl;
-#endif //_DEBUG
-	break;
-      }
-    }
-    idx++;
-    
-  case 1://Fall-through!! We only have an atom name specifier
-    if (!componentList[idx].empty()) {
-      matchingAtoms = Rbt::GetAtomList(matchingAtoms,Rbt::isAtomName_eq(componentList[idx]));
-#ifdef _DEBUG
-      //cout << "Matching atom name=" << componentList[idx] << ", #atoms=" << matchingAtoms.size() << endl;
-#endif //_DEBUG
-    }
-    break;
-
-  default:
-#ifdef _DEBUG
-    //cout << "Too many colons (:) in " << strFullName << endl;
-#endif //_DEBUG
-    break;
-  }
-
-  return matchingAtoms;
+    return matchingAtoms;
 }
 
 //DM 15 Apr 1999 - as above, but match against a list of full atom name specifiers
