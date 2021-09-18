@@ -1,3 +1,7 @@
-build/**
-obj/**
-lib/**
+*.o
+build/*/release
+build/test
+dataset/**
+*.log
+lib/
+Makefile.*
