@@ -90,7 +90,7 @@ rdock-dt-exe: rdock-lib
 
 rdock-lib:
 	./progen -t lib -o $(PROJECT)	'VERSION = $(VERSION)' \
-					'CONFIG = dll warn_off $(CONFIG)' \
+					'CONFIG = dll warn_on $(CONFIG)' \
 					'INCLUDEPATH = ../include;../include/GP;../import/simplex/include;../import/tnt/include' \
 					'DEPENDPATH = $$INCLUDEPATH' \
 					'DEFINES += $(DEFINES)' \
