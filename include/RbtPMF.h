@@ -35,6 +35,6 @@ typedef RbtPMFType PMFType;
 namespace Rbt {
 	RbtString	PMFType2Str(RbtPMFType aType);
 	RbtPMFType	PMFStr2Type(RbtString anStr);
-};
+}
 
 #endif // _RBTPMF_H_

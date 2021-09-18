@@ -45,7 +45,7 @@ RbtToken::RbtToken(const RbtToken& t) :
 RbtToken::~RbtToken()
 {
     _RBTOBJECTCOUNTER_DESTR_(_CT);
-};
+}
 
 const RbtVble& RbtToken::GetVble() const
 {

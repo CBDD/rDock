@@ -74,7 +74,7 @@ RbtReturnType RbtGPParser::Parse1Output(RbtGPChromosomePtr chrom, RbtInt output)
     RbtInt startCell = (nFunctionsInputs + 1) * (output - nProgramInputs);
     RbtInt ncomm = (*chrom)[startCell + nFunctionsInputs];
     RbtInt nargs = commands[ncomm]->GetNArgs();
-    RbtReturnType args[nargs];
+    std::vector<RbtReturnType> args(nargs, 0);
     // I had this two loops as one before, but because is a
     // recursive function, they MUST be separated, otherwise the command
     // can get the arguments from another cell 
