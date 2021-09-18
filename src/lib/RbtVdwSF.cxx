@@ -120,99 +120,99 @@ RbtDouble RbtVdwSF::MaxVdwRange(RbtTriposAtomType::eType t) const {
 
 //Initialise m_vdwTable with appropriate params for each atom type pair
 void RbtVdwSF::Setup() {
-  RbtTriposAtomType triposType;
-  RbtInt iTrace = GetTrace();
-  if (iTrace > 3) {
-    cout << endl << _CT << "::Setup()" << endl;
-    cout << "TYPE1,TYPE2,A,B,RMIN,KIJ,RMAX" << endl;
-  }
-  //Dummy read to force parsing of file, otherwise the first SetSection is overridden
-  RbtStringList secList = m_spVdwSource->GetSectionList();
-  RbtString _R("R");
-  RbtString _K("K");
-  RbtString _IP("IP");
-  RbtString _POL("POL");
-  RbtString _ISHBD("isHBD");
-  RbtString _ISHBA("isHBA");
-  m_vdwTable = RbtVdwTable(RbtTriposAtomType::MAXTYPES,RbtVdwRow(RbtTriposAtomType::MAXTYPES));
-  m_maxRange = RbtDoubleList(RbtTriposAtomType::MAXTYPES,0.0);
-  for (RbtInt i = RbtTriposAtomType::UNDEFINED; i < RbtTriposAtomType::MAXTYPES; i++) {
-    //Read the params for atom type i
-    RbtString stri = triposType.Type2Str(RbtTriposAtomType::eType(i));
-    m_spVdwSource->SetSection(stri);
-    RbtDouble Ri = m_spVdwSource->GetParameterValue(_R);//vdw radius
-    RbtDouble Ki = m_spVdwSource->GetParameterValue(_K);//Tripos 5.2 well depth
-    RbtBool hasIPi = m_spVdwSource->isParameterPresent(_IP);
-    RbtBool isHBDi = m_spVdwSource->isParameterPresent(_ISHBD);
-    RbtBool isHBAi = m_spVdwSource->isParameterPresent(_ISHBA);
-    RbtDouble Ii, alphai;
-    if (hasIPi) {
-      Ii = m_spVdwSource->GetParameterValue(_IP);//Ionisation potential, I
-      alphai = m_spVdwSource->GetParameterValue(_POL);//Polarisability, alpha
+    RbtTriposAtomType triposType;
+    RbtInt iTrace = GetTrace();
+    if (iTrace > 3) {
+        cout << endl << _CT << "::Setup()" << endl;
+        cout << "TYPE1,TYPE2,A,B,RMIN,KIJ,RMAX" << endl;
     }
-    //Symmetric matrix, so only need to generate one half (i.e. m_vdwTable[i][j] = m_vdwTable[j][i])
-    for (RbtInt j = i; j < RbtTriposAtomType::MAXTYPES; j++) {
-      //Read the params for atom type j
-      RbtString strj = triposType.Type2Str(RbtTriposAtomType::eType(j));
-      m_spVdwSource->SetSection(strj);
-      RbtDouble Rj = m_spVdwSource->GetParameterValue(_R);//vdw radius
-      RbtDouble Kj = m_spVdwSource->GetParameterValue(_K);//Tripos 5.2 well depth
-      RbtBool hasIPj = m_spVdwSource->isParameterPresent(_IP);
-      RbtBool isHBDj = m_spVdwSource->isParameterPresent(_ISHBD);
-      RbtBool isHBAj = m_spVdwSource->isParameterPresent(_ISHBA);
-      RbtDouble Ij, alphaj;
-      if (hasIPj) {
-	Ij = m_spVdwSource->GetParameterValue(_IP);//Ionisation potential, I
-	alphaj = m_spVdwSource->GetParameterValue(_POL);//Polarisability, alpha
-      }
+    //Dummy read to force parsing of file, otherwise the first SetSection is overridden
+    RbtStringList secList = m_spVdwSource->GetSectionList();
+    RbtString _R("R");
+    RbtString _K("K");
+    RbtString _IP("IP");
+    RbtString _POL("POL");
+    RbtString _ISHBD("isHBD");
+    RbtString _ISHBA("isHBA");
+    m_vdwTable = RbtVdwTable(RbtTriposAtomType::MAXTYPES,RbtVdwRow(RbtTriposAtomType::MAXTYPES));
+    m_maxRange = RbtDoubleList(RbtTriposAtomType::MAXTYPES,0.0);
+    for (RbtInt i = RbtTriposAtomType::UNDEFINED; i < RbtTriposAtomType::MAXTYPES; i++) {
+        //Read the params for atom type i
+        RbtString stri = triposType.Type2Str(RbtTriposAtomType::eType(i));
+        m_spVdwSource->SetSection(stri);
+        RbtDouble Ri = m_spVdwSource->GetParameterValue(_R);  // vdw radius
+        RbtDouble Ki = m_spVdwSource->GetParameterValue(_K);  // Tripos 5.2 well depth
+        RbtBool hasIPi = m_spVdwSource->isParameterPresent(_IP);
+        RbtBool isHBDi = m_spVdwSource->isParameterPresent(_ISHBD);
+        RbtBool isHBAi = m_spVdwSource->isParameterPresent(_ISHBA);
+        RbtDouble Ii = 0, alphai = 0;
+        if (hasIPi) {
+            Ii = m_spVdwSource->GetParameterValue(_IP);  // Ionisation potential, I
+            alphai = m_spVdwSource->GetParameterValue(_POL);  // Polarisability, alpha
+        }
+        //Symmetric matrix, so only need to generate one half (i.e. m_vdwTable[i][j] = m_vdwTable[j][i])
+        for (RbtInt j = i; j < RbtTriposAtomType::MAXTYPES; j++) {
+        //Read the params for atom type j
+        RbtString strj = triposType.Type2Str(RbtTriposAtomType::eType(j));
+        m_spVdwSource->SetSection(strj);
+        RbtDouble Rj = m_spVdwSource->GetParameterValue(_R);//vdw radius
+        RbtDouble Kj = m_spVdwSource->GetParameterValue(_K);//Tripos 5.2 well depth
+        RbtBool hasIPj = m_spVdwSource->isParameterPresent(_IP);
+        RbtBool isHBDj = m_spVdwSource->isParameterPresent(_ISHBD);
+        RbtBool isHBAj = m_spVdwSource->isParameterPresent(_ISHBA);
+        RbtDouble Ij = 0, alphaj = 0;
+        if (hasIPj) {
+            Ij = m_spVdwSource->GetParameterValue(_IP);//Ionisation potential, I
+            alphaj = m_spVdwSource->GetParameterValue(_POL);//Polarisability, alpha
+        }
 
-      //Create the vdw params for this atom type pair
-      vdwprms prms;
-      prms.rmin = Ri+Rj;//rmin is the sum of Ri and Rj
-      RbtDouble rmax = prms.rmin * m_rmax;
-      m_maxRange[i] = std::max(m_maxRange[i],rmax);//Keep track of max range for atom type i
-      m_maxRange[j] = std::max(m_maxRange[j],rmax);//Keep track of max range for atom type j
-      prms.rmax_sq = rmax * rmax;//Max range**2
-      //EITHER: Well depth is zero between donor Hs and acceptors
-      if ( (isHBDi && isHBAj) || (isHBDj && isHBAi)) {
-	prms.kij = 0.0;
-      }
-      //OR, use Standard L-J combination rules for well depth
-      //switch to this mode if either atom is missing IP values
-      else if (m_use_tripos || !hasIPi || !hasIPj) {
-	prms.kij = sqrt(Ki*Kj);
-      }
-      //OR, use GOLD rules based on ionisation potential and polarisability
-      else {
-	RbtDouble D = 0.345 * Ii * Ij * alphai * alphaj / (Ii + Ij);
-	RbtDouble C = 0.5 * D * pow(prms.rmin,6);
-	prms.kij = D * D / (4.0 * C);
-      }
-      //Having got the well depth, we can now generate A and B for either 4-8 or 6-12
-      RbtDouble rmin_pwr = (m_use_4_8) ? pow(prms.rmin,4) : pow(prms.rmin,6);
-      prms.A = prms.kij * rmin_pwr * rmin_pwr;
-      prms.B = 2.0 * prms.kij * rmin_pwr;
-      m_vdwTable[i][j] = prms;
-      m_vdwTable[j][i] = prms;
-      if (iTrace > 3) {
-	cout << triposType.Type2Str(RbtTriposAtomType::eType(i)) << ","
-	     << triposType.Type2Str(RbtTriposAtomType::eType(j)) << ","
-	     << prms.A << ","
-	     << prms.B << ","
-	     << prms.rmin << ","
-	     << prms.kij << ","
-	     << sqrt(prms.rmax_sq) << endl;
-      }
+        //Create the vdw params for this atom type pair
+        vdwprms prms;
+        prms.rmin = Ri+Rj;//rmin is the sum of Ri and Rj
+        RbtDouble rmax = prms.rmin * m_rmax;
+        m_maxRange[i] = std::max(m_maxRange[i],rmax);//Keep track of max range for atom type i
+        m_maxRange[j] = std::max(m_maxRange[j],rmax);//Keep track of max range for atom type j
+        prms.rmax_sq = rmax * rmax;//Max range**2
+        //EITHER: Well depth is zero between donor Hs and acceptors
+        if ( (isHBDi && isHBAj) || (isHBDj && isHBAi)) {
+            prms.kij = 0.0;
+        }
+        //OR, use Standard L-J combination rules for well depth
+        //switch to this mode if either atom is missing IP values
+        else if (m_use_tripos || !hasIPi || !hasIPj) {
+            prms.kij = sqrt(Ki*Kj);
+        }
+        //OR, use GOLD rules based on ionisation potential and polarisability
+        else {
+            RbtDouble D = 0.345 * Ii * Ij * alphai * alphaj / (Ii + Ij);
+            RbtDouble C = 0.5 * D * pow(prms.rmin,6);
+            prms.kij = D * D / (4.0 * C);
+        }
+        //Having got the well depth, we can now generate A and B for either 4-8 or 6-12
+        RbtDouble rmin_pwr = (m_use_4_8) ? pow(prms.rmin,4) : pow(prms.rmin,6);
+        prms.A = prms.kij * rmin_pwr * rmin_pwr;
+        prms.B = 2.0 * prms.kij * rmin_pwr;
+        m_vdwTable[i][j] = prms;
+        m_vdwTable[j][i] = prms;
+        if (iTrace > 3) {
+        cout << triposType.Type2Str(RbtTriposAtomType::eType(i)) << ","
+            << triposType.Type2Str(RbtTriposAtomType::eType(j)) << ","
+            << prms.A << ","
+            << prms.B << ","
+            << prms.rmin << ","
+            << prms.kij << ","
+            << sqrt(prms.rmax_sq) << endl;
+        }
+        }
     }
-  }
-  //Now we can regenerate the close range params
-  SetupCloseRange();
-  //Set the overall range automatically from the max range for each atom type
-  RbtDouble range = *(std::max_element(m_maxRange.begin(),m_maxRange.end()));
-  SetRange(range);
-  if (iTrace > 1) {
-    cout << "Overall max range for scoring function = " << range << endl;
-  }
+    //Now we can regenerate the close range params
+    SetupCloseRange();
+    //Set the overall range automatically from the max range for each atom type
+    RbtDouble range = *(std::max_element(m_maxRange.begin(),m_maxRange.end()));
+    SetRange(range);
+    if (iTrace > 1) {
+        cout << "Overall max range for scoring function = " << range << endl;
+    }
 }
 
 //Regenerate the short-range params only (called more frequently)
