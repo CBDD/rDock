@@ -717,8 +717,8 @@
             else {
                 chrom->Randomise();
             }
-            RbtInt i(0);
-            RbtDouble diff = chrom->CompareVector(refVec,i);
+            RbtUInt i(0);
+            RbtDouble diff = chrom->CompareVector(refVec, i);
             meanDiff += diff;
             if (iTrial == 0) {
                 minDiff = diff;
@@ -751,10 +751,10 @@
             chrom->Randomise();
             chrom2->Randomise();
             Rbt::Crossover(chrom, chrom2, chrom3, chrom4);
-            RbtInt i(0);
-            RbtDouble diff3 = chrom3->CompareVector(refVec,i);
+            RbtUInt i(0);
+            RbtDouble diff3 = chrom3->CompareVector(refVec, i);
             i = 0;
-            RbtDouble diff4 = chrom4->CompareVector(refVec,i);
+            RbtDouble diff4 = chrom4->CompareVector(refVec, i);
             meanDiff += diff3;
             meanDiff += diff4;
             if (iTrial == 0) {
