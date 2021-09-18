@@ -150,8 +150,8 @@ class Vector
 
     iterator begin() { return v_;}
     iterator end()   { return v_ + n_; }
-    const iterator begin() const { return v_;}
-    const iterator end() const  { return v_ + n_; }
+    const_iterator begin() const { return v_;}
+    const_iterator end() const { return v_ + n_; }
 
     // destructor
 

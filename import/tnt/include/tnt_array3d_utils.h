@@ -45,9 +45,15 @@ std::istream& operator>>(std::istream &s, Array3D<T> &A)
 	Array3D<T> B(M,N,K);
 
     for (int i=0; i<M; i++)
+	{
         for (int j=0; j<N; j++)
+		{
 			for (int k=0; k<K; k++)
+			{
             	s >>  B[i][j][k];
+			}
+		}
+	}
 
 	A = B;
     return s;

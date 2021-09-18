@@ -59,10 +59,12 @@ std::istream& operator>>(std::istream &s, Fortran_Array2D<T> &A)
 	Fortran_Array2D<T> B(M,N);
 
     for (int i=1; i<=M; i++)
+	{
         for (int j=1; j<=N; j++)
         {
             s >>  B(i,j);
         }
+	}
 
 	A = B;
     return s;

@@ -60,10 +60,12 @@ std::istream& operator>>(std::istream &s, Array2D<T> &A)
 	Array2D<T> B(M,N);
 
     for (int i=0; i<M; i++)
+	{
         for (int j=0; j<N; j++)
         {
             s >>  B[i][j];
         }
+	}
 
 	A = B;
     return s;
