@@ -25,7 +25,7 @@
     #define __FALLTHROUGH__ [[fallthrough]]
 #else
     #ifdef __GNUG__
-        #define __FALLTHROUGH__ __atribute__ ((fallthrough))
+        #define __FALLTHROUGH__ __attribute__ ((fallthrough))
     #endif
 #endif
 
