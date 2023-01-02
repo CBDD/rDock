@@ -29,8 +29,8 @@ jobs:
           mamba-version: "*"
           channels: acellera,conda-forge,defaults
 
-      - name: Install yum deps
-        run: sudo apt-get install -y gcc g++ make libpopt-dev libcppunit-dev
+      # - name: Install yum deps
+      #   run: sudo apt-get install -y gcc g++ make libpopt-dev libcppunit-dev
 
       # - name: Build rDock binaries
       #   working-directory: ./build
