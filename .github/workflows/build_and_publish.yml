@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest"]
+        os: ["ubuntu-20.04"]
         python-version: ["3.10"]
 
     defaults: # Needed for conda
@@ -34,7 +34,9 @@ jobs:
 
       - name: Build rDock binaries
         working-directory: ./build
-        run: make linux-g++-64
+        run: |
+          chmod a+x p4utils.pl
+          make linux-g++-64
 
       - name: Test rDock binaries
         working-directory: ./build
