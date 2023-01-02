@@ -6,7 +6,7 @@ make linux-g++-64
 make test
 
 cd ..
-cp lib/libRbt.so.rDock.0 "${PREFIX}/lib/libRbt.so.rDock"
+cp lib/libRbt.* "${PREFIX}/lib/"
 PERL_INSTALLSITELIB=$(perl -e 'use Config; print "$Config{installsitelib}"')
 mkdir -p "${PERL_INSTALLSITELIB}" "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/bin"
 cp lib/*.pl lib/*.pm "${PERL_INSTALLSITELIB}"
