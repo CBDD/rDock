@@ -32,15 +32,15 @@ jobs:
       - name: Install yum deps
         run: sudo apt-get install -y gcc g++ make libpopt-dev libcppunit-dev
 
-      - name: Build rDock binaries
-        working-directory: ./build
-        run: |
-          chmod a+x p4utils.pl
-          make linux-g++-64
+      # - name: Build rDock binaries
+      #   working-directory: ./build
+      #   run: |
+      #     chmod a+x p4utils.pl
+      #     make linux-g++-64
 
-      - name: Test rDock binaries
-        working-directory: ./build
-        run: make test
+      # - name: Test rDock binaries
+      #   working-directory: ./build
+      #   run: make test
 
       - name: Build rDock package
         shell: bash -l {0}

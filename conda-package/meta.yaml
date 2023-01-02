@@ -6,13 +6,28 @@ source:
   path: ..
 
 build:
-  number: 0
-  script:
-    - "mkdir -p $PREFIX/bin"
-    - "mkdir -p $PREFIX/lib"
-    - "cp bin/* $PREFIX/bin/"
-    - "cp lib/* $PREFIX/lib/"
-    - "chmod u+x $PREFIX/bin/*"
+  number: "1"
+
+requirements:
+  build:
+    - perl
+    - python
+  run:
+    - libgcc
+    - numpy
+    - perl
+
+test:
+  commands:
+    - rbcavity --help
+    - rbdock --help
+    - sdrmsd --help
+    - sdsort -h
 
 about:
-  license: open-source
+  home: http://rdock.sourceforge.net/
+  license: LGPLv3
+  license_file: license.txt
+  summary:
+    A Fast, Versatile and Open Source Program for Docking Ligands to Proteins
+    and Nucleic Acids
