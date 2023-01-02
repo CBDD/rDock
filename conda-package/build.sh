@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ $PY3K -eq 1 ]; then
+    2to3 -w -n build/test/RBT_HOME/check_test.py
+fi
+
 cd build/
 chmod a+x p4utils.pl
 make linux-g++-64
