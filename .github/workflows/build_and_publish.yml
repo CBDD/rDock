@@ -46,7 +46,7 @@ jobs:
         shell: bash -l {0}
         run: |
           conda install anaconda-client conda-build
-          conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload
+          conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
 
       - name: Upload to conda
         shell: bash -l {0}

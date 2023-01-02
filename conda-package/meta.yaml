@@ -10,6 +10,8 @@ build:
 
 requirements:
   build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - cppunit
     - gcc
     - perl
