@@ -1,6 +1,6 @@
 package:
-  name: rDock
-  version: 2022_v0
+  name: rdock
+  version: "2022.0"
 
 source:
   path: ..
