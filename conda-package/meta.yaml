@@ -10,12 +10,17 @@ build:
 
 requirements:
   build:
+    - cppunit
+    - gcc
     - perl
+    - popt
     - python
   run:
     - libgcc
     - numpy
     - perl
+    - popt
+    - openbabel
 
 test:
   commands:
