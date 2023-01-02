@@ -45,12 +45,10 @@ jobs:
       - name: Build rDock package
         shell: bash -l {0}
         run: |
-          export TAG_DESCRIBE=$(git describe)
-          export BUILD_VERSION=$(echo $TAG_DESCRIBE | sed 's/-/ /g' | awk '{print $1}')
           conda install anaconda-client conda-build
           conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload
 
       - name: Upload to conda
         shell: bash -l {0}
         run: |
-          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rDock-*.tar.bz2
+          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rdock-*.tar.bz2
