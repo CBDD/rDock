@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd build/
+chmod a+x p4utils.pl
 make linux-g++-64
 make test
 
