@@ -1,0 +1,54 @@
+name: Build package and publish
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.10"]
+
+    defaults: # Needed for conda
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+          submodules: true
+
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          mamba-version: "*"
+          channels: acellera,conda-forge,defaults
+
+      - name: Install yum deps
+        run: sudo apt-get install -y gcc g++ make libpopt-dev libcppunit-dev
+
+      - name: Build rDock binaries
+        working-directory: ./build
+        run: make linux-g++-64
+
+      - name: Test rDock binaries
+        working-directory: ./build
+        run: make test
+
+      - name: Build rDock package
+        shell: bash -l {0}
+        run: |
+          export TAG_DESCRIBE=$(git describe)
+          export BUILD_VERSION=$(echo $TAG_DESCRIBE | sed 's/-/ /g' | awk '{print $1}')
+          conda install anaconda-client conda-build
+          conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload
+
+      - name: Upload to conda
+        shell: bash -l {0}
+        run: |
+          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rDock-*.tar.bz2
