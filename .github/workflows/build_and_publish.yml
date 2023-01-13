@@ -27,7 +27,7 @@ jobs:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
           mamba-version: "*"
-          channels: acellera,conda-forge,defaults
+          channels: acellera,conda-forge
 
       - name: Install yum deps
         run: sudo apt-get install -y gcc g++ make libpopt-dev libcppunit-dev
