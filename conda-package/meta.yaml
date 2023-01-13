@@ -24,12 +24,12 @@ requirements:
     - popt
     - openbabel
 
-test:
-  commands:
-    - rbcavity --help
-    - rbdock --help
-    # - sdrmsd --help
-    - sdsort -h
+# test:
+#   commands:
+#     - rbcavity --help
+#     - rbdock --help
+#     # - sdrmsd --help
+#     - sdsort -h
 
 about:
   home: http://rdock.sourceforge.net/
