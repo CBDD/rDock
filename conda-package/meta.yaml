@@ -10,8 +10,6 @@ build:
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
     - cppunit
     - gcc
     - perl
@@ -24,12 +22,12 @@ requirements:
     - popt
     - openbabel
 
-# test:
-#   commands:
-#     - rbcavity --help
-#     - rbdock --help
-#     # - sdrmsd --help
-#     - sdsort -h
+test:
+  commands:
+    - rbcavity --help
+    - rbdock --help
+    - sdrmsd --help
+    - sdsort -h
 
 about:
   home: http://rdock.sourceforge.net/
