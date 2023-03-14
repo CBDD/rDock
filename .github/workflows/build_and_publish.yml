@@ -28,7 +28,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           uses-mamba: true
           miniforge-variant: Mambaforge
-          channels: acellera,conda-forge,defaults
+          channels: conda-forge,defaults
 
       - name: Install yum deps
         run: sudo apt-get install -y gcc g++ make libpopt-dev libcppunit-dev
@@ -46,7 +46,7 @@ jobs:
       - name: Build rDock package
         shell: bash -l {0}
         run: |
-          conda install anaconda-client conda-build
+          conda install anaconda-client conda-build conda-verify
           conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
 
       - name: Upload to conda
