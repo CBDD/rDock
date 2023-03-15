@@ -561,9 +561,9 @@ void RbtRealGrid::CreateArrays() {
 }
 
 void RbtRealGrid::ClearArrays() {
-  delete m_grid[1][1];
-  delete m_grid[1];
-  delete m_grid;
+  delete[] m_grid[1][1];
+  delete[] m_grid[1];
+  delete[] m_grid;
   m_grid = NULL;
   m_data = NULL;
 }

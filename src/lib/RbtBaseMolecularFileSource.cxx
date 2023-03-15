@@ -260,10 +260,15 @@ void RbtBaseMolecularFileSource::RemoveAtom(RbtAtomPtr spAtom)
   const RbtBondMap& bondMap = spAtom->GetBondMap();
 
   //First remove all bonds from the atom
-  for (RbtBondMapConstIter mapIter = bondMap.begin(); mapIter != bondMap.end(); mapIter++) {
+  for (RbtBondMapConstIter mapIter = bondMap.begin(); mapIter != bondMap.end();) {
+    // FIX: Stefan Doerr: The following two lines are necessary because the smart pointer of the bond
+    // is getting deallocated in the m_bondList.erase command which frees the object.
+    // With these two lines we increase the iterator before the object is freed.
+    RbtBond* pbond = (*mapIter).first;
+    mapIter++;
     if(bondMap.begin() == bondMap.end())
 	break;
-    RbtBondListIter bIter = Rbt::FindBond(m_bondList,Rbt::isBond_eq((*mapIter).first));
+    RbtBondListIter bIter = Rbt::FindBond(m_bondList,Rbt::isBond_eq(pbond));
     if (bIter != m_bondList.end()) {
 #ifdef _DEBUG
       cout << "Removing bond #" << (*bIter)->GetBondId()

@@ -964,10 +964,12 @@ void RbtMdlFileSource::SetupSegmentNames()
        seed != m_atomList.end();
        nSeg++,seed = Rbt::FindAtom(m_atomList,Rbt::isSegmentName_eq("H"))) {
     //New segment name (H1, H2 etc)
-    ostrstream ostr;
-    ostr << "H" << nSeg << ends;
-    RbtString strSegName(ostr.str());
-    delete ostr.str();
+    RbtString strSegName;
+    {  // Fix Stefan Doerr: Scope for ostrstream to go out of and release memory
+      ostrstream ostr;
+      ostr << "H" << nSeg << ends;
+      strSegName = RbtString(ostr.str());
+    }
     //Temporary atom list containing atoms to be processed
     //Note: this is a true list (not a vector) as we will be making numerous insertions and deletions
     (*seed)->SetSegmentName(strSegName);
