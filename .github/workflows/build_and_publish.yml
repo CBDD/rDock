@@ -49,6 +49,12 @@ jobs:
           conda install anaconda-client conda-build conda-verify
           conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
 
+      - name: Test package
+        run: |
+          conda install -q -y ./pkg/linux-64/rdock-*.tar.bz2
+          conda install -q -y pytest
+          pytest ./tests/
+
       - name: Upload to conda
         shell: bash -l {0}
         run: |
