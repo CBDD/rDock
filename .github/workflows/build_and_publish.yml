@@ -31,7 +31,9 @@ jobs:
           activate-environment: ../my-env
 
       - name: Install yum deps
-        run: yum -y groupinstall "Development Tools"
+        run: |
+          yum groupinstall -y "Development Tools"
+          yum install -y popt-devel cppunit-devel
 
       - name: Build rDock package
         shell: bash -l {0}
