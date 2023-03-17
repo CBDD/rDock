@@ -35,8 +35,9 @@ jobs:
       - name: Build rDock package
         shell: bash -l {0}
         run: |
+          git config --global --add safe.directory '*'
           conda install anaconda-client conda-build conda-verify
-          conda build conda-package/ --output-folder ./pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
+          conda build conda-package/ --output-folder ../pkg/ --no-include-recipe --no-anaconda-upload -c conda-forge
 
       - name: Test package
         run: |
@@ -47,4 +48,4 @@ jobs:
       - name: Upload to conda
         shell: bash -l {0}
         run: |
-          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ./pkg/*/rdock-*.tar.bz2
+          anaconda -t ${{ secrets.ANACONDA_TOKEN_BASIC }} upload -u acellera ../pkg/*/rdock-*.tar.bz2
