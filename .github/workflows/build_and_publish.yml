@@ -5,12 +5,14 @@ on: [push]
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-20.04"]
+        os: ["ubuntu-latest"]
         python-version: ["3.10"]
+        container: ["quay.io/pypa/manylinux2014_x86_64"]
 
     defaults: # Needed for conda
       run:
@@ -32,16 +34,6 @@ jobs:
 
       - name: Install yum deps
         run: sudo apt-get install -y gcc g++ make libpopt-dev libcppunit-dev
-
-      # - name: Build rDock binaries
-      #   working-directory: ./build
-      #   run: |
-      #     chmod a+x p4utils.pl
-      #     make linux-g++-64
-
-      # - name: Test rDock binaries
-      #   working-directory: ./build
-      #   run: make test
 
       - name: Build rDock package
         shell: bash -l {0}
