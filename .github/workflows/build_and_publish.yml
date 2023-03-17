@@ -30,7 +30,7 @@ jobs:
           channels: conda-forge,defaults
 
       - name: Install yum deps
-        run: yum install -y gcc-c++ make popt-devel cppunit-devel
+        run: yum -y groupinstall "Development Tools"
 
       - name: Build rDock package
         shell: bash -l {0}
