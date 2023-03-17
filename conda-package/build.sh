@@ -11,10 +11,7 @@ make test
 
 cd ..
 cp lib/libRbt.* "${PREFIX}/lib/"
-PERL_INSTALLSITELIB=$(perl -e 'use Config; print "$Config{installsitelib}"')
-mkdir -p "${PERL_INSTALLSITELIB}" "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/bin"
-cp lib/*.pl lib/*.pm "${PERL_INSTALLSITELIB}"
-mkdir -p "${PREFIX}/lib/perl5/site_perl/"
+mkdir -p "${PREFIX}/lib/perl5/site_perl/" "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/bin"
 cp lib/*.pl lib/*.pm "${PREFIX}/lib/perl5/site_perl/"
 mv data/ "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/"
 mkdir -p "${PREFIX}/bin/"
