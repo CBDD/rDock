@@ -259,20 +259,25 @@ void RbtBaseMolecularFileSource::RemoveAtom(RbtAtomPtr spAtom)
 	//DM 31 Oct 2000 - return by const ref
   const RbtBondMap& bondMap = spAtom->GetBondMap();
 
-  //First remove all bonds from the atom
-  for (RbtBondMapConstIter mapIter = bondMap.begin(); mapIter != bondMap.end(); mapIter++) {
-    if(bondMap.begin() == bondMap.end())
-	break;
-    RbtBondListIter bIter = Rbt::FindBond(m_bondList,Rbt::isBond_eq((*mapIter).first));
-    if (bIter != m_bondList.end()) {
+  // select bonds to be removed
+  std::vector<RbtBondListIter> bondIterators;
+  for (const auto &mapIter : bondMap)
+  {
+    RbtBondListIter bIter = Rbt::FindBond(m_bondList, Rbt::isBond_eq((mapIter).first));
+    if (bIter != m_bondList.end())
+      bondIterators.push_back(bIter);
+  }
+
+  // and then remove them
+  for (auto bIter : bondIterators)
+  {
 #ifdef _DEBUG
-      cout << "Removing bond #" << (*bIter)->GetBondId()
-	   << " (" << (*bIter)->GetAtom1Ptr()->GetAtomName()
-	   << "-" << (*bIter)->GetAtom2Ptr()->GetAtomName()
-	   << ")" << endl;
+    cout << "Removing bond #" << (*bIter)->GetBondId()
+         << " (" << (*bIter)->GetAtom1Ptr()->GetAtomName()
+         << "-" << (*bIter)->GetAtom2Ptr()->GetAtomName()
+         << ")" << endl;
 #endif //_DEBUG
-      m_bondList.erase(bIter);//Erase the bond
-    }
+    m_bondList.erase(bIter);
   }
 
   //Now we have an isolated atom we can remove it
