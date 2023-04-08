@@ -79,12 +79,13 @@ bin_names   = rbdock rbcavity rbmoegrid rblist rbcalcgrid
 bins        = $(addprefix bin/, $(bin_names))
 bin_sources = $(addprefix src/exe/, $(addsuffix .cxx $(bins)))
 
+
 .PHONY:	\
 	install \
 	target_folders build_directories \
 	lib bin scripts \
 	build build_lib build_bin \
-	test \
+	test test_dock_run test_rbcavity \
 	clean clean_bin clean_lib veryclean \
 
 ## User directed targets
@@ -108,8 +109,16 @@ build_bin: build_directories
 build_lib: build_directories
 	$(MAKE) lib
 
-test:
-	@echo "[test] target to be implemented"
+test: build
+	$(MAKE) test_rbcavity test_dock_run
+
+test_dock_run: build tests/data/1YET_test.as
+	mkdir -p tests/results
+	cd tests/data ; RBT_ROOT=../.. LD_LIBRARY_PATH=../../lib:$(LD_LIBRARY_PATH) ../../bin/rbdock -r1YET_test.prm -i 1YET_c.sd -p dock.prm -n 1 -s 48151623 -o ../results/1YET_test_out > ../results/1YET_test_out.log
+	
+	@tests/scripts/check_results.sh ./tests/data/1YET_reference_out.sd ./tests/results/1YET_test_out.sd
+
+test_rbcavity: tests/data/1koc.as tests/data/1YET.as tests/data/1YET_test.as
 
 clean:
 	@rm -rf obj
@@ -119,6 +128,9 @@ clean_bin:
 
 clean_lib:
 	@rm -f lib/libRbt.so
+
+clean_tests:
+	@rm -rf tests/results tests/data/*.as
 
 veryclean: clean clean_bin clean_lib
 
@@ -145,9 +157,13 @@ obj/GP/%.o: src/GP/%.cxx
 scripts: build_directories
 	@cp -r scripts/* bin/
 
-lib: $(objects)
-	@echo $(objects)
+lib: lib/libRbt.so
+
+lib/libRbt.so: $(objects)
 	$(CXX) $(CXX_FLAGS) -shared -L$(LIBRARY) $^ -o lib/libRbt.so $(LIBS)
 
-bin/%: src/exe/%.cxx lib
+bin/%: src/exe/%.cxx lib/libRbt.so
 	$(CXX) $(CXX_FLAGS) $(INCLUDE) -L$(LIBRARY) -o $@ $< $(LIBS)
+
+tests/data/%.as: tests/data/%.prm bin/rbcavity
+	cd tests/data ; RBT_ROOT=../.. LD_LIBRARY_PATH=../../lib:$(LD_LIBRARY_PATH) ../../bin/rbcavity -r$(notdir $<) -was
