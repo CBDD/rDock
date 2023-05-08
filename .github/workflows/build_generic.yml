@@ -1,0 +1,26 @@
+on:
+  workflow_call:
+    inputs:
+      distribution:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Build base image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false
+        tags: rdock-${{ inputs.distribution }}:base
+        file: .github/docker/Dockerfile.${{ inputs.distribution }}
+        target: base
+        load: true
+
+    - name: Build rDock
+      run: docker run --rm -v $PWD:/rdock -w /rdock/build rdock-${{ inputs.distribution }}:base make linux-g++-64 -j 2
