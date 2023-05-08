@@ -1,0 +1,23 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE RNA APTAMER COMPLEXED WITH ARGININE, NMR
+RECEPTOR_TOPOL_FILE		1koc.psf       # topology file for receptor
+RECEPTOR_COORD_FILE		1koc.crd       # coordinate file for receptor
+RECEPTOR_SEGMENT_NAME		P1KO           # Segment name for receptor in the above files
+RECEPTOR_MASSES_FILE		masses.rtf     # CHARMm file containing atom types
+RECEPTOR_FLEX			3.0
+SECTION MAPPER
+        SITE_MAPPER     RbtLigandSiteMapper
+        VOL_INCR        0.0
+        GRIDSTEP        0.5
+        RADIUS          4.0
+        REF_MOL         1koc_c.sd
+        SMALL_SPHERE    1.0
+        TRACE           1
+        MIN_VOLUME      100
+        MAX_CAVITIES    1
+END_SECTION
+# Restraints definition
+SECTION CAVITY
+        SCORING_FUNCTION        RbtCavityGridSF
+        WEIGHT                  1.0
+END_SECTION	
