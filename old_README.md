@@ -1,4 +1,11 @@
-# rDOCK BUILD INSTRUCTIONS
+# rDOCK BUILD INSTRUCTIONS (DEPRECATED)
+
+## WARNING:
+
+This is the old build system, which is deprecated and will be removed in the future.
+Please use the new build system, which is much simpler, convenient, and easier to use.
+For more information, please check the main README.md file.
+If you really need to use the old build system, set the environment variable USE_OLD_BUILD_SYSTEM to 1 before running make.
 
 ```
 In this file you have the basic commands for installing rDock in 32- or 64-bits linux computers.
@@ -46,11 +53,11 @@ $ cd rDock_2021.1_src/build
 And run, either:
 
 ```
-$ make linux-g++           #for 32-bit build with g++ compiler
-$ make linux-g++-64        #for 64-bit build with g++ compiler
+$ USE_DEPRECATED_BUILD_SYSTEM=1 make linux-g++           #for 32-bit build with g++ compiler
+$ USE_DEPRECATED_BUILD_SYSTEM=1 make linux-g++-64        #for 64-bit build with g++ compiler
 ```
 
-If wish to use a different compiler/architecture combination, or if you wish to
+If you wish to use a different compiler/architecture combination, or if you wish to
 change the compiler flags, see below.
 
 The built libraries and executables are copied to their run-time locations
