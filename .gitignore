@@ -1,0 +1,16 @@
+# object files and libraries
+*.o
+*.so
+*.so.1
+*.so.1.0
+
+# built binaries
+bin/
+obj/
+lib/
+
+# build folders
+build/linux-g++-64
+
+# test files
+*.as
