@@ -23,4 +23,7 @@ jobs:
         load: true
 
     - name: Build rDock
-      run: docker run --rm -v $PWD:/rdock -w /rdock/build rdock-${{ inputs.distribution }}:base make linux-g++-64 -j 2
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make -j 2
+    
+    - name: Test rDock
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make test
