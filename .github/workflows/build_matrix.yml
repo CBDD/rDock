@@ -1,0 +1,22 @@
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false  # we want all the flows to run, to success or failure
+      matrix:
+        distribution:
+          - ubuntu-20.04
+          - ubuntu-22.04
+          - debian-10
+          - debian-11
+          - centos-stream8
+    uses: ./.github/workflows/build_generic.yml
+    with:
+      distribution: ${{ matrix.distribution }}
