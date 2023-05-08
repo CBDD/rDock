@@ -59,7 +59,8 @@ endif
 
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
-LIBS                        += -lm -lpopt -lRbt
+LIB_DEPENDENCIES            := -lpopt -lm
+LIBS                        += $(LIB_DEPENDENCIES) -lRbt
 INCLUDE                     := $(addprefix -I./, $(shell find include/ -type d )) $(addprefix -I./, $(shell find import/ -type d ))
 LIBRARY                     := ./lib
 
@@ -163,7 +164,7 @@ scripts: build_directories
 lib: lib/libRbt.so
 
 lib/libRbt.so: $(objects)
-	$(CXX) $(CXX_FLAGS) -shared -L$(LIBRARY) $^ -o lib/libRbt.so $(LIBS)
+	$(CXX) $(CXX_FLAGS) -shared -L$(LIBRARY) $^ -o lib/libRbt.so $(LIB_DEPENDENCIES)
 
 bin/%: src/exe/%.cxx lib/libRbt.so
 	$(CXX) $(CXX_FLAGS) $(INCLUDE) -L$(LIBRARY) -o $@ $< $(LIBS)
