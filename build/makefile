@@ -55,7 +55,14 @@ DIST_SRC =	$(PRODUCT)/$(CODELINE)/include/ \
                 $(PRODUCT)/$(CODELINE)/import/simplex/ \
                 $(PRODUCT)/$(CODELINE)/import/tnt/
 
+USE_DEPRECATED_BUILD_SYSTEM ?= 0
 
+ifeq ($(USE_DEPRECATED_BUILD_SYSTEM),0)
+  $(info this way of building rDock is now deprecated, and will be removed soon.)
+  $(info please use the new build system as described in the README.md file)
+  $(info if you really need the old build system set USE_DEPRECATED_BUILD_SYSTEM=1 in your environment and try again)
+  $(error [ERROR] this way of building rDock is now deprecated)
+endif
 
 
 # Environment for running rDock unit tests
@@ -108,7 +115,7 @@ test:	./test/RBT_HOME/1koc.as ./test/RBT_HOME/1YET.as ./test/RBT_HOME/1YET_test.
 	@echo ""
 	@$(RBT_ROOT)/bin/rbdock -r1YET_test.prm -i ./test/RBT_HOME/1YET_c.sd -p dock.prm -n 1 -s 48151623 -o 1YET_test_out > 1YET_test_out.log
 	@mv 1YET_test_out.log 1YET_test_out.sd ./test/RBT_HOME/
-	@python ./test/RBT_HOME/check_test.py ./test/RBT_HOME/1YET_reference_out.sd ./test/RBT_HOME/1YET_test_out.sd
+	@test/RBT_HOME/check_results.sh ./test/RBT_HOME/1YET_reference_out.sd ./test/RBT_HOME/1YET_test_out.sd
 
 ./test/unit_test:
 	$(warning $@ executable not found)
