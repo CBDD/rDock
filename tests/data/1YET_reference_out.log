@@ -1,0 +1,50 @@
+***********************************************
+Copyright (C) RiboTargets 1998-2003, Vernalis (R&D) Ltd 2003-2006
+Executable:	rbdock ($Id: //depot/dev/client3/rdock/2006.1/src/exe/rbdock.cxx#4 $)
+Library:	libRbt.so/2006.1/901 2006/09/27
+RBT_ROOT:	/mds/sergi/rdock/2006.1
+RBT_HOME:	/home/sergi
+Current dir:	/home/sergi/work/dev/rdock/rDock_2013_SRC/build/test/RBT_HOME
+Date:		Fri Nov  8 16:37:58 2013
+***********************************************
+
+
+Command line args:
+ -i 1YET_c.sd
+ -r 1YET.prm
+ -p dock.prm
+ -o 1YET_reference_out
+ -n 1
+ -s 48151623
+Reading polar hydrogens only from ligand SD file
+
+DOCKING PROTOCOL:
+/mds/sergi/rdock/2006.1/data/scripts/dock.prm
+Free docking (indexed VDW)
+
+RECEPTOR:
+1YET.prm
+R_1YET
+
+DOCKING SITE
+Total volume 2060.88 A^3
+Cavity #1	Size=16487 points; Vol=2060.88 A^3; Min=(24,-3,15.5); Max=(44,16.5,35); Center=(34.7872,6.08871,24.663); Extent=(20,19.5,19.5)
+
+
+No solvent
+
+------------- Terminate filter 0------------
+
+if (SCORE.NRUNS - 0 ) > 0 then
+	0.0 
+else
+	-1.0 
+end
+
+
+**************************************************
+RECORD #1
+NAME:   L_1YET
+RANDOM_NUMBER_SEED:           48151623
+
+END OF RUN
