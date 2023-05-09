@@ -12,10 +12,10 @@ jobs:
       fail-fast: false  # we want all the flows to run, to success or failure
       matrix:
         distribution:
-          - ubuntu-20.04
           - ubuntu-22.04
-          - debian-10
+          - ubuntu-20.04
           - debian-11
+          - debian-10
           - centos-stream8
     uses: ./.github/workflows/build_generic.yml
     with:
