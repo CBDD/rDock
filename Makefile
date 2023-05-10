@@ -36,12 +36,26 @@
 #
 #   CXX_EXTRA_FLAGS: extra flags to pass to the compiler. Default: empty
 #
+#   LEGACY_BUILD: set to YES for legacy systems that do not support modern c++ standards (like centos7)
+#  				  this will enable the -fpermissive and -Wno-deprecated options too.
+#                 legacy build is deprecated, disabled by default, and will be removed in future
+#                 releases.
+#
 
 PREFIX                      ?= /usr
 CONFIG                      ?= RELEASE
 CXX                         ?= g++
+
+LEGACY_BUILD				?= NO
+ifeq ($(LEGACY_BUILD),YES)
+	CXX_STD					?= c++11
+	CXX_BASE_FLAGS          += -Wno-deprecated -fpermissive
+else
+	CXX_STD					?= c++14
+endif
+
 CXX_EXTRA_FLAGS				?=
-CXX_BASE_FLAGS              += -pipe -std=c++14 -fPIC -fpermissive
+CXX_BASE_FLAGS              += -pipe -std=$(CXX_STD) -fPIC -fpermissive
 CXX_DEBUG_CONFIG_FLAGS      += -O0 -g
 CXX_RELEASE_CONFIG_FLAGS    += -O3 -ffast-math
 CXX_WARNING_FLAGS           += -Wno-deprecated
