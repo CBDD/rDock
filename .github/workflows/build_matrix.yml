@@ -17,6 +17,7 @@ jobs:
           - debian-11
           - debian-10
           - centos-stream8
+          - centos-centos7
     uses: ./.github/workflows/build_generic.yml
     with:
       distribution: ${{ matrix.distribution }}
