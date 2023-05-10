@@ -1,90 +1,85 @@
-# rDOCK BUILD INSTRUCTIONS
+[![.github/workflows/build_matrix.yml](https://github.com/CBDD/rDock/actions/workflows/build_matrix.yml/badge.svg?branch=main)](https://github.com/CBDD/rDock/actions/workflows/build_matrix.yml)
+# rDock
+
+## Quick start guide (new build system)
+
+### Requirements
+
+make sure the following requirements are installed and available:
+
+* make
+* a c++ compiler (g++ by default)
+* popt and development headers (libpopt0 and libpopt-dev in ubuntu)
+* git (optional if you download the code directly)
+
+if you're running ubuntu, you can get all of them by running
 
 ```
-In this file you have the basic commands for installing rDock in 32- or 64-bits linux computers.
- For a more detailed explanation, please open the Getting Started guide or full documentation 
- in our webpage or in docs folder.
+sudo apt update && sudo apt install -y make git libpopt0 libpopt-dev g++
 ```
 
-## BACKGROUND
+you can also check requirements for other distributions in the [Dockerfiles](https://github.com/CBDD/rDock/blob/main/.github/docker) used for CI
 
-rDock is written in C++ and makes heavy use of the C++ Standard Template Library (STL).
-All source code is compiled into a single shared library (libRbt.so).
-The executables are light-weight command-line applications linked with libRbt.so.
+### Compilation
 
-rDock should compile on the majority of Unix/Linux platforms with little or no
-modification. However, only the following combinations have been thoroughly
-tested:
-
-openSUSE 32 and 64 bits.
-Ubuntu 32 and 64 bits.
-*  Both with compiler versions higher than 3.3.
-
-
-### PREREQUISITES:
-
-Make sure you have the following packages installed:
-
-*  gcc		GNU C compiler (or your preferred C compiler)
-*  g++		GNU C++ compiler (or your preferred C++ compiler)
-*  make
-*  popt		Command-line argument processing (run-time)
-*  popt-devel	Command-line argument processing (compile-time)
-*  cppunit		C++ unit testing framework (port of JUnit)
-*  cppunit-devel		C++ unit testing framework (port of JUnit)
-
-After installing these dependencies, please follow the following steps:
-
-## BASIC BUILD INSTRUCTIONS:
-
-### Step 1) BUILD
-
-* Change current directory to build folder:
-```
-$ cd rDock_2021.1_src/build
-```
-And run, either:
+clone and compile the project
 
 ```
-$ make linux-g++           #for 32-bit build with g++ compiler
-$ make linux-g++-64        #for 64-bit build with g++ compiler
+git clone https://github.com/CBDD/rDock
+cd rDock
+make
 ```
 
-If wish to use a different compiler/architecture combination, or if you wish to
-change the compiler flags, see below.
-
-The built libraries and executables are copied to their run-time locations
-(../lib and ../bin) as part of Step 1.
-
-### Step 2) TEST
-
+if you have multiple cores available, you may want to speed up the build process running make like this (replace 4 with the number of parallel processes you'd like to run)  
 ```
-$ make test                #Runs rDock unit tests
+make -j 4
 ```
 
-If the test has succeed, you are done, enjoy using rDock!
-Otherwise, please check your dependencies and all the previous commands or go to 
-Support Section in the webpage (http://rdock.sourceforge.net) to ask for help.
+for advanced compiling options, see the Makefile in this folder
 
-### Step 3) INSTALL
+### Testing
 
-You can either run rDock directly from the build location initial testing), or 
-install the binaries and data files to a new location.
-
-Set the necessary environmental variables for running rDock in the command line.
-(for example, in a bash shell):
+once the compilation process is finished, run tests to validate the built binaries
 
 ```
-$ export RBT_ROOT=/path/to/rDock/installation/
-$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$RBT_ROOT/lib
-$ export PATH=$PATH:$RBT_ROOT/bin
+make test
 ```
 
-### OTHER MAKE TARGETS
+### Installation
 
-`make src_dist` 		Creates source distribution
+select the location for rDock binaries, library and development headers to be installed.
 
-`make clean`              Removes all intermediate build files
+then set the PREFIX environment variable to point to this folder, for example ~/.local
 
-`make distclean`         Also removes installed libs and exes in ../lib and ../bin
 
+```
+PREFIX=~/.local make install
+```
+
+if PREFIX is not set, it will default to /usr, installing rDock for all users (you'll need sudo unless you're root):
+
+```
+sudo make install
+```
+
+make sure to add the installation folders to your PATH and LD_LIBRARY_PATH if necessary, and to set the RBT_ROOT environment variable:
+
+```
+export PATH=~/.local/bin:$PATH
+export LD_LIBRARY_PATH=~/.local/lib:$LD_LIBRARY_PATH
+export RBT_ROOT=~/.local/rDock
+```
+
+you may want to add these lines to your profile/configuration files like ~/.bashrc
+
+## Old build system (deprecated):
+
+all the information about how to use the old build system is available in the [old readme file](https://github.com/CBDD/rDock/blob/main/old_README.md) file.  
+if you really need to use it, set the environment variable USE_OLD_BUILD_SYSTEM to 1 before running make
+
+```
+cd build
+USE_OLD_BUILD_SYSTEM=1 make linux-g++-64 -j 4
+```
+
+this build system is deprecated and will be removed in the future.
