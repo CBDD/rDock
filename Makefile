@@ -51,6 +51,7 @@ ifeq ($(LEGACY_BUILD),YES)
 	CXX_STD					?= c++11
 	CXX_BASE_FLAGS          += -Wno-deprecated -fpermissive
 else
+	CXX_BASE_FLAGS		  	+= -Werror
 	CXX_STD					?= c++14
 endif
 
