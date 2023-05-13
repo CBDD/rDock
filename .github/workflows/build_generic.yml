@@ -19,8 +19,8 @@ jobs:
         tags: rdock-${{ inputs.distribution }}:base
         file: .github/docker/Dockerfile.${{ inputs.distribution }}
         target: base
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        cache-from: type=gha,scope=${{ inputs.distribution }}
+        cache-to: type=gha,mode=max,scope=${{ inputs.distribution }}
         load: true
 
     - name: Build rDock
