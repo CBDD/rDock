@@ -214,6 +214,7 @@ RbtDouble RbtStringContext::Get(RbtModelPtr lig, RbtString name)
         return negChg;
     if (name == "LIG_TOT_CHG")
         return (posChg + negChg);
+    return 0.;
 }
 
 RbtDouble RbtStringContext::Get(RbtModelPtr spReceptor, 
@@ -308,6 +309,7 @@ RbtDouble RbtStringContext::Get(RbtModelPtr spReceptor,
         return negChg;
     if (name == "SITE_TOT_CHG")
         return (posChg + negChg);
+    return 0.;
 }
 
 RbtDouble RbtStringContext::Get(RbtBaseSF* spSF, RbtString name, 
