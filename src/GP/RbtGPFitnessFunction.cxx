@@ -41,6 +41,7 @@ RbtGPFitnessFunction& RbtGPFitnessFunction::operator=
         objective = g.objective;
         fitness = g.fitness;
     }
+    return *this;
 }
 
 

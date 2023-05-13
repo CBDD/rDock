@@ -68,7 +68,7 @@ class RbtAromIdxSF : public RbtBaseInterSF, public RbtBaseIdxSF, public RbtAnnot
   //Generic scoring function params
   struct f1prms {
     RbtDouble R0,DRMin,DRMax,slope;
-    f1prms::f1prms(RbtDouble R, RbtDouble DMin, RbtDouble DMax)
+    f1prms(RbtDouble R, RbtDouble DMin, RbtDouble DMax)
       : R0(R),DRMin(DMin),DRMax(DMax),slope(1.0/(DMax-DMin)) {};
   };
 
