@@ -21,6 +21,7 @@ jobs:
         target: base
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        load: true
 
     - name: Build rDock
       run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make -j 2
