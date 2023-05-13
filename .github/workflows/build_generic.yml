@@ -16,11 +16,11 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        push: false
         tags: rdock-${{ inputs.distribution }}:base
         file: .github/docker/Dockerfile.${{ inputs.distribution }}
         target: base
-        load: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - name: Build rDock
       run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make -j 2
