@@ -17,8 +17,10 @@
 
 RbtString RbtChromDihedralRefData::_CT = "RbtChromDihedralRefData";
 
-RbtChromDihedralRefData::RbtChromDihedralRefData(RbtBondPtr spBond, RbtAtomList tetheredAtoms, RbtDouble stepSize,
-                                                 RbtChromElement::eMode mode, RbtDouble maxDihedral):
+RbtChromDihedralRefData::RbtChromDihedralRefData(
+    RbtBondPtr spBond, RbtAtomList tetheredAtoms, RbtDouble stepSize, RbtChromElement::eMode mode,
+    RbtDouble maxDihedral
+):
     m_stepSize(stepSize), m_mode(mode), m_maxDihedral(maxDihedral) {
     Setup(spBond, tetheredAtoms);
     m_initialValue = GetModelValue();

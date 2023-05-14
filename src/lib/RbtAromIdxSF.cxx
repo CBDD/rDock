@@ -116,7 +116,8 @@ void RbtAromIdxSF::SetupReceptor() {
                 RbtAtomPtr spRecepPiAtom1 = recepPiAtoms[0];
                 RbtAtomPtr spRecepPiAtom2 = recepPiAtoms[1];
                 RbtInteractionCenter* pIntnCenter(
-                    new RbtInteractionCenter(spPseudoAtom, spRecepPiAtom1, spRecepPiAtom2));
+                    new RbtInteractionCenter(spPseudoAtom, spRecepPiAtom1, spRecepPiAtom2)
+                );
                 m_recepAromList.push_back(pIntnCenter);
             }
         }
@@ -154,7 +155,8 @@ void RbtAromIdxSF::SetupReceptor() {
                     RbtAtomPtr spRecepPiAtom1 = recepPiAtoms[0];
                     RbtAtomPtr spRecepPiAtom2 = recepPiAtoms[1];
                     RbtInteractionCenter* pIntnCenter(
-                        new RbtInteractionCenter(spPseudoAtom, spRecepPiAtom1, spRecepPiAtom2));
+                        new RbtInteractionCenter(spPseudoAtom, spRecepPiAtom1, spRecepPiAtom2)
+                    );
                     m_recepAromList.push_back(pIntnCenter);
                     m_spAromGrid->SetInteractionLists(pIntnCenter, idxIncr);
                 }
@@ -307,8 +309,9 @@ void RbtAromIdxSF::ParameterUpdated(const RbtString& strName) {
 }
 
 // The actual aromatic score, between a given interaction center and a list of near neighbour centers
-RbtDouble RbtAromIdxSF::AromScore(const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List,
-                                  const f1prms& Rprms, const f1prms& Aprms) const {
+RbtDouble RbtAromIdxSF::AromScore(
+    const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List, const f1prms& Rprms, const f1prms& Aprms
+) const {
     RbtDouble s(0.0);
     if (IC2List.empty()) {
         return s;

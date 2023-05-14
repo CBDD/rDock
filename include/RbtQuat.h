@@ -129,8 +129,10 @@ class RbtQuat {
 
     // Multiplication (non-commutative)
     inline friend RbtQuat operator*(const RbtQuat& quat1, const RbtQuat& quat2) {
-        return RbtQuat(quat1.s * quat2.s - (quat1.v).Dot(quat2.v),
-                       quat1.s * quat2.v + quat1.v * quat2.s + (quat1.v).Cross(quat2.v));
+        return RbtQuat(
+            quat1.s * quat2.s - (quat1.v).Dot(quat2.v),
+            quat1.s * quat2.v + quat1.v * quat2.s + (quat1.v).Cross(quat2.v)
+        );
     }
 
     // Scalar product

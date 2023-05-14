@@ -37,7 +37,8 @@ RbtAtomListList DT::QueryModel(RbtModelPtr spModel, const RbtString &strSmart, R
         r2d[rID] = dID;
         d2r[dID] = rID;
         atoms.push_back(
-            dt_addatom(m, (*at)->GetAtomicNo(), (*at)->GetNumImplicitHydrogens() + (*at)->GetCoordinationNumber(1)));
+            dt_addatom(m, (*at)->GetAtomicNo(), (*at)->GetNumImplicitHydrogens() + (*at)->GetCoordinationNumber(1))
+        );
         dt_setarborder(atoms.back(), dID);
         // Workaround for terminal -ve charged acids
         // We want to use the SMILES string we generate from the dt_mol

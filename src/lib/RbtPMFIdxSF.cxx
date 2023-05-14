@@ -45,8 +45,10 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName): RbtBaseSF(_CT, aName) {
     // we are building a grid for slopes, so we can get the plateau
     // info similarly like the PMF values
     RbtCoord theSlopeGridCoords(1.0, 1.0, 1.0);
-    theSlopeGrid = RbtRealGridPtr(new RbtRealGrid(theSlopeGridCoords, theSlopeGridCoords, 2,  // cPlStart & cPlVal
-                                                  nTypes, nTypes));
+    theSlopeGrid = RbtRealGridPtr(new RbtRealGrid(
+        theSlopeGridCoords, theSlopeGridCoords, 2,  // cPlStart & cPlVal
+        nTypes, nTypes
+    ));
 
     // setup the grids for every types
     // first read .pmf files from directory
@@ -66,11 +68,12 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName): RbtBaseSF(_CT, aName) {
 
         // iterate through each individual PMF
         for (int j = 0; j < thePMF[i].size(); j++) {
-            RbtPMFType rType = Rbt::PMFStr2Type(theFileNames[i].substr(0, 2));         // receptor type
-            RbtPMFType lType = Rbt::PMFStr2Type(theFileNames[i].substr(2, 2));         // ligand type
-            thePMFGrid->SetValue(thePMFGrid->GetIX((RbtDouble)thePMF[i][j].distance),  // distance
-                                 rType, lType,
-                                 thePMF[i][j].density  // the density value
+            RbtPMFType rType = Rbt::PMFStr2Type(theFileNames[i].substr(0, 2));  // receptor type
+            RbtPMFType lType = Rbt::PMFStr2Type(theFileNames[i].substr(2, 2));  // ligand type
+            thePMFGrid->SetValue(
+                thePMFGrid->GetIX((RbtDouble)thePMF[i][j].distance),  // distance
+                rType, lType,
+                thePMF[i][j].density  // the density value
             );
         }
     }
@@ -78,12 +81,16 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName): RbtBaseSF(_CT, aName) {
     for (int i = 0; i < theSlopeIndex.size(); i++) {
         RbtPMFType rType = Rbt::PMFStr2Type(theFileNames[i].substr(0, 2));  // receptor type
         RbtPMFType lType = Rbt::PMFStr2Type(theFileNames[i].substr(2, 2));  // ligand type
-        theSlopeGrid->SetValue(cPlStart,                                    // index 1 for the distance where the
-                               rType, lType,                                // plateau starts
-                               theSlopeIndex[i].distance);
-        theSlopeGrid->SetValue(cPlVal,        // that is the actual value
-                               rType, lType,  // can be more than 3.0
-                               theSlopeIndex[i].density);
+        theSlopeGrid->SetValue(
+            cPlStart,      // index 1 for the distance where the
+            rType, lType,  // plateau starts
+            theSlopeIndex[i].distance
+        );
+        theSlopeGrid->SetValue(
+            cPlVal,        // that is the actual value
+            rType, lType,  // can be more than 3.0
+            theSlopeIndex[i].density
+        );
     }
 #ifdef _DEBUG1
     // checking values for type cP only. This test assumes the original
@@ -280,11 +287,12 @@ RbtDouble RbtPMFIdxSF::RawScore() const {
     if (bAnnotate) {
         for (RbtAtomRListConstIter sIter = theReceptorRList.begin(); sIter != theReceptorRList.end(); ++sIter) {
             RbtAtom* lAtom = (*theLigandRList.begin());
-            RbtAnnotationPtr spAnnotation(
-                new RbtAnnotation(lAtom,                      // ligand
-                                  (*sIter),                   // receptor
-                                  0.0,                        // distance
-                                  (*sIter)->GetUser2Value())  // cumulative receptor PMF contribution
+            RbtAnnotationPtr spAnnotation(new RbtAnnotation(
+                lAtom,     // ligand
+                (*sIter),  // receptor
+                0.0,       // distance
+                (*sIter)->GetUser2Value()
+            )  // cumulative receptor PMF contribution
             );
             AddAnnotation(spAnnotation);
             (*sIter)->SetUser2Value(0.0);  // clean old values

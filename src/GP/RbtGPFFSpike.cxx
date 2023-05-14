@@ -73,8 +73,9 @@ void RbtGPFFSpike::ReadTables(istream& in, RbtReturnTypeArray& it, RbtReturnType
     sft = SFTable;
 }
 
-RbtDouble RbtGPFFSpike::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                         RbtBool function) {
+RbtDouble RbtGPFFSpike::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtBool function
+) {
     //    RbtGPParser p(RbtGPGenome::GetNIP(), RbtGPGenome::GetNIF(),
     //                RbtGPGenome::GetNN(), RbtGPGenome::GetNO());
     RbtReturnTypeList o;
@@ -125,8 +126,9 @@ RbtDouble RbtGPFFSpike::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& i
     return fitness;
 }
 
-RbtDouble RbtGPFFSpike::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                         RbtDouble hitlimit, RbtBool function) {
+RbtDouble RbtGPFFSpike::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtDouble hitlimit, RbtBool function
+) {
     //    RbtGPParser p(g->GetNIP(), g->GetNIF(), g->GetNN(), g->GetNO());
     RbtReturnTypeList o;
     o.push_back(new RbtReturnType(1.1));

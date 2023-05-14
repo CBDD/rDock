@@ -113,8 +113,9 @@ void RbtModelMutator::Setup() {
 
         // Store the smaller atom list (or free atom list in tethered mode) for this rotable bond
         RbtAtomRList sList;
-        std::copy_if(m_pModel->m_atomList.begin(), m_pModel->m_atomList.end(), std::back_inserter(sList),
-                     Rbt::isAtomSelected());
+        std::copy_if(
+            m_pModel->m_atomList.begin(), m_pModel->m_atomList.end(), std::back_inserter(sList), Rbt::isAtomSelected()
+        );
         m_rotAtoms.push_back(sList);
 
         // DM 25 Apr 2002
@@ -141,8 +142,9 @@ void RbtModelMutator::Setup() {
         pAtom2->SetSelectionFlag(false);
         pAtom3->SetSelectionFlag(false);
         RbtAtomRList uList;
-        std::copy_if(m_pModel->m_atomList.begin(), m_pModel->m_atomList.end(), std::back_inserter(uList),
-                     Rbt::isAtomSelected());
+        std::copy_if(
+            m_pModel->m_atomList.begin(), m_pModel->m_atomList.end(), std::back_inserter(uList), Rbt::isAtomSelected()
+        );
         // Sort the lists of selected and unselected atoms by atom ID
         std::sort(sList.begin(), sList.end(), Rbt::RbtAtomPtrCmp_AtomId());
         std::sort(uList.begin(), uList.end(), Rbt::RbtAtomPtrCmp_AtomId());

@@ -190,8 +190,10 @@ class isBond_eq: public RbtBondUnaryPredicate {
  public:
     explicit isBond_eq(RbtBond* pp): p(pp) {}
     RbtBool operator()(RbtBond* pBond) const {
-        return ((pBond->GetBondId() == p->GetBondId()) && (bIsAtomEqual(pBond->GetAtom1Ptr(), p->GetAtom1Ptr()))
-                && (bIsAtomEqual(pBond->GetAtom2Ptr(), p->GetAtom2Ptr())));
+        return (
+            (pBond->GetBondId() == p->GetBondId()) && (bIsAtomEqual(pBond->GetAtom1Ptr(), p->GetAtom1Ptr()))
+            && (bIsAtomEqual(pBond->GetAtom2Ptr(), p->GetAtom2Ptr()))
+        );
     }
 };
 

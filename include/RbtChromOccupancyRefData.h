@@ -24,9 +24,11 @@ class RbtChromOccupancyRefData {
     // Class type string
     static RbtString _CT;
     // Sole constructor
-    RbtChromOccupancyRefData(RbtModel* pModel,
-                             RbtDouble stepSize,    // mutation step size
-                             RbtDouble threshold);  // threshold for enabling/disabling atoms
+    RbtChromOccupancyRefData(
+        RbtModel* pModel,
+        RbtDouble stepSize,  // mutation step size
+        RbtDouble threshold
+    );  // threshold for enabling/disabling atoms
     virtual ~RbtChromOccupancyRefData();
 
     RbtDouble GetStepSize() const { return m_stepSize; }

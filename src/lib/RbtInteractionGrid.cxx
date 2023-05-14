@@ -58,8 +58,9 @@ RbtString RbtInteractionGrid::_CT("RbtInteractionGrid");
 ////////////////////////////////////////
 // Constructors/destructors
 // Construct a NXxNYxNZ grid running from gridMin at gridStep resolution
-RbtInteractionGrid::RbtInteractionGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY,
-                                       RbtUInt NZ, RbtUInt NPad):
+RbtInteractionGrid::RbtInteractionGrid(
+    const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad
+):
     RbtBaseGrid(gridMin, gridStep, NX, NY, NZ, NPad) {
     CreateMap();
     _RBTOBJECTCOUNTER_CONSTR_("RbtInteractionGrid");

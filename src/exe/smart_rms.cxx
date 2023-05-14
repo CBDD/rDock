@@ -69,7 +69,8 @@ int main(int argc, char* argv[]) {
 
     try {
         RbtMolecularFileSourcePtr spRefFileSource(
-            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strRefSDFile), false, false, true));
+            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strRefSDFile), false, false, true)
+        );
         // DM 16 June 2006 - remove any solvent fragments from reference
         // The largest fragment in each SD record always has segment name="H"
         // for reasons lost in the mists of rDock history
@@ -106,7 +107,8 @@ int main(int argc, char* argv[]) {
         // MAIN LOOP OVER LIGAND RECORDS
         ///////////////////////////////////
         RbtMolecularFileSourcePtr spMdlFileSource(
-            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strInputSDFile), false, false, true));
+            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strInputSDFile), false, false, true)
+        );
         RbtMolecularFileSinkPtr spMdlFileSink;
         if (bOutput) {
             spMdlFileSink = new RbtMdlFileSink(strOutputSDFile, RbtModelPtr());

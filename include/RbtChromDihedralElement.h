@@ -27,11 +27,13 @@ class RbtChromDihedralElement: public RbtChromElement {
     //   the end of the bond with the fewest pendant atoms is rotated (other half remains fixed)
     // else if the tetheredAtoms list is not empty, then
     //   the end of the bond with the fewest tethered atoms is rotated (other half remains fixed)
-    RbtChromDihedralElement(RbtBondPtr spBond,          // Rotatable bond
-                            RbtAtomList tetheredAtoms,  // Tethered atom list
-                            RbtDouble stepSize,         // maximum mutation step size (degrees)
-                            RbtChromElement::eMode mode = RbtChromElement::FREE,  // sampling mode
-                            RbtDouble maxDihedral = 0.0);  // max deviation from reference (tethered mode only)
+    RbtChromDihedralElement(
+        RbtBondPtr spBond,                                    // Rotatable bond
+        RbtAtomList tetheredAtoms,                            // Tethered atom list
+        RbtDouble stepSize,                                   // maximum mutation step size (degrees)
+        RbtChromElement::eMode mode = RbtChromElement::FREE,  // sampling mode
+        RbtDouble maxDihedral = 0.0
+    );  // max deviation from reference (tethered mode only)
 
     virtual ~RbtChromDihedralElement();
     virtual void Reset();

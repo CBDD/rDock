@@ -175,8 +175,8 @@ RbtBool Rbt::isBondRotatable::operator()(RbtBond* pBond) const {
 
     // Eliminate terminal CH3 and NH3 groups (i.e. anything bonded to 3 explicit or implicit hydrogens)
     // DM 8 Feb 2000 - only eliminate CH3
-    if (((spAtom1->GetAtomicNo() == 6)
-         && (spAtom1->GetNumImplicitHydrogens() + spAtom1->GetCoordinationNumber(1) == 3))
+    if (((spAtom1->GetAtomicNo() == 6) && (spAtom1->GetNumImplicitHydrogens() + spAtom1->GetCoordinationNumber(1) == 3)
+        )
         || ((spAtom2->GetAtomicNo() == 6)
             && (spAtom2->GetNumImplicitHydrogens() + spAtom2->GetCoordinationNumber(1) == 3)))
         return false;
@@ -196,8 +196,8 @@ RbtBool Rbt::isBondRotatable::operator()(RbtBond* pBond) const {
 RbtBool Rbt::isBondToNH3::operator()(RbtBond* pBond) const {
     RbtAtomPtr spAtom1(pBond->GetAtom1Ptr());
     RbtAtomPtr spAtom2(pBond->GetAtom2Ptr());
-    if (((spAtom1->GetAtomicNo() == 7)
-         && (spAtom1->GetNumImplicitHydrogens() + spAtom1->GetCoordinationNumber(1) == 3))
+    if (((spAtom1->GetAtomicNo() == 7) && (spAtom1->GetNumImplicitHydrogens() + spAtom1->GetCoordinationNumber(1) == 3)
+        )
         || ((spAtom2->GetAtomicNo() == 7)
             && (spAtom2->GetNumImplicitHydrogens() + spAtom2->GetCoordinationNumber(1) == 3)))
         return true;
@@ -209,8 +209,8 @@ RbtBool Rbt::isBondToNH3::operator()(RbtBond* pBond) const {
 RbtBool Rbt::isBondToOH::operator()(RbtBond* pBond) const {
     RbtAtomPtr spAtom1(pBond->GetAtom1Ptr());
     RbtAtomPtr spAtom2(pBond->GetAtom2Ptr());
-    if (((spAtom1->GetAtomicNo() == 8)
-         && (spAtom1->GetNumImplicitHydrogens() + spAtom1->GetCoordinationNumber(1) == 1))
+    if (((spAtom1->GetAtomicNo() == 8) && (spAtom1->GetNumImplicitHydrogens() + spAtom1->GetCoordinationNumber(1) == 1)
+        )
         || ((spAtom2->GetAtomicNo() == 8)
             && (spAtom2->GetNumImplicitHydrogens() + spAtom2->GetCoordinationNumber(1) == 1)))
         return true;

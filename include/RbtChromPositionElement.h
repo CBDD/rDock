@@ -23,13 +23,15 @@ class RbtChromPositionElement: public RbtChromElement {
     // Class type string
     static RbtString _CT;
 
-    RbtChromPositionElement(const RbtModel* pModel, const RbtDockingSite* pDockSite,
-                            RbtDouble transStepSize,  // Angstroms
-                            RbtDouble rotStepSize,    // Radians
-                            RbtChromElement::eMode transMode = RbtChromElement::FREE,
-                            RbtChromElement::eMode rotMode = RbtChromElement::FREE,
-                            RbtDouble maxTrans = 0.0,  // Angstroms
-                            RbtDouble maxRot = 0.0);   // radians
+    RbtChromPositionElement(
+        const RbtModel* pModel, const RbtDockingSite* pDockSite,
+        RbtDouble transStepSize,  // Angstroms
+        RbtDouble rotStepSize,    // Radians
+        RbtChromElement::eMode transMode = RbtChromElement::FREE,
+        RbtChromElement::eMode rotMode = RbtChromElement::FREE,
+        RbtDouble maxTrans = 0.0,  // Angstroms
+        RbtDouble maxRot = 0.0
+    );  // radians
     virtual ~RbtChromPositionElement();
     virtual void Reset();
     virtual void Randomise();

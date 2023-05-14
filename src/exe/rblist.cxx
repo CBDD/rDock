@@ -181,8 +181,8 @@ int main(int argc, char* argv[]) {
         ///////////////////////////////////
         // MAIN LOOP OVER LIGAND RECORDS
         ///////////////////////////////////
-        RbtMolecularFileSourcePtr spMdlFileSource(
-            new RbtMdlFileSource(strInputSDFile, bPosIonise, bNegIonise, bImplH));
+        RbtMolecularFileSourcePtr spMdlFileSource(new RbtMdlFileSource(strInputSDFile, bPosIonise, bNegIonise, bImplH)
+        );
         // DM 4 June 1999 - only read the largest segment
         // spMdlFileSource->SetSegmentFilterMap(Rbt::ConvertStringToSegmentMap("H"));
 

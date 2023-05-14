@@ -492,8 +492,9 @@ const RbtAtomRList& RbtModel::GetFlexIntns(RbtAtom* pAtom) const throw(RbtError)
     if (isFlexible()) {
         // Check if atom is actually in the model
         if (pAtom->GetModelPtr() != this) {
-            throw RbtBadArgument(_WHERE_,
-                                 "GetFlexIntns: " + pAtom->GetFullAtomName() + " is not in model " + GetName());
+            throw RbtBadArgument(
+                _WHERE_, "GetFlexIntns: " + pAtom->GetFullAtomName() + " is not in model " + GetName()
+            );
         }
         const RbtAtomRListList& flexIntns(m_spMutator->GetFlexIntns());
         RbtInt id = pAtom->GetAtomId() - 1;

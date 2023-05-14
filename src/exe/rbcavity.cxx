@@ -170,7 +170,8 @@ int main(int argc, const char *argv[]) {
 
         // Read the protocol parameter file
         RbtParameterFileSourcePtr spRecepPrmSource(
-            new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", strReceptorPrmFile)));
+            new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", strReceptorPrmFile))
+        );
 
         // Create the receptor model from the file names in the parameter file
         spRecepPrmSource->SetSection();

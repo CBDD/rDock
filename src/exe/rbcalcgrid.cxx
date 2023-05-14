@@ -148,7 +148,8 @@ int main(int argc, char* argv[]) {
 
         // Read the receptor parameter file
         RbtParameterFileSourcePtr spRecepPrmSource(
-            new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", strReceptorPrmFile)));
+            new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", strReceptorPrmFile))
+        );
         cout << endl
              << "RECEPTOR:" << endl
              << spRecepPrmSource->GetFileName() << endl

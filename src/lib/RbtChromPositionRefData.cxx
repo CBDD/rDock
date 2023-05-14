@@ -15,10 +15,10 @@
 RbtString RbtChromPositionRefData::_CT = "RbtChromPositionRefData";
 const RbtPrincipalAxes RbtChromPositionRefData::CARTESIAN_AXES;
 
-RbtChromPositionRefData::RbtChromPositionRefData(const RbtModel* pModel, const RbtDockingSite* pDockSite,
-                                                 RbtDouble transStepSize, RbtDouble rotStepSize,
-                                                 RbtChromElement::eMode transMode, RbtChromElement::eMode rotMode,
-                                                 RbtDouble maxTrans, RbtDouble maxRot):
+RbtChromPositionRefData::RbtChromPositionRefData(
+    const RbtModel* pModel, const RbtDockingSite* pDockSite, RbtDouble transStepSize, RbtDouble rotStepSize,
+    RbtChromElement::eMode transMode, RbtChromElement::eMode rotMode, RbtDouble maxTrans, RbtDouble maxRot
+):
     m_transStepSize(transStepSize),
     m_rotStepSize(rotStepSize),
     m_transMode(transMode),

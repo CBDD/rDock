@@ -36,8 +36,9 @@ RbtTransformFactory::~RbtTransformFactory() {}
 ////////////////
 // Creates a single transform object of type strTransformClass, and name strName
 // e.g. strTransformClass = RbtSimAnnTransform
-RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass,
-                                              const RbtString& strName) throw(RbtError) {
+RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass, const RbtString& strName) throw(
+    RbtError
+) {
     // Component transforms
     if (strTransformClass == RbtSimAnnTransform::_CT) return new RbtSimAnnTransform(strName);
     if (strTransformClass == RbtGATransform::_CT) return new RbtGATransform(strName);
@@ -58,9 +59,9 @@ RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass
 // strTransformClasses contains a comma-delimited list of transform class names to instantiate
 // If strTransformClasses is empty, all named sections in spPrmSource are scanned for valid transform definitions
 // Transform parameters and scoring function requests are set from the list of parameters in each named section
-RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource,
-                                                        const RbtString& strName,
-                                                        const RbtString& strTransformClasses) throw(RbtError) {
+RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
+    RbtParameterFileSourcePtr spPrmSource, const RbtString& strName, const RbtString& strTransformClasses
+) throw(RbtError) {
     // Get list of transform objects to create
     RbtStringList transformList = Rbt::ConvertDelimitedStringToList(strTransformClasses);
     // If strTransformClasses is empty, then default to reading all sections of the
@@ -90,8 +91,9 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(RbtParameterFileSourcePt
                 // Only SetParamRequest currently supported
                 RbtStringList compList = Rbt::ConvertDelimitedStringToList(*prmIter, "@");
                 if (compList.size() == 2) {
-                    RbtRequestPtr spReq(new RbtSFSetParamRequest(compList[1], compList[0],
-                                                                 spPrmSource->GetParameterValueAsString(*prmIter)));
+                    RbtRequestPtr spReq(new RbtSFSetParamRequest(
+                        compList[1], compList[0], spPrmSource->GetParameterValueAsString(*prmIter)
+                    ));
                     pTransform->AddSFRequest(spReq);
                 } else if ((*prmIter) != _TRANSFORM) {  // Skip _TRANSFORM parameter
                     pTransform->SetParameter(*prmIter, spPrmSource->GetParameterValueAsString(*prmIter));

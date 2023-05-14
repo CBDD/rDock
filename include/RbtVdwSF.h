@@ -56,8 +56,9 @@ class RbtVdwSF: public virtual RbtBaseSF, public virtual RbtAnnotationHandler {
     // Index the intramolecular interactions
     void BuildIntraMap(const RbtAtomRList& atomList, RbtAtomRListList& intns) const;
     void BuildIntraMap(const RbtAtomRList& atomList1, const RbtAtomRList& atomList2, RbtAtomRListList& intns) const;
-    void Partition(const RbtAtomRList& atomList, const RbtAtomRListList& intns, RbtAtomRListList& prtIntns,
-                   RbtDouble dist = 0.0) const;
+    void Partition(
+        const RbtAtomRList& atomList, const RbtAtomRListList& intns, RbtAtomRListList& prtIntns, RbtDouble dist = 0.0
+    ) const;
 
  private:
     // vdW scoring function params

@@ -78,7 +78,8 @@ void RbtTetherSF::SetupLigand() {
     if (m_tetherAtomList.size() != m_tetherCoords.size())
         throw RbtBadArgument(
             _WHERE_,
-            "the number of tethered atoms in the ligand SD file should be the same than in the reference SD file");
+            "the number of tethered atoms in the ligand SD file should be the same than in the reference SD file"
+        );
 
     m_ligAtomList = GetLigand()->GetAtomList();
 #ifdef _DEBUG

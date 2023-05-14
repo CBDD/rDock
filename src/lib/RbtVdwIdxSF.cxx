@@ -376,8 +376,7 @@ void RbtVdwIdxSF::RenderAnnotationsByResidue(RbtStringList& retVal) const {
         RbtDouble s((*aIter)->GetScore());
         if (s > 0.0) {
             retVal.push_back(strRepul + "," + (*aIter)->Render());
-        } else if ((s < m_lipoAnnot) && (*aIter)->GetAtom1Ptr()->GetUser1Flag()
-                   && (*aIter)->GetAtom2Ptr()->GetUser1Flag()) {
+        } else if ((s < m_lipoAnnot) && (*aIter)->GetAtom1Ptr()->GetUser1Flag() && (*aIter)->GetAtom2Ptr()->GetUser1Flag()) {
             retVal.push_back(strLipo + "," + (*aIter)->Render());
         }
     }

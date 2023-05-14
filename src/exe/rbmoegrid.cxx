@@ -166,15 +166,16 @@ int main(int argc, char* argv[]) {
 
             // Read the receptor parameter file
             RbtParameterFileSourcePtr spRecepPrmSource(
-                new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", (*strReceptorPrmFilesIter))));
+                new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", (*strReceptorPrmFilesIter)))
+            );
             cout << endl
                  << "RECEPTOR:" << endl
                  << spRecepPrmSource->GetFileName() << endl
                  << spRecepPrmSource->GetTitle() << endl;
 
             // Read the scoring function file
-            RbtParameterFileSourcePtr spSFSource(
-                new RbtParameterFileSource(Rbt::GetRbtFileName("data/sf", strSFFile)));
+            RbtParameterFileSourcePtr spSFSource(new RbtParameterFileSource(Rbt::GetRbtFileName("data/sf", strSFFile))
+            );
             RbtSFFactoryPtr spSFFactory(new RbtSFFactory());  // Factory class for scoring functions
             RbtSFAggPtr spSF(spSFFactory->CreateAggFromFile(spSFSource, _ROOT_SF));  // Root SF aggregate
 

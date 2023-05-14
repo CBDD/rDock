@@ -1,6 +1,7 @@
 BasedOnStyle:    Google
 Language:        Cpp
 AccessModifierOffset: -3
+AlignAfterOpenBracket: BlockIndent
 AllowShortFunctionsOnASingleLine: true
 BreakBeforeBinaryOperators: NonAssignment
 BreakInheritanceList: AfterColon

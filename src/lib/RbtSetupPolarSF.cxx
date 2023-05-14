@@ -77,8 +77,9 @@ void RbtSetupPolarSF::SetupSolvent() {
 
 // Reusable method for setting up an arbitrary atom list
 // If neigbourList is empty, then do not include the neighbour density factor
-void RbtSetupPolarSF::SetupAtomList(RbtAtomList& atomList, const RbtAtomList& neighbourList,
-                                    RbtInt traceTriggerLevel) {
+void RbtSetupPolarSF::SetupAtomList(
+    RbtAtomList& atomList, const RbtAtomList& neighbourList, RbtInt traceTriggerLevel
+) {
     if (atomList.empty()) return;
 
     RbtInt iTrace = GetTrace();

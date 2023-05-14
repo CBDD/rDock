@@ -14,8 +14,10 @@
 
 RbtString RbtChromDihedralElement::_CT = "RbtChromDihedralElement";
 
-RbtChromDihedralElement::RbtChromDihedralElement(RbtBondPtr spBond, RbtAtomList tetheredAtoms, RbtDouble stepSize,
-                                                 RbtChromElement::eMode mode, RbtDouble maxDihedral):
+RbtChromDihedralElement::RbtChromDihedralElement(
+    RbtBondPtr spBond, RbtAtomList tetheredAtoms, RbtDouble stepSize, RbtChromElement::eMode mode,
+    RbtDouble maxDihedral
+):
     m_value(0.0) {
     m_spRefData = new RbtChromDihedralRefData(spBond, tetheredAtoms, stepSize, mode, maxDihedral);
     // Set the initial genotype to match the current phenotype

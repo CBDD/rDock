@@ -118,8 +118,9 @@ RbtBaseSF* RbtSFFactory::Create(const RbtString& strSFClass, const RbtString& st
 // strSFClasses contains a comma-delimited list of SF class names to instantiate
 // If strSFClasses is empty, all named sections in spPrmSource are scanned for valid scoring function definitions
 // SF parameters are set from the list of parameters in each named section
-RbtSFAgg* RbtSFFactory::CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName,
-                                          const RbtString& strSFClasses) throw(RbtError) {
+RbtSFAgg* RbtSFFactory::CreateAggFromFile(
+    RbtParameterFileSourcePtr spPrmSource, const RbtString& strName, const RbtString& strSFClasses
+) throw(RbtError) {
     // Get list of scoring function objects to create
     RbtStringList sfList = Rbt::ConvertDelimitedStringToList(strSFClasses);
     // If strSFClasses is empty, then default to reading all sections of the

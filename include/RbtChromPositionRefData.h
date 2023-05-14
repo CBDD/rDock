@@ -28,13 +28,15 @@ class RbtChromPositionRefData {
     static RbtString _CT;
     // Reference Cartesian axes
     static const RbtPrincipalAxes CARTESIAN_AXES;
-    RbtChromPositionRefData(const RbtModel* pModel, const RbtDockingSite* pDockSite,
-                            RbtDouble transStepSize,  // Angstroms
-                            RbtDouble rotStepSize,    // radians
-                            RbtChromElement::eMode transMode = RbtChromElement::FREE,
-                            RbtChromElement::eMode rotMode = RbtChromElement::FREE,
-                            RbtDouble maxTrans = 0.0,  // Angstroms
-                            RbtDouble maxRot = 0.0);   // radians
+    RbtChromPositionRefData(
+        const RbtModel* pModel, const RbtDockingSite* pDockSite,
+        RbtDouble transStepSize,  // Angstroms
+        RbtDouble rotStepSize,    // radians
+        RbtChromElement::eMode transMode = RbtChromElement::FREE,
+        RbtChromElement::eMode rotMode = RbtChromElement::FREE,
+        RbtDouble maxTrans = 0.0,  // Angstroms
+        RbtDouble maxRot = 0.0
+    );  // radians
     virtual ~RbtChromPositionRefData();
 
     RbtInt GetNumStartCoords() const { return m_startCoords.size(); }

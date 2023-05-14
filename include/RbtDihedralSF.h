@@ -87,8 +87,10 @@ class RbtDihedralSF: public virtual RbtBaseSF {
 
  private:
     // Lookup the dihedral params for a given set of types
-    RbtDihedral::prms FindDihedralParams(RbtTriposAtomType::eType t1, RbtTriposAtomType::eType t2,
-                                         RbtTriposAtomType::eType t3, RbtTriposAtomType::eType t4);
+    RbtDihedral::prms FindDihedralParams(
+        RbtTriposAtomType::eType t1, RbtTriposAtomType::eType t2, RbtTriposAtomType::eType t3,
+        RbtTriposAtomType::eType t4
+    );
 
     // Determines the list of bonded atoms for pAtom1, and the list of dihedral offsets for any implicit hydrogens
     // pAtom2 is the other central atom in the bond, is excluded from the returned list of bonded atoms

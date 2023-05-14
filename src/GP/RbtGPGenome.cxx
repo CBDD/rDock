@@ -80,8 +80,9 @@ RbtGPGenome& RbtGPGenome::operator=(const RbtGPGenome& g) {
 //////////////////
 RbtGPGenome::~RbtGPGenome() { _RBTOBJECTCOUNTER_DESTR_(_CT); }
 
-void RbtGPGenome::SetStructure(RbtInt inpi, RbtInt infi, RbtInt insfi, RbtInt ino, RbtInt inf, RbtInt inr, RbtInt inc,
-                               RbtInt il) {
+void RbtGPGenome::SetStructure(
+    RbtInt inpi, RbtInt infi, RbtInt insfi, RbtInt ino, RbtInt inf, RbtInt inr, RbtInt inc, RbtInt il
+) {
     npi = inpi;    // number of program inputs
     nfi = infi;    // number of inputs per function
     nsfi = insfi;  // number of inputs needed to calculate the SF

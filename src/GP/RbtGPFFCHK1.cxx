@@ -71,8 +71,9 @@ void RbtGPFFCHK1::ReadTables(istream& in, RbtReturnTypeArray& it, RbtReturnTypeA
     sft = SFTable;
 }
 
-RbtDouble RbtGPFFCHK1::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                        RbtBool function) {
+RbtDouble RbtGPFFCHK1::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtBool function
+) {
     RbtDouble tp = 0.0;  // True Positives
     RbtDouble fp = 0.0;  // False Positives
     RbtDouble fn = 0.0;  // True Negatives
@@ -119,8 +120,9 @@ objective = ( tp + tn) / (tp + tn + fp + fn);
     return fitness;
 }
 
-RbtDouble RbtGPFFCHK1::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                        RbtDouble hitlimit, RbtBool function) {
+RbtDouble RbtGPFFCHK1::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtDouble hitlimit, RbtBool function
+) {
     RbtDouble tp = 0.0;  // True Positives
     RbtDouble fp = 0.0;  // False Positives
     RbtDouble fn = 0.0;  // True Negatives

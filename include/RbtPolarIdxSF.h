@@ -63,8 +63,9 @@ class RbtPolarIdxSF: public RbtBaseInterSF, public RbtBaseIdxSF, public RbtPolar
     RbtDouble ReceptorSolventScore() const;
     RbtDouble LigandSolventScore() const;
 
-    RbtDouble InterScore(const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-                         RbtBool bCount) const;
+    RbtDouble InterScore(
+        const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList, RbtBool bCount
+    ) const;
     RbtInteractionGridPtr m_spPosGrid;
     RbtInteractionGridPtr m_spNegGrid;
     RbtInteractionCenterList m_recepPosList;

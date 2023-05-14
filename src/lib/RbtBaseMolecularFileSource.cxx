@@ -28,8 +28,9 @@ RbtBaseMolecularFileSource::RbtBaseMolecularFileSource(const RbtString& fileName
 }
 
 // Multi-record version, with record delimiter passed as an argument
-RbtBaseMolecularFileSource::RbtBaseMolecularFileSource(const RbtString& fileName, const RbtString& strRecDelim,
-                                                       const RbtString& sourceName):
+RbtBaseMolecularFileSource::RbtBaseMolecularFileSource(
+    const RbtString& fileName, const RbtString& strRecDelim, const RbtString& sourceName
+):
     RbtBaseFileSource(fileName, strRecDelim), RbtBaseMolecularDataSource(sourceName) {
     _RBTOBJECTCOUNTER_CONSTR_("RbtBaseMolecularFileSource");
 }

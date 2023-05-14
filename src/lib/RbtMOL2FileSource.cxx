@@ -261,10 +261,12 @@ void RbtMOL2FileSource::ParseRecordATOM(const RbtString& aLine) {
     }
     RbtElementData elementData = m_spElementData->GetElementData(atomic_number);
     RbtAtom::eHybridState hybrid_state = (RbtAtom::eHybridState)m_typer.Type2Hybrid(tt);
-    RbtAtomPtr newAtom(new RbtAtom(atom_id, atomic_number, atom_name,
-                                   sID,      // subunit id undef
-                                   sName,    // subunit name undef
-                                   "UNK"));  // segment name undefined at this point (need SUBSTRUCTURE records)
+    RbtAtomPtr newAtom(new RbtAtom(
+        atom_id, atomic_number, atom_name,
+        sID,    // subunit id undef
+        sName,  // subunit name undef
+        "UNK"
+    ));  // segment name undefined at this point (need SUBSTRUCTURE records)
     newAtom->SetCoords(atom_coord);
     newAtom->SetFFType(atom_type);  // Original Tripos type in string format
     newAtom->SetTriposType(tt);     // Same type, but stored as an enum (may be updated later)
@@ -571,8 +573,9 @@ void RbtMOL2FileSource::SetupVdWRadii() {
 
 // Splits the Tripos MOL2 subst_name field into appropriate residue name (sName) and residue ID (sID) components
 // If subst_name is **** or in the style <148>, then substitutes default name (UNK) and default ID (subst_id)
-void RbtMOL2FileSource::GetSSIDandName(const RbtString& subst_name, RbtInt subst_id, RbtString& sID,
-                                       RbtString& sName) {
+void RbtMOL2FileSource::GetSSIDandName(
+    const RbtString& subst_name, RbtInt subst_id, RbtString& sID, RbtString& sName
+) {
     // subst_names beginning with * or < do not follow the normal pattern of ALA99 etc
     const RbtString nonstandard("*<");
     const RbtString numeric("0123456789");

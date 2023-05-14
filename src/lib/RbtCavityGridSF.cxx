@@ -141,7 +141,8 @@ void RbtCavityGridSF::HeavyAtomFactory::VisitSolventFlexData(RbtSolventFlexData*
     RbtChromElement::eMode eTransMode = RbtChromElement::StrToMode(transModeStr);
     if ((eTransMode == RbtChromElement::FREE) || ((eTransMode == RbtChromElement::TETHERED) && (maxTrans > 0.0))) {
         RbtAtomList atomList = pFlexData->GetModel()->GetAtomList();
-        std::copy_if(atomList.begin(), atomList.end(), std::back_inserter(m_atomList),
-                     std::not1(Rbt::isAtomicNo_eq(1)));
+        std::copy_if(
+            atomList.begin(), atomList.end(), std::back_inserter(m_atomList), std::not1(Rbt::isAtomicNo_eq(1))
+        );
     }
 }

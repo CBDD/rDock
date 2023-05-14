@@ -48,8 +48,9 @@ class RbtInteractionGridTemplate: public RbtBaseGrid {
  public:
     static RbtString _CT;
 
-    RbtInteractionGridTemplate(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ,
-                               RbtUInt NPad = 0) {
+    RbtInteractionGridTemplate(
+        const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad = 0
+    ) {
         _CT = "RbtInteractionGridTemplate";
         CreateMap();
         _RBTOBJECTCOUNTER_CONSTR_("RbtInteractionGridTemplate");

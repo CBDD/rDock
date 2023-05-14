@@ -19,8 +19,9 @@
 #include "RbtModelError.h"
 #include "RbtPlane.h"
 
-RbtMdlFileSource::RbtMdlFileSource(const RbtString& fileName, RbtBool bPosIonisable, RbtBool bNegIonisable,
-                                   RbtBool bImplHydrogens):
+RbtMdlFileSource::RbtMdlFileSource(
+    const RbtString& fileName, RbtBool bPosIonisable, RbtBool bNegIonisable, RbtBool bImplHydrogens
+):
     RbtBaseMolecularFileSource(fileName, IDS_MDL_RECDELIM, "MDL_FILE_SOURCE"),  // Call base class constructor
     m_bPosIonisable(bPosIonisable),
     m_bNegIonisable(bNegIonisable),
@@ -116,11 +117,12 @@ void RbtMdlFileSource::Parse() throw(RbtError) {
                 RbtString strAtomName(szAtomName);
 
                 // Construct a new atom (constructor only accepts the 2D params)
-                RbtAtomPtr spAtom(
-                    new RbtAtom(nAtomId, nAtomicNo, strAtomName, strSubunitId, strSubunitName, strSegmentName,
-                                RbtAtom::UNDEFINED,  // Hybridisation state
-                                0,                   // Num implicit hydrogens
-                                nFormalCharge)       // Formal charge
+                RbtAtomPtr spAtom(new RbtAtom(
+                    nAtomId, nAtomicNo, strAtomName, strSubunitId, strSubunitName, strSegmentName,
+                    RbtAtom::UNDEFINED,  // Hybridisation state
+                    0,                   // Num implicit hydrogens
+                    nFormalCharge
+                )  // Formal charge
                 );
 
                 // Now set the remaining 2-D and 3-D params
@@ -162,8 +164,10 @@ void RbtMdlFileSource::Parse() throw(RbtError) {
                                                                // from zero in our atom vector
                 RbtAtomPtr spAtom2(m_atomList[idxAtom2 - 1]);  // Decrement the atom index as the atoms are numbered
                                                                // from zero in our atom vector
-                RbtBondPtr spBond(new RbtBond(++nBondId,       // Store a nominal bond ID starting from 1
-                                              spAtom1, spAtom2, nBondOrder));
+                RbtBondPtr spBond(new RbtBond(
+                    ++nBondId,  // Store a nominal bond ID starting from 1
+                    spAtom1, spAtom2, nBondOrder
+                ));
                 m_bondList.push_back(spBond);
             }
 
@@ -550,8 +554,7 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
 #endif  //_DEBUG
                         }
                         // AMIDINE Check that the N_SP2 is bonded to 1 hydrogen and the N_TRI is bonded to 2 hydrogens
-                        else if ((Rbt::GetNumAtoms(nsp2BondedAtomList, Rbt::isAtomicNo_eq(1)) == 1)
-                                 && (Rbt::GetNumAtoms(ntriBondedAtomList, Rbt::isAtomicNo_eq(1)) == 2)) {
+                        else if ((Rbt::GetNumAtoms(nsp2BondedAtomList, Rbt::isAtomicNo_eq(1)) == 1) && (Rbt::GetNumAtoms(ntriBondedAtomList, Rbt::isAtomicNo_eq(1)) == 2)) {
                             //#ifdef _DEBUG
                             cout << "Protonating neutral amidine " << (*nsp2Iter)->GetAtomName() << endl;
                             //#endif //_DEBUG
@@ -720,15 +723,17 @@ void RbtMdlFileSource::AddHydrogen(RbtAtomPtr spAtom) throw(RbtError) {
     ostr << "H" << nAtomId << ends;
     RbtString strAtomName(ostr.str());
     delete ostr.str();
-    RbtAtomPtr spHAtom(new RbtAtom(nAtomId,
-                                   1,  // nAtomicNo,
-                                   strAtomName,
-                                   "1",           // strSubunitId,
-                                   "MOL",         // strSubunitName,
-                                   "H",           // strSegmentName,
-                                   RbtAtom::SP3,  // Hybridisation state
-                                   0,             // Num implicit hydrogens
-                                   0)             // Formal charge
+    RbtAtomPtr spHAtom(new RbtAtom(
+        nAtomId,
+        1,  // nAtomicNo,
+        strAtomName,
+        "1",           // strSubunitId,
+        "MOL",         // strSubunitName,
+        "H",           // strSegmentName,
+        RbtAtom::SP3,  // Hybridisation state
+        0,             // Num implicit hydrogens
+        0
+    )  // Formal charge
     );
 
     // Now set the remaining 2-D and 3-D params

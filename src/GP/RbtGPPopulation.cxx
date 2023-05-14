@@ -23,8 +23,9 @@ RbtString RbtGPPopulation::_CT("RbtGPPopulation");
 
 // Constructor
 
-RbtGPPopulation::RbtGPPopulation(RbtInt s, RbtInt nr, RbtGPFitnessFunctionPtr f, RbtReturnTypeArray& it,
-                                 RbtReturnTypeArray& sft):
+RbtGPPopulation::RbtGPPopulation(
+    RbtInt s, RbtInt nr, RbtGPFitnessFunctionPtr f, RbtReturnTypeArray& it, RbtReturnTypeArray& sft
+):
     m_rand(Rbt::GetRbtRand()) {
     popsize = s;
     nrepl = nr;
@@ -116,8 +117,10 @@ RbtGPGenomePtr RbtGPPopulation::TSelect(RbtDouble tp) const {
 
 RbtGPGenomePtr RbtGPPopulation::Select(RbtString selector) const { return TSelect(0.7); }
 
-void RbtGPPopulation::GAstep(RbtString selector, RbtDouble pcross, RbtDouble pmut, RbtDouble mean, RbtDouble variance,
-                             RbtDouble hitlimit, RbtBool function) throw(RbtError) {
+void RbtGPPopulation::GAstep(
+    RbtString selector, RbtDouble pcross, RbtDouble pmut, RbtDouble mean, RbtDouble variance, RbtDouble hitlimit,
+    RbtBool function
+) throw(RbtError) {
     RbtGPGenomePtr mother, father;
     for (RbtInt i = 0; i < nrepl - 1; i++) {
         mother = Select(selector);
@@ -149,8 +152,10 @@ void RbtGPPopulation::GAstep(RbtString selector, RbtDouble pcross, RbtDouble pmu
     }
 }
 
-void RbtGPPopulation::EPstep(RbtString selector, RbtDouble pcross, RbtDouble pmut, RbtDouble mean, RbtDouble variance,
-                             RbtDouble hitlimit, RbtBool function) throw(RbtError) {
+void RbtGPPopulation::EPstep(
+    RbtString selector, RbtDouble pcross, RbtDouble pmut, RbtDouble mean, RbtDouble variance, RbtDouble hitlimit,
+    RbtBool function
+) throw(RbtError) {
     *(newpop[0]) = *(pop[bestInd]);
     for (RbtInt i = 1; i < popsize; i++) {
         *(newpop[i]) = *(pop[bestInd]);

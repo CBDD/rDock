@@ -24,8 +24,9 @@ RbtString RbtRealGrid::_CT("RbtRealGrid");
 ////////////////////////////////////////
 // Constructors/destructors
 // Construct a NXxNYxNZ grid running from gridMin at gridStep resolution
-RbtRealGrid::RbtRealGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ,
-                         RbtUInt NPad):
+RbtRealGrid::RbtRealGrid(
+    const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad
+):
     RbtBaseGrid(gridMin, gridStep, NX, NY, NZ, NPad), m_tol(0.001), m_grid(NULL), m_data(NULL) {
     CreateArrays();
     // Initialise the grid to zero
@@ -228,8 +229,9 @@ void RbtRealGrid::SetSphere(const RbtCoord& c, RbtDouble radius, RbtDouble val, 
 // Set all grid points with radii between rad1 and rad2 from coord to the given value
 // If bOverwrite is false, does not replace non-zero values
 // If bOverwrite is true, all grid points are set the new value
-void RbtRealGrid::SetSurface(const RbtCoord& c, RbtDouble innerRad, RbtDouble outerRad, RbtDouble val,
-                             RbtBool bOverwrite) {
+void RbtRealGrid::SetSurface(
+    const RbtCoord& c, RbtDouble innerRad, RbtDouble outerRad, RbtDouble val, RbtBool bOverwrite
+) {
     RbtUIntList oIndices;  // List of sphere points for outer sphere
     RbtUIntList iIndices;  // List of sphere points for outer sphere
     RbtUIntList sIndices;  // List of points for surface region (points in outer sphere, but not inner sphere)
@@ -237,8 +239,9 @@ void RbtRealGrid::SetSurface(const RbtCoord& c, RbtDouble innerRad, RbtDouble ou
     GetSphereIndices(c, innerRad, iIndices);
     // std::sort(oIndices.begin(),oIndices.end());
     // std::sort(iIndices.begin(),iIndices.end());
-    std::set_difference(oIndices.begin(), oIndices.end(), iIndices.begin(), iIndices.end(),
-                        std::back_inserter(sIndices));
+    std::set_difference(
+        oIndices.begin(), oIndices.end(), iIndices.begin(), iIndices.end(), std::back_inserter(sIndices)
+    );
     SetValues(sIndices, val, bOverwrite);
 }
 
@@ -283,8 +286,9 @@ RbtBool RbtRealGrid::isValueWithinSphere(const RbtCoord& c, RbtDouble radius, Rb
 // Sets all grid points with value=oldValue, which have no grid points with value=adjacentValue within a sphere
 // of given radius, to value=newValue
 //+/- tolerance is applied to oldValue and adjacentValue
-void RbtRealGrid::SetAccessible(RbtDouble radius, RbtDouble oldVal, RbtDouble adjVal, RbtDouble newVal,
-                                RbtBool bCenterOnly) {
+void RbtRealGrid::SetAccessible(
+    RbtDouble radius, RbtDouble oldVal, RbtDouble adjVal, RbtDouble newVal, RbtBool bCenterOnly
+) {
     // Iterate over the cuboid defined by the pad coords
     RbtUInt iMinX = GetPad() + 1;
     RbtUInt iMinY = GetPad() + 1;
@@ -312,8 +316,10 @@ void RbtRealGrid::SetAccessible(RbtDouble radius, RbtDouble oldVal, RbtDouble ad
                             m_grid[iX][iY][iZ] = newVal;  // Set just the center grid point
                         else
                             // SetValues(sphereIndices,newVal,false);//Set all grid points in the sphere
-                            SetValues(sphereIndices, newVal,
-                                      true);  // DM 3 April 2002 - now overwrite ALL gridpoints with newVal
+                            SetValues(
+                                sphereIndices, newVal,
+                                true
+                            );  // DM 3 April 2002 - now overwrite ALL gridpoints with newVal
                     }
                 }
             }

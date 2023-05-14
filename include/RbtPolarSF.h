@@ -59,15 +59,20 @@ class RbtPolarSF: public virtual RbtBaseSF, public virtual RbtAnnotationHandler 
     RbtInteractionCenterList CreateDonorInteractionCenters(const RbtAtomList& atomList) const;
 
     // Index the intramolecular interactions between two lists
-    void BuildIntraMap(const RbtInteractionCenterList& ICList1, const RbtInteractionCenterList& ICList2,
-                       RbtInteractionListMap& intns) const;
+    void BuildIntraMap(
+        const RbtInteractionCenterList& ICList1, const RbtInteractionCenterList& ICList2, RbtInteractionListMap& intns
+    ) const;
     // Index the intramolecular interactions within a single list
     void BuildIntraMap(const RbtInteractionCenterList& ICList, RbtInteractionListMap& intns) const;
 
-    RbtDouble IntraScore(const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-                         const RbtInteractionListMap& prtIntns, RbtBool attr) const;
-    void Partition(const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-                   const RbtInteractionListMap& intns, RbtInteractionListMap& prtIntns, RbtDouble dist = 0.0) const;
+    RbtDouble IntraScore(
+        const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
+        const RbtInteractionListMap& prtIntns, RbtBool attr
+    ) const;
+    void Partition(
+        const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
+        const RbtInteractionListMap& intns, RbtInteractionListMap& prtIntns, RbtDouble dist = 0.0
+    ) const;
 
     // Generic scoring function params
     struct f1prms {
@@ -80,8 +85,10 @@ class RbtPolarSF: public virtual RbtBaseSF, public virtual RbtAnnotationHandler 
     inline f1prms GetA1prms() const { return f1prms(m_A1, m_DA1Min, m_DA1Max); }
     inline f1prms GetA2prms() const { return f1prms(m_A2, m_DA2Min, m_DA2Max); }
 
-    RbtDouble PolarScore(const RbtInteractionCenter* intn, const RbtInteractionCenterList& intnList,
-                         const f1prms& Rprms, const f1prms& A1prms, const f1prms& A2prms) const;
+    RbtDouble PolarScore(
+        const RbtInteractionCenter* intn, const RbtInteractionCenterList& intnList, const f1prms& Rprms,
+        const f1prms& A1prms, const f1prms& A2prms
+    ) const;
 
     // As this has a virtual base class we need a separate OwnParameterUpdated
     // which can be called by concrete subclass ParameterUpdated methods

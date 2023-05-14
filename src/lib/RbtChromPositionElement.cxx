@@ -14,18 +14,20 @@
 
 RbtString RbtChromPositionElement::_CT = "RbtChromPositionElement";
 
-RbtChromPositionElement::RbtChromPositionElement(const RbtModel* pModel, const RbtDockingSite* pDockSite,
-                                                 RbtDouble transStepSize, RbtDouble rotStepSize,
-                                                 RbtChromElement::eMode transMode, RbtChromElement::eMode rotMode,
-                                                 RbtDouble maxTrans, RbtDouble maxRot) {
-    m_spRefData = new RbtChromPositionRefData(pModel, pDockSite, transStepSize, rotStepSize, transMode, rotMode,
-                                              maxTrans, maxRot);
+RbtChromPositionElement::RbtChromPositionElement(
+    const RbtModel* pModel, const RbtDockingSite* pDockSite, RbtDouble transStepSize, RbtDouble rotStepSize,
+    RbtChromElement::eMode transMode, RbtChromElement::eMode rotMode, RbtDouble maxTrans, RbtDouble maxRot
+) {
+    m_spRefData = new RbtChromPositionRefData(
+        pModel, pDockSite, transStepSize, rotStepSize, transMode, rotMode, maxTrans, maxRot
+    );
     SyncFromModel();
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
-RbtChromPositionElement::RbtChromPositionElement(RbtChromPositionRefDataPtr spRefData, const RbtCoord& com,
-                                                 const RbtEuler& orientation):
+RbtChromPositionElement::RbtChromPositionElement(
+    RbtChromPositionRefDataPtr spRefData, const RbtCoord& com, const RbtEuler& orientation
+):
     m_spRefData(spRefData), m_com(com), m_orientation(orientation) {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }

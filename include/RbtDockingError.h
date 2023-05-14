@@ -28,8 +28,9 @@ class RbtDockingError: public RbtError {
     // Protected constructor to allow derived docking error classes
     // to set error name
  protected:
-    RbtDockingError(const RbtString& strName, const RbtString& strFile, RbtInt nLine,
-                    const RbtString& strMessage = ""):
+    RbtDockingError(
+        const RbtString& strName, const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""
+    ):
         RbtError(strName, strFile, nLine, strMessage) {}
 };
 

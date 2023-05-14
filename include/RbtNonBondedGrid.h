@@ -36,8 +36,9 @@ class RbtNonBondedGrid: public RbtBaseGrid {
     ////////////////////////////////////////
     // Constructors/destructors
     // Construct a NXxNYxNZ grid running from gridMin at gridStep resolution
-    RbtNonBondedGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ,
-                     RbtUInt NPad = 0);
+    RbtNonBondedGrid(
+        const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad = 0
+    );
 
     // Constructor reading all params from binary stream
     RbtNonBondedGrid(istream& istr);

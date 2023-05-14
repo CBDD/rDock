@@ -175,20 +175,23 @@ RbtInteractionCenterList RbtPolarSF::CreateAcceptorInteractionCenters(const RbtA
                 if (bLP && bIsO(*iter) && (bIsC(spAcceptorParent) || bIsN(spAcceptorParent))) {
                     // Get the atoms bonded to the acceptor parent (not including the acceptor itself)
                     RbtAtomList grandParentList = Rbt::GetAtomList(
-                        Rbt::GetBondedAtomList(spAcceptorParent), std::not1(std::bind2nd(Rbt::isAtomPtr_eq(), *iter)));
+                        Rbt::GetBondedAtomList(spAcceptorParent), std::not1(std::bind2nd(Rbt::isAtomPtr_eq(), *iter))
+                    );
                     if (!grandParentList.empty()) {
                         RbtAtomPtr spGrandParent = grandParentList.front();
                         // If O is -ve charged (likely carboxylate), or is in RNA, or is in nitro group
                         // define interaction center with LONEPAIR geometry (directionality and in-plane of LP)
                         if (bIsAnionic(*iter) || bIsRNA(*iter) || bIsN(spAcceptorParent)) {
-                            intnList.push_back(new RbtInteractionCenter(*iter, spAcceptorParent, spGrandParent,
-                                                                        RbtInteractionCenter::LONEPAIR));
+                            intnList.push_back(new RbtInteractionCenter(
+                                *iter, spAcceptorParent, spGrandParent, RbtInteractionCenter::LONEPAIR
+                            ));
                             // cout << "LONEPAIR acceptor: " << (*iter)->GetFullAtomName() << endl;
                         }
                         // else define interaction center with PLANE geometry (in-plane of LP, broader directionality)
                         else {
-                            intnList.push_back(new RbtInteractionCenter(*iter, spAcceptorParent, spGrandParent,
-                                                                        RbtInteractionCenter::PLANE));
+                            intnList.push_back(new RbtInteractionCenter(
+                                *iter, spAcceptorParent, spGrandParent, RbtInteractionCenter::PLANE
+                            ));
                             // cout << "PLANE acceptor: " << (*iter)->GetFullAtomName() << endl;
                         }
                     } else {
@@ -209,8 +212,9 @@ RbtInteractionCenterList RbtPolarSF::CreateAcceptorInteractionCenters(const RbtA
     return intnList;
 }
 
-void RbtPolarSF::BuildIntraMap(const RbtInteractionCenterList& ICList1, const RbtInteractionCenterList& ICList2,
-                               RbtInteractionListMap& intns) const {
+void RbtPolarSF::BuildIntraMap(
+    const RbtInteractionCenterList& ICList1, const RbtInteractionCenterList& ICList2, RbtInteractionListMap& intns
+) const {
     Rbt::SelectInteractionCenter selectIC(true);
     Rbt::isInteractionCenterSelected isSelected;
     RbtBool bSingleList = ICList2.empty();  // If true, then index the flexible interactions within ICList1
@@ -253,8 +257,10 @@ void RbtPolarSF::BuildIntraMap(const RbtInteractionCenterList& ICList, RbtIntera
     BuildIntraMap(ICList, emptyList, intns);
 }
 
-RbtDouble RbtPolarSF::IntraScore(const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-                                 const RbtInteractionListMap& intns, RbtBool attr) const {
+RbtDouble RbtPolarSF::IntraScore(
+    const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
+    const RbtInteractionListMap& intns, RbtBool attr
+) const {
     RbtDouble score = 0.0;  // Total score
 
     RbtPolarSF::f1prms Rprms = GetRprms();    // Distance params
@@ -313,8 +319,10 @@ RbtDouble RbtPolarSF::IntraScore(const RbtInteractionCenterList& posList, const 
     return score;
 }
 
-void RbtPolarSF::Partition(const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-                           const RbtInteractionListMap& intns, RbtInteractionListMap& prtIntns, RbtDouble dist) const {
+void RbtPolarSF::Partition(
+    const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
+    const RbtInteractionListMap& intns, RbtInteractionListMap& prtIntns, RbtDouble dist
+) const {
     RbtInt iTrace = GetTrace();
 
     // Clear the existing partitioned lists
@@ -358,8 +366,10 @@ void RbtPolarSF::Partition(const RbtInteractionCenterList& posList, const RbtInt
     }
 }
 
-RbtDouble RbtPolarSF::PolarScore(const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List,
-                                 const f1prms& Rprms, const f1prms& A1prms, const f1prms& A2prms) const {
+RbtDouble RbtPolarSF::PolarScore(
+    const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List, const f1prms& Rprms,
+    const f1prms& A1prms, const f1prms& A2prms
+) const {
     RbtDouble s(0.0);
     if (IC2List.empty()) {
         return s;
@@ -486,7 +496,8 @@ RbtDouble RbtPolarSF::PolarScore(const RbtInteractionCenter* pIC1, const RbtInte
                         // annotation score so that the score truly reflects the strength of the interaction, as scored
                         // by rDock This also distinguishes attractive (-ve) and repulsive (+ve) annotations
                         RbtAnnotationPtr spAnnotation(new RbtAnnotation(
-                            pAtom1_1, pAtom2_1, R, f * pAtom1_1->GetUser1Value() * pAtom2_1->GetUser1Value()));
+                            pAtom1_1, pAtom2_1, R, f * pAtom1_1->GetUser1Value() * pAtom2_1->GetUser1Value()
+                        ));
                         AddAnnotation(spAnnotation);
                     }
                 }

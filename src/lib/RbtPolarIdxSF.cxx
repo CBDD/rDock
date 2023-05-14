@@ -158,8 +158,10 @@ void RbtPolarIdxSF::SetupReceptor() {
             m_flexRecIntns = RbtInteractionListMap(nAtoms, RbtInteractionCenterList());
             m_flexRecPrtIntns = RbtInteractionListMap(nAtoms, RbtInteractionCenterList());
             if (m_bAttr) {
-                BuildIntraMap(m_flexRecPosList, m_flexRecNegList,
-                              m_flexRecIntns);                                    // flexible donor - flexible acceptor
+                BuildIntraMap(
+                    m_flexRecPosList, m_flexRecNegList,
+                    m_flexRecIntns
+                );                                                                // flexible donor - flexible acceptor
                 BuildIntraMap(m_flexRecPosList, m_recepNegList, m_flexRecIntns);  // flexible donor - rigid acceptor
                 BuildIntraMap(m_flexRecNegList, m_recepPosList, m_flexRecIntns);  // flexible acceptor - rigid donor
             } else {
@@ -359,8 +361,9 @@ RbtDouble RbtPolarIdxSF::LigandSolventScore() const {
 
 // Reusable method for receptor-ligand and receptor-solvent scores
 // bCount controls whether to count the positive and negative interaction scores
-RbtDouble RbtPolarIdxSF::InterScore(const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-                                    RbtBool bCount) const {
+RbtDouble RbtPolarIdxSF::InterScore(
+    const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList, RbtBool bCount
+) const {
     RbtDouble score = 0.0;  // Total score
     if (bCount) {
         m_nPos = 0;

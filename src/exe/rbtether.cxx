@@ -117,7 +117,8 @@ int main(int argc, char *argv[]) {
     try {
         // Read the reference SD file
         RbtMolecularFileSourcePtr spReferenceSD(
-            new RbtMdlFileSource(strReferenceSDFile, bPosIonise, bNegIonise, bImplH));
+            new RbtMdlFileSource(strReferenceSDFile, bPosIonise, bNegIonise, bImplH)
+        );
         RbtModelPtr spReferenceMdl(new RbtModel(spReferenceSD));
         RbtString strSmiles;
         RbtAtomListList tetherAtoms = DT::QueryModel(spReferenceMdl, strQuery, strSmiles);
@@ -180,7 +181,8 @@ int main(int argc, char *argv[]) {
         // to MdlFileSource constructor
         RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(strRunName + ".sd", RbtModelPtr()));
         RbtMolecularFileSourcePtr spMdlFileSource(
-            new RbtMdlFileSource(strLigandMdlFile, bPosIonise, bNegIonise, bImplH));
+            new RbtMdlFileSource(strLigandMdlFile, bPosIonise, bNegIonise, bImplH)
+        );
         for (RbtInt nRec = 1; spMdlFileSource->FileStatusOK(); spMdlFileSource->NextRecord(), nRec++) {
             cout.setf(ios_base::left, ios_base::adjustfield);
             cout << endl << "**************************************************" << endl << "RECORD #" << nRec << endl;

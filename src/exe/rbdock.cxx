@@ -276,10 +276,12 @@ int main(int argc, const char *argv[]) {
 
         // Read the docking protocol parameter file
         RbtParameterFileSourcePtr spParamSource(
-            new RbtParameterFileSource(Rbt::GetRbtFileName("data/scripts", strParamFile)));
+            new RbtParameterFileSource(Rbt::GetRbtFileName("data/scripts", strParamFile))
+        );
         // Read the receptor parameter file
         RbtParameterFileSourcePtr spRecepPrmSource(
-            new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", strReceptorPrmFile)));
+            new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", strReceptorPrmFile))
+        );
         cout << endl
              << "DOCKING PROTOCOL:" << endl
              << spParamSource->GetFileName() << endl
@@ -422,7 +424,8 @@ int main(int argc, const char *argv[]) {
         // MAIN LOOP OVER LIGAND RECORDS
         // DM 20 Apr 1999 - add explicit bPosIonise and bNegIonise flags to MdlFileSource constructor
         RbtMolecularFileSourcePtr spMdlFileSource(
-            new RbtMdlFileSource(strLigandMdlFile, bPosIonise, bNegIonise, bImplH));
+            new RbtMdlFileSource(strLigandMdlFile, bPosIonise, bNegIonise, bImplH)
+        );
         for (RbtInt nRec = 1; spMdlFileSource->FileStatusOK(); spMdlFileSource->NextRecord(), nRec++) {
             cout.setf(ios_base::left, ios_base::adjustfield);
             cout << endl << "**************************************************" << endl << "RECORD #" << nRec << endl;

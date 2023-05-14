@@ -114,8 +114,7 @@ void EnumerateSymCoords::Setup() {
                 cout << "Matched bond ID " << (*bIter)->GetBondId() << " for atoms " << atomId1 << ", " << atomId2
                      << ", swap=false" << endl;
 #endif  //_DEBUG
-            } else if (((*bIter)->GetAtom1Ptr()->GetAtomId() == atomId2)
-                       && ((*bIter)->GetAtom2Ptr()->GetAtomId() == atomId1)) {
+            } else if (((*bIter)->GetAtom1Ptr()->GetAtomId() == atomId2) && ((*bIter)->GetAtom2Ptr()->GetAtomId() == atomId1)) {
                 RbtSymBondPtr spSymBond(new RbtSymBond(*bIter, nSym, true));
                 m_symBondList.push_back(spSymBond);
                 bMatch = true;
@@ -180,7 +179,8 @@ int main(int argc, char* argv[]) {
 
     try {
         RbtMolecularFileSourcePtr spRefFileSource(
-            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strRefSDFile), false, false, true));
+            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strRefSDFile), false, false, true)
+        );
         // DM 16 June 2006 - remove any solvent fragments from reference
         // The largest fragment in each SD record always has segment name="H"
         // for reasons lost in the mists of rDock history
@@ -201,7 +201,8 @@ int main(int argc, char* argv[]) {
         // MAIN LOOP OVER LIGAND RECORDS
         ///////////////////////////////////
         RbtMolecularFileSourcePtr spMdlFileSource(
-            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strInputSDFile), false, false, true));
+            new RbtMdlFileSource(Rbt::GetRbtFileName("data/ligands", strInputSDFile), false, false, true)
+        );
         RbtMolecularFileSinkPtr spMdlFileSink;
         if (bOutput) {
             spMdlFileSink = new RbtMdlFileSink(strOutputSDFile, RbtModelPtr());
@@ -242,7 +243,8 @@ int main(int argc, char* argv[]) {
                         RbtCoordList prevCoords;
                         Rbt::GetCoordList(
                             Rbt::GetAtomList(previousModels[i]->GetAtomList(), std::not1(Rbt::isAtomicNo_eq(1))),
-                            prevCoords);
+                            prevCoords
+                        );
                         RbtDouble rms0 = rmsd(prevCoords, coords);
                         bIsUnique = (rms0 > threshold);
                     }

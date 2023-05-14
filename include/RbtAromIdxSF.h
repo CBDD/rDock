@@ -80,8 +80,10 @@ class RbtAromIdxSF: public RbtBaseInterSF, public RbtBaseIdxSF, public RbtAnnota
     };
 
     // The actual aromatic score, between a given interaction center and a list of near neighbour centers
-    RbtDouble AromScore(const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List, const f1prms& Rprms,
-                        const f1prms& Aprms) const;
+    RbtDouble AromScore(
+        const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List, const f1prms& Rprms,
+        const f1prms& Aprms
+    ) const;
     RbtDouble PiScore(const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List) const;
     // End of section that should ultimately be moved to RbtAromSF base class
     //////////////////////////////////////////////////////////

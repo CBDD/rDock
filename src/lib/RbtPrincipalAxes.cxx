@@ -26,8 +26,9 @@
 
 // Special case for water
 // Allow for symmetry
-RbtPrincipalAxes Rbt::GetSolventPrincipalAxes(const RbtAtomPtr& oAtom, const RbtAtomPtr& h1Atom,
-                                              const RbtAtomPtr& h2Atom) {
+RbtPrincipalAxes Rbt::GetSolventPrincipalAxes(
+    const RbtAtomPtr& oAtom, const RbtAtomPtr& h1Atom, const RbtAtomPtr& h2Atom
+) {
     RbtPrincipalAxes retVal;
     RbtCoord oC = oAtom->GetCoords();
     RbtCoord h1C = h1Atom->GetCoords();
@@ -236,8 +237,9 @@ RbtPrincipalAxes Rbt::GetPrincipalAxes(const RbtCoordList& coordList) {
 // If required (bAlignCOM=true), also aligns the center of mass with refAxes.com
 //
 // LIMITATION: does not check for non-orthogonal alignAxes
-RbtQuat Rbt::AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& refAxes,
-                                RbtBool bAlignCOM) throw(RbtError) {
+RbtQuat Rbt::AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& refAxes, RbtBool bAlignCOM) throw(
+    RbtError
+) {
     RbtPrincipalAxes prAxes = Rbt::GetPrincipalAxes(atomList);
     RbtQuat q = Rbt::GetQuatFromAlignAxes(prAxes, refAxes);
 

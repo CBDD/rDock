@@ -48,8 +48,10 @@ class RbtTransformFactory {
     // If strTransformClasses is empty, all named sections in spPrmSource are scanned for valid transform
     // definitions Transform parameters and scoring function requests are set from the list of parameters in each
     // named section
-    virtual RbtTransformAgg* CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName,
-                                               const RbtString& strTransformClasses = RbtString()) throw(RbtError);
+    virtual RbtTransformAgg* CreateAggFromFile(
+        RbtParameterFileSourcePtr spPrmSource, const RbtString& strName,
+        const RbtString& strTransformClasses = RbtString()
+    ) throw(RbtError);
 
  protected:
     ////////////////////////////////////////

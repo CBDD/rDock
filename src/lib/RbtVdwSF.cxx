@@ -383,8 +383,8 @@ void RbtVdwSF::SetupCloseRange() {
 // Index the flexible interactions between two atom lists.
 // Foreach atom in the first list, compile a list of the atoms in the second list whose distance can vary to that atom
 // intns container should have been initialised to a vector of empty atom lists prior to calling BuildIntraMap
-void RbtVdwSF::BuildIntraMap(const RbtAtomRList& atomList1, const RbtAtomRList& atomList2,
-                             RbtAtomRListList& intns) const {
+void RbtVdwSF::BuildIntraMap(const RbtAtomRList& atomList1, const RbtAtomRList& atomList2, RbtAtomRListList& intns)
+    const {
     Rbt::SelectAtom selectAtom(true);
     Rbt::isAtomSelected isSelected;
     RbtBool bSingleList = atomList2.empty();  // If true, then index the flexible interactions within atomList1
@@ -423,8 +423,9 @@ void RbtVdwSF::BuildIntraMap(const RbtAtomRList& atomList, RbtAtomRListList& int
     BuildIntraMap(atomList, emptyList, intns);
 }
 
-void RbtVdwSF::Partition(const RbtAtomRList& atomList, const RbtAtomRListList& intns, RbtAtomRListList& prtIntns,
-                         RbtDouble dist) const {
+void RbtVdwSF::Partition(
+    const RbtAtomRList& atomList, const RbtAtomRListList& intns, RbtAtomRListList& prtIntns, RbtDouble dist
+) const {
     RbtInt iTrace = GetTrace();
 
     // Clear the existing partitioned lists

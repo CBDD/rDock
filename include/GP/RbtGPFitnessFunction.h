@@ -41,8 +41,9 @@ class RbtGPFitnessFunction {
     RbtDouble GetObjective() const;
     RbtDouble GetFitness() const;
     void SetFitness(RbtDouble);
-    virtual RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble,
-                                       RbtBool) = 0;
+    virtual RbtDouble CalculateFitness(
+        RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble, RbtBool
+    ) = 0;
     virtual RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtBool) = 0;
 
  protected:

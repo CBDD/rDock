@@ -21,8 +21,9 @@ class RbtPMFDirSource: public RbtDirectorySource {
     RbtPMFDirSource(const RbtString &) throw(RbtError);
     virtual ~RbtPMFDirSource(){};
 
-    virtual void ReadFiles(vector<vector<RbtPMFValue>> *aVect, vector<string> *aNameVect,
-                           vector<RbtPMFValue> *aSlopeVect);
+    virtual void ReadFiles(
+        vector<vector<RbtPMFValue>> *aVect, vector<string> *aNameVect, vector<RbtPMFValue> *aSlopeVect
+    );
     virtual void ParseLines(vector<RbtString> anStrVect, vector<RbtPMFValue> *aValueVect);
 };
 

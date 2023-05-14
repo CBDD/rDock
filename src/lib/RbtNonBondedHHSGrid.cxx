@@ -17,8 +17,9 @@
 
 RbtString RbtNonBondedHHSGrid::_CT("RbtNonBondedHHSGrid");
 
-RbtNonBondedHHSGrid::RbtNonBondedHHSGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY,
-                                         RbtUInt NZ, RbtUInt NPad /*=0*/):
+RbtNonBondedHHSGrid::RbtNonBondedHHSGrid(
+    const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad /*=0*/
+):
     RbtBaseGrid(gridMin, gridStep, NX, NY, NZ, NPad) {
     CreateMap();
     _RBTOBJECTCOUNTER_CONSTR_("RbtNonBondedHHSGrid");

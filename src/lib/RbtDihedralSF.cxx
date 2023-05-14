@@ -46,8 +46,9 @@ RbtDihedralSF::RbtDihedralSF() {
 #endif  //_DEBUG
     // Add parameters
     AddParameter(_IMPL_H_CORR, false);
-    m_spDihedralSource = RbtParameterFileSourcePtr(
-        new RbtParameterFileSource(Rbt::GetRbtFileName("data/sf", "Tripos52_dihedrals.prm")));
+    m_spDihedralSource =
+        RbtParameterFileSourcePtr(new RbtParameterFileSource(Rbt::GetRbtFileName("data/sf", "Tripos52_dihedrals.prm"))
+        );
     m_centralPairs = m_spDihedralSource->GetSectionList();
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
@@ -144,8 +145,9 @@ RbtDihedralList RbtDihedralSF::CreateDihedralList(const RbtBondList& bondList) {
     return dihList;
 }
 
-RbtDihedral::prms RbtDihedralSF::FindDihedralParams(RbtTriposAtomType::eType t1, RbtTriposAtomType::eType t2,
-                                                    RbtTriposAtomType::eType t3, RbtTriposAtomType::eType t4) {
+RbtDihedral::prms RbtDihedralSF::FindDihedralParams(
+    RbtTriposAtomType::eType t1, RbtTriposAtomType::eType t2, RbtTriposAtomType::eType t3, RbtTriposAtomType::eType t4
+) {
     RbtString str1 = m_triposType.Type2Str(t1);
     RbtString str2 = m_triposType.Type2Str(t2);
     RbtString str3 = m_triposType.Type2Str(t3);
@@ -241,8 +243,9 @@ RbtDihedral::prms RbtDihedralSF::FindDihedralParams(RbtTriposAtomType::eType t1,
 
 // Determines the list of bonded atoms for pAtom1, and the list of dihedral offsets for any implicit hydrogens
 // pAtom2 is the other central atom in the bond, is excluded from the returned list of bonded atoms
-void RbtDihedralSF::CalcBondedAtoms(RbtAtom* pAtom1, RbtAtom* pAtom2, RbtAtomList& bondedAtoms,
-                                    RbtDoubleList& offsets) {
+void RbtDihedralSF::CalcBondedAtoms(
+    RbtAtom* pAtom1, RbtAtom* pAtom2, RbtAtomList& bondedAtoms, RbtDoubleList& offsets
+) {
     offsets.clear();
     bondedAtoms =
         Rbt::GetAtomList(Rbt::GetBondedAtomList(pAtom1), std::not1(std::bind2nd(Rbt::isAtomPtr_eq(), pAtom2)));

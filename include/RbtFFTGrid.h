@@ -48,8 +48,9 @@ class RbtFFTGrid: public RbtRealGrid {
     ////////////////////////////////////////
     // Constructors/destructors
     // Construct a NXxNYxNZ grid running from gridMin at gridStep resolution
-    RbtFFTGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ,
-               RbtUInt NPad = 0);
+    RbtFFTGrid(
+        const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad = 0
+    );
 
     // Constructor reading all params from binary stream
     RbtFFTGrid(istream& istr);

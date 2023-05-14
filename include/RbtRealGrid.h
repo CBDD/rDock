@@ -25,8 +25,9 @@ class RbtRealGrid: public RbtBaseGrid {
     ////////////////////////////////////////
     // Constructors/destructors
     // Construct a NXxNYxNZ grid running from gridMin at gridStep resolution
-    RbtRealGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ,
-                RbtUInt NPad = 0);
+    RbtRealGrid(
+        const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad = 0
+    );
 
     // Constructor reading all params from binary stream
     RbtRealGrid(istream& istr);
@@ -109,8 +110,9 @@ class RbtRealGrid: public RbtBaseGrid {
     // Set all grid points with radii between rad1 and rad2 from coord to the given value
     // If bOverwrite is false, does not replace non-zero values
     // If bOverwrite is true, all grid points are set the new value
-    void SetSurface(const RbtCoord& c, RbtDouble innerRad, RbtDouble outerRad, RbtDouble val,
-                    RbtBool bOverwrite = true);
+    void SetSurface(
+        const RbtCoord& c, RbtDouble innerRad, RbtDouble outerRad, RbtDouble val, RbtBool bOverwrite = true
+    );
 
     // Sets all grid points with value=oldValue, which are adjacent to those with value=adjacentValue, to
     // value=newValue
@@ -125,8 +127,9 @@ class RbtRealGrid: public RbtBaseGrid {
     //+/- tolerance is applied to oldValue and adjacentValue
     // If bCenterOnly is true, just the center of the sphere is set the newValue
     // If bCenterOnly is false, all grid points in the sphere are set to the newValue
-    void SetAccessible(RbtDouble radius, RbtDouble oldVal, RbtDouble adjVal, RbtDouble newVal,
-                       RbtBool bCenterOnly = true);
+    void SetAccessible(
+        RbtDouble radius, RbtDouble oldVal, RbtDouble adjVal, RbtDouble newVal, RbtBool bCenterOnly = true
+    );
 
     /////////////////////////
     // Statistical functions

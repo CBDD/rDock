@@ -52,8 +52,9 @@ void RbtGPFFGold::ReadTables(istream& in) {
     }
 }
 
-RbtDouble RbtGPFFGold::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                        RbtBool function) {
+RbtDouble RbtGPFFGold::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtBool function
+) {
     RbtGPParser p(RbtGPGenome::GetNIP(), RbtGPGenome::GetNIF(), RbtGPGenome::GetNN(), RbtGPGenome::GetNO());
     RbtReturnTypeList o;
     RbtDouble tot = 0.0;
@@ -101,8 +102,9 @@ RbtDouble RbtGPFFGold::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it
     return fitness;
 }
 
-RbtDouble RbtGPFFGold::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                        RbtDouble hitlimit, RbtBool function) {
+RbtDouble RbtGPFFGold::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtDouble hitlimit, RbtBool function
+) {
     RbtGPParser p(g->GetNIP(), g->GetNIF(), g->GetNN(), g->GetNO());
     RbtReturnTypeList o;
     RbtDouble truehits = 0.0;

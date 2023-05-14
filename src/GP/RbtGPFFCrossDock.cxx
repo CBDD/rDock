@@ -65,8 +65,9 @@ void RbtGPFFCrossDock::ReadTables(istream& in, RbtReturnTypeArray& it, RbtReturn
     sft = SFTable;
 }
 
-RbtDouble RbtGPFFCrossDock::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                             RbtBool function) {
+RbtDouble RbtGPFFCrossDock::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtBool function
+) {
     if (function) {
         cout << "Error, no function possible with Cross Docking\n";
         exit(1);
@@ -128,8 +129,9 @@ RbtDouble RbtGPFFCrossDock::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArra
     return fitness;
 }
 
-RbtDouble RbtGPFFCrossDock::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                             RbtDouble hitlimit, RbtBool function) {
+RbtDouble RbtGPFFCrossDock::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtDouble hitlimit, RbtBool function
+) {
     RbtGPParser p(g->GetNIP(), g->GetNIF(), g->GetNN(), g->GetNO());
     RbtReturnTypeList o;
     RbtDouble good = 0.0;

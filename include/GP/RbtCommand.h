@@ -121,8 +121,10 @@ class IfCommand: public RbtCommand {
         //	return ("\niff(" + NameArg[0] + "," + NameArg[1] + "," +
         //			NameArg[2] + ")");};
         if (inside) return ("iff(" + NameArg[0] + " , " + NameArg[1] + " , " + NameArg[2] + ")");
-        return ("\n" + tabs(ntabs - 1) + "if " + NameArg[0] + "> 0 then\n" + tabs(ntabs) + NameArg[1] + "\n"
-                + tabs(ntabs - 1) + "else \n" + tabs(ntabs) + NameArg[2] + "\n" + tabs(ntabs - 1) + "end\n");
+        return (
+            "\n" + tabs(ntabs - 1) + "if " + NameArg[0] + "> 0 then\n" + tabs(ntabs) + NameArg[1] + "\n"
+            + tabs(ntabs - 1) + "else \n" + tabs(ntabs) + NameArg[2] + "\n" + tabs(ntabs - 1) + "end\n"
+        );
     };
     IfCommand(){};
     void SetArg(int i, RbtReturnType f) { Arg[i] = f; };

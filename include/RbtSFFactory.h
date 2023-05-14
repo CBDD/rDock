@@ -46,8 +46,9 @@ class RbtSFFactory {
     // strSFClasses contains a comma-delimited list of SF class names to instantiate
     // If strSFClasses is empty, all named sections in spPrmSource are scanned for valid scoring function
     // definitions SF parameters are set from the list of parameters in each named section
-    virtual RbtSFAgg* CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName,
-                                        const RbtString& strSFClasses = RbtString()) throw(RbtError);
+    virtual RbtSFAgg* CreateAggFromFile(
+        RbtParameterFileSourcePtr spPrmSource, const RbtString& strName, const RbtString& strSFClasses = RbtString()
+    ) throw(RbtError);
 
  protected:
     ////////////////////////////////////////

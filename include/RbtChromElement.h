@@ -157,7 +157,8 @@ typedef RbtChromElementList::const_iterator RbtChromElementListConstIter;
 
 namespace Rbt {
 // 2-point crossover
-void Crossover(RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3,
-               RbtChromElement* pChr4) throw(RbtError);
+void Crossover(RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3, RbtChromElement* pChr4) throw(
+    RbtError
+);
 }  // namespace Rbt
 #endif /*RBTCHROMELEMENT_H_*/

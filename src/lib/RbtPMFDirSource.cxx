@@ -23,8 +23,9 @@ RbtPMFDirSource::RbtPMFDirSource(const RbtString &aDir) throw(RbtError): RbtDire
 #endif
 }
 
-void RbtPMFDirSource::ReadFiles(vector<vector<RbtPMFValue>> *aVect, vector<string> *aNameVect,
-                                vector<RbtPMFValue> *aSlopeVect) {
+void RbtPMFDirSource::ReadFiles(
+    vector<vector<RbtPMFValue>> *aVect, vector<string> *aNameVect, vector<RbtPMFValue> *aSlopeVect
+) {
     cout << "Reading " << fNum << " PMF files..." << endl;
     RbtString theFileName;              // will be the filename with full path
     RbtString theLine;                  // one line from the file

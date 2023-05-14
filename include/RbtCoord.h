@@ -421,8 +421,10 @@ inline RbtCoord Min(const RbtCoordList& cl) {
     std::transform(cl.begin(), cl.end(), std::back_inserter(cy), ExtractYCoord);
     std::transform(cl.begin(), cl.end(), std::back_inserter(cz), ExtractZCoord);
     // Compose the min coord from the min of each of the components
-    return RbtCoord(*(std::min_element(cx.begin(), cx.end())), *(std::min_element(cy.begin(), cy.end())),
-                    *(std::min_element(cz.begin(), cz.end())));
+    return RbtCoord(
+        *(std::min_element(cx.begin(), cx.end())), *(std::min_element(cy.begin(), cy.end())),
+        *(std::min_element(cz.begin(), cz.end()))
+    );
 }
 
 // DM 28 Jul 1999 - returns component-wise max coord for coord list (i.e. max x, max y, max z)
@@ -433,8 +435,10 @@ inline RbtCoord Max(const RbtCoordList& cl) {
     std::transform(cl.begin(), cl.end(), std::back_inserter(cy), ExtractYCoord);
     std::transform(cl.begin(), cl.end(), std::back_inserter(cz), ExtractZCoord);
     // Compose the max coord from the max of each of the components
-    return RbtCoord(*(std::max_element(cx.begin(), cx.end())), *(std::max_element(cy.begin(), cy.end())),
-                    *(std::max_element(cz.begin(), cz.end())));
+    return RbtCoord(
+        *(std::max_element(cx.begin(), cx.end())), *(std::max_element(cy.begin(), cy.end())),
+        *(std::max_element(cz.begin(), cz.end()))
+    );
 }
 
 // Returns center of "mass" of coords in coord list

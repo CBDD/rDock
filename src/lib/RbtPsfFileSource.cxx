@@ -111,9 +111,11 @@ void RbtPsfFileSource::Parse() throw(RbtError) {
                     >> dPartialCharge >> dAtomicMass;
 
                 // Construct a new atom (constructor only accepts the 2D params)
-                RbtAtomPtr spAtom(new RbtAtom(nAtomId,
-                                              0,  // Atomic number undefined (gets set below)
-                                              strAtomName, strSubunitId, strSubunitName, strSegmentName));
+                RbtAtomPtr spAtom(new RbtAtom(
+                    nAtomId,
+                    0,  // Atomic number undefined (gets set below)
+                    strAtomName, strSubunitId, strSubunitName, strSegmentName
+                ));
 
                 // Now set the remaining 2-D and 3-D params
                 // Use the Charmm data source to provide some params not in the PSF file
@@ -123,12 +125,12 @@ void RbtPsfFileSource::Parse() throw(RbtError) {
                 if (nFFType > 0)
                     strFFType = m_spCharmmData->AtomTypeString(nFFType);  // Convert atom type from int to string
                 spAtom->SetFFType(strFFType);
-                spAtom->SetAtomicNo(
-                    m_spCharmmData->AtomicNumber(strFFType));  // Now we can set the atomic number correctly
-                spAtom->SetNumImplicitHydrogens(
-                    m_spCharmmData->ImplicitHydrogens(strFFType));  // Set # of implicit hydrogens
-                spAtom->SetHybridState(
-                    m_spCharmmData->HybridState(strFFType));  // DM 8 Dec 1998 Set hybridisation state
+                spAtom->SetAtomicNo(m_spCharmmData->AtomicNumber(strFFType)
+                );  // Now we can set the atomic number correctly
+                spAtom->SetNumImplicitHydrogens(m_spCharmmData->ImplicitHydrogens(strFFType)
+                );  // Set # of implicit hydrogens
+                spAtom->SetHybridState(m_spCharmmData->HybridState(strFFType)
+                );  // DM 8 Dec 1998 Set hybridisation state
                 // spAtom->SetVdwRadius(m_spCharmmData->VdwRadius(strFFType));
                 // spAtom->SetFormalCharge(m_spCharmmData->FormalCharge(strFFType));
                 spAtom->SetGroupCharge(0.0);
@@ -172,15 +174,18 @@ void RbtPsfFileSource::Parse() throw(RbtError) {
                 // May be better to store a map rather than a vector ??
                 while (istr >> idxAtom1 >> idxAtom2) {
                     if ((idxAtom1 > nAtomRec) || (idxAtom2 > nAtomRec)) {  // Check for indices in range
-                        throw RbtFileParseError(_WHERE_,
-                                                "Atom index out of range in bond records in " + GetFileName());
+                        throw RbtFileParseError(
+                            _WHERE_, "Atom index out of range in bond records in " + GetFileName()
+                        );
                     }
                     RbtAtomPtr spAtom1(m_atomList[idxAtom1 - 1]);  // Decrement the atom index as the atoms are
                                                                    // numbered from zero in our atom vector
                     RbtAtomPtr spAtom2(m_atomList[idxAtom2 - 1]);  // Decrement the atom index as the atoms are
                                                                    // numbered from zero in our atom vector
-                    RbtBondPtr spBond(new RbtBond(++nBondId,       // Store a nominal bond ID starting from 1
-                                                  spAtom1, spAtom2));
+                    RbtBondPtr spBond(new RbtBond(
+                        ++nBondId,  // Store a nominal bond ID starting from 1
+                        spAtom1, spAtom2
+                    ));
                     m_bondList.push_back(spBond);
                 }
             }

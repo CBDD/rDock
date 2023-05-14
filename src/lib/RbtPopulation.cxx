@@ -54,8 +54,10 @@ void RbtPopulation::SetSF(RbtBaseSF* pSF) throw(RbtError) {
     EvaluateRWFitness();
 }
 
-void RbtPopulation::GAstep(RbtInt nReplicates, RbtDouble relStepSize, RbtDouble equalityThreshold, RbtDouble pcross,
-                           RbtBool xovermut, RbtBool cmutate) throw(RbtError) {
+void RbtPopulation::GAstep(
+    RbtInt nReplicates, RbtDouble relStepSize, RbtDouble equalityThreshold, RbtDouble pcross, RbtBool xovermut,
+    RbtBool cmutate
+) throw(RbtError) {
     if (nReplicates <= 0) {
         throw RbtBadArgument(_WHERE_, "nReplicates must be positive (non-zero)");
     }
@@ -154,8 +156,9 @@ void RbtPopulation::MergeNewPop(RbtGenomeList& newPop, RbtDouble equalityThresho
     RbtGenomeList mergedPop;
     mergedPop.reserve(m_pop.size() + newPop.size());
     // Merge pops by score
-    std::merge(m_pop.begin(), m_pop.end(), newPop.begin(), newPop.end(), std::back_inserter(mergedPop),
-               Rbt::GenomeCmp_Score());
+    std::merge(
+        m_pop.begin(), m_pop.end(), newPop.begin(), newPop.end(), std::back_inserter(mergedPop), Rbt::GenomeCmp_Score()
+    );
     // Remove neighbouring duplicates by equality of chromosome element values
     RbtGenomeListIter end = std::unique(mergedPop.begin(), mergedPop.end(), Rbt::isGenome_eq(equalityThreshold));
     mergedPop.erase(end, mergedPop.end());

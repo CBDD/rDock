@@ -118,8 +118,9 @@ ostream& operator<<(ostream& s, const RbtChromElement& c) {
     return s;
 }
 
-void Rbt::Crossover(RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3,
-                    RbtChromElement* pChr4) throw(RbtError) {
+void Rbt::Crossover(
+    RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3, RbtChromElement* pChr4
+) throw(RbtError) {
     // Check all chromosomes have the same crossover length
     RbtInt length1 = pChr1->GetXOverLength();
     if ((length1 != pChr2->GetXOverLength()) || (length1 != pChr3->GetXOverLength())

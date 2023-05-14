@@ -55,11 +55,11 @@ RbtAtom::RbtAtom():
 
 // Constructor supplying all 2-D parameters
 // Initialise 3-D attributes to zero/null
-RbtAtom::RbtAtom(RbtInt nAtomId, RbtInt nAtomicNo /*= 6*/, RbtString strAtomName /*= "C"*/,
-                 RbtString strSubunitId /*= "1"*/, RbtString strSubunitName /*= "RES"*/,
-                 RbtString strSegmentName /*= "SEG1"*/, eHybridState eState /*= UNDEFINED*/,
-                 RbtUInt nHydrogens /*= 0*/, RbtInt nFormalCharge /*= 0.0*/
-                 ):
+RbtAtom::RbtAtom(
+    RbtInt nAtomId, RbtInt nAtomicNo /*= 6*/, RbtString strAtomName /*= "C"*/, RbtString strSubunitId /*= "1"*/,
+    RbtString strSubunitName /*= "RES"*/, RbtString strSegmentName /*= "SEG1"*/, eHybridState eState /*= UNDEFINED*/,
+    RbtUInt nHydrogens /*= 0*/, RbtInt nFormalCharge /*= 0.0*/
+):
     m_nAtomId(nAtomId),
     m_nAtomicNo(nAtomicNo),
     m_strAtomName(strAtomName),
@@ -413,9 +413,11 @@ RbtBool Rbt::isAtomHBondAcceptor::operator()(const RbtAtom* pAtom) const {
 // Is atom a H-Bond Donor ?
 // Checks 1) is it a hydrogen, 2) does it make exactly one bond, 3) is the bond to O, N or S ?
 RbtBool Rbt::isAtomHBondDonor::operator()(const RbtAtom* pAtom) const {
-    return ((pAtom->GetAtomicNo() == 1) && (pAtom->GetNumBonds() == 1)
-            && ((pAtom->GetCoordinationNumber(8) == 1) || (pAtom->GetCoordinationNumber(7) == 1)
-                || (pAtom->GetCoordinationNumber(16) == 1)));
+    return (
+        (pAtom->GetAtomicNo() == 1) && (pAtom->GetNumBonds() == 1)
+        && ((pAtom->GetCoordinationNumber(8) == 1) || (pAtom->GetCoordinationNumber(7) == 1)
+            || (pAtom->GetCoordinationNumber(16) == 1))
+    );
 }
 
 // Is atom planar ?
@@ -426,8 +428,10 @@ RbtBool Rbt::isAtomPlanar::operator()(const RbtAtom* pAtom) const {
     // 17 Dec 1998 (DM) GetCoordinationNumber works for extended atoms
     //  as it includes any implicit hydrogens
     //   return ( (spAtom->GetNumBonds() == 2) ||
-    return ((pAtom->GetCoordinationNumber() == 2) || (hybrid == RbtAtom::SP2) || (hybrid == RbtAtom::AROM)
-            || (hybrid == RbtAtom::TRI));
+    return (
+        (pAtom->GetCoordinationNumber() == 2) || (hybrid == RbtAtom::SP2) || (hybrid == RbtAtom::AROM)
+        || (hybrid == RbtAtom::TRI)
+    );
 }
 
 // Is atom a pi-atom ?
@@ -476,8 +480,10 @@ RbtBool Rbt::isAtom_13Connected::operator()(RbtAtom* pAtom2) const {
     RbtAtomList bondedAtomList2 = GetBondedAtomList(pAtom2);
     // Check if any atoms appear in both bonded atom lists
     // STL find_first_of will do the trick.
-    return std::find_first_of(bondedAtomList1.begin(), bondedAtomList1.end(), bondedAtomList2.begin(),
-                              bondedAtomList2.end(), Rbt::isAtomPtr_eq())
+    return std::find_first_of(
+               bondedAtomList1.begin(), bondedAtomList1.end(), bondedAtomList2.begin(), bondedAtomList2.end(),
+               Rbt::isAtomPtr_eq()
+           )
            != bondedAtomList1.end();
 }
 
@@ -486,9 +492,10 @@ RbtBool Rbt::isAtom_13Connected::operator()(RbtAtom* pAtom2) const {
 // Note: strictly speaking these are used for DNA, not RNA, but they often crop up in RNA
 RbtBool Rbt::isAtomRNA::operator()(const RbtAtom* pAtom) const {
     RbtString strSubunitName = pAtom->GetSubunitName();
-    return ((strSubunitName == "A") || (strSubunitName == "ADE") || (strSubunitName == "G")
-            || (strSubunitName == "GUA") || (strSubunitName == "C") || (strSubunitName == "CYT")
-            || (strSubunitName == "U") || (strSubunitName == "URI"));
+    return (
+        (strSubunitName == "A") || (strSubunitName == "ADE") || (strSubunitName == "G") || (strSubunitName == "GUA")
+        || (strSubunitName == "C") || (strSubunitName == "CYT") || (strSubunitName == "U") || (strSubunitName == "URI")
+    );
 }
 
 // DM 21 Jul 1999 Is atom lipophilic ?

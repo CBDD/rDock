@@ -68,10 +68,12 @@ class RbtAtom {
     RbtAtom();
 
     // Constructor supplying all 2-D parameters
-    RbtAtom(RbtInt nAtomId, RbtInt nAtomicNo = 6, RbtString strAtomName = "C", RbtString strSubunitId = "1",
-            RbtString strSubunitName = "RES", RbtString strSegmentName = "SEG1",
-            eHybridState eState = UNDEFINED,  // DM 8 Dec 1998 Changed from SP3 to UNDEFINED
-            RbtUInt nHydrogens = 0, RbtInt nFormalCharge = 0);
+    RbtAtom(
+        RbtInt nAtomId, RbtInt nAtomicNo = 6, RbtString strAtomName = "C", RbtString strSubunitId = "1",
+        RbtString strSubunitName = "RES", RbtString strSegmentName = "SEG1",
+        eHybridState eState = UNDEFINED,  // DM 8 Dec 1998 Changed from SP3 to UNDEFINED
+        RbtUInt nHydrogens = 0, RbtInt nFormalCharge = 0
+    );
 
     // Default destructor
     virtual ~RbtAtom();
@@ -552,9 +554,11 @@ class isAtom_eq: public std::binary_function<RbtAtom*, RbtAtom*, RbtBool> {
  public:
     explicit isAtom_eq() {}
     RbtBool operator()(const RbtAtom* pAtom1, const RbtAtom* pAtom2) const {
-        return ((pAtom1->GetSubunitId() == pAtom2->GetSubunitId())
-                && (pAtom1->GetSubunitName() == pAtom2->GetSubunitName())
-                && (pAtom1->GetAtomName() == pAtom2->GetAtomName()));
+        return (
+            (pAtom1->GetSubunitId() == pAtom2->GetSubunitId())
+            && (pAtom1->GetSubunitName() == pAtom2->GetSubunitName())
+            && (pAtom1->GetAtomName() == pAtom2->GetAtomName())
+        );
     }
 };
 

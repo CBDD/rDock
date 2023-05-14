@@ -78,9 +78,11 @@ void RbtGPFFHSP90::ReadTables(istream& in, RbtReturnTypeArray& it, RbtReturnType
     sft = SFTable;
 }
 
-RbtDouble RbtGPFFHSP90::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                         //                                         RbtDouble limit,
-                                         RbtBool function) {
+RbtDouble RbtGPFFHSP90::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
+    //                                         RbtDouble limit,
+    RbtBool function
+) {
     RbtReturnTypeArray o;
     //    o.push_back(new RbtReturnType(1.1));
     RbtReturnType oldo;
@@ -133,8 +135,9 @@ RbtDouble RbtGPFFHSP90::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& i
     return fitness;
 }
 
-RbtDouble RbtGPFFHSP90::CalculateFitness(RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
-                                         RbtDouble limit, RbtBool function) {
+RbtDouble RbtGPFFHSP90::CalculateFitness(
+    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft, RbtDouble limit, RbtBool function
+) {
     RbtReturnTypeArray o;
     RbtReturnType oldo;
     RbtDouble tot = 0.0;

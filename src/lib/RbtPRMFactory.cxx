@@ -99,8 +99,9 @@ RbtModelPtr RbtPRMFactory::CreateReceptor() throw(RbtError) {
                     cout << endl << "Incompatible file type for " << _REC_COORD_FILE << " option" << endl;
                     cout << "File type must provide coordinate information (atom list with 3D coords)" << endl << endl;
                 }
-                throw RbtBadReceptorFile(_WHERE_,
-                                         "Inappropriate molecular file type for " + _REC_COORD_FILE + " option");
+                throw RbtBadReceptorFile(
+                    _WHERE_, "Inappropriate molecular file type for " + _REC_COORD_FILE + " option"
+                );
             }
             retVal->UpdateCoords(theCoordSource);
         }
@@ -177,7 +178,8 @@ RbtModelList RbtPRMFactory::CreateSolvent() throw(RbtError) {
                 cout << "File type must provide atom list and coordinates in a single file" << endl;
             }
             throw RbtBadReceptorFile(
-                _WHERE_, "Inappropriate molecular file type for " + _SOLV_SECTION + "::" + _SOLV_FILE + " option");
+                _WHERE_, "Inappropriate molecular file type for " + _SOLV_SECTION + "::" + _SOLV_FILE + " option"
+            );
         }
         // Find all the water molecules within the file source and convert each to a separate RbtModel
         Rbt::isAtomName_eq bIsO("OW");

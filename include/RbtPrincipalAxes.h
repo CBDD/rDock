@@ -52,8 +52,9 @@ RbtPrincipalAxes GetPrincipalAxes(const RbtCoordList& coordList);
 // Special case for water
 RbtPrincipalAxes GetSolventPrincipalAxes(const RbtAtomPtr& oAtom, const RbtAtomPtr& h1Atom, const RbtAtomPtr& h2Atom);
 // DM 17 Jul 2001 - returns the quaternion used to effect the transformation
-RbtQuat AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& alignAxes = RbtPrincipalAxes(),
-                           RbtBool bAlignCOM = true) throw(RbtError);
+RbtQuat AlignPrincipalAxes(
+    RbtAtomList& atomList, const RbtPrincipalAxes& alignAxes = RbtPrincipalAxes(), RbtBool bAlignCOM = true
+) throw(RbtError);
 // Returns the quaternion required to align principal axes with reference axes
 RbtQuat GetQuatFromAlignAxes(const RbtPrincipalAxes& prAxes, const RbtPrincipalAxes& refAxes) throw(RbtError);
 // Returns the quaternion required to effect an alignment of v onto ref vector.

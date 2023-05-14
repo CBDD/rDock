@@ -36,7 +36,8 @@ void RbtChromFactory::VisitReceptorFlexData(RbtReceptorFlexData* pFlexData) {
         if (pModel->GetNumSavedCoords() > 1) {
             RbtString message(
                 "The combination of flexible OH/NH3 groups AND multiple receptor conformations is not supported "
-                "currently");
+                "currently"
+            );
             throw RbtInvalidRequest(_WHERE_, message);
         }
 
@@ -107,7 +108,8 @@ void RbtChromFactory::VisitLigandFlexData(RbtLigandFlexData* pFlexData) {
         if (dihedralMode != RbtChromElement::FIXED) {
             for (RbtBondListConstIter iter = rotBondList.begin(); iter != rotBondList.end(); ++iter) {
                 m_pChrom->Add(
-                    new RbtChromDihedralElement(*iter, tetheredAtoms, dihedralStepSize, dihedralMode, maxDihedral));
+                    new RbtChromDihedralElement(*iter, tetheredAtoms, dihedralStepSize, dihedralMode, maxDihedral)
+                );
             }
         }
 
@@ -116,8 +118,10 @@ void RbtChromFactory::VisitLigandFlexData(RbtLigandFlexData* pFlexData) {
         // if translation and rotation are fixed.
         if ((transMode != RbtChromElement::FIXED) || (rotMode != RbtChromElement::FIXED)) {
             // Don't forget that whole body rotation code is in radians (not degrees)
-            m_pChrom->Add(new RbtChromPositionElement(pModel, pDockSite, transStepSize, rotStepSize * M_PI / 180.0,
-                                                      transMode, rotMode, maxTrans, maxRot * M_PI / 180.0));
+            m_pChrom->Add(new RbtChromPositionElement(
+                pModel, pDockSite, transStepSize, rotStepSize * M_PI / 180.0, transMode, rotMode, maxTrans,
+                maxRot * M_PI / 180.0
+            ));
         }
         // Create the legacy ModelMutator object
         // needed for storing the flexible interaction maps

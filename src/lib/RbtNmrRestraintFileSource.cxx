@@ -81,8 +81,9 @@ void RbtNmrRestraintFileSource::Parse() throw(RbtError) {
                 istr >> strAtomNames1 >> strAtomNames2 >> maxDist;
                 // Check if we read all the fields OK
                 if (!istr)
-                    throw RbtFileParseError(_WHERE_,
-                                            "Missing field(s) at line " + (*fileIter) + " in " + GetFileName());
+                    throw RbtFileParseError(
+                        _WHERE_, "Missing field(s) at line " + (*fileIter) + " in " + GetFileName()
+                    );
 
                 // DM 10 Dec 2002 - support for STD restraints. The first atom name string is replaced by the
                 // keyword STD (or std) in the file. The restraint is applied to the second atom list and implies
@@ -93,8 +94,9 @@ void RbtNmrRestraintFileSource::Parse() throw(RbtError) {
                     restraint.from.type = NoeRestraintType(strAtomNames2);
                     // Check for bad syntax (restraint type=UNDEFINED)
                     if (restraint.from.type == Rbt::NOE_UNDEFINED)
-                        throw RbtFileParseError(_WHERE_, "Unmatched or misplaced brackets at line " + (*fileIter)
-                                                             + " in " + GetFileName());
+                        throw RbtFileParseError(
+                            _WHERE_, "Unmatched or misplaced brackets at line " + (*fileIter) + " in " + GetFileName()
+                        );
                     RbtStringList fromList = Rbt::ConvertDelimitedStringToList(strAtomNames2, strDelimiter);
                     restraint.from.names = fromList;
                     restraint.maxDist = maxDist;
@@ -109,8 +111,9 @@ void RbtNmrRestraintFileSource::Parse() throw(RbtError) {
                     restraint.to.type = NoeRestraintType(strAtomNames2);
                     // Check for bad syntax (restraint type=UNDEFINED)
                     if ((restraint.from.type == Rbt::NOE_UNDEFINED) || (restraint.to.type == Rbt::NOE_UNDEFINED))
-                        throw RbtFileParseError(_WHERE_, "Unmatched or misplaced brackets at line " + (*fileIter)
-                                                             + " in " + GetFileName());
+                        throw RbtFileParseError(
+                            _WHERE_, "Unmatched or misplaced brackets at line " + (*fileIter) + " in " + GetFileName()
+                        );
                     RbtStringList fromList = Rbt::ConvertDelimitedStringToList(strAtomNames1, strDelimiter);
                     restraint.from.names = fromList;
                     RbtStringList toList = Rbt::ConvertDelimitedStringToList(strAtomNames2, strDelimiter);

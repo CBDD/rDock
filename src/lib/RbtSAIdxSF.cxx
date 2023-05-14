@@ -57,8 +57,9 @@ void RbtSAIdxSF::SetupReceptor() {
     // Trap multiple receptor conformations here: this SF does not support them yet
     RbtBool bEnsemble = (GetReceptor()->GetNumSavedCoords() > 1);
     if (bEnsemble) {
-        throw RbtInvalidRequest(_WHERE_,
-                                "Solvation scoring function does not support multiple receptor conformations yet");
+        throw RbtInvalidRequest(
+            _WHERE_, "Solvation scoring function does not support multiple receptor conformations yet"
+        );
     }
 
     // MAKE THE ASSUMPTION that the only flexible receptor atoms are terminal OH/NH3

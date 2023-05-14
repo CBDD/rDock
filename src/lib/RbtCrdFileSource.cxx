@@ -78,9 +78,11 @@ void RbtCrdFileSource::Parse() throw(RbtError) {
                     >> coord.y >> coord.z >> strSegmentName >> strSubunitId;
 
                 // Construct a new atom (constructor only accepts the 2D params)
-                RbtAtomPtr spAtom(new RbtAtom(nAtomId,
-                                              0,  // Atomic number undefined (gets set in CheckAtomParams)
-                                              strAtomName, strSubunitId, strSubunitName, strSegmentName));
+                RbtAtomPtr spAtom(new RbtAtom(
+                    nAtomId,
+                    0,  // Atomic number undefined (gets set in CheckAtomParams)
+                    strAtomName, strSubunitId, strSubunitName, strSegmentName
+                ));
 
                 // Now set the 3-D params we have
                 spAtom->SetCoords(coord);

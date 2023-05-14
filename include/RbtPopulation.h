@@ -62,13 +62,14 @@ class RbtPopulation {
     void SetSF(RbtBaseSF* pSF) throw(RbtError);
 
     // Main method for performing a GA iteration
-    void GAstep(RbtInt nReplicates,           // Number of new genomes to create in the iteration
-                RbtDouble relStepSize,        // Relative step size for chromosome mutations
-                RbtDouble equalityThreshold,  // Equality threshold for genomes
-                RbtDouble pcross,             // Probability of crossover
-                RbtBool xovermut,             // if true, perform cauchy mutation following crossover
-                RbtBool cmutate               // true=cauchy mutations, false=regular mutations
-                ) throw(RbtError);
+    void GAstep(
+        RbtInt nReplicates,           // Number of new genomes to create in the iteration
+        RbtDouble relStepSize,        // Relative step size for chromosome mutations
+        RbtDouble equalityThreshold,  // Equality threshold for genomes
+        RbtDouble pcross,             // Probability of crossover
+        RbtBool xovermut,             // if true, perform cauchy mutation following crossover
+        RbtBool cmutate               // true=cauchy mutations, false=regular mutations
+    ) throw(RbtError);
     RbtGenomePtr RouletteWheelSelect() const;
 
     void Print(ostream&) const;

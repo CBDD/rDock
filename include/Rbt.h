@@ -68,8 +68,9 @@ RbtString GetFileType(const RbtString& strFile);
 // GetDirList
 // Returns a list of files in a directory (strDir) whose names begin with strFilePrefix (optional)
 // and whose type is strFileType (optional, as returned by GetFileType)
-RbtStringList GetDirList(const RbtString& strDir, const RbtString& strFilePrefix = "",
-                         const RbtString& strFileType = "");
+RbtStringList GetDirList(
+    const RbtString& strDir, const RbtString& strFilePrefix = "", const RbtString& strFileType = ""
+);
 //
 ////////////////////////////////////////////////////////////////
 

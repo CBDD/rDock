@@ -25,8 +25,9 @@
 // so that the first model is rendered using the model segment names
 // Default in calls to SetModel is to set m_bUseModelSegmentNames to false
 // so that subsequent Render()s use numeric segment IDs
-RbtBaseMolecularFileSink::RbtBaseMolecularFileSink(const RbtString& fileName, RbtModelPtr spModel,
-                                                   RbtBool bUseModelSegmentNames):
+RbtBaseMolecularFileSink::RbtBaseMolecularFileSink(
+    const RbtString& fileName, RbtModelPtr spModel, RbtBool bUseModelSegmentNames
+):
     RbtBaseFileSink(fileName),
     m_spModel(spModel),
     m_bMultiConf(false),
