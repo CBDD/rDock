@@ -20,16 +20,16 @@
 #include "RbtRequest.h"
 
 class RbtRequestHandler {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtRequestHandler(){};
-        virtual ~RbtRequestHandler(){};
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtRequestHandler(){};
+    virtual ~RbtRequestHandler(){};
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        virtual void HandleRequest(RbtRequestPtr spRequest){};
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    virtual void HandleRequest(RbtRequestPtr spRequest){};
 };
 
 #endif  //_RBTREQUESTHANDLER_H_

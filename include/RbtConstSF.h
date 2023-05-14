@@ -20,29 +20,29 @@
 #include "RbtBaseInterSF.h"
 
 class RbtConstSF: public RbtBaseInterSF {
-    public:
-        // Static data member for class type (i.e. "RbtConstSF")
-        static RbtString _CT;
-        static RbtString _SOLVENT_PENALTY;
+ public:
+    // Static data member for class type (i.e. "RbtConstSF")
+    static RbtString _CT;
+    static RbtString _SOLVENT_PENALTY;
 
-        RbtConstSF(const RbtString& strName = "CONST");
-        virtual ~RbtConstSF();
+    RbtConstSF(const RbtString& strName = "CONST");
+    virtual ~RbtConstSF();
 
-        virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
+    virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
 
-    protected:
-        virtual void SetupReceptor(){};
-        virtual void SetupLigand(){};
-        virtual void SetupScore(){};
-        virtual RbtDouble RawScore() const;
-        void ParameterUpdated(const RbtString& strName);
+ protected:
+    virtual void SetupReceptor(){};
+    virtual void SetupLigand(){};
+    virtual void SetupScore(){};
+    virtual RbtDouble RawScore() const;
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        // The original constant score for ligand binding
-        RbtDouble InterScore() const;
-        // The solvent binding penalty
-        RbtDouble SystemScore() const;
-        RbtDouble m_solventPenalty;
+ private:
+    // The original constant score for ligand binding
+    RbtDouble InterScore() const;
+    // The solvent binding penalty
+    RbtDouble SystemScore() const;
+    RbtDouble m_solventPenalty;
 };
 
 #endif  //_RBTCONSTSF_H_

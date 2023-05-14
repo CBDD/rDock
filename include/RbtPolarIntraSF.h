@@ -21,37 +21,37 @@
 #include "RbtPolarSF.h"
 
 class RbtPolarIntraSF: public RbtBaseIntraSF, public RbtPolarSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _ATTR;
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _ATTR;
 
-        RbtPolarIntraSF(const RbtString& strName = "POLAR");
-        virtual ~RbtPolarIntraSF();
+    RbtPolarIntraSF(const RbtString& strName = "POLAR");
+    virtual ~RbtPolarIntraSF();
 
-    protected:
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
+ protected:
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
 
-        // Request Handling method
-        // Handles the Partition request
-        virtual void HandleRequest(RbtRequestPtr spRequest);
+    // Request Handling method
+    // Handles the Partition request
+    virtual void HandleRequest(RbtRequestPtr spRequest);
 
-        // Clear the model lists
-        // As we are not using smart pointers, there is some memory management to do
-        void ClearModel();
+    // Clear the model lists
+    // As we are not using smart pointers, there is some memory management to do
+    void ClearModel();
 
-        // DM 25 Oct 2000 - track changes to parameter values in local data members
-        // ParameterUpdated is invoked by RbtParamHandler::SetParameter
-        void ParameterUpdated(const RbtString& strName);
+    // DM 25 Oct 2000 - track changes to parameter values in local data members
+    // ParameterUpdated is invoked by RbtParamHandler::SetParameter
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        RbtInteractionCenterList m_posList;
-        RbtInteractionCenterList m_negList;
-        RbtInteractionListMap m_intns;
-        RbtInteractionListMap m_prtIntns;
-        RbtBool m_bAttr;
+ private:
+    RbtInteractionCenterList m_posList;
+    RbtInteractionCenterList m_negList;
+    RbtInteractionListMap m_intns;
+    RbtInteractionListMap m_prtIntns;
+    RbtBool m_bAttr;
 };
 
 #endif  //_RBTPOLARINTRASF_H_

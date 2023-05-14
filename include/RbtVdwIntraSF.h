@@ -19,29 +19,29 @@
 #include "RbtVdwSF.h"
 
 class RbtVdwIntraSF: public RbtBaseIntraSF, public RbtVdwSF {
-    public:
-        // Class type string
-        static RbtString _CT;
+ public:
+    // Class type string
+    static RbtString _CT;
 
-        RbtVdwIntraSF(const RbtString& strName = "VDW");
-        virtual ~RbtVdwIntraSF();
+    RbtVdwIntraSF(const RbtString& strName = "VDW");
+    virtual ~RbtVdwIntraSF();
 
-        // Request Handling method
-        // Handles the Partition request
-        virtual void HandleRequest(RbtRequestPtr spRequest);
+    // Request Handling method
+    // Handles the Partition request
+    virtual void HandleRequest(RbtRequestPtr spRequest);
 
-    protected:
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
+ protected:
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
 
-        // DM 25 Oct 2000 - track changes to parameter values in local data members
-        // ParameterUpdated is invoked by RbtParamHandler::SetParameter
-        void ParameterUpdated(const RbtString& strName);
+    // DM 25 Oct 2000 - track changes to parameter values in local data members
+    // ParameterUpdated is invoked by RbtParamHandler::SetParameter
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        RbtAtomRListList m_vdwIntns;  // The full list of vdW interactions
-        RbtAtomRListList m_prtIntns;  // The partitioned interactions (within partition distance)
-        RbtAtomRList m_ligAtomList;
+ private:
+    RbtAtomRListList m_vdwIntns;  // The full list of vdW interactions
+    RbtAtomRListList m_prtIntns;  // The partitioned interactions (within partition distance)
+    RbtAtomRList m_ligAtomList;
 };
 
 #endif  //_RBTVDWINTRASF_H_

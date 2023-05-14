@@ -21,41 +21,41 @@
 // but instead RbtAtom HHS_Solvation is used as operand
 
 class RbtNonBondedHHSGrid: public RbtBaseGrid {
-    public:
-        static RbtString _CT;
-        RbtNonBondedHHSGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ,
-                            RbtUInt NPad = 0);
-        RbtNonBondedHHSGrid(istream& istr);
-        ~RbtNonBondedHHSGrid();
+ public:
+    static RbtString _CT;
+    RbtNonBondedHHSGrid(const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ,
+                        RbtUInt NPad = 0);
+    RbtNonBondedHHSGrid(istream& istr);
+    ~RbtNonBondedHHSGrid();
 
-        RbtNonBondedHHSGrid(const RbtNonBondedHHSGrid&);
-        RbtNonBondedHHSGrid(const RbtBaseGrid&);
-        RbtNonBondedHHSGrid& operator=(const RbtNonBondedHHSGrid&);
-        RbtNonBondedHHSGrid& operator=(const RbtBaseGrid&);
+    RbtNonBondedHHSGrid(const RbtNonBondedHHSGrid&);
+    RbtNonBondedHHSGrid(const RbtBaseGrid&);
+    RbtNonBondedHHSGrid& operator=(const RbtNonBondedHHSGrid&);
+    RbtNonBondedHHSGrid& operator=(const RbtBaseGrid&);
 
-        virtual void Print(ostream& ostr) const;
-        virtual void Write(ostream& ostr) const;
-        virtual void Read(istream& istr);
+    virtual void Print(ostream& ostr) const;
+    virtual void Write(ostream& ostr) const;
+    virtual void Read(istream& istr);
 
-        const HHS_SolvationRList& GetHHSList(RbtUInt iXYZ) const;
-        const HHS_SolvationRList& GetHHSList(const RbtCoord& c) const;
+    const HHS_SolvationRList& GetHHSList(RbtUInt iXYZ) const;
+    const HHS_SolvationRList& GetHHSList(const RbtCoord& c) const;
 
-        void SetHHSLists(HHS_Solvation* pHHS, RbtDouble radius);
-        void ClearHHSLists(void);
+    void SetHHSLists(HHS_Solvation* pHHS, RbtDouble radius);
+    void ClearHHSLists(void);
 
-    protected:
-        void OwnPrint(ostream& ostr) const;
-        void OwnWrite(ostream& ostr) const;
-        void OwnRead(istream& istr) throw(RbtError);
+ protected:
+    void OwnPrint(ostream& ostr) const;
+    void OwnWrite(ostream& ostr) const;
+    void OwnRead(istream& istr) throw(RbtError);
 
-    private:
-        RbtNonBondedHHSGrid();
+ private:
+    RbtNonBondedHHSGrid();
 
-        void CopyGrid(const RbtNonBondedHHSGrid&);
-        void CreateMap();
+    void CopyGrid(const RbtNonBondedHHSGrid&);
+    void CreateMap();
 
-        HHS_SolvationListMap m_hhsMap;
-        const HHS_SolvationRList m_emptyList;
+    HHS_SolvationListMap m_hhsMap;
+    const HHS_SolvationRList m_emptyList;
 };
 
 typedef SmartPtr<RbtNonBondedHHSGrid> RbtNonBondedHHSGridPtr;

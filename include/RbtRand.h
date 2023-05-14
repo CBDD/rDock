@@ -23,34 +23,34 @@
 #include "RbtTypes.h"
 
 class RbtRand {
-        /////////////
-        // Constructor
-    public:
-        RbtRand();
-        /////////////
-        // Destructor
-        ~RbtRand();
+    /////////////
+    // Constructor
+ public:
+    RbtRand();
+    /////////////
+    // Destructor
+    ~RbtRand();
 
-        ////////////////
-        // Public methods
+    ////////////////
+    // Public methods
 
-        // Seed the random number generator
-        void Seed(RbtInt seed = 0);
-        // Seed the random number generator from the system clock
-        void SeedFromClock();
-        // Returns current seed
-        RbtInt GetSeed();
-        // Get a random double between 0 and 1 (inlined)
-        RbtDouble GetRandom01() { return m_rand.fdraw(); };
-        // Get a random integer between 0 and nMax-1
-        RbtInt GetRandomInt(RbtInt nMax);
-        // Get a random unit vector distributed evenly over the surface of a sphere
-        RbtVector GetRandomUnitVector();
-        RbtDouble GetGaussianRandom(RbtDouble, RbtDouble);
-        RbtDouble GetCauchyRandom(RbtDouble, RbtDouble);
+    // Seed the random number generator
+    void Seed(RbtInt seed = 0);
+    // Seed the random number generator from the system clock
+    void SeedFromClock();
+    // Returns current seed
+    RbtInt GetSeed();
+    // Get a random double between 0 and 1 (inlined)
+    RbtDouble GetRandom01() { return m_rand.fdraw(); };
+    // Get a random integer between 0 and nMax-1
+    RbtInt GetRandomInt(RbtInt nMax);
+    // Get a random unit vector distributed evenly over the surface of a sphere
+    RbtVector GetRandomUnitVector();
+    RbtDouble GetGaussianRandom(RbtDouble, RbtDouble);
+    RbtDouble GetCauchyRandom(RbtDouble, RbtDouble);
 
-    private:
-        Randint m_rand;  // Random number generator
+ private:
+    Randint m_rand;  // Random number generator
 };
 
 ///////////////////////////////////////

@@ -162,7 +162,7 @@ void RbtMdlFileSource::Parse() throw(RbtError) {
                                                                // from zero in our atom vector
                 RbtAtomPtr spAtom2(m_atomList[idxAtom2 - 1]);  // Decrement the atom index as the atoms are numbered
                                                                // from zero in our atom vector
-                RbtBondPtr spBond(new RbtBond(++nBondId,  // Store a nominal bond ID starting from 1
+                RbtBondPtr spBond(new RbtBond(++nBondId,       // Store a nominal bond ID starting from 1
                                               spAtom1, spAtom2, nBondOrder));
                 m_bondList.push_back(spBond);
             }
@@ -507,19 +507,19 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
                         cout << "Possible imidazole/amidine, found 1xN_SP2, 1xN_TRI bonded to "
                              << (*iter)->GetAtomName() << endl;
 #endif  //_DEBUG
-                        // IMIDAZOLE - Check that the N_SP2 is bonded to 2 x C_SP2 and that
-                        // the N_TRI is bonded to 2 x C_SP2 and 1 hydrogen
+        // IMIDAZOLE - Check that the N_SP2 is bonded to 2 x C_SP2 and that
+        // the N_TRI is bonded to 2 x C_SP2 and 1 hydrogen
                         if ((Rbt::GetNumAtoms(nsp2BondedAtomList, bIsC_SP2) == 2)
                             && (Rbt::GetNumAtoms(ntriBondedAtomList, bIsC_SP2) == 2)
                             && (Rbt::GetNumAtoms(ntriBondedAtomList, Rbt::isAtomicNo_eq(1)) == 1)) {
 #ifdef _DEBUG
                             cout << "Possible imidazole, bonding requirements for N_SP2 and N_TRI met" << endl;
 #endif  //_DEBUG
-                            // Now check if any of the atoms bonded to the N_TRI are 1-2 connected to any
-                            // of the atoms bonded to the N_SP2. If so, it is a 5-membered ring
-                            // DM 25 Jul 2002 - also check whether the atoms are bridgeheads or not
-                            // We don't want to protonate imidazoles which are part of larger fused ring systems
-                            //(can have very different pKa's)
+        // Now check if any of the atoms bonded to the N_TRI are 1-2 connected to any
+        // of the atoms bonded to the N_SP2. If so, it is a 5-membered ring
+        // DM 25 Jul 2002 - also check whether the atoms are bridgeheads or not
+        // We don't want to protonate imidazoles which are part of larger fused ring systems
+        //(can have very different pKa's)
                             RbtAtomList atoms12Conn;
                             for (RbtAtomListConstIter iter2 = ntriBondedAtomList.begin();
                                  iter2 != ntriBondedAtomList.end(); iter2++) {

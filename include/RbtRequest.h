@@ -30,32 +30,32 @@ const RbtBool REQ_CHECK = true;
 #endif  //_NDEBUG
 
 class RbtRequest {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtRequest() {}
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtRequest() {}
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        RbtRequestID GetID() const { return m_id; }
-        RbtUInt GetNumParameters() const { return m_parameters.size(); }
-        RbtVariantList GetParameters() const { return m_parameters; }
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    RbtRequestID GetID() const { return m_id; }
+    RbtUInt GetNumParameters() const { return m_parameters.size(); }
+    RbtVariantList GetParameters() const { return m_parameters; }
 
-        ////////////////////////////////////////
-        // Protected methods
-        ////////////////
-        // Protected constructor to be used by derived classes to set request ID
-        RbtRequest(RbtRequestID id): m_id(id) {}
-        // AddParameter can be used by derived classes to add parameters to list
-        void AddParameter(const RbtVariant& v) { m_parameters.push_back(v); }
+    ////////////////////////////////////////
+    // Protected methods
+    ////////////////
+    // Protected constructor to be used by derived classes to set request ID
+    RbtRequest(RbtRequestID id): m_id(id) {}
+    // AddParameter can be used by derived classes to add parameters to list
+    void AddParameter(const RbtVariant& v) { m_parameters.push_back(v); }
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtRequestID m_id;
-        RbtVariantList m_parameters;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtRequestID m_id;
+    RbtVariantList m_parameters;
 };
 
 // Useful typedefs

@@ -18,29 +18,29 @@
 #include "RbtBaseInterSF.h"
 
 class RbtTetherSF: public RbtBaseInterSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _REFERENCE_FILE;
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _REFERENCE_FILE;
 
-        RbtTetherSF(const RbtString& strName = "TETHER");
-        virtual ~RbtTetherSF();
+    RbtTetherSF(const RbtString& strName = "TETHER");
+    virtual ~RbtTetherSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
-        // DM 25 Oct 2000 - track changes to parameter values in local data members
-        // ParameterUpdated is invoked by RbtParamHandler::SetParameter
-        void ParameterUpdated(const RbtString& strName);
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
+    // DM 25 Oct 2000 - track changes to parameter values in local data members
+    // ParameterUpdated is invoked by RbtParamHandler::SetParameter
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        RbtIntList ReadTetherAtoms(RbtStringList&);
-        RbtAtomList m_ligAtomList;
-        RbtIntList m_tetherAtomList;
-        RbtCoordList m_tetherCoords;
+ private:
+    RbtIntList ReadTetherAtoms(RbtStringList&);
+    RbtAtomList m_ligAtomList;
+    RbtIntList m_tetherAtomList;
+    RbtCoordList m_tetherCoords;
 };
 
 #endif  //_RBTTETHERSF_H_

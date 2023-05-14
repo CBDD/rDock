@@ -20,23 +20,23 @@
 #include "RbtFFTGrid.h"
 
 class RbtCavityFillSF: public RbtBaseInterSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        RbtCavityFillSF(const RbtString& strName = "CAVFILL");
-        virtual ~RbtCavityFillSF();
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    RbtCavityFillSF(const RbtString& strName = "CAVFILL");
+    virtual ~RbtCavityFillSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
-        void ParameterUpdated(const RbtString& strName);
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        RbtFFTGridPtr m_spGrid;
-        RbtAtomList m_ligAtomList;
+ private:
+    RbtFFTGridPtr m_spGrid;
+    RbtAtomList m_ligAtomList;
 };
 
 #endif  //_RBTCAVITYFILLSF_H_

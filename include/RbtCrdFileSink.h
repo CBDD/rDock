@@ -18,50 +18,50 @@
 #include "RbtBaseMolecularFileSink.h"
 
 class RbtCrdFileSink: public RbtBaseMolecularFileSink {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        // RbtCrdFileSink(const char* fileName, RbtModelPtr spModel);
-        RbtCrdFileSink(const RbtString& fileName, RbtModelPtr spModel);
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    // RbtCrdFileSink(const char* fileName, RbtModelPtr spModel);
+    RbtCrdFileSink(const RbtString& fileName, RbtModelPtr spModel);
 
-        virtual ~RbtCrdFileSink();  // Default destructor
+    virtual ~RbtCrdFileSink();  // Default destructor
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        //
-        // Derived classes should override
-        // Controls whether file type can support the writing of multiple conformations/models to a single file
-        virtual RbtBool isMultiConfSupported() { return true; };
-        //
-        ////////////////////////////////////////
-        // Override public methods from RbtBaseFileSink
-        virtual void Render() throw(RbtError);
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    //
+    // Derived classes should override
+    // Controls whether file type can support the writing of multiple conformations/models to a single file
+    virtual RbtBool isMultiConfSupported() { return true; };
+    //
+    ////////////////////////////////////////
+    // Override public methods from RbtBaseFileSink
+    virtual void Render() throw(RbtError);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-        RbtCrdFileSink();                                  // Disable default constructor
-        RbtCrdFileSink(const RbtCrdFileSink&);             // Copy constructor disabled by default
-        RbtCrdFileSink& operator=(const RbtCrdFileSink&);  // Copy assignment disabled by default
+    RbtCrdFileSink();                                  // Disable default constructor
+    RbtCrdFileSink(const RbtCrdFileSink&);             // Copy constructor disabled by default
+    RbtCrdFileSink& operator=(const RbtCrdFileSink&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtUInt m_numAtomsLineRec;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtUInt m_numAtomsLineRec;
 };
 
 // Useful typedefs

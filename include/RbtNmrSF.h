@@ -20,32 +20,32 @@
 #include "RbtNoeRestraint.h"
 
 class RbtNmrSF: public RbtBaseInterSF, public RbtBaseIdxSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _FILENAME;   // Nmr restraint file name
-        static RbtString _QUADRATIC;  // True = quadratic penalty function; false = linear
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _FILENAME;   // Nmr restraint file name
+    static RbtString _QUADRATIC;  // True = quadratic penalty function; false = linear
 
-        RbtNmrSF(const RbtString& strName = "NMR");
-        virtual ~RbtNmrSF();
+    RbtNmrSF(const RbtString& strName = "NMR");
+    virtual ~RbtNmrSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
-        void ParameterUpdated(const RbtString& strName);
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        RbtDouble NoeDistance(const RbtNoeRestraintAtoms& noe) const;
-        RbtDouble StdDistance(const RbtStdRestraintAtoms& std) const;
+ private:
+    RbtDouble NoeDistance(const RbtNoeRestraintAtoms& noe) const;
+    RbtDouble StdDistance(const RbtStdRestraintAtoms& std) const;
 
-        RbtBool m_bQuadratic;  // synchronised with QUADRATIC named parameter
-        RbtNonBondedGridPtr m_spGrid;
-        RbtAtomList m_ligAtomList;           // All ligand atoms
-        RbtNoeRestraintAtomsList m_noeList;  // List of all NOE interactions
-        RbtStdRestraintAtomsList m_stdList;  // List of all STD interactions
+    RbtBool m_bQuadratic;  // synchronised with QUADRATIC named parameter
+    RbtNonBondedGridPtr m_spGrid;
+    RbtAtomList m_ligAtomList;           // All ligand atoms
+    RbtNoeRestraintAtomsList m_noeList;  // List of all NOE interactions
+    RbtStdRestraintAtomsList m_stdList;  // List of all STD interactions
 };
 
 #endif  //_RBTNMRSF_H_

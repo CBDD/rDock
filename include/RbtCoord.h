@@ -27,277 +27,277 @@
 extern istream& eatSeps(istream& is);
 
 class RbtCoord {
-        ///////////////////////////////////////////////
-        // Data members
-        ///////////////
-        //(leave public so we don't need
-        // to write accessor functions)
-    public:
-        RbtDouble x;
-        RbtDouble y;
-        RbtDouble z;
+    ///////////////////////////////////////////////
+    // Data members
+    ///////////////
+    //(leave public so we don't need
+    // to write accessor functions)
+ public:
+    RbtDouble x;
+    RbtDouble y;
+    RbtDouble z;
 
-        ///////////////////////////////////////////////
-        // Constructors/destructors:
-        ///////////////////////////
-    public:
-        // Default constructor (initialise to zero)
-        inline RbtCoord(): x(0.0), y(0.0), z(0.0) {}
+    ///////////////////////////////////////////////
+    // Constructors/destructors:
+    ///////////////////////////
+ public:
+    // Default constructor (initialise to zero)
+    inline RbtCoord(): x(0.0), y(0.0), z(0.0) {}
 
-        // Constructor with initial values
-        inline RbtCoord(RbtDouble x1, RbtDouble y1, RbtDouble z1): x(x1), y(y1), z(z1) {}
+    // Constructor with initial values
+    inline RbtCoord(RbtDouble x1, RbtDouble y1, RbtDouble z1): x(x1), y(y1), z(z1) {}
 
-        // Destructor
-        virtual ~RbtCoord() {}
+    // Destructor
+    virtual ~RbtCoord() {}
 
-        // Copy constructor
-        inline RbtCoord(const RbtCoord& coord) {
+    // Copy constructor
+    inline RbtCoord(const RbtCoord& coord) {
+        x = coord.x;
+        y = coord.y;
+        z = coord.z;
+    }
+
+    // DM 19 Jul 2000 - Read,Write methods to read/write coords to binary streams
+    inline ostream& Write(ostream& ostr) const {
+        ostr.write((const char*)&x, sizeof(x));
+        ostr.write((const char*)&y, sizeof(y));
+        ostr.write((const char*)&z, sizeof(z));
+        return ostr;
+    }
+    inline istream& Read(istream& istr) {
+        istr.read((char*)&x, sizeof(x));
+        istr.read((char*)&y, sizeof(y));
+        istr.read((char*)&z, sizeof(z));
+        return istr;
+    }
+
+    ///////////////////////////////////////////////
+    // Operator functions:
+    /////////////////////
+
+    // Copy assignment (*this = coord)
+    inline RbtCoord& operator=(const RbtCoord& coord) {
+        if (this != &coord) {  // beware of self-assignment
             x = coord.x;
             y = coord.y;
             z = coord.z;
         }
+        return *this;
+    }
 
-        // DM 19 Jul 2000 - Read,Write methods to read/write coords to binary streams
-        inline ostream& Write(ostream& ostr) const {
-            ostr.write((const char*)&x, sizeof(x));
-            ostr.write((const char*)&y, sizeof(y));
-            ostr.write((const char*)&z, sizeof(z));
-            return ostr;
-        }
-        inline istream& Read(istream& istr) {
-            istr.read((char*)&x, sizeof(x));
-            istr.read((char*)&y, sizeof(y));
-            istr.read((char*)&z, sizeof(z));
-            return istr;
-        }
+    // Copy assignment (*this = const)
+    inline RbtCoord& operator=(const RbtDouble& d) {
+        x = d;
+        y = d;
+        z = d;
+        return *this;
+    }
 
-        ///////////////////////////////////////////////
-        // Operator functions:
-        /////////////////////
+    //*this += coord
+    inline void operator+=(const RbtCoord& coord) {
+        x += coord.x;
+        y += coord.y;
+        z += coord.z;
+    }
 
-        // Copy assignment (*this = coord)
-        inline RbtCoord& operator=(const RbtCoord& coord) {
-            if (this != &coord) {  // beware of self-assignment
-                x = coord.x;
-                y = coord.y;
-                z = coord.z;
-            }
-            return *this;
-        }
+    //*this += const
+    inline void operator+=(const RbtDouble& d) {
+        x += d;
+        y += d;
+        z += d;
+    }
 
-        // Copy assignment (*this = const)
-        inline RbtCoord& operator=(const RbtDouble& d) {
-            x = d;
-            y = d;
-            z = d;
-            return *this;
-        }
+    //*this -= coord
+    inline void operator-=(const RbtCoord& coord) {
+        x -= coord.x;
+        y -= coord.y;
+        z -= coord.z;
+    }
 
-        //*this += coord
-        inline void operator+=(const RbtCoord& coord) {
-            x += coord.x;
-            y += coord.y;
-            z += coord.z;
-        }
+    //*this -= const
+    inline void operator-=(const RbtDouble& d) {
+        x -= d;
+        y -= d;
+        z -= d;
+    }
 
-        //*this += const
-        inline void operator+=(const RbtDouble& d) {
-            x += d;
-            y += d;
-            z += d;
-        }
+    //*this *= const
+    inline void operator*=(const RbtDouble& d) {
+        x *= d;
+        y *= d;
+        z *= d;
+    }
 
-        //*this -= coord
-        inline void operator-=(const RbtCoord& coord) {
-            x -= coord.x;
-            y -= coord.y;
-            z -= coord.z;
-        }
+    //*this /= const
+    inline void operator/=(const RbtDouble& d) {
+        x /= d;
+        y /= d;
+        z /= d;
+    }
 
-        //*this -= const
-        inline void operator-=(const RbtDouble& d) {
-            x -= d;
-            y -= d;
-            z -= d;
-        }
+    ///////////////////////////////////////////////
+    // Friend functions:
+    ///////////////////
 
-        //*this *= const
-        inline void operator*=(const RbtDouble& d) {
-            x *= d;
-            y *= d;
-            z *= d;
-        }
+    // Insertion (output) operator
+    friend ostream& operator<<(ostream& s, const RbtCoord& coord) {
+        return s << "(" << coord.x << "," << coord.y << "," << coord.z << ")";
+    }
 
-        //*this /= const
-        inline void operator/=(const RbtDouble& d) {
-            x /= d;
-            y /= d;
-            z /= d;
-        }
+    // Input operator
+    // DM 15 Apr 1999
+    // Valid formats (actually the comma can be any single non-whitespace character):
+    //  x,y,z
+    //  (x,y,z)
+    //  BGD 06 Nov 2002
+    //  Trying to make it more versatil. The separator now is any
+    //  amount of white space or commas.
+    //  x   y,z
+    //  (x   y, z  )
+    //  uses the auxiliary function eatSeps
 
-        ///////////////////////////////////////////////
-        // Friend functions:
-        ///////////////////
-
-        // Insertion (output) operator
-        friend ostream& operator<<(ostream& s, const RbtCoord& coord) {
-            return s << "(" << coord.x << "," << coord.y << "," << coord.z << ")";
-        }
-
-        // Input operator
-        // DM 15 Apr 1999
-        // Valid formats (actually the comma can be any single non-whitespace character):
-        //  x,y,z
-        //  (x,y,z)
-        //  BGD 06 Nov 2002
-        //  Trying to make it more versatil. The separator now is any
-        //  amount of white space or commas.
-        //  x   y,z
-        //  (x   y, z  )
-        //  uses the auxiliary function eatSeps
-
-        friend istream& operator>>(istream& s, RbtCoord& coord) {
-            RbtDouble x = 0, y = 0, z = 0;
-            char c = 0;
+    friend istream& operator>>(istream& s, RbtCoord& coord) {
+        RbtDouble x = 0, y = 0, z = 0;
+        char c = 0;
+        s >> c;
+        if (c == '(') {
+            s >> x;
+            eatSeps(s);
+            s >> y;
+            eatSeps(s);
+            s >> z;
+            eatSeps(s);
             s >> c;
-            if (c == '(') {
-                s >> x;
-                eatSeps(s);
-                s >> y;
-                eatSeps(s);
-                s >> z;
-                eatSeps(s);
-                s >> c;
-                if (c != ')') s.clear(ios_base::badbit);  // Missing closing bracket
-            } else {
-                s.putback(c);
-                s >> x;
-                eatSeps(s);
-                s >> y;
-                eatSeps(s);
-                s >> z;
-            }
-            if (s) coord = RbtCoord(x, y, z);
-            return s;
+            if (c != ')') s.clear(ios_base::badbit);  // Missing closing bracket
+        } else {
+            s.putback(c);
+            s >> x;
+            eatSeps(s);
+            s >> y;
+            eatSeps(s);
+            s >> z;
         }
+        if (s) coord = RbtCoord(x, y, z);
+        return s;
+    }
 
-        // Equality
-        inline friend RbtBool operator==(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return coord1.x == coord2.x && coord1.y == coord2.y && coord1.z == coord2.z;
-        }
+    // Equality
+    inline friend RbtBool operator==(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return coord1.x == coord2.x && coord1.y == coord2.y && coord1.z == coord2.z;
+    }
 
-        // Non-equality
-        inline friend RbtBool operator!=(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return coord1.x != coord2.x || coord1.y != coord2.y || coord1.z != coord2.z;
-        }
+    // Non-equality
+    inline friend RbtBool operator!=(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return coord1.x != coord2.x || coord1.y != coord2.y || coord1.z != coord2.z;
+    }
 
-        // Greater than
-        inline friend RbtBool operator>(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return coord1.x > coord2.x && coord1.y > coord2.y && coord1.z > coord2.z;
-        }
+    // Greater than
+    inline friend RbtBool operator>(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return coord1.x > coord2.x && coord1.y > coord2.y && coord1.z > coord2.z;
+    }
 
-        // Greater than or equal
-        inline friend RbtBool operator>=(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return coord1.x >= coord2.x && coord1.y >= coord2.y && coord1.z >= coord2.z;
-        }
+    // Greater than or equal
+    inline friend RbtBool operator>=(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return coord1.x >= coord2.x && coord1.y >= coord2.y && coord1.z >= coord2.z;
+    }
 
-        // Less than
-        inline friend RbtBool operator<(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return coord1.x < coord2.x && coord1.y < coord2.y && coord1.z < coord2.z;
-        }
+    // Less than
+    inline friend RbtBool operator<(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return coord1.x < coord2.x && coord1.y < coord2.y && coord1.z < coord2.z;
+    }
 
-        // Less than or equal
-        inline friend RbtBool operator<=(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return coord1.x <= coord2.x && coord1.y <= coord2.y && coord1.z <= coord2.z;
-        }
+    // Less than or equal
+    inline friend RbtBool operator<=(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return coord1.x <= coord2.x && coord1.y <= coord2.y && coord1.z <= coord2.z;
+    }
 
-        // Addition (coord + coord)
-        inline friend RbtCoord operator+(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return RbtCoord(coord1.x + coord2.x, coord1.y + coord2.y, coord1.z + coord2.z);
-        }
+    // Addition (coord + coord)
+    inline friend RbtCoord operator+(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return RbtCoord(coord1.x + coord2.x, coord1.y + coord2.y, coord1.z + coord2.z);
+    }
 
-        // Addition (coord + const)
-        inline friend RbtCoord operator+(const RbtCoord& coord1, RbtDouble d) {
-            return RbtCoord(coord1.x + d, coord1.y + d, coord1.z + d);
-        }
+    // Addition (coord + const)
+    inline friend RbtCoord operator+(const RbtCoord& coord1, RbtDouble d) {
+        return RbtCoord(coord1.x + d, coord1.y + d, coord1.z + d);
+    }
 
-        // Addition (const + coord)
-        inline friend RbtCoord operator+(RbtDouble d, const RbtCoord& coord1) {
-            return RbtCoord(d + coord1.x, d + coord1.y, d + coord1.z);
-        }
+    // Addition (const + coord)
+    inline friend RbtCoord operator+(RbtDouble d, const RbtCoord& coord1) {
+        return RbtCoord(d + coord1.x, d + coord1.y, d + coord1.z);
+    }
 
-        // Subtraction (coord - coord)
-        inline friend RbtCoord operator-(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return RbtCoord(coord1.x - coord2.x, coord1.y - coord2.y, coord1.z - coord2.z);
-        }
+    // Subtraction (coord - coord)
+    inline friend RbtCoord operator-(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return RbtCoord(coord1.x - coord2.x, coord1.y - coord2.y, coord1.z - coord2.z);
+    }
 
-        // Subtraction (coord - const)
-        inline friend RbtCoord operator-(const RbtCoord& coord1, RbtDouble d) {
-            return RbtCoord(coord1.x - d, coord1.y - d, coord1.z - d);
-        }
+    // Subtraction (coord - const)
+    inline friend RbtCoord operator-(const RbtCoord& coord1, RbtDouble d) {
+        return RbtCoord(coord1.x - d, coord1.y - d, coord1.z - d);
+    }
 
-        // Subtraction (const - coord)
-        inline friend RbtCoord operator-(RbtDouble d, const RbtCoord& coord1) {
-            return RbtCoord(d - coord1.x, d - coord1.y, d - coord1.z);
-        }
+    // Subtraction (const - coord)
+    inline friend RbtCoord operator-(RbtDouble d, const RbtCoord& coord1) {
+        return RbtCoord(d - coord1.x, d - coord1.y, d - coord1.z);
+    }
 
-        // Negation
-        inline friend RbtCoord operator-(const RbtCoord& coord) { return RbtCoord(-coord.x, -coord.y, -coord.z); }
+    // Negation
+    inline friend RbtCoord operator-(const RbtCoord& coord) { return RbtCoord(-coord.x, -coord.y, -coord.z); }
 
-        // Dot product
-        // DM 7 Jan 1999 - operator* replaced by Dot(coord) member function
-        // and by Dot(coord1,coord2) non-member function
-        // inline friend RbtDouble operator*(const RbtCoord& coord1, const RbtCoord& coord2) {
-        //   return coord1.x*coord2.x + coord1.y*coord2.y + coord1.z*coord2.z;
-        // }
+    // Dot product
+    // DM 7 Jan 1999 - operator* replaced by Dot(coord) member function
+    // and by Dot(coord1,coord2) non-member function
+    // inline friend RbtDouble operator*(const RbtCoord& coord1, const RbtCoord& coord2) {
+    //   return coord1.x*coord2.x + coord1.y*coord2.y + coord1.z*coord2.z;
+    // }
 
-        // Scalar product (coord * const)
-        inline friend RbtCoord operator*(const RbtCoord& coord, const RbtDouble& d) {
-            return RbtCoord(coord.x * d, coord.y * d, coord.z * d);
-        }
+    // Scalar product (coord * const)
+    inline friend RbtCoord operator*(const RbtCoord& coord, const RbtDouble& d) {
+        return RbtCoord(coord.x * d, coord.y * d, coord.z * d);
+    }
 
-        // Scalar product (const * coord)
-        inline friend RbtCoord operator*(const RbtDouble& d, const RbtCoord& coord) {
-            return RbtCoord(coord.x * d, coord.y * d, coord.z * d);
-        }
+    // Scalar product (const * coord)
+    inline friend RbtCoord operator*(const RbtDouble& d, const RbtCoord& coord) {
+        return RbtCoord(coord.x * d, coord.y * d, coord.z * d);
+    }
 
-        // Scalar product (coord * coord : component-wise multiplication)
-        inline friend RbtCoord operator*(const RbtCoord& coord1, const RbtCoord& coord2) {
-            return RbtCoord(coord1.x * coord2.x, coord1.y * coord2.y, coord1.z * coord2.z);
-        }
+    // Scalar product (coord * coord : component-wise multiplication)
+    inline friend RbtCoord operator*(const RbtCoord& coord1, const RbtCoord& coord2) {
+        return RbtCoord(coord1.x * coord2.x, coord1.y * coord2.y, coord1.z * coord2.z);
+    }
 
-        // Scalar division (coord / const)
-        inline friend RbtCoord operator/(const RbtCoord& coord, const RbtDouble& d) {
-            return RbtCoord(coord.x / d, coord.y / d, coord.z / d);
-        }
+    // Scalar division (coord / const)
+    inline friend RbtCoord operator/(const RbtCoord& coord, const RbtDouble& d) {
+        return RbtCoord(coord.x / d, coord.y / d, coord.z / d);
+    }
 
-        ///////////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ///////////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        // Mostly applicable to vectors (rather than coords)
+    // Mostly applicable to vectors (rather than coords)
 
-        // Returns square of magnitude of vector (or distance from origin)
-        inline RbtDouble Length2() const { return x * x + y * y + z * z; }
+    // Returns square of magnitude of vector (or distance from origin)
+    inline RbtDouble Length2() const { return x * x + y * y + z * z; }
 
-        // Returns magnitude of vector (or distance from origin)
-        inline RbtDouble Length() const { return sqrt(Length2()); }
+    // Returns magnitude of vector (or distance from origin)
+    inline RbtDouble Length() const { return sqrt(Length2()); }
 
-        // Returns unit vector in same direction
-        // Member function (V2 = V1.Unit())
-        // Checks for zero length
-        inline RbtCoord Unit() const {
-            RbtDouble l = Length();
-            return (l > 0) ? *this / l : *this;
-        }
+    // Returns unit vector in same direction
+    // Member function (V2 = V1.Unit())
+    // Checks for zero length
+    inline RbtCoord Unit() const {
+        RbtDouble l = Length();
+        return (l > 0) ? *this / l : *this;
+    }
 
-        // Cross product member function (V3 = V1.Cross(V2))
-        inline RbtCoord Cross(const RbtCoord& v2) const {
-            return RbtCoord(y * v2.z - v2.y * z, z * v2.x - v2.z * x, x * v2.y - v2.x * y);
-        }
+    // Cross product member function (V3 = V1.Cross(V2))
+    inline RbtCoord Cross(const RbtCoord& v2) const {
+        return RbtCoord(y * v2.z - v2.y * z, z * v2.x - v2.z * x, x * v2.y - v2.x * y);
+    }
 
-        // Dot product member function (D = V1.Dot(V2)
-        inline RbtDouble Dot(const RbtCoord& v2) const { return x * v2.x + y * v2.y + z * v2.z; }
+    // Dot product member function (D = V1.Dot(V2)
+    inline RbtDouble Dot(const RbtCoord& v2) const { return x * v2.x + y * v2.y + z * v2.z; }
 };
 
 // Useful typedefs

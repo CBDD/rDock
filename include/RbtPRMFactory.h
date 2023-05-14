@@ -24,51 +24,51 @@ class RbtParameterFileSource;
 class RbtDockingSite;
 
 class RbtPRMFactory {
-    public:
-        static const RbtString& _CT;
-        // Receptor parameters
-        static const RbtString& _REC_SECTION;
-        static const RbtString& _REC_FILE;
-        static const RbtString& _REC_TOPOL_FILE;
-        static const RbtString& _REC_COORD_FILE;
-        static const RbtString& _REC_NUM_COORD_FILES;
-        static const RbtString& _REC_FLEX_DISTANCE;
-        static const RbtString& _REC_DIHEDRAL_STEP;
+ public:
+    static const RbtString& _CT;
+    // Receptor parameters
+    static const RbtString& _REC_SECTION;
+    static const RbtString& _REC_FILE;
+    static const RbtString& _REC_TOPOL_FILE;
+    static const RbtString& _REC_COORD_FILE;
+    static const RbtString& _REC_NUM_COORD_FILES;
+    static const RbtString& _REC_FLEX_DISTANCE;
+    static const RbtString& _REC_DIHEDRAL_STEP;
 
-        // Ligand parameters
-        static const RbtString& _LIG_SECTION;
-        // Ligand file is not read here, so no need for _LIG_FILE
-        // No need to specify ligand flexibility parameter names explicitly
-        // as we assume that all parameters in SECTION LIGAND
-        // are flexibility params.
+    // Ligand parameters
+    static const RbtString& _LIG_SECTION;
+    // Ligand file is not read here, so no need for _LIG_FILE
+    // No need to specify ligand flexibility parameter names explicitly
+    // as we assume that all parameters in SECTION LIGAND
+    // are flexibility params.
 
-        // Solvent parameters
-        static const RbtString& _SOLV_SECTION;
-        static const RbtString& _SOLV_FILE;
-        // No need to specify solvent flexibility parameter names explicitly
-        // as we assume that all parameters in SECTION SOLVENT
-        // are flexibility params (except for _SOLV_FILE)
+    // Solvent parameters
+    static const RbtString& _SOLV_SECTION;
+    static const RbtString& _SOLV_FILE;
+    // No need to specify solvent flexibility parameter names explicitly
+    // as we assume that all parameters in SECTION SOLVENT
+    // are flexibility params (except for _SOLV_FILE)
 
-        RbtPRMFactory(RbtParameterFileSource* pParamSource);
-        RbtPRMFactory(RbtParameterFileSource* pParamSource, RbtDockingSite* pDS);
+    RbtPRMFactory(RbtParameterFileSource* pParamSource);
+    RbtPRMFactory(RbtParameterFileSource* pParamSource, RbtDockingSite* pDS);
 
-        RbtInt GetTrace() const { return m_iTrace; }
-        void SetTrace(RbtInt iTrace) { m_iTrace = iTrace; }
-        RbtDockingSite* GetDockingSite() const { return m_pDS; }
-        void SetDockingSite(RbtDockingSite* pDS) { m_pDS = pDS; }
+    RbtInt GetTrace() const { return m_iTrace; }
+    void SetTrace(RbtInt iTrace) { m_iTrace = iTrace; }
+    RbtDockingSite* GetDockingSite() const { return m_pDS; }
+    void SetDockingSite(RbtDockingSite* pDS) { m_pDS = pDS; }
 
-        RbtModelPtr CreateReceptor() throw(RbtError);
-        RbtModelPtr CreateLigand(RbtBaseMolecularFileSource* pSource) throw(RbtError);
-        RbtModelList CreateSolvent() throw(RbtError);
+    RbtModelPtr CreateReceptor() throw(RbtError);
+    RbtModelPtr CreateLigand(RbtBaseMolecularFileSource* pSource) throw(RbtError);
+    RbtModelList CreateSolvent() throw(RbtError);
 
-    private:
-        // Creates the appropriate source according to the file extension
-        RbtMolecularFileSourcePtr CreateMolFileSource(const RbtString& fileName) throw(RbtError);
-        void AttachReceptorFlexData(RbtModel* pReceptor);
-        void AttachLigandFlexData(RbtModel* pLigand);
-        void AttachSolventFlexData(RbtModel* pSolvent);
-        RbtParameterFileSource* m_pParamSource;
-        RbtDockingSite* m_pDS;
-        RbtInt m_iTrace;
+ private:
+    // Creates the appropriate source according to the file extension
+    RbtMolecularFileSourcePtr CreateMolFileSource(const RbtString& fileName) throw(RbtError);
+    void AttachReceptorFlexData(RbtModel* pReceptor);
+    void AttachLigandFlexData(RbtModel* pLigand);
+    void AttachSolventFlexData(RbtModel* pSolvent);
+    RbtParameterFileSource* m_pParamSource;
+    RbtDockingSite* m_pDS;
+    RbtInt m_iTrace;
 };
 #endif /*RBTPRMFACTORY_H_*/

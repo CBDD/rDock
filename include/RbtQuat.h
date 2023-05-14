@@ -20,163 +20,163 @@
 #include "RbtCoord.h"
 
 class RbtQuat {
-        ///////////////////////////////////////////////
-        // Data members
-        ///////////////
-        //(leave public so we don't need
-        // to write accessor functions)
-    public:
-        RbtDouble s;  // Scalar component
-        RbtVector v;  // Vector component
+    ///////////////////////////////////////////////
+    // Data members
+    ///////////////
+    //(leave public so we don't need
+    // to write accessor functions)
+ public:
+    RbtDouble s;  // Scalar component
+    RbtVector v;  // Vector component
 
-        ///////////////////////////////////////////////
-        // Constructors/destructors:
-        ///////////////////////////
-    public:
-        // Default constructor (corresponds to no rotation (null transformation))
-        inline RbtQuat(): s(1.0), v(0.0, 0.0, 0.0) {}
+    ///////////////////////////////////////////////
+    // Constructors/destructors:
+    ///////////////////////////
+ public:
+    // Default constructor (corresponds to no rotation (null transformation))
+    inline RbtQuat(): s(1.0), v(0.0, 0.0, 0.0) {}
 
-        // Constructor with initial values (vector component passed as 3 RbtDouble's)
-        inline RbtQuat(RbtDouble s1, RbtDouble vx, RbtDouble vy, RbtDouble vz): s(s1), v(vx, vy, vz) {}
+    // Constructor with initial values (vector component passed as 3 RbtDouble's)
+    inline RbtQuat(RbtDouble s1, RbtDouble vx, RbtDouble vy, RbtDouble vz): s(s1), v(vx, vy, vz) {}
 
-        // Constructor with initial values (vector component passed as RbtVector)
-        // CAUTION: Argument types are the reverse of below
-        inline RbtQuat(RbtDouble s1, const RbtVector& v1): s(s1), v(v1) {}
+    // Constructor with initial values (vector component passed as RbtVector)
+    // CAUTION: Argument types are the reverse of below
+    inline RbtQuat(RbtDouble s1, const RbtVector& v1): s(s1), v(v1) {}
 
-        // Constructor accepting a rotation axis and rotation angle (radians).
-        // CAUTION: Argument types are the reverse of above
-        inline RbtQuat(const RbtVector& axis, RbtDouble phi) {
-            RbtDouble halfPhi(0.5 * phi);
-            s = cos(halfPhi);
-            v = sin(halfPhi) * axis.Unit();
-        }
+    // Constructor accepting a rotation axis and rotation angle (radians).
+    // CAUTION: Argument types are the reverse of above
+    inline RbtQuat(const RbtVector& axis, RbtDouble phi) {
+        RbtDouble halfPhi(0.5 * phi);
+        s = cos(halfPhi);
+        v = sin(halfPhi) * axis.Unit();
+    }
 
-        // Destructor
-        virtual ~RbtQuat() {}
+    // Destructor
+    virtual ~RbtQuat() {}
 
-        // Copy constructor
-        inline RbtQuat(const RbtQuat& quat) {
+    // Copy constructor
+    inline RbtQuat(const RbtQuat& quat) {
+        s = quat.s;
+        v = quat.v;
+    }
+
+    ///////////////////////////////////////////////
+    // Operator functions:
+    /////////////////////
+
+    // Copy assignment (*this = coord)
+    inline RbtQuat& operator=(const RbtQuat& quat) {
+        if (this != &quat) {  // beware of self-assignment
             s = quat.s;
             v = quat.v;
         }
+        return *this;
+    }
 
-        ///////////////////////////////////////////////
-        // Operator functions:
-        /////////////////////
+    //*this += quat
+    inline void operator+=(const RbtQuat& quat) {
+        s += quat.s;
+        v += quat.v;
+    }
 
-        // Copy assignment (*this = coord)
-        inline RbtQuat& operator=(const RbtQuat& quat) {
-            if (this != &quat) {  // beware of self-assignment
-                s = quat.s;
-                v = quat.v;
-            }
-            return *this;
-        }
+    //*this -= quat
+    inline void operator-=(const RbtQuat& quat) {
+        s -= quat.s;
+        v -= quat.v;
+    }
 
-        //*this += quat
-        inline void operator+=(const RbtQuat& quat) {
-            s += quat.s;
-            v += quat.v;
-        }
+    //*this *= const
+    inline void operator*=(const RbtDouble& d) {
+        s *= d;
+        v *= d;
+    }
 
-        //*this -= quat
-        inline void operator-=(const RbtQuat& quat) {
-            s -= quat.s;
-            v -= quat.v;
-        }
+    //*this /= const
+    inline void operator/=(const RbtDouble& d) {
+        s /= d;
+        v /= d;
+    }
 
-        //*this *= const
-        inline void operator*=(const RbtDouble& d) {
-            s *= d;
-            v *= d;
-        }
+    ///////////////////////////////////////////////
+    // Friend functions:
+    ///////////////////
 
-        //*this /= const
-        inline void operator/=(const RbtDouble& d) {
-            s /= d;
-            v /= d;
-        }
+    // Insertion operator
+    friend ostream& operator<<(ostream& s, const RbtQuat& quat) { return s << quat.s << "," << quat.v; }
 
-        ///////////////////////////////////////////////
-        // Friend functions:
-        ///////////////////
+    // Equality
+    inline friend RbtBool operator==(const RbtQuat& quat1, const RbtQuat& quat2) {
+        return quat1.s == quat2.s && quat1.v == quat2.v;
+    }
 
-        // Insertion operator
-        friend ostream& operator<<(ostream& s, const RbtQuat& quat) { return s << quat.s << "," << quat.v; }
+    // Non-equality
+    inline friend RbtBool operator!=(const RbtQuat& quat1, const RbtQuat& quat2) {
+        return quat1.s != quat2.s || quat1.v != quat2.v;
+    }
 
-        // Equality
-        inline friend RbtBool operator==(const RbtQuat& quat1, const RbtQuat& quat2) {
-            return quat1.s == quat2.s && quat1.v == quat2.v;
-        }
+    // Addition
+    inline friend RbtQuat operator+(const RbtQuat& quat1, const RbtQuat& quat2) {
+        return RbtQuat(quat1.s + quat2.s, quat1.v + quat2.v);
+    }
 
-        // Non-equality
-        inline friend RbtBool operator!=(const RbtQuat& quat1, const RbtQuat& quat2) {
-            return quat1.s != quat2.s || quat1.v != quat2.v;
-        }
+    // Subtraction
+    inline friend RbtQuat operator-(const RbtQuat& quat1, const RbtQuat& quat2) {
+        return RbtQuat(quat1.s - quat2.s, quat1.v - quat2.v);
+    }
 
-        // Addition
-        inline friend RbtQuat operator+(const RbtQuat& quat1, const RbtQuat& quat2) {
-            return RbtQuat(quat1.s + quat2.s, quat1.v + quat2.v);
-        }
+    // Negation
+    inline friend RbtQuat operator-(const RbtQuat& quat) { return RbtQuat(-quat.s, -quat.v); }
 
-        // Subtraction
-        inline friend RbtQuat operator-(const RbtQuat& quat1, const RbtQuat& quat2) {
-            return RbtQuat(quat1.s - quat2.s, quat1.v - quat2.v);
-        }
+    // Multiplication (non-commutative)
+    inline friend RbtQuat operator*(const RbtQuat& quat1, const RbtQuat& quat2) {
+        return RbtQuat(quat1.s * quat2.s - (quat1.v).Dot(quat2.v),
+                       quat1.s * quat2.v + quat1.v * quat2.s + (quat1.v).Cross(quat2.v));
+    }
 
-        // Negation
-        inline friend RbtQuat operator-(const RbtQuat& quat) { return RbtQuat(-quat.s, -quat.v); }
+    // Scalar product
+    inline friend RbtQuat operator*(const RbtQuat& quat, const RbtDouble& d) {
+        return RbtQuat(quat.s * d, quat.v * d);
+    }
 
-        // Multiplication (non-commutative)
-        inline friend RbtQuat operator*(const RbtQuat& quat1, const RbtQuat& quat2) {
-            return RbtQuat(quat1.s * quat2.s - (quat1.v).Dot(quat2.v),
-                           quat1.s * quat2.v + quat1.v * quat2.s + (quat1.v).Cross(quat2.v));
-        }
+    // Scalar product
+    inline friend RbtQuat operator*(const RbtDouble& d, const RbtQuat& quat) {
+        return RbtQuat(quat.s * d, quat.v * d);
+    }
 
-        // Scalar product
-        inline friend RbtQuat operator*(const RbtQuat& quat, const RbtDouble& d) {
-            return RbtQuat(quat.s * d, quat.v * d);
-        }
+    // Scalar division
+    inline friend RbtQuat operator/(const RbtQuat& quat, const RbtDouble& d) {
+        return RbtQuat(quat.s / d, quat.v / d);
+    }
 
-        // Scalar product
-        inline friend RbtQuat operator*(const RbtDouble& d, const RbtQuat& quat) {
-            return RbtQuat(quat.s * d, quat.v * d);
-        }
+    ///////////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        // Scalar division
-        inline friend RbtQuat operator/(const RbtQuat& quat, const RbtDouble& d) {
-            return RbtQuat(quat.s / d, quat.v / d);
-        }
+    // Returns magnitude of quat
+    // Member function (L = Q1.Length())
+    inline RbtDouble Length() const { return sqrt(s * s + v.x * v.x + v.y * v.y + v.z * v.z); }
 
-        ///////////////////////////////////////////////
-        // Public methods
-        ////////////////
+    // Returns unit quat
+    // Member function (U1 = Q1.Unit())
+    inline RbtQuat Unit() const {
+        RbtDouble l = Length();
+        return (l > 0) ? *this / l : *this;
+    }
 
-        // Returns magnitude of quat
-        // Member function (L = Q1.Length())
-        inline RbtDouble Length() const { return sqrt(s * s + v.x * v.x + v.y * v.y + v.z * v.z); }
+    // Dot product member function (D = Q1.Dot(Q2))
+    inline RbtDouble Dot(const RbtQuat& quat) const { return s * quat.s + v.Dot(quat.v); }
 
-        // Returns unit quat
-        // Member function (U1 = Q1.Unit())
-        inline RbtQuat Unit() const {
-            RbtDouble l = Length();
-            return (l > 0) ? *this / l : *this;
-        }
+    // Returns conjugate
+    // Member function (Q1* = Q1.Conj())
+    inline RbtQuat Conj() const { return RbtQuat(s, -v); }
 
-        // Dot product member function (D = Q1.Dot(Q2))
-        inline RbtDouble Dot(const RbtQuat& quat) const { return s * quat.s + v.Dot(quat.v); }
-
-        // Returns conjugate
-        // Member function (Q1* = Q1.Conj())
-        inline RbtQuat Conj() const { return RbtQuat(s, -v); }
-
-        // Returns Q W Q* where Q=S+V is a quaternion and W is a 3-D vector
-        // Q W Q* = (S^2 - V.V)W + 2S(VxW) + 2V(V.W)
-        // where . = Dot product and x = Cross product
-        // The end result is a 3-D rotation, assuming q has been obtained from RotationQuat
-        inline RbtCoord Rotate(const RbtCoord& w) const {
-            return (s * s - v.Dot(v)) * w + 2 * s * v.Cross(w) + 2 * v * v.Dot(w);
-        }
+    // Returns Q W Q* where Q=S+V is a quaternion and W is a 3-D vector
+    // Q W Q* = (S^2 - V.V)W + 2S(VxW) + 2V(V.W)
+    // where . = Dot product and x = Cross product
+    // The end result is a 3-D rotation, assuming q has been obtained from RotationQuat
+    inline RbtCoord Rotate(const RbtCoord& w) const {
+        return (s * s - v.Dot(v)) * w + 2 * s * v.Cross(w) + 2 * v * v.Dot(w);
+    }
 };
 
 // Useful typedefs

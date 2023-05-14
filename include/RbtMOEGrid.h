@@ -42,58 +42,58 @@
 // single point in a multi-dimensional grid
 // the coords contains N values where N is the dimension of the grid
 class RbtMOEGridPoint {
-        vector<double> coords;
-        double value;
+    vector<double> coords;
+    double value;
 
-    public:
-        // default ctor with a 1D gridpoint at 0.0 value 1.0
-        // see also default ctor for the shape and data vector below
-        RbtMOEGridPoint();
-        // parametrized ctor when supplying data as a vector + value pair
-        RbtMOEGridPoint(vector<double>, double);
-        // parametrized ctor getting coord values from RbtCoord (default 3D
-        // grid for convenience)
-        RbtMOEGridPoint(RbtCoord&, double);
-        // data access methods
-        double GetValue() { return value; };
-        const vector<double>& GetCoords() { return coords; };
-        void SetCoords(double a_val) { coords.push_back(a_val); };
-        void SetValue(double a_val) { value = a_val; };
+ public:
+    // default ctor with a 1D gridpoint at 0.0 value 1.0
+    // see also default ctor for the shape and data vector below
+    RbtMOEGridPoint();
+    // parametrized ctor when supplying data as a vector + value pair
+    RbtMOEGridPoint(vector<double>, double);
+    // parametrized ctor getting coord values from RbtCoord (default 3D
+    // grid for convenience)
+    RbtMOEGridPoint(RbtCoord&, double);
+    // data access methods
+    double GetValue() { return value; };
+    const vector<double>& GetCoords() { return coords; };
+    void SetCoords(double a_val) { coords.push_back(a_val); };
+    void SetValue(double a_val) { value = a_val; };
 };
 
 // MOE grid shape vector
 class RbtMOEGridShape {
-        // data that is provided usually in the SVL code
-        // a shape vector is defined by
-        //		i)		starting coordinates
-        //		ii)		X,Y,Z extension (in absolute coordinates)
-        //		iii)	grid stepsize
-        // data vector defined by
-        //		i)		a 1D vector containing the same number
-        //				of elements than the total number of the
-        //				shape vector
+    // data that is provided usually in the SVL code
+    // a shape vector is defined by
+    //		i)		starting coordinates
+    //		ii)		X,Y,Z extension (in absolute coordinates)
+    //		iii)	grid stepsize
+    // data vector defined by
+    //		i)		a 1D vector containing the same number
+    //				of elements than the total number of the
+    //				shape vector
 
-        vector<double> origin;   // the starting point
-        vector<double> extents;  // the final points
-        vector<int> i_extents;   // extents in integers: number of
-                                 // points at the edges (ie 20 X 30 X 40 grid)
-        double step_size;        // grid step size
-        long data_size;          // total number of points
+    vector<double> origin;   // the starting point
+    vector<double> extents;  // the final points
+    vector<int> i_extents;   // extents in integers: number of
+                             // points at the edges (ie 20 X 30 X 40 grid)
+    double step_size;        // grid step size
+    long data_size;          // total number of points
 
-    public:
-        // default ctor allocates a 1D grid starting at 0.0 to 1.0
-        // with 1.0 stepsize (2 elements at least needed for MOE)
-        RbtMOEGridShape();
+ public:
+    // default ctor allocates a 1D grid starting at 0.0 to 1.0
+    // with 1.0 stepsize (2 elements at least needed for MOE)
+    RbtMOEGridShape();
 
-        // parametrized ctor receives grid as the origin vector, the extent
-        // vector and stepsize
-        RbtMOEGridShape(vector<double>, vector<double>, double);
+    // parametrized ctor receives grid as the origin vector, the extent
+    // vector and stepsize
+    RbtMOEGridShape(vector<double>, vector<double>, double);
 
-        const vector<double>& GetOrigin() { return origin; };
-        const vector<double>& GetExtents() { return extents; };
-        const vector<int>& GetIExtents() { return i_extents; };
-        double GetStepSize() { return step_size; };
-        long GetDataSize() { return data_size; };
+    const vector<double>& GetOrigin() { return origin; };
+    const vector<double>& GetExtents() { return extents; };
+    const vector<int>& GetIExtents() { return i_extents; };
+    double GetStepSize() { return step_size; };
+    long GetDataSize() { return data_size; };
 };
 
 typedef vector<RbtMOEGridPoint> RbtMOEGridData;
@@ -102,32 +102,32 @@ typedef vector<RbtMOEGridPoint> RbtMOEGridData;
 //
 // the MOE grid file format (in the present stage at 06/03/2003)
 class RbtMOEGrid {
-        RbtMOEGridShape myShape;
-        RbtMOEGridData myData;
-        RbtString stream_name;  // filename
-        RbtCoord min, max;      // common extent min and max coords
-        RbtCoord c_min, c_max;  // current extent min and max coords
-    public:
-        // default ctor
-        RbtMOEGrid();
-        // parameterised ctor for a single grid
-        // pass shape, data and outfilename
-        RbtMOEGrid(RbtMOEGridShape&, RbtMOEGridData&, RbtString);
-        // or pass parameters using these functions (when it is about
-        // to save multiple grids into a single file)
-        void SetShape(RbtMOEGridShape& a_shape) { myShape = a_shape; };
-        void SetData(RbtMOEGridData& a_data) { myData = a_data; };
-        void SetOutputFileName(RbtString& a_filename) { stream_name = a_filename; };
-        // methods to calculate grid extents
-        void CalculateCommonExtents(vector<RbtString> strPrmFiles);  // for all
-        void GetDockingSiteExtents(RbtString& a_strPrmFile);         // for a single
-        // get methods
-        RbtCoord GetMinExtents() { return min; };
-        RbtCoord GetMaxExtents() { return max; };
+    RbtMOEGridShape myShape;
+    RbtMOEGridData myData;
+    RbtString stream_name;  // filename
+    RbtCoord min, max;      // common extent min and max coords
+    RbtCoord c_min, c_max;  // current extent min and max coords
+ public:
+    // default ctor
+    RbtMOEGrid();
+    // parameterised ctor for a single grid
+    // pass shape, data and outfilename
+    RbtMOEGrid(RbtMOEGridShape&, RbtMOEGridData&, RbtString);
+    // or pass parameters using these functions (when it is about
+    // to save multiple grids into a single file)
+    void SetShape(RbtMOEGridShape& a_shape) { myShape = a_shape; };
+    void SetData(RbtMOEGridData& a_data) { myData = a_data; };
+    void SetOutputFileName(RbtString& a_filename) { stream_name = a_filename; };
+    // methods to calculate grid extents
+    void CalculateCommonExtents(vector<RbtString> strPrmFiles);  // for all
+    void GetDockingSiteExtents(RbtString& a_strPrmFile);         // for a single
+    // get methods
+    RbtCoord GetMinExtents() { return min; };
+    RbtCoord GetMaxExtents() { return max; };
 
-        // iofstream methods
-        long WriteGrid(std::_Ios_Openmode mode);  // returns the number of points written
-        long ReadGrid();                          // ditto (fields read)
+    // iofstream methods
+    long WriteGrid(std::_Ios_Openmode mode);  // returns the number of points written
+    long ReadGrid();                          // ditto (fields read)
 };
 
 // the relevant SVL code in gridshow.svl

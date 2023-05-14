@@ -29,42 +29,42 @@
 class RbtSubject;
 
 class RbtObserver {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtObserver();  // Default destructor
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtObserver();  // Default destructor
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        // PURE VIRTUAL - DERIVED CLASSES MUST OVERRIDE
-        // Notify observer that subject has changed
-        virtual void Update(RbtSubject* theChangedSubject) = 0;
-        // Notify observer that subject is about to be deleted
-        virtual void Deleted(RbtSubject* theDeletedSubject) = 0;
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    // PURE VIRTUAL - DERIVED CLASSES MUST OVERRIDE
+    // Notify observer that subject has changed
+    virtual void Update(RbtSubject* theChangedSubject) = 0;
+    // Notify observer that subject is about to be deleted
+    virtual void Deleted(RbtSubject* theDeletedSubject) = 0;
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtObserver();
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtObserver();
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtObserver(const RbtObserver&);             // Copy constructor disabled by default
-        RbtObserver& operator=(const RbtObserver&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtObserver(const RbtObserver&);             // Copy constructor disabled by default
+    RbtObserver& operator=(const RbtObserver&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
 };
 
 // Useful typedefs

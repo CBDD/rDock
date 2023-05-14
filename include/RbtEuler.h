@@ -40,56 +40,56 @@
 #include "RbtQuat.h"
 
 class RbtEuler {
-    public:
-        // Constructor accepting values for heading, attitude and bank (radians).
-        // NOTE: For performance reasons, no checks are made that the values
-        // are within range
-        RbtEuler(RbtDouble heading = 0.0, RbtDouble attitude = 0.0, RbtDouble bank = 0.0):
-            m_heading(heading), m_attitude(attitude), m_bank(bank) {}
-        // Constructor accepting a quaternion.
-        // Quaternion is converted to Euler angle representation
-        // NOTE: For performance reasons, q is assumed to be of unit length
-        // and no further checks are made.
-        RbtEuler(const RbtQuat& q) { FromQuat(q); }
+ public:
+    // Constructor accepting values for heading, attitude and bank (radians).
+    // NOTE: For performance reasons, no checks are made that the values
+    // are within range
+    RbtEuler(RbtDouble heading = 0.0, RbtDouble attitude = 0.0, RbtDouble bank = 0.0):
+        m_heading(heading), m_attitude(attitude), m_bank(bank) {}
+    // Constructor accepting a quaternion.
+    // Quaternion is converted to Euler angle representation
+    // NOTE: For performance reasons, q is assumed to be of unit length
+    // and no further checks are made.
+    RbtEuler(const RbtQuat& q) { FromQuat(q); }
 
-        // Returns true if all three Euler angles are within their
-        // standard ranges
-        RbtBool isStandardised() const {
-            return (m_heading >= -M_PI) && (m_heading <= M_PI) && (m_attitude >= -M_PI / 2.0)
-                   && (m_attitude <= M_PI / 2.0) && (m_bank >= -M_PI) && (m_bank <= M_PI);
-        }
-        // Standardises the Euler angles by conversion to/from quaternion
-        void Standardise() {
-            if (!isStandardised()) FromQuat(ToQuat());
-        }
+    // Returns true if all three Euler angles are within their
+    // standard ranges
+    RbtBool isStandardised() const {
+        return (m_heading >= -M_PI) && (m_heading <= M_PI) && (m_attitude >= -M_PI / 2.0) && (m_attitude <= M_PI / 2.0)
+               && (m_bank >= -M_PI) && (m_bank <= M_PI);
+    }
+    // Standardises the Euler angles by conversion to/from quaternion
+    void Standardise() {
+        if (!isStandardised()) FromQuat(ToQuat());
+    }
 
-        // Gets the current heading angle (radians)
-        RbtDouble GetHeading() const { return m_heading; }
-        // Gets the current attitude angle (radians)
-        RbtDouble GetAttitude() const { return m_attitude; }
-        // Gets the current bank angle (radians)
-        RbtDouble GetBank() const { return m_bank; }
-        // Gets the equivalent quaternion representation
-        // NOTE: For performance reasons, no checks are made that the current
-        // Euler angles are within range prior to the conversion.
-        RbtQuat ToQuat() const;
-        // Updates the Euler angles from a quaternion representation
-        // NOTE: For performance reasons, q is assumed to be of unit length
-        // and no further checks are made.
-        void FromQuat(const RbtQuat& q);
-        // Convenience method to rotate orientation by a quaternion
-        void Rotate(const RbtQuat& q) { FromQuat(q * ToQuat()); }
-        void Rotate(const RbtVector& axis, RbtDouble theta) { Rotate(RbtQuat(axis, theta)); }
+    // Gets the current heading angle (radians)
+    RbtDouble GetHeading() const { return m_heading; }
+    // Gets the current attitude angle (radians)
+    RbtDouble GetAttitude() const { return m_attitude; }
+    // Gets the current bank angle (radians)
+    RbtDouble GetBank() const { return m_bank; }
+    // Gets the equivalent quaternion representation
+    // NOTE: For performance reasons, no checks are made that the current
+    // Euler angles are within range prior to the conversion.
+    RbtQuat ToQuat() const;
+    // Updates the Euler angles from a quaternion representation
+    // NOTE: For performance reasons, q is assumed to be of unit length
+    // and no further checks are made.
+    void FromQuat(const RbtQuat& q);
+    // Convenience method to rotate orientation by a quaternion
+    void Rotate(const RbtQuat& q) { FromQuat(q * ToQuat()); }
+    void Rotate(const RbtVector& axis, RbtDouble theta) { Rotate(RbtQuat(axis, theta)); }
 
-        // Insertion operator
-        friend ostream& operator<<(ostream& s, const RbtEuler& euler) {
-            return s << "Heading = " << euler.m_heading << ", Attitude = " << euler.m_attitude
-                     << ", Bank = " << euler.m_bank;
-        }
+    // Insertion operator
+    friend ostream& operator<<(ostream& s, const RbtEuler& euler) {
+        return s << "Heading = " << euler.m_heading << ", Attitude = " << euler.m_attitude
+                 << ", Bank = " << euler.m_bank;
+    }
 
-    private:
-        RbtDouble m_heading;   // heading angle (radians)
-        RbtDouble m_attitude;  // attitude angle (radians)
-        RbtDouble m_bank;      // bank angle (radians)
+ private:
+    RbtDouble m_heading;   // heading angle (radians)
+    RbtDouble m_attitude;  // attitude angle (radians)
+    RbtDouble m_bank;      // bank angle (radians)
 };
 #endif /*RBTEULER_H_*/

@@ -19,54 +19,54 @@
 #include "RbtModel.h"
 
 class RbtBaseBiMolTransform: public RbtBaseTransform {
-    public:
-        // Class type string
-        static RbtString _CT;
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtBaseBiMolTransform();
+ public:
+    // Class type string
+    static RbtString _CT;
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtBaseBiMolTransform();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        RbtModelPtr GetReceptor() const;
-        RbtModelPtr GetLigand() const;
-        RbtModelList GetSolvent() const;
+    RbtModelPtr GetReceptor() const;
+    RbtModelPtr GetLigand() const;
+    RbtModelList GetSolvent() const;
 
-        // Override RbtObserver pure virtual
-        // Notify observer that subject has changed
-        virtual void Update(RbtSubject* theChangedSubject);
+    // Override RbtObserver pure virtual
+    // Notify observer that subject has changed
+    virtual void Update(RbtSubject* theChangedSubject);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtBaseBiMolTransform(const RbtString& strClass, const RbtString& strName);
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtBaseBiMolTransform(const RbtString& strClass, const RbtString& strName);
 
-        // PURE VIRTUAL - Derived classes must override
-        virtual void SetupReceptor() = 0;   // Called by Update when receptor is changed
-        virtual void SetupLigand() = 0;     // Called by Update when ligand is changed
-        virtual void SetupSolvent(){};      // Called by Update when ligand is changed
-        virtual void SetupTransform() = 0;  // Called by Update when either model has changed
+    // PURE VIRTUAL - Derived classes must override
+    virtual void SetupReceptor() = 0;   // Called by Update when receptor is changed
+    virtual void SetupLigand() = 0;     // Called by Update when ligand is changed
+    virtual void SetupSolvent(){};      // Called by Update when ligand is changed
+    virtual void SetupTransform() = 0;  // Called by Update when either model has changed
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtModelPtr m_spReceptor;
-        RbtModelPtr m_spLigand;
-        RbtModelList m_solventList;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtModelPtr m_spReceptor;
+    RbtModelPtr m_spLigand;
+    RbtModelList m_solventList;
 };
 
 #endif  //_RBTBASEBIMOLTRANSFORM_H_

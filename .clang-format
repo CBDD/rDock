@@ -1,6 +1,6 @@
 BasedOnStyle:    Google
 Language:        Cpp
-AccessModifierOffset: 0
+AccessModifierOffset: -3
 AllowShortFunctionsOnASingleLine: true
 BreakBeforeBinaryOperators: NonAssignment
 BreakInheritanceList: AfterColon
@@ -28,7 +28,7 @@ IncludeCategories:
     Priority:        3
     SortPriority:    0
     CaseSensitive:   false
-IndentAccessModifiers: true
+IndentAccessModifiers: false
 IndentCaseLabels: true
 IndentCaseBlocks: true
 IndentGotoLabels: true

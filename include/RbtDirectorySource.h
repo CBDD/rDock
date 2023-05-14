@@ -34,36 +34,36 @@ const unsigned int ALL = 0;           // read all files in directory
  * include other ReadFiles () methods
  */
 class RbtDirectorySource {
-    protected:
-        struct stat fStat;  // stat struct for file access check
+ protected:
+    struct stat fStat;  // stat struct for file access check
 #ifdef COMMENT
     #ifdef linux
-        struct dirent **fNameList;  // file name list in directory
+    struct dirent **fNameList;  // file name list in directory
     #endif
-    #ifdef sun                      // for gcc
-        struct direct **fNameList;  // file name list in directory
+    #ifdef sun                  // for gcc
+    struct direct **fNameList;  // file name list in directory
     #endif
-#endif                                     // COMMENT
-        int fNum;                          // number of files in the dir
-        struct dirent **fNameList;         // file name list in directory
-        ifstream inFile;                   // an actual file to read
-        RbtString thePath;                 // leading path
-        void CheckDirectory(RbtString &);  // to check directory access
+#endif                                 // COMMENT
+    int fNum;                          // number of files in the dir
+    struct dirent **fNameList;         // file name list in directory
+    ifstream inFile;                   // an actual file to read
+    RbtString thePath;                 // leading path
+    void CheckDirectory(RbtString &);  // to check directory access
 
-    public:
-        RbtDirectorySource(const RbtString &) throw(RbtError);
-        virtual ~RbtDirectorySource();
+ public:
+    RbtDirectorySource(const RbtString &) throw(RbtError);
+    virtual ~RbtDirectorySource();
 
-        static RbtString _CT;
+    static RbtString _CT;
 
-        /**
-         * ReadFiles should be re-defined by derived classes to match argument
-         * Ie ReadFile(vector<string> anStrVect) reads file and stores result in anStrVect,
-         * or ReadFile(map< ... > aMap) in aMap, etc.
-         *
-         */
-        // virtual void ReadFiles()=0;
-        // virtual void ParseLines()=0;
+    /**
+     * ReadFiles should be re-defined by derived classes to match argument
+     * Ie ReadFile(vector<string> anStrVect) reads file and stores result in anStrVect,
+     * or ReadFile(map< ... > aMap) in aMap, etc.
+     *
+     */
+    // virtual void ReadFiles()=0;
+    // virtual void ParseLines()=0;
 };
 
 #endif  // _RBTDIRECTORYSOURCE_H_

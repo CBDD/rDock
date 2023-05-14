@@ -17,27 +17,27 @@
 #include "RbtRealGrid.h"
 
 class RbtPMFGridSF: public RbtBaseInterSF {
-        RbtBool m_bSmoothed;
-        RbtAtomList theLigandList;        // vector to store the ligand
-        vector<RbtPMFType> theTypeList;   // store PMF used types here
-        vector<RbtRealGridPtr> theGrids;  // grids with PMF data
+    RbtBool m_bSmoothed;
+    RbtAtomList theLigandList;        // vector to store the ligand
+    vector<RbtPMFType> theTypeList;   // store PMF used types here
+    vector<RbtRealGridPtr> theGrids;  // grids with PMF data
 
-        void ReadGrids(istream& istr) throw(RbtError);
+    void ReadGrids(istream& istr) throw(RbtError);
 
-    public:
-        static RbtString _CT;        // class name
-        static RbtString _GRID;      // filename extension (.grd)
-        static RbtString _SMOOTHED;  // controls wether to smooth the grid values
+ public:
+    static RbtString _CT;        // class name
+    static RbtString _GRID;      // filename extension (.grd)
+    static RbtString _SMOOTHED;  // controls wether to smooth the grid values
 
-        RbtPMFGridSF(const RbtString& strName = "PMFGRID");
-        virtual ~RbtPMFGridSF();
+    RbtPMFGridSF(const RbtString& strName = "PMFGRID");
+    virtual ~RbtPMFGridSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore(){};
-        virtual RbtDouble RawScore() const;
-        RbtUInt GetCorrectedType(RbtPMFType aType) const;
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore(){};
+    virtual RbtDouble RawScore() const;
+    RbtUInt GetCorrectedType(RbtPMFType aType) const;
 };
 
 #endif  // _RBTPMFGRIDSF_H_

@@ -23,12 +23,12 @@
 // #include <cmath>
 
 class RbtGPFFGold: public RbtGPFitnessFunction {
-    public:
-        static RbtString _CT;
+ public:
+    static RbtString _CT;
 
-        void ReadTables(istream&);
-        RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble, RbtBool);
-        RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtBool);
+    void ReadTables(istream&);
+    RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble, RbtBool);
+    RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtBool);
 };
 
 // Useful typedefs

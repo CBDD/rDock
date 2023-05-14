@@ -24,20 +24,20 @@
 // #include <cmath>
 
 class RbtGPFFSpike: public RbtGPFitnessFunction {
-    public:
-        static RbtString _CT;
-        RbtGPFFSpike(RbtContextPtr c): contextp(c) { _RBTOBJECTCOUNTER_CONSTR_(_CT); };
-        virtual ~RbtGPFFSpike() { _RBTOBJECTCOUNTER_DESTR_(_CT); };
+ public:
+    static RbtString _CT;
+    RbtGPFFSpike(RbtContextPtr c): contextp(c) { _RBTOBJECTCOUNTER_CONSTR_(_CT); };
+    virtual ~RbtGPFFSpike() { _RBTOBJECTCOUNTER_DESTR_(_CT); };
 
-        void ReadTables(istream&, RbtReturnTypeArray&, RbtReturnTypeArray&);
-        RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble, RbtBool);
-        RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtBool);
+    void ReadTables(istream&, RbtReturnTypeArray&, RbtReturnTypeArray&);
+    RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble, RbtBool);
+    RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtBool);
 
-    private:
-        void CreateRandomCtes(RbtInt);
-        RbtDoubleList ctes;
-        RbtCellContextPtr contextp;
-        RbtGPFFSpike();  // default constructor disabled
+ private:
+    void CreateRandomCtes(RbtInt);
+    RbtDoubleList ctes;
+    RbtCellContextPtr contextp;
+    RbtGPFFSpike();  // default constructor disabled
 };
 
 // Useful typedefs

@@ -17,27 +17,27 @@
 
 // after Hasel, Hendrickson and Still
 struct RbtSimpleSolvationParameters {
-        RbtDouble p;
-        RbtDouble r;
+    RbtDouble p;
+    RbtDouble r;
 };
 
 class RbtSetupSASF: public RbtBaseInterSF {
-        RbtAtomList theLigandList;    // ligand typing
-        RbtAtomList theReceptorList;  // receptor typing
+    RbtAtomList theLigandList;    // ligand typing
+    RbtAtomList theReceptorList;  // receptor typing
 
-    public:
-        static RbtString _CT;
+ public:
+    static RbtString _CT;
 
-        RbtSetupSASF(const RbtString& strName = "SETUP_SA");
-        ~RbtSetupSASF();
+    RbtSetupSASF(const RbtString& strName = "SETUP_SA");
+    ~RbtSetupSASF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
 
-        void SetupReceptorSATypes(void) throw(RbtError);
-        void SetupLigandSATypes(void) throw(RbtError);
+    void SetupReceptorSATypes(void) throw(RbtError);
+    void SetupLigandSATypes(void) throw(RbtError);
 };
 #endif  //_RBTSETUPSASF_H_

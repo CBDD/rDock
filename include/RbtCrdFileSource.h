@@ -18,30 +18,30 @@
 #include "RbtBaseMolecularFileSource.h"
 
 class RbtCrdFileSource: public RbtBaseMolecularFileSource {
-    public:
-        // Constructors
-        RbtCrdFileSource(const char* fileName);
-        RbtCrdFileSource(const RbtString fileName);
+ public:
+    // Constructors
+    RbtCrdFileSource(const char* fileName);
+    RbtCrdFileSource(const RbtString fileName);
 
-        // Default destructor
-        virtual ~RbtCrdFileSource();
+    // Default destructor
+    virtual ~RbtCrdFileSource();
 
-        ////////////////////////////////////////
-        // Override public methods from RbtBaseMolecularDataSource
-        virtual RbtBool isTitleListSupported() { return true; };
-        virtual RbtBool isAtomListSupported() { return true; };
-        virtual RbtBool isCoordinatesSupported() { return true; };
-        virtual RbtBool isBondListSupported() { return false; };
+    ////////////////////////////////////////
+    // Override public methods from RbtBaseMolecularDataSource
+    virtual RbtBool isTitleListSupported() { return true; };
+    virtual RbtBool isAtomListSupported() { return true; };
+    virtual RbtBool isCoordinatesSupported() { return true; };
+    virtual RbtBool isBondListSupported() { return false; };
 
-    protected:
-        // Pure virtual in RbtBaseFileSource - needs to be defined here
-        virtual void Parse() throw(RbtError);
+ protected:
+    // Pure virtual in RbtBaseFileSource - needs to be defined here
+    virtual void Parse() throw(RbtError);
 
-    private:
-        // Private methods
-        RbtCrdFileSource();                                    // Disable default constructor
-        RbtCrdFileSource(const RbtCrdFileSource&);             // Copy constructor disabled by default
-        RbtCrdFileSource& operator=(const RbtCrdFileSource&);  // Copy assignment disabled by default
+ private:
+    // Private methods
+    RbtCrdFileSource();                                    // Disable default constructor
+    RbtCrdFileSource(const RbtCrdFileSource&);             // Copy constructor disabled by default
+    RbtCrdFileSource& operator=(const RbtCrdFileSource&);  // Copy assignment disabled by default
 };
 
 // useful typedefs

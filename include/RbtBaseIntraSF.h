@@ -19,55 +19,55 @@
 #include "RbtModel.h"
 
 class RbtBaseIntraSF: public virtual RbtBaseSF {
-    public:
-        // Class type string
-        static RbtString _CT;
+ public:
+    // Class type string
+    static RbtString _CT;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtBaseIntraSF();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtBaseIntraSF();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        RbtModelPtr GetLigand() const;
+    RbtModelPtr GetLigand() const;
 
-        // Override RbtObserver pure virtual
-        // Notify observer that subject has changed
-        virtual void Update(RbtSubject* theChangedSubject);
+    // Override RbtObserver pure virtual
+    // Notify observer that subject has changed
+    virtual void Update(RbtSubject* theChangedSubject);
 
-        // Override RbtBaseSF::ScoreMap to provide additional raw descriptors
-        virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
+    // Override RbtBaseSF::ScoreMap to provide additional raw descriptors
+    virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtBaseIntraSF();
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtBaseIntraSF();
 
-        // PURE VIRTUAL - Derived classes must override
-        virtual void SetupScore() = 0;  // Called by Update when model has changed
+    // PURE VIRTUAL - Derived classes must override
+    virtual void SetupScore() = 0;  // Called by Update when model has changed
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtModelPtr m_spLigand;
-        // 26 Mar 2003 (DM) Remember the raw score for the initial ligand conformation
-        // This becomes the zero point for all subsequent score reporting
-        // i.e. all intramolecular scores are reported relative to the initial score
-        RbtDouble m_zero;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtModelPtr m_spLigand;
+    // 26 Mar 2003 (DM) Remember the raw score for the initial ligand conformation
+    // This becomes the zero point for all subsequent score reporting
+    // i.e. all intramolecular scores are reported relative to the initial score
+    RbtDouble m_zero;
 };
 
 #endif  //_RBTBASEINTRASF_H_

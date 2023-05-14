@@ -18,47 +18,47 @@
 #include "RbtChromElement.h"
 
 class RbtRandPopTransform: public RbtBaseBiMolTransform {
-    public:
-        static RbtString _CT;
-        static RbtString _POP_SIZE;
-        static RbtString _SCALE_CHROM_LENGTH;
+ public:
+    static RbtString _CT;
+    static RbtString _POP_SIZE;
+    static RbtString _SCALE_CHROM_LENGTH;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtRandPopTransform(const RbtString& strName = "RANDPOP");
-        virtual ~RbtRandPopTransform();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtRandPopTransform(const RbtString& strName = "RANDPOP");
+    virtual ~RbtRandPopTransform();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        virtual void SetupTransform();  // Called by Update when either model has changed
-        virtual void SetupReceptor();   // Called by Update when receptor is changed
-        virtual void SetupLigand();     // Called by Update when ligand is changed
-        virtual void SetupSolvent();    // Called by Update when solvent is changed
-        virtual void Execute();
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    virtual void SetupTransform();  // Called by Update when either model has changed
+    virtual void SetupReceptor();   // Called by Update when receptor is changed
+    virtual void SetupLigand();     // Called by Update when ligand is changed
+    virtual void SetupSolvent();    // Called by Update when solvent is changed
+    virtual void Execute();
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtRandPopTransform(const RbtRandPopTransform&);             // Copy constructor disabled by default
-        RbtRandPopTransform& operator=(const RbtRandPopTransform&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtRandPopTransform(const RbtRandPopTransform&);             // Copy constructor disabled by default
+    RbtRandPopTransform& operator=(const RbtRandPopTransform&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtChromElementPtr m_chrom;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtChromElementPtr m_chrom;
 };
 
 // Useful typedefs

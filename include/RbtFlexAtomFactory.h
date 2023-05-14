@@ -46,28 +46,28 @@
 // allowed coordinates.
 // The User2Value for fixed and free atoms is set to zero.
 class RbtFlexAtomFactory: public RbtFlexDataVisitor {
-    public:
-        RbtFlexAtomFactory(){};
-        // Constructor accepting a single model
-        RbtFlexAtomFactory(RbtModel*);
-        // Constructor accepting a list of models
-        RbtFlexAtomFactory(RbtModelList);
-        // Helper method to visit a single model
-        void Visit(RbtModel*);
-        // Clears the partitioned atom lists
-        void Clear();
-        // Implement the base class abstract methods
-        virtual void VisitReceptorFlexData(RbtReceptorFlexData*);
-        virtual void VisitLigandFlexData(RbtLigandFlexData*);
-        virtual void VisitSolventFlexData(RbtSolventFlexData*);
-        // Get methods for the partitioned atom lists
-        RbtAtomRList GetFixedAtomList() const { return m_fixedAtomList; }
-        RbtAtomRList GetTetheredAtomList() const { return m_tetheredAtomList; }
-        RbtAtomRList GetFreeAtomList() const { return m_freeAtomList; }
+ public:
+    RbtFlexAtomFactory(){};
+    // Constructor accepting a single model
+    RbtFlexAtomFactory(RbtModel*);
+    // Constructor accepting a list of models
+    RbtFlexAtomFactory(RbtModelList);
+    // Helper method to visit a single model
+    void Visit(RbtModel*);
+    // Clears the partitioned atom lists
+    void Clear();
+    // Implement the base class abstract methods
+    virtual void VisitReceptorFlexData(RbtReceptorFlexData*);
+    virtual void VisitLigandFlexData(RbtLigandFlexData*);
+    virtual void VisitSolventFlexData(RbtSolventFlexData*);
+    // Get methods for the partitioned atom lists
+    RbtAtomRList GetFixedAtomList() const { return m_fixedAtomList; }
+    RbtAtomRList GetTetheredAtomList() const { return m_tetheredAtomList; }
+    RbtAtomRList GetFreeAtomList() const { return m_freeAtomList; }
 
-    private:
-        RbtAtomRList m_fixedAtomList;
-        RbtAtomRList m_tetheredAtomList;
-        RbtAtomRList m_freeAtomList;
+ private:
+    RbtAtomRList m_fixedAtomList;
+    RbtAtomRList m_tetheredAtomList;
+    RbtAtomRList m_freeAtomList;
 };
 #endif  //_RBTFLEXATOMFACTORY_H_

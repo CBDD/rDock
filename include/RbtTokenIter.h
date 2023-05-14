@@ -21,17 +21,17 @@
 #include "RbtTypes.h"
 
 class RbtTokenIter {
-    public:
-        //  virtual void copy(const RbtTokenIter &) = 0;
-        virtual void Next(RbtContextPtr) = 0;
-        virtual RbtTokenPtr Current() = 0;
-        virtual ~RbtTokenIter() {}
+ public:
+    //  virtual void copy(const RbtTokenIter &) = 0;
+    virtual void Next(RbtContextPtr) = 0;
+    virtual RbtTokenPtr Current() = 0;
+    virtual ~RbtTokenIter() {}
 
-        //  virtual RbtTokenPtr IsDone() const = 0;
-        //  virtual void First() = 0;
-        //  RbtBool operator==(const RbtTokenIter&) const;
-        //  ostream& Print(ostream&) const;
-        //  friend ostream& operator<<(ostream& s, const RbtTokenIter &p);
+    //  virtual RbtTokenPtr IsDone() const = 0;
+    //  virtual void First() = 0;
+    //  RbtBool operator==(const RbtTokenIter&) const;
+    //  ostream& Print(ostream&) const;
+    //  friend ostream& operator<<(ostream& s, const RbtTokenIter &p);
 };
 
 // Useful typedefs

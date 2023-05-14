@@ -19,10 +19,10 @@ class RbtLigandFlexData;
 class RbtSolventFlexData;
 
 class RbtFlexDataVisitor {
-    public:
-        virtual ~RbtFlexDataVisitor(){};
-        virtual void VisitReceptorFlexData(RbtReceptorFlexData*) = 0;
-        virtual void VisitLigandFlexData(RbtLigandFlexData*) = 0;
-        virtual void VisitSolventFlexData(RbtSolventFlexData*) = 0;
+ public:
+    virtual ~RbtFlexDataVisitor(){};
+    virtual void VisitReceptorFlexData(RbtReceptorFlexData*) = 0;
+    virtual void VisitLigandFlexData(RbtLigandFlexData*) = 0;
+    virtual void VisitSolventFlexData(RbtSolventFlexData*) = 0;
 };
 #endif  //_RBTFLEXDATAVISITOR_H_

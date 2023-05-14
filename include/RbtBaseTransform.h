@@ -21,74 +21,74 @@
 class RbtTransformAgg;  // forward declaration
 
 class RbtBaseTransform: public RbtBaseObject {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtBaseTransform();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtBaseTransform();
 
-        // Give aggregates access to RbtBaseSF private methods/data
-        friend class RbtTransformAgg;
+    // Give aggregates access to RbtBaseSF private methods/data
+    friend class RbtTransformAgg;
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        // Fully qualified name, prefixed by all ancestors
-        RbtString GetFullName() const;
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    // Fully qualified name, prefixed by all ancestors
+    RbtString GetFullName() const;
 
-        // Main public method - actually apply the transform
-        // Not virtual. Base class method checks if transform is enabled,
-        // sends SFRequests to reconfigure the scoring function
-        // then calls private virtual method Execute() to apply the transform
-        void Go();
+    // Main public method - actually apply the transform
+    // Not virtual. Base class method checks if transform is enabled,
+    // sends SFRequests to reconfigure the scoring function
+    // then calls private virtual method Execute() to apply the transform
+    void Go();
 
-        // Aggregate handling methods
-        virtual void Add(RbtBaseTransform*) throw(RbtError);
-        virtual void Remove(RbtBaseTransform*) throw(RbtError);
-        virtual RbtBool isAgg() const;
-        virtual RbtUInt GetNumTransforms() const;
-        virtual RbtBaseTransform* GetTransform(RbtUInt) const throw(RbtError);
-        void Orphan();  // Force removal from the parent aggregate
-        RbtBaseTransform* GetParentTransform() const;
+    // Aggregate handling methods
+    virtual void Add(RbtBaseTransform*) throw(RbtError);
+    virtual void Remove(RbtBaseTransform*) throw(RbtError);
+    virtual RbtBool isAgg() const;
+    virtual RbtUInt GetNumTransforms() const;
+    virtual RbtBaseTransform* GetTransform(RbtUInt) const throw(RbtError);
+    void Orphan();  // Force removal from the parent aggregate
+    RbtBaseTransform* GetParentTransform() const;
 
-        // Scoring function request handling
-        // Transforms can store up a list of requests to send to the workspace
-        // scoring function each time Go() is executed
-        void AddSFRequest(RbtRequestPtr);
-        void ClearSFRequests();
-        void SendSFRequests();
+    // Scoring function request handling
+    // Transforms can store up a list of requests to send to the workspace
+    // scoring function each time Go() is executed
+    void AddSFRequest(RbtRequestPtr);
+    void ClearSFRequests();
+    void SendSFRequests();
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtBaseTransform(const RbtString& strClass, const RbtString& strName);
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtBaseTransform(const RbtString& strClass, const RbtString& strName);
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtBaseTransform();
-        RbtBaseTransform(const RbtBaseTransform&);             // Copy constructor disabled by default
-        RbtBaseTransform& operator=(const RbtBaseTransform&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtBaseTransform();
+    RbtBaseTransform(const RbtBaseTransform&);             // Copy constructor disabled by default
+    RbtBaseTransform& operator=(const RbtBaseTransform&);  // Copy assignment disabled by default
 
-        // PURE VIRTUAL - subclasses should override. Applies the transform
-        virtual void Execute() = 0;
+    // PURE VIRTUAL - subclasses should override. Applies the transform
+    virtual void Execute() = 0;
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtBaseTransform* m_parent;
-        RbtRequestList m_SFRequests;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtBaseTransform* m_parent;
+    RbtRequestList m_SFRequests;
 };
 
 // Useful typedefs

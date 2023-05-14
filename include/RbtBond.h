@@ -19,94 +19,94 @@
 #include "RbtConfig.h"
 
 class RbtBond {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        ////////////////////////////////////////
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    ////////////////////////////////////////
 
-        // Default constructor
-        RbtBond();
+    // Default constructor
+    RbtBond();
 
-        // Cconstructor supplying all parameters
-        RbtBond(RbtInt nBondId, RbtAtomPtr& spAtom1, RbtAtomPtr& spAtom2, RbtInt nFormalBondOrder = 1);
+    // Cconstructor supplying all parameters
+    RbtBond(RbtInt nBondId, RbtAtomPtr& spAtom1, RbtAtomPtr& spAtom2, RbtInt nFormalBondOrder = 1);
 
-        virtual ~RbtBond();  // Default destructor
+    virtual ~RbtBond();  // Default destructor
 
-        RbtBond(const RbtBond& bond);  // Copy constructor
+    RbtBond(const RbtBond& bond);  // Copy constructor
 
-        RbtBond& operator=(const RbtBond& bond);  // Copy assignment
+    RbtBond& operator=(const RbtBond& bond);  // Copy assignment
 
-        ///////////////////////////////////////////////
-        // Stream functions
-        ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    // Stream functions
+    ///////////////////////////////////////////////
 
-        // Insertion operator (primarily for debugging)
-        // Note: needs to be friend so can access bond private data
-        // without using the accessor functions
-        friend ostream& operator<<(ostream& s, const RbtBond& bond);
+    // Insertion operator (primarily for debugging)
+    // Note: needs to be friend so can access bond private data
+    // without using the accessor functions
+    friend ostream& operator<<(ostream& s, const RbtBond& bond);
 
-        ////////////////////////////////////////
-        // Public accessor functions
-        ////////////////
+    ////////////////////////////////////////
+    // Public accessor functions
+    ////////////////
 
-        // Bond ID
-        RbtInt GetBondId() const { return m_nBondId; }
-        void SetBondId(const RbtInt nBondId) { m_nBondId = nBondId; }
+    // Bond ID
+    RbtInt GetBondId() const { return m_nBondId; }
+    void SetBondId(const RbtInt nBondId) { m_nBondId = nBondId; }
 
-        // Atom pointers
-        RbtAtomPtr GetAtom1Ptr() const { return m_spAtom1; }
-        RbtAtomPtr GetAtom2Ptr() const { return m_spAtom2; }
-        void SetAtom1Ptr(RbtAtomPtr& spAtom1) { m_spAtom1 = spAtom1; }
-        void SetAtom2Ptr(RbtAtomPtr& spAtom2) { m_spAtom2 = spAtom2; }
+    // Atom pointers
+    RbtAtomPtr GetAtom1Ptr() const { return m_spAtom1; }
+    RbtAtomPtr GetAtom2Ptr() const { return m_spAtom2; }
+    void SetAtom1Ptr(RbtAtomPtr& spAtom1) { m_spAtom1 = spAtom1; }
+    void SetAtom2Ptr(RbtAtomPtr& spAtom2) { m_spAtom2 = spAtom2; }
 
-        // Formal Bond order
-        RbtInt GetFormalBondOrder() const { return m_nFormalBondOrder; }
-        void SetFormalBondOrder(const RbtInt nFormalBondOrder) { m_nFormalBondOrder = nFormalBondOrder; }
+    // Formal Bond order
+    RbtInt GetFormalBondOrder() const { return m_nFormalBondOrder; }
+    void SetFormalBondOrder(const RbtInt nFormalBondOrder) { m_nFormalBondOrder = nFormalBondOrder; }
 
-        // Partial Bond order
-        RbtDouble GetPartialBondOrder() const { return m_dPartialBondOrder; }
-        void SetPartialBondOrder(const RbtDouble dPartialBondOrder) { m_dPartialBondOrder = dPartialBondOrder; }
+    // Partial Bond order
+    RbtDouble GetPartialBondOrder() const { return m_dPartialBondOrder; }
+    void SetPartialBondOrder(const RbtDouble dPartialBondOrder) { m_dPartialBondOrder = dPartialBondOrder; }
 
-        // CyclicFlag - flag to indicate bond is in a ring (set by RbtModel::FindRing)
-        RbtBool GetCyclicFlag() const { return m_bCyclic; }
-        void SetCyclicFlag(RbtBool bCyclic = true) { m_bCyclic = bCyclic; }
+    // CyclicFlag - flag to indicate bond is in a ring (set by RbtModel::FindRing)
+    RbtBool GetCyclicFlag() const { return m_bCyclic; }
+    void SetCyclicFlag(RbtBool bCyclic = true) { m_bCyclic = bCyclic; }
 
-        // SelectionFlag - general purpose flag can be set/cleared by various search algorithms (e.g. FindRings)
-        RbtBool GetSelectionFlag() const { return m_bSelected; }
-        void SetSelectionFlag(RbtBool bSelected = true) { m_bSelected = bSelected; }
+    // SelectionFlag - general purpose flag can be set/cleared by various search algorithms (e.g. FindRings)
+    RbtBool GetSelectionFlag() const { return m_bSelected; }
+    void SetSelectionFlag(RbtBool bSelected = true) { m_bSelected = bSelected; }
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        // Returns bond length
-        RbtDouble Length() const;
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    // Returns bond length
+    RbtDouble Length() const;
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtInt m_nBondId;               // Original bond ID in PSF file
-        RbtAtomPtr m_spAtom1;           // Smart pointer to atom 1
-        RbtAtomPtr m_spAtom2;           // Smart pointer to atom 2
-        RbtInt m_nFormalBondOrder;      // Formal bond order (1,2,3, no aromatic bond orders of 1.5)
-        RbtDouble m_dPartialBondOrder;  // Partial bond order (1.0, 1.5, 2.0, 3.0 etc)
-        RbtBool m_bCyclic;              // Is the bond in a ring ?
-        RbtBool m_bSelected;            // Can be set/cleared by various search algorithms (e.g. FindRings)
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtInt m_nBondId;               // Original bond ID in PSF file
+    RbtAtomPtr m_spAtom1;           // Smart pointer to atom 1
+    RbtAtomPtr m_spAtom2;           // Smart pointer to atom 2
+    RbtInt m_nFormalBondOrder;      // Formal bond order (1,2,3, no aromatic bond orders of 1.5)
+    RbtDouble m_dPartialBondOrder;  // Partial bond order (1.0, 1.5, 2.0, 3.0 etc)
+    RbtBool m_bCyclic;              // Is the bond in a ring ?
+    RbtBool m_bSelected;            // Can be set/cleared by various search algorithms (e.g. FindRings)
 };
 
 // Useful typedefs
@@ -130,37 +130,37 @@ typedef std::binary_function<RbtBond*, RbtBond*, RbtBool> RbtBondBinaryPredicate
 
 // Is bond selected ?
 class isBondSelected: public RbtBondUnaryPredicate {
-    public:
-        explicit isBondSelected() {}
-        RbtBool operator()(RbtBond* pBond) const { return pBond->GetSelectionFlag(); }
+ public:
+    explicit isBondSelected() {}
+    RbtBool operator()(RbtBond* pBond) const { return pBond->GetSelectionFlag(); }
 };
 
 // Is bond cyclic ?
 class isBondCyclic: public RbtBondUnaryPredicate {
-    public:
-        explicit isBondCyclic() {}
-        RbtBool operator()(RbtBond* pBond) const { return pBond->GetCyclicFlag(); }
+ public:
+    explicit isBondCyclic() {}
+    RbtBool operator()(RbtBond* pBond) const { return pBond->GetCyclicFlag(); }
 };
 
 // Is bond rotatable ?
 class isBondRotatable: public RbtBondUnaryPredicate {
-    public:
-        explicit isBondRotatable() {}
-        RbtBool operator()(RbtBond*) const;
+ public:
+    explicit isBondRotatable() {}
+    RbtBool operator()(RbtBond*) const;
 };
 
 // Is bond to a terminal NH3+ group?
 class isBondToNH3: public RbtBondUnaryPredicate {
-    public:
-        explicit isBondToNH3() {}
-        RbtBool operator()(RbtBond*) const;
+ public:
+    explicit isBondToNH3() {}
+    RbtBool operator()(RbtBond*) const;
 };
 
 // Is bond to a terminal OH group?
 class isBondToOH: public RbtBondUnaryPredicate {
-    public:
-        explicit isBondToOH() {}
-        RbtBool operator()(RbtBond* pBond) const;
+ public:
+    explicit isBondToOH() {}
+    RbtBool operator()(RbtBond* pBond) const;
 };
 
 // DM 1 April 1999
@@ -174,33 +174,33 @@ class isBondToOH: public RbtBondUnaryPredicate {
 
 // Is bond.Ptr() equal to RbtBond* (checks if underlying regular pointers match)
 class isBondPtr_eq: public RbtBondUnaryPredicate {
-        RbtBond* p;
+    RbtBond* p;
 
-    public:
-        explicit isBondPtr_eq(RbtBond* pp): p(pp) {}
-        RbtBool operator()(RbtBond* pBond) const { return pBond == p; }
+ public:
+    explicit isBondPtr_eq(RbtBond* pp): p(pp) {}
+    RbtBool operator()(RbtBond* pBond) const { return pBond == p; }
 };
 
 // DM 2 Aug 1999
 // Is bond2 equal to bond1 (checks if bond ID, atom1 and atom2 match)
 class isBond_eq: public RbtBondUnaryPredicate {
-        RbtBond* p;
-        Rbt::isAtom_eq bIsAtomEqual;
+    RbtBond* p;
+    Rbt::isAtom_eq bIsAtomEqual;
 
-    public:
-        explicit isBond_eq(RbtBond* pp): p(pp) {}
-        RbtBool operator()(RbtBond* pBond) const {
-            return ((pBond->GetBondId() == p->GetBondId()) && (bIsAtomEqual(pBond->GetAtom1Ptr(), p->GetAtom1Ptr()))
-                    && (bIsAtomEqual(pBond->GetAtom2Ptr(), p->GetAtom2Ptr())));
-        }
+ public:
+    explicit isBond_eq(RbtBond* pp): p(pp) {}
+    RbtBool operator()(RbtBond* pBond) const {
+        return ((pBond->GetBondId() == p->GetBondId()) && (bIsAtomEqual(pBond->GetAtom1Ptr(), p->GetAtom1Ptr()))
+                && (bIsAtomEqual(pBond->GetAtom2Ptr(), p->GetAtom2Ptr())));
+    }
 };
 
 // DM 7 June 1999
 // Is bond an amide bond?
 class isBondAmide: public RbtBondUnaryPredicate {
-    public:
-        explicit isBondAmide() {}
-        RbtBool operator()(RbtBond*) const;
+ public:
+    explicit isBondAmide() {}
+    RbtBool operator()(RbtBond*) const;
 };
 
 ////////////////////////////////////////////

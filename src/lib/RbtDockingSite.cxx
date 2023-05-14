@@ -18,19 +18,19 @@
 
 // Less than operator for sorting coords
 class RbtCoordCmp {
-    public:
-        RbtBool operator()(const RbtCoord& c1, const RbtCoord& c2) const {
-            if (c1.x < c2.x)
+ public:
+    RbtBool operator()(const RbtCoord& c1, const RbtCoord& c2) const {
+        if (c1.x < c2.x)
+            return true;
+        else if (c1.x == c2.x) {
+            if (c1.y < c2.y)
                 return true;
-            else if (c1.x == c2.x) {
-                if (c1.y < c2.y)
-                    return true;
-                else if (c1.y == c2.y) {
-                    if (c1.z < c2.z) return true;
-                }
+            else if (c1.y == c2.y) {
+                if (c1.z < c2.z) return true;
             }
-            return false;
         }
+        return false;
+    }
 };
 
 // Static data members

@@ -26,41 +26,41 @@
 
 typedef SmartPtr<istream> istreamPtr;
 class RbtStringTokenIter: public RbtTokenIter {
-    public:
-        static RbtString _CT;
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtStringTokenIter(const RbtStringTokenIter &);
-        RbtStringTokenIter(const istreamPtr, RbtContextPtr);
+ public:
+    static RbtString _CT;
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtStringTokenIter(const RbtStringTokenIter &);
+    RbtStringTokenIter(const istreamPtr, RbtContextPtr);
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtStringTokenIter();
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtStringTokenIter();
 
-        void copy(const RbtStringTokenIter &);
-        // void First();
-        void Next(RbtContextPtr);
-        // RbtBool IsDone() const;
-        RbtTokenPtr Current();
+    void copy(const RbtStringTokenIter &);
+    // void First();
+    void Next(RbtContextPtr);
+    // RbtBool IsDone() const;
+    RbtTokenPtr Current();
 
-        //  RbtBool operator==(const RbtStringTokenIter&) const;
-        //  ostream& Print(ostream&) const;
-        //  friend ostream& operator<<(ostream& s, const RbtStringTokenIter &p);
+    //  RbtBool operator==(const RbtStringTokenIter&) const;
+    //  ostream& Print(ostream&) const;
+    //  friend ostream& operator<<(ostream& s, const RbtStringTokenIter &p);
 
-        ////////////////////
-        // Private methods
-        ////////////////////
+    ////////////////////
+    // Private methods
+    ////////////////////
 
-    private:
-        RbtStringTokenIter();  // Default constructor disabled
-        RbtTokenPtr translate(RbtString);
+ private:
+    RbtStringTokenIter();  // Default constructor disabled
+    RbtTokenPtr translate(RbtString);
 
-        istreamPtr filep;
-        RbtTokenPtr current;
-        RbtString strtok;
-        RbtContextPtr contextp;
+    istreamPtr filep;
+    RbtTokenPtr current;
+    RbtString strtok;
+    RbtContextPtr contextp;
 };
 
 // Useful typedefs

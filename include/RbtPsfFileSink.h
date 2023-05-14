@@ -18,43 +18,43 @@
 #include "RbtBaseMolecularFileSink.h"
 
 class RbtPsfFileSink: public RbtBaseMolecularFileSink {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        // RbtPsfFileSink(const char* fileName, RbtModelPtr spModel);
-        RbtPsfFileSink(const RbtString& fileName, RbtModelPtr spModel);
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    // RbtPsfFileSink(const char* fileName, RbtModelPtr spModel);
+    RbtPsfFileSink(const RbtString& fileName, RbtModelPtr spModel);
 
-        virtual ~RbtPsfFileSink();  // Default destructor
+    virtual ~RbtPsfFileSink();  // Default destructor
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        // Override public methods from RbtBaseFileSink
-        virtual void Render() throw(RbtError);
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    // Override public methods from RbtBaseFileSink
+    virtual void Render() throw(RbtError);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-        RbtPsfFileSink();                                  // Disable default constructor
-        RbtPsfFileSink(const RbtPsfFileSink&);             // Copy constructor disabled by default
-        RbtPsfFileSink& operator=(const RbtPsfFileSink&);  // Copy assignment disabled by default
+    RbtPsfFileSink();                                  // Disable default constructor
+    RbtPsfFileSink(const RbtPsfFileSink&);             // Copy constructor disabled by default
+    RbtPsfFileSink& operator=(const RbtPsfFileSink&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
 };
 
 // Useful typedefs

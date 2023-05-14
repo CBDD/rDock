@@ -26,13 +26,13 @@
 
 // Object counter class for debugging no. of object constructions and destructions
 class RbtObjectCounter {
-    public:
-        RbtObjectCounter();
-        ~RbtObjectCounter();
-        friend ostream& operator<<(ostream& s, const RbtObjectCounter& counter);
-        RbtInt nConstr;
-        RbtInt nCopyConstr;
-        RbtInt nDestr;
+ public:
+    RbtObjectCounter();
+    ~RbtObjectCounter();
+    friend ostream& operator<<(ostream& s, const RbtObjectCounter& counter);
+    RbtInt nConstr;
+    RbtInt nCopyConstr;
+    RbtInt nDestr;
 };
 
 // Useful typedefs

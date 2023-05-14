@@ -27,72 +27,72 @@ const RbtBool TRANSFORMAGG_CHECK = true;
 // Useful typedefs
 
 class RbtTransformAgg: public RbtBaseTransform {
-    public:
-        // Static data member for class type (i.e. "RbtTransformAgg")
-        static RbtString _CT;
+ public:
+    // Static data member for class type (i.e. "RbtTransformAgg")
+    static RbtString _CT;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtTransformAgg(const RbtString& strName = "DOCK");
-        virtual ~RbtTransformAgg();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtTransformAgg(const RbtString& strName = "DOCK");
+    virtual ~RbtTransformAgg();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        // Aggregate handling methods
-        virtual void Add(RbtBaseTransform*) throw(RbtError);
-        virtual void Remove(RbtBaseTransform*) throw(RbtError);
-        virtual RbtBool isAgg() const;
-        virtual RbtUInt GetNumTransforms() const;
-        virtual RbtBaseTransform* GetTransform(RbtUInt iTransform) const throw(RbtError);
+    // Aggregate handling methods
+    virtual void Add(RbtBaseTransform*) throw(RbtError);
+    virtual void Remove(RbtBaseTransform*) throw(RbtError);
+    virtual RbtBool isAgg() const;
+    virtual RbtUInt GetNumTransforms() const;
+    virtual RbtBaseTransform* GetTransform(RbtUInt iTransform) const throw(RbtError);
 
-        // WorkSpace handling methods
-        // Register scoring function with a workspace
-        // Aggregate version registers all children, but NOT itself
-        //(Aggregates are just containers, and have no need for model information
-        virtual void Register(RbtWorkSpace*);
-        // Unregister with a workspace
-        // Aggregate version unregisters all children, but NOT itself
-        virtual void Unregister();
+    // WorkSpace handling methods
+    // Register scoring function with a workspace
+    // Aggregate version registers all children, but NOT itself
+    //(Aggregates are just containers, and have no need for model information
+    virtual void Register(RbtWorkSpace*);
+    // Unregister with a workspace
+    // Aggregate version unregisters all children, but NOT itself
+    virtual void Unregister();
 
-        // Override RbtObserver pure virtual
-        // Notify observer that subject has changed
-        // Does nothing in RbtTransformAgg as aggregates do not require updating
-        virtual void Update(RbtSubject* theChangedSubject);
+    // Override RbtObserver pure virtual
+    // Notify observer that subject has changed
+    // Does nothing in RbtTransformAgg as aggregates do not require updating
+    virtual void Update(RbtSubject* theChangedSubject);
 
-        // Request Handling method
-        virtual void HandleRequest(RbtRequestPtr spRequest);
+    // Request Handling method
+    virtual void HandleRequest(RbtRequestPtr spRequest);
 
-        // Virtual function for dumping transform details to an output stream
-        // Called by operator <<
-        virtual void Print(ostream& s) const;
+    // Virtual function for dumping transform details to an output stream
+    // Called by operator <<
+    virtual void Print(ostream& s) const;
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        // Actually apply the transform
-        // Aggregate version loops over all child transforms
-        virtual void Execute();
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    // Actually apply the transform
+    // Aggregate version loops over all child transforms
+    virtual void Execute();
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtTransformAgg(const RbtTransformAgg&);             // Copy constructor disabled by default
-        RbtTransformAgg& operator=(const RbtTransformAgg&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtTransformAgg(const RbtTransformAgg&);             // Copy constructor disabled by default
+    RbtTransformAgg& operator=(const RbtTransformAgg&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtBaseTransformList m_transforms;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtBaseTransformList m_transforms;
 };
 
 // Useful typedefs

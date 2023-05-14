@@ -19,29 +19,29 @@
 #include "RbtBaseInterSF.h"
 
 class RbtRotSF: public RbtBaseInterSF {
-    public:
-        // Static data member for class type
-        static RbtString _CT;
-        // Parameter names
-        // Boolean controlling whether to include bonds to NH3+ in rotable bond count
-        static RbtString _INCNH3;
-        // Boolean controlling whether to include bonds to OH in  rotable bond count
-        static RbtString _INCOH;
+ public:
+    // Static data member for class type
+    static RbtString _CT;
+    // Parameter names
+    // Boolean controlling whether to include bonds to NH3+ in rotable bond count
+    static RbtString _INCNH3;
+    // Boolean controlling whether to include bonds to OH in  rotable bond count
+    static RbtString _INCOH;
 
-        RbtRotSF(const RbtString& strName = "ROT");
-        virtual ~RbtRotSF();
+    RbtRotSF(const RbtString& strName = "ROT");
+    virtual ~RbtRotSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
-        void ParameterUpdated(const RbtString& strName);
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        RbtInt nRot;
-        RbtBool bIncNH3;
-        RbtBool bIncOH;
+ private:
+    RbtInt nRot;
+    RbtBool bIncNH3;
+    RbtBool bIncOH;
 };
 
 #endif  //_RBTROTSF_H_

@@ -21,49 +21,49 @@
 // #include <cmath>
 
 class RbtGPGenome {
-    public:
-        static RbtString _CT;
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtGPGenome();
-        RbtGPGenome(const RbtGPGenome&);
-        RbtGPGenome(RbtString);
-        RbtGPGenome(istream&);
+ public:
+    static RbtString _CT;
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtGPGenome();
+    RbtGPGenome(const RbtGPGenome&);
+    RbtGPGenome(RbtString);
+    RbtGPGenome(istream&);
 
-        RbtGPGenome& operator=(const RbtGPGenome&);
+    RbtGPGenome& operator=(const RbtGPGenome&);
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtGPGenome();
-        static void SetStructure(RbtInt, RbtInt, RbtInt, RbtInt, RbtInt, RbtInt, RbtInt, RbtInt);
-        static RbtInt GetNIP() { return npi; };
-        static void SetNIP(RbtInt n) { npi = n; };
-        static RbtInt GetNIF() { return nfi; };
-        static RbtInt GetNN() { return nn; };
-        static RbtInt GetNO() { return no; };
-        static RbtInt GetNSFI() { return nsfi; };
-        static void SetNSFI(RbtInt n) { nsfi = n; };
-        RbtGPChromosomePtr GetChrom() const { return (new RbtGPChromosome(*chrom)); };
-        void Initialise();
-        void Mutate(RbtDouble);
-        void SetFitness(RbtDouble f) { fitness = f; };
-        RbtDouble GetFitness() const { return fitness; };
-        void UniformCrossover(const RbtGPGenome&, const RbtGPGenome&);
-        void Crossover(RbtGPGenome&);
-        friend ostream& operator<<(ostream& s, const RbtGPGenome& p);
-        ostream& Print(ostream&) const;
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtGPGenome();
+    static void SetStructure(RbtInt, RbtInt, RbtInt, RbtInt, RbtInt, RbtInt, RbtInt, RbtInt);
+    static RbtInt GetNIP() { return npi; };
+    static void SetNIP(RbtInt n) { npi = n; };
+    static RbtInt GetNIF() { return nfi; };
+    static RbtInt GetNN() { return nn; };
+    static RbtInt GetNO() { return no; };
+    static RbtInt GetNSFI() { return nsfi; };
+    static void SetNSFI(RbtInt n) { nsfi = n; };
+    RbtGPChromosomePtr GetChrom() const { return (new RbtGPChromosome(*chrom)); };
+    void Initialise();
+    void Mutate(RbtDouble);
+    void SetFitness(RbtDouble f) { fitness = f; };
+    RbtDouble GetFitness() const { return fitness; };
+    void UniformCrossover(const RbtGPGenome&, const RbtGPGenome&);
+    void Crossover(RbtGPGenome&);
+    friend ostream& operator<<(ostream& s, const RbtGPGenome& p);
+    ostream& Print(ostream&) const;
 
-    protected:
-    private:
-        void MutateGene(RbtInt);
+ protected:
+ private:
+    void MutateGene(RbtInt);
 
-        static RbtInt npi, nfi, nsfi, no, nn, nf, nr, nc, l;
-        // defines structures and constraints of each genome
-        RbtRand& m_rand;
-        RbtDouble fitness;         // scaled score. For now same than score
-        RbtGPChromosomePtr chrom;  // list of integers that represent a chrom
+    static RbtInt npi, nfi, nsfi, no, nn, nf, nr, nc, l;
+    // defines structures and constraints of each genome
+    RbtRand& m_rand;
+    RbtDouble fitness;         // scaled score. For now same than score
+    RbtGPChromosomePtr chrom;  // list of integers that represent a chrom
 };
 
 // Useful typedefs

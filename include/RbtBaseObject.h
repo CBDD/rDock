@@ -24,90 +24,90 @@
 class RbtWorkSpace;  // forward definition
 
 class RbtBaseObject: public RbtParamHandler, public RbtObserver, public RbtRequestHandler {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _CLASS;
-        static RbtString _NAME;
-        static RbtString _ENABLED;
-        static RbtString _TRACE;  // DM 1 Mar 2002 - move from RbtBaseTransform
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _CLASS;
+    static RbtString _NAME;
+    static RbtString _ENABLED;
+    static RbtString _TRACE;  // DM 1 Mar 2002 - move from RbtBaseTransform
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtBaseObject();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtBaseObject();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        // Class name (e.g. RbtConstSF)
-        RbtString GetClass() const;
-        // Short name (e.g. HBOND)
-        RbtString GetName() const;
-        void SetName(const RbtString&);
-        // Fully qualified name (should be overridden by subclasses which can be aggregated
-        // to prefix the name with the parent's name)
-        virtual RbtString GetFullName() const;
-        void Enable();
-        void Disable();
-        RbtBool isEnabled() const;
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    // Class name (e.g. RbtConstSF)
+    RbtString GetClass() const;
+    // Short name (e.g. HBOND)
+    RbtString GetName() const;
+    void SetName(const RbtString&);
+    // Fully qualified name (should be overridden by subclasses which can be aggregated
+    // to prefix the name with the parent's name)
+    virtual RbtString GetFullName() const;
+    void Enable();
+    void Disable();
+    RbtBool isEnabled() const;
 
-        // DM 1 Mar 2002 - move from RbtBaseTransform
-        // get/set the trace level for debugging
-        RbtInt GetTrace() const;
-        void SetTrace(RbtInt);
+    // DM 1 Mar 2002 - move from RbtBaseTransform
+    // get/set the trace level for debugging
+    RbtInt GetTrace() const;
+    void SetTrace(RbtInt);
 
-        // WorkSpace handling methods
-        // Register scoring function with a workspace
-        // Base class version just registers itself
-        virtual void Register(RbtWorkSpace*);
-        // Unregister with a workspace
-        // Base class version just unregisters itself
-        virtual void Unregister();
-        // Get workspace pointer
-        RbtWorkSpace* GetWorkSpace() const;
+    // WorkSpace handling methods
+    // Register scoring function with a workspace
+    // Base class version just registers itself
+    virtual void Register(RbtWorkSpace*);
+    // Unregister with a workspace
+    // Base class version just unregisters itself
+    virtual void Unregister();
+    // Get workspace pointer
+    RbtWorkSpace* GetWorkSpace() const;
 
-        // Override Observer method
-        // Notify observer that subject is about to be deleted
-        virtual void Deleted(RbtSubject* theDeletedSubject);
+    // Override Observer method
+    // Notify observer that subject is about to be deleted
+    virtual void Deleted(RbtSubject* theDeletedSubject);
 
-        // Request Handling method
-        virtual void HandleRequest(RbtRequestPtr spRequest);
+    // Request Handling method
+    virtual void HandleRequest(RbtRequestPtr spRequest);
 
-        // Virtual function for dumping parameters to an output stream
-        // Called by operator <<
-        virtual void Print(ostream& s) const;
+    // Virtual function for dumping parameters to an output stream
+    // Called by operator <<
+    virtual void Print(ostream& s) const;
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtBaseObject(const RbtString& strClass, const RbtString& strName);
-        RbtBaseObject();
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtBaseObject(const RbtString& strClass, const RbtString& strName);
+    RbtBaseObject();
 
-        // DM 25 Oct 2000 - track changes to parameter values in local data members
-        // ParameterUpdated is invoked by RbtParamHandler::SetParameter
-        void ParameterUpdated(const RbtString& strName);
+    // DM 25 Oct 2000 - track changes to parameter values in local data members
+    // ParameterUpdated is invoked by RbtParamHandler::SetParameter
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtBaseObject(const RbtBaseObject&);             // Copy constructor disabled by default
-        RbtBaseObject& operator=(const RbtBaseObject&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtBaseObject(const RbtBaseObject&);             // Copy constructor disabled by default
+    RbtBaseObject& operator=(const RbtBaseObject&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtWorkSpace* m_workspace;
-        RbtBool m_enabled;
-        RbtInt m_trace;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtWorkSpace* m_workspace;
+    RbtBool m_enabled;
+    RbtInt m_trace;
 };
 
 // Useful typedefs

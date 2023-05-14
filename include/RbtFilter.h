@@ -24,42 +24,42 @@
 class RbtFilterExpressionVisitor;
 
 class RbtFilter: public RbtBaseObject {
-    public:
-        static RbtString _CT;
-        RbtFilter(RbtString strfilter, RbtBool filter = false);
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtFilter();
-        // Override RbtObserver pure virtual
-        // Notify observer that subject has changed
-        virtual void Update(RbtSubject* theChangedSubject);
+ public:
+    static RbtString _CT;
+    RbtFilter(RbtString strfilter, RbtBool filter = false);
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtFilter();
+    // Override RbtObserver pure virtual
+    // Notify observer that subject has changed
+    virtual void Update(RbtSubject* theChangedSubject);
 
-        void SetupReceptor();  // Called by Update when receptor is changed
-        void SetupLigand();    // Called by Update when ligand is changed
-        void SetupScore();     // Called by Update when either model has changed
-        RbtBool Write();       // Output conformation?
-        RbtBool Terminate();   // Finished with ligand?
-        RbtModelPtr GetReceptor() const;
-        RbtModelPtr GetLigand() const;
-        void SetMaxNRuns(RbtInt n) { maxnruns = n; }
+    void SetupReceptor();  // Called by Update when receptor is changed
+    void SetupLigand();    // Called by Update when ligand is changed
+    void SetupScore();     // Called by Update when either model has changed
+    RbtBool Write();       // Output conformation?
+    RbtBool Terminate();   // Finished with ligand?
+    RbtModelPtr GetReceptor() const;
+    RbtModelPtr GetLigand() const;
+    void SetMaxNRuns(RbtInt n) { maxnruns = n; }
 
-        ////////////////////
-        // Private methods
-        ////////////////////
+    ////////////////////
+    // Private methods
+    ////////////////////
 
-    protected:
-        RbtFilter();  // Default constructor disabled
+ protected:
+    RbtFilter();  // Default constructor disabled
 
-    private:
-        void ReadFilters();
+ private:
+    void ReadFilters();
 
-        RbtInt filteridx, nTermFilters, nWriteFilters, nruns, maxnruns;
-        RbtFilterExpressionList terminationFilters;
-        RbtFilterExpressionList writtingFilter;
-        RbtModelPtr m_spReceptor;
-        RbtModelPtr m_spLigand;
-        RbtContextPtr contextp;
+    RbtInt filteridx, nTermFilters, nWriteFilters, nruns, maxnruns;
+    RbtFilterExpressionList terminationFilters;
+    RbtFilterExpressionList writtingFilter;
+    RbtModelPtr m_spReceptor;
+    RbtModelPtr m_spLigand;
+    RbtContextPtr contextp;
 };
 
 // Useful typedefs

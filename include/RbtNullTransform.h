@@ -19,43 +19,43 @@
 #include "RbtBaseTransform.h"
 
 class RbtNullTransform: public RbtBaseTransform {
-    public:
-        // Static data member for class type
-        static RbtString _CT;
+ public:
+    // Static data member for class type
+    static RbtString _CT;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtNullTransform(const RbtString& strName = "NULL");
-        virtual ~RbtNullTransform();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtNullTransform(const RbtString& strName = "NULL");
+    virtual ~RbtNullTransform();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        virtual void Update(RbtSubject* theChangedSubject);  // Does nothing
+    virtual void Update(RbtSubject* theChangedSubject);  // Does nothing
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        virtual void Execute();  // Does nothing
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    virtual void Execute();  // Does nothing
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtNullTransform(const RbtNullTransform&);             // Copy constructor disabled by default
-        RbtNullTransform& operator=(const RbtNullTransform&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtNullTransform(const RbtNullTransform&);             // Copy constructor disabled by default
+    RbtNullTransform& operator=(const RbtNullTransform&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
 };
 
 // Useful typedefs

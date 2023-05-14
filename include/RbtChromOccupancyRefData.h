@@ -20,25 +20,25 @@
 class RbtModel;
 
 class RbtChromOccupancyRefData {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Sole constructor
-        RbtChromOccupancyRefData(RbtModel* pModel,
-                                 RbtDouble stepSize,    // mutation step size
-                                 RbtDouble threshold);  // threshold for enabling/disabling atoms
-        virtual ~RbtChromOccupancyRefData();
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Sole constructor
+    RbtChromOccupancyRefData(RbtModel* pModel,
+                             RbtDouble stepSize,    // mutation step size
+                             RbtDouble threshold);  // threshold for enabling/disabling atoms
+    virtual ~RbtChromOccupancyRefData();
 
-        RbtDouble GetStepSize() const { return m_stepSize; }
-        RbtDouble GetModelValue() const;
-        void SetModelValue(RbtDouble occupancy);
-        RbtDouble GetInitialValue() const { return m_initialValue; }
+    RbtDouble GetStepSize() const { return m_stepSize; }
+    RbtDouble GetModelValue() const;
+    void SetModelValue(RbtDouble occupancy);
+    RbtDouble GetInitialValue() const { return m_initialValue; }
 
-    private:
-        RbtModel* m_pModel;
-        RbtDouble m_stepSize;
-        RbtDouble m_threshold;
-        RbtDouble m_initialValue;
+ private:
+    RbtModel* m_pModel;
+    RbtDouble m_stepSize;
+    RbtDouble m_threshold;
+    RbtDouble m_initialValue;
 };
 
 typedef SmartPtr<RbtChromOccupancyRefData> RbtChromOccupancyRefDataPtr;  // Smart pointer

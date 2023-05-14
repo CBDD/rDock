@@ -19,26 +19,26 @@
 #include "RbtDihedralSF.h"
 
 class RbtDihedralTargetSF: public RbtBaseInterSF, public RbtDihedralSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
 
-        RbtDihedralTargetSF(const RbtString& strName = "DIHEDRAL");
-        virtual ~RbtDihedralTargetSF();
+    RbtDihedralTargetSF(const RbtString& strName = "DIHEDRAL");
+    virtual ~RbtDihedralTargetSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
 
-        // Clear the dihedral list
-        // As we are not using smart pointers, there is some memory management to do
-        void ClearReceptor();
+    // Clear the dihedral list
+    // As we are not using smart pointers, there is some memory management to do
+    void ClearReceptor();
 
-    private:
-        RbtDihedralList m_dihList;
+ private:
+    RbtDihedralList m_dihList;
 };
 
 #endif  //_RBTDIHEDRALTARGETSF_H_

@@ -20,51 +20,51 @@
 
 // Simple struct for holding the type info in masses.rtf
 class CharmmType {
-    public:
-        CharmmType(): nAtomType(0), strAtomType(""), mass(0.0), element(""), comment("") {}
-        RbtInt nAtomType;
-        RbtString strAtomType;
-        RbtDouble mass;
-        RbtString element;
-        RbtString comment;
+ public:
+    CharmmType(): nAtomType(0), strAtomType(""), mass(0.0), element(""), comment("") {}
+    RbtInt nAtomType;
+    RbtString strAtomType;
+    RbtDouble mass;
+    RbtString element;
+    RbtString comment;
 };
 
 typedef vector<CharmmType> RbtCharmmTypeList;
 typedef RbtCharmmTypeList::iterator RbtCharmmTypeListIter;
 
 class RbtCharmmTypesFileSource: public RbtBaseFileSource {
-    public:
-        // Constructors
-        RbtCharmmTypesFileSource(const char* fileName);
-        RbtCharmmTypesFileSource(const RbtString fileName);
+ public:
+    // Constructors
+    RbtCharmmTypesFileSource(const char* fileName);
+    RbtCharmmTypesFileSource(const RbtString fileName);
 
-        // Destructor
-        virtual ~RbtCharmmTypesFileSource();
+    // Destructor
+    virtual ~RbtCharmmTypesFileSource();
 
-        ////////////////////////////////////////
-        // Public methods
-        RbtInt GetNumTypes();
-        RbtCharmmTypeList GetTypeList();
+    ////////////////////////////////////////
+    // Public methods
+    RbtInt GetNumTypes();
+    RbtCharmmTypeList GetTypeList();
 
-    protected:
-        // Protected methods
+ protected:
+    // Protected methods
 
-    private:
-        // Private methods
-        RbtCharmmTypesFileSource();                                            // Disable default constructor
-        RbtCharmmTypesFileSource(const RbtCharmmTypesFileSource&);             // Copy constructor disabled by default
-        RbtCharmmTypesFileSource& operator=(const RbtCharmmTypesFileSource&);  // Copy assignment disabled by default
+ private:
+    // Private methods
+    RbtCharmmTypesFileSource();                                            // Disable default constructor
+    RbtCharmmTypesFileSource(const RbtCharmmTypesFileSource&);             // Copy constructor disabled by default
+    RbtCharmmTypesFileSource& operator=(const RbtCharmmTypesFileSource&);  // Copy assignment disabled by default
 
-        // Pure virtual in RbtBaseFileSource - needs to be defined here
-        virtual void Parse() throw(RbtError);
-        void ClearTypesCache();
+    // Pure virtual in RbtBaseFileSource - needs to be defined here
+    virtual void Parse() throw(RbtError);
+    void ClearTypesCache();
 
-    protected:
-        // Protected data
+ protected:
+    // Protected data
 
-    private:
-        // Private data
-        RbtCharmmTypeList m_typesList;
+ private:
+    // Private data
+    RbtCharmmTypeList m_typesList;
 };
 
 // useful typedefs

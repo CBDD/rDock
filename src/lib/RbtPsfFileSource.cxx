@@ -179,7 +179,7 @@ void RbtPsfFileSource::Parse() throw(RbtError) {
                                                                    // numbered from zero in our atom vector
                     RbtAtomPtr spAtom2(m_atomList[idxAtom2 - 1]);  // Decrement the atom index as the atoms are
                                                                    // numbered from zero in our atom vector
-                    RbtBondPtr spBond(new RbtBond(++nBondId,  // Store a nominal bond ID starting from 1
+                    RbtBondPtr spBond(new RbtBond(++nBondId,       // Store a nominal bond ID starting from 1
                                                   spAtom1, spAtom2));
                     m_bondList.push_back(spBond);
                 }

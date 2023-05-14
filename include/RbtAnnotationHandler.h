@@ -20,49 +20,49 @@
 #include "RbtAnnotation.h"
 
 class RbtAnnotationHandler {
-    public:
-        static RbtString _ANNOTATION_FIELD;
+ public:
+    static RbtString _ANNOTATION_FIELD;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtAnnotationHandler();  // Default destructor
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtAnnotationHandler();  // Default destructor
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        RbtBool isAnnotationEnabled() const;
-        // Get a const ref to the annotation list (read-only)
-        const RbtAnnotationList& GetAnnotationList() const;
-        RbtInt GetNumAnnotations() const;
-        void RenderAnnotationList(const RbtString& strName, RbtStringList& retVal) const;
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    RbtBool isAnnotationEnabled() const;
+    // Get a const ref to the annotation list (read-only)
+    const RbtAnnotationList& GetAnnotationList() const;
+    RbtInt GetNumAnnotations() const;
+    void RenderAnnotationList(const RbtString& strName, RbtStringList& retVal) const;
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtAnnotationHandler();
-        void AddAnnotation(RbtAnnotationPtr spAnnotation) const;
-        void ClearAnnotationList() const;
-        void EnableAnnotations(RbtBool bEnabled) const;
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtAnnotationHandler();
+    void AddAnnotation(RbtAnnotationPtr spAnnotation) const;
+    void ClearAnnotationList() const;
+    void EnableAnnotations(RbtBool bEnabled) const;
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtAnnotationHandler(const RbtAnnotationHandler&);             // Copy constructor disabled by default
-        RbtAnnotationHandler& operator=(const RbtAnnotationHandler&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtAnnotationHandler(const RbtAnnotationHandler&);             // Copy constructor disabled by default
+    RbtAnnotationHandler& operator=(const RbtAnnotationHandler&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        mutable RbtBool m_bEnabled;
-        mutable RbtAnnotationList m_annotationList;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    mutable RbtBool m_bEnabled;
+    mutable RbtAnnotationList m_annotationList;
 };
 
 #endif  //_RBTANNOTATIONHANDLER_H_

@@ -23,40 +23,40 @@
 #include "RbtTypes.h"
 
 class RbtGPParser {
-    public:
-        static RbtString _CT;
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtGPParser(RbtInt, RbtInt, RbtInt, RbtInt);
-        RbtGPParser(const RbtGPParser&);
+ public:
+    static RbtString _CT;
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtGPParser(RbtInt, RbtInt, RbtInt, RbtInt);
+    RbtGPParser(const RbtGPParser&);
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtGPParser();
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtGPParser();
 
-        void Clear();
-        ostream& Print(ostream&) const;
-        friend ostream& operator<<(ostream& s, const RbtGPParser& p);
-        RbtReturnTypeList Parse(RbtGPChromosomePtr, RbtReturnTypeList&);
-        RbtString PrintParse(istream&, RbtGPChromosomePtr, RbtBool, RbtBool);
-        RbtBool IsConstantInt(RbtInt i) { return (i == CINT); };
-        RbtBool IsConstantFloat(RbtInt i) { return (i == CFLOAT); };
+    void Clear();
+    ostream& Print(ostream&) const;
+    friend ostream& operator<<(ostream& s, const RbtGPParser& p);
+    RbtReturnTypeList Parse(RbtGPChromosomePtr, RbtReturnTypeList&);
+    RbtString PrintParse(istream&, RbtGPChromosomePtr, RbtBool, RbtBool);
+    RbtBool IsConstantInt(RbtInt i) { return (i == CINT); };
+    RbtBool IsConstantFloat(RbtInt i) { return (i == CFLOAT); };
 
-    private:
-        /////////////////////
-        // Private data
-        /////////////////////
-        RbtReturnType Eval(RbtGPChromosomePtr, RbtInt);
-        RbtReturnType Parse1Output(RbtGPChromosomePtr, RbtInt);
-        RbtString PrintEval(RbtGPChromosomePtr, RbtInt, RbtBool, RbtBool);
-        RbtString PrintParse1Output(RbtGPChromosomePtr, RbtInt, RbtBool, RbtBool);
-        // RbtGPChromosomePtr chrom;
-        // RbtCellList cells;
-        RbtCommandList commands;
-        RbtInt nProgramInputs, nFunctionsInputs, nProgramOutputs;
-        RbtInt ADD, SUB, MUL, DIV, IF, CINT, CFLOAT;
+ private:
+    /////////////////////
+    // Private data
+    /////////////////////
+    RbtReturnType Eval(RbtGPChromosomePtr, RbtInt);
+    RbtReturnType Parse1Output(RbtGPChromosomePtr, RbtInt);
+    RbtString PrintEval(RbtGPChromosomePtr, RbtInt, RbtBool, RbtBool);
+    RbtString PrintParse1Output(RbtGPChromosomePtr, RbtInt, RbtBool, RbtBool);
+    // RbtGPChromosomePtr chrom;
+    // RbtCellList cells;
+    RbtCommandList commands;
+    RbtInt nProgramInputs, nFunctionsInputs, nProgramOutputs;
+    RbtInt ADD, SUB, MUL, DIV, IF, CINT, CFLOAT;
 };
 
 // Useful typedefs

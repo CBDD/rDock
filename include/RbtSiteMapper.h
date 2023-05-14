@@ -26,50 +26,50 @@
 #include "RbtModel.h"
 
 class RbtSiteMapper: public RbtBaseObject {
-    public:
-        // Class type string
-        static RbtString _CT;
+ public:
+    // Class type string
+    static RbtString _CT;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtSiteMapper();
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        RbtModelPtr GetReceptor() const { return m_spReceptor; }
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtSiteMapper();
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    RbtModelPtr GetReceptor() const { return m_spReceptor; }
 
-        // PURE VIRTUAL - subclasses must override
-        // NB - subclasses should also override RbtObserver::Update pure virtual
-        virtual RbtCavityList operator()() = 0;
+    // PURE VIRTUAL - subclasses must override
+    // NB - subclasses should also override RbtObserver::Update pure virtual
+    virtual RbtCavityList operator()() = 0;
 
-        // Override RbtObserver pure virtual
-        // Notify observer that subject has changed
-        virtual void Update(RbtSubject* theChangedSubject);
+    // Override RbtObserver pure virtual
+    // Notify observer that subject has changed
+    virtual void Update(RbtSubject* theChangedSubject);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtSiteMapper(const RbtString& strClass, const RbtString& strName);
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtSiteMapper(const RbtString& strClass, const RbtString& strName);
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtSiteMapper();                                 // default constructor disabled
-        RbtSiteMapper(const RbtSiteMapper&);             // Copy constructor disabled by default
-        RbtSiteMapper& operator=(const RbtSiteMapper&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtSiteMapper();                                 // default constructor disabled
+    RbtSiteMapper(const RbtSiteMapper&);             // Copy constructor disabled by default
+    RbtSiteMapper& operator=(const RbtSiteMapper&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtModelPtr m_spReceptor;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtModelPtr m_spReceptor;
 };
 
 // Useful typedefs

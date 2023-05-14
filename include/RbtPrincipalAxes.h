@@ -21,23 +21,23 @@
 // Struct for holding principal axes info
 // Center of mass, three principal axis vectors, three principal moments
 class RbtPrincipalAxes {
-    public:
-        // Default is X,Y,Z cartesian axes centered at origin
-        RbtPrincipalAxes():
-            com(0.0, 0.0, 0.0),
-            axis1(1.0, 0.0, 0.0),
-            axis2(0.0, 1.0, 0.0),
-            axis3(0.0, 0.0, 1.0),
-            moment1(1.0),
-            moment2(1.0),
-            moment3(1.0) {}
-        RbtCoord com;
-        RbtVector axis1;
-        RbtVector axis2;
-        RbtVector axis3;
-        RbtDouble moment1;
-        RbtDouble moment2;
-        RbtDouble moment3;
+ public:
+    // Default is X,Y,Z cartesian axes centered at origin
+    RbtPrincipalAxes():
+        com(0.0, 0.0, 0.0),
+        axis1(1.0, 0.0, 0.0),
+        axis2(0.0, 1.0, 0.0),
+        axis3(0.0, 0.0, 1.0),
+        moment1(1.0),
+        moment2(1.0),
+        moment3(1.0) {}
+    RbtCoord com;
+    RbtVector axis1;
+    RbtVector axis2;
+    RbtVector axis3;
+    RbtDouble moment1;
+    RbtDouble moment2;
+    RbtDouble moment3;
 };
 
 typedef vector<RbtPrincipalAxes> RbtPrincipalAxesList;

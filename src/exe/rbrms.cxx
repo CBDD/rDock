@@ -25,14 +25,14 @@ typedef RbtCoordListList::const_iterator RbtCoordListListConstIter;
 
 // Struct for holding symmetric bond params
 class RbtSymBond {
-    public:
-        RbtSymBond(RbtBondPtr bond, RbtInt n, RbtBool swap): m_bond(bond), m_n(n), m_swap(swap) {
-            m_dih = (m_n > 0) ? 360.0 / m_n : 360.0;
-        }
-        RbtBondPtr m_bond;  // The smart pointer to the bond itself
-        RbtInt m_n;         // The symmetry operator (n-fold rotation)
-        RbtBool m_swap;     // false = spin atom 2 in bond; true = spin atom 1 in bond
-        RbtDouble m_dih;    // The dihedral step (360/n)
+ public:
+    RbtSymBond(RbtBondPtr bond, RbtInt n, RbtBool swap): m_bond(bond), m_n(n), m_swap(swap) {
+        m_dih = (m_n > 0) ? 360.0 / m_n : 360.0;
+    }
+    RbtBondPtr m_bond;  // The smart pointer to the bond itself
+    RbtInt m_n;         // The symmetry operator (n-fold rotation)
+    RbtBool m_swap;     // false = spin atom 2 in bond; true = spin atom 1 in bond
+    RbtDouble m_dih;    // The dihedral step (360/n)
 };
 
 typedef SmartPtr<RbtSymBond> RbtSymBondPtr;
@@ -42,21 +42,21 @@ typedef RbtSymBondList::const_iterator RbtSymBondListConstIter;
 
 // Class to enumerate all symmetry-related coordinate sets for a RbtModel
 class EnumerateSymCoords {
-    public:
-        EnumerateSymCoords(RbtModelPtr spModel);
-        // Main method to get the sym coords
-        void GetSymCoords(RbtCoordListList& cll);
+ public:
+    EnumerateSymCoords(RbtModelPtr spModel);
+    // Main method to get the sym coords
+    void GetSymCoords(RbtCoordListList& cll);
 
-    private:
-        void Setup();
-        // Recursive operator to traverse the sym bond list
-        void operator()(RbtSymBondListConstIter symIter, RbtCoordListList& cll);
+ private:
+    void Setup();
+    // Recursive operator to traverse the sym bond list
+    void operator()(RbtSymBondListConstIter symIter, RbtCoordListList& cll);
 
-        RbtModelPtr m_spModel;
-        RbtCoordListList m_cll;
-        RbtSymBondList m_symBondList;
-        RbtAtomList m_heavyAtomList;
-        RbtMolecularFileSinkPtr m_sink;
+    RbtModelPtr m_spModel;
+    RbtCoordListList m_cll;
+    RbtSymBondList m_symBondList;
+    RbtAtomList m_heavyAtomList;
+    RbtMolecularFileSinkPtr m_sink;
 };
 
 EnumerateSymCoords::EnumerateSymCoords(RbtModelPtr spModel): m_spModel(spModel) {

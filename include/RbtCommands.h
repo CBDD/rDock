@@ -18,82 +18,71 @@
 #include "RbtTypes.h"
 
 class RbtCommands {
-    public:
-        enum RbtCommName {
-            ADD = 0,
-            SUB = 1,
-            MUL = 2,
-            DIV = 3,
-            IF = 4,
-            LOG = 5,
-            EXP = 6,
-            RCTE = 7,
-            AND = 8,
-            NULLC = -1
-        };
+ public:
+    enum RbtCommName { ADD = 0, SUB = 1, MUL = 2, DIV = 3, IF = 4, LOG = 5, EXP = 6, RCTE = 7, AND = 8, NULLC = -1 };
 
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtCommands(const RbtCommands& c): name(c.name), nargs(c.nargs){};
-        inline RbtCommands(RbtInt ncomm) {
-            name = RbtCommName(ncomm);
-            switch (name) {
-                case ADD:
-                case SUB:
-                case MUL:
-                case DIV:
-                case AND:
-                    nargs = 2;
-                    break;
-                case IF:
-                    nargs = 3;
-                    break;
-                case LOG:
-                case EXP:
-                    nargs = 1;
-                    break;
-                case RCTE:
-                    nargs = 0;
-                    break;
-                case NULLC:
-                    nargs = 0;
-                    break;
-            }
-        };
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtCommands(const RbtCommands& c): name(c.name), nargs(c.nargs){};
+    inline RbtCommands(RbtInt ncomm) {
+        name = RbtCommName(ncomm);
+        switch (name) {
+            case ADD:
+            case SUB:
+            case MUL:
+            case DIV:
+            case AND:
+                nargs = 2;
+                break;
+            case IF:
+                nargs = 3;
+                break;
+            case LOG:
+            case EXP:
+                nargs = 1;
+                break;
+            case RCTE:
+                nargs = 0;
+                break;
+            case NULLC:
+                nargs = 0;
+                break;
+        }
+    };
 
-        inline RbtCommName GetName() const { return name; };
+    inline RbtCommName GetName() const { return name; };
 
-        inline RbtInt GetNArgs() const { return nargs; };
+    inline RbtInt GetNArgs() const { return nargs; };
 
-        inline RbtBool IsAdd() const { return (name == ADD); };
-        inline RbtBool IsSub() const { return (name == SUB); };
-        inline RbtBool IsMul() const { return (name == MUL); };
-        inline RbtBool IsDiv() const { return (name == DIV); };
-        inline RbtBool IsIf() const { return (name == IF); };
-        inline RbtBool IsLog() const { return (name == LOG); };
-        inline RbtBool IsExp() const { return (name == EXP); };
-        inline RbtBool IsRCte() const { return (name == RCTE); };
-        inline RbtBool IsAnd() const { return (name == AND); };
+    inline RbtBool IsAdd() const { return (name == ADD); };
+    inline RbtBool IsSub() const { return (name == SUB); };
+    inline RbtBool IsMul() const { return (name == MUL); };
+    inline RbtBool IsDiv() const { return (name == DIV); };
+    inline RbtBool IsIf() const { return (name == IF); };
+    inline RbtBool IsLog() const { return (name == LOG); };
+    inline RbtBool IsExp() const { return (name == EXP); };
+    inline RbtBool IsRCte() const { return (name == RCTE); };
+    inline RbtBool IsAnd() const { return (name == AND); };
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtCommands(){};
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtCommands(){};
 
-        virtual void copy(const RbtCommands& c) {
-            name = c.name;
-            nargs = c.nargs;
-        };
+    virtual void copy(const RbtCommands& c) {
+        name = c.name;
+        nargs = c.nargs;
+    };
 
-        ////////////////////
-        // Private methods
-        ////////////////////
+    ////////////////////
+    // Private methods
+    ////////////////////
 
-    private:
-        RbtCommands();  // Default constructor disabled
-        RbtCommName name;
-        RbtInt nargs;
+ private:
+    RbtCommands();  // Default constructor disabled
+    RbtCommName name;
+    RbtInt nargs;
 };
 
 // Useful typedefs

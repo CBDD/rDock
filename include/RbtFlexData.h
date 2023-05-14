@@ -23,19 +23,19 @@ class RbtModel;
 class RbtDockingSite;
 
 class RbtFlexData: public RbtParamHandler {
-    public:
-        virtual ~RbtFlexData(){};
-        RbtModel* GetModel() const { return m_pModel; }
-        void SetModel(RbtModel* pModel) { m_pModel = pModel; }
-        RbtDockingSite* GetDockingSite() const { return m_pDockSite; }
-        virtual void Accept(RbtFlexDataVisitor&) = 0;
+ public:
+    virtual ~RbtFlexData(){};
+    RbtModel* GetModel() const { return m_pModel; }
+    void SetModel(RbtModel* pModel) { m_pModel = pModel; }
+    RbtDockingSite* GetDockingSite() const { return m_pDockSite; }
+    virtual void Accept(RbtFlexDataVisitor&) = 0;
 
-    protected:
-        RbtFlexData(RbtDockingSite* pDockSite): m_pModel(NULL), m_pDockSite(pDockSite) {}
+ protected:
+    RbtFlexData(RbtDockingSite* pDockSite): m_pModel(NULL), m_pDockSite(pDockSite) {}
 
-    private:
-        RbtModel* m_pModel;
-        RbtDockingSite* m_pDockSite;
+ private:
+    RbtModel* m_pModel;
+    RbtDockingSite* m_pDockSite;
 };
 
 typedef SmartPtr<RbtFlexData> RbtFlexDataPtr;

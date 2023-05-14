@@ -30,53 +30,53 @@
 typedef map<RbtAtom*, RbtUInt, Rbt::RbtAtomPtrCmp_Ptr> RbtAtomIdMap;
 
 class RbtMdlFileSink: public RbtBaseMolecularFileSink {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtMdlFileSink(const RbtString& fileName, RbtModelPtr spModel);
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtMdlFileSink(const RbtString& fileName, RbtModelPtr spModel);
 
-        virtual ~RbtMdlFileSink();  // Default destructor
+    virtual ~RbtMdlFileSink();  // Default destructor
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        //
-        //
-        ////////////////////////////////////////
-        // Override public methods from RbtBaseFileSink
-        virtual void Render() throw(RbtError);
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    //
+    //
+    ////////////////////////////////////////
+    // Override public methods from RbtBaseFileSink
+    virtual void Render() throw(RbtError);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        void RenderAtomList(const RbtAtomList& atomList);
-        void RenderBondList(const RbtBondList& bondList);
-        void RenderData(const RbtStringVariantMap& dataMap);
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    void RenderAtomList(const RbtAtomList& atomList);
+    void RenderBondList(const RbtBondList& bondList);
+    void RenderData(const RbtStringVariantMap& dataMap);
 
-        RbtMdlFileSink();                                  // Disable default constructor
-        RbtMdlFileSink(const RbtMdlFileSink&);             // Copy constructor disabled by default
-        RbtMdlFileSink& operator=(const RbtMdlFileSink&);  // Copy assignment disabled by default
+    RbtMdlFileSink();                                  // Disable default constructor
+    RbtMdlFileSink(const RbtMdlFileSink&);             // Copy constructor disabled by default
+    RbtMdlFileSink& operator=(const RbtMdlFileSink&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtElementFileSourcePtr m_spElementData;
-        // DM 27 Apr 1999 - default behaviour is for the first Render to overwrite any existing file
-        // then subsequent Renders to append.
-        RbtBool m_bFirstRender;
-        RbtAtomIdMap m_atomIdMap;  // Keep track of logical atom IDs as rendered to file
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtElementFileSourcePtr m_spElementData;
+    // DM 27 Apr 1999 - default behaviour is for the first Render to overwrite any existing file
+    // then subsequent Renders to append.
+    RbtBool m_bFirstRender;
+    RbtAtomIdMap m_atomIdMap;  // Keep track of logical atom IDs as rendered to file
 };
 
 // Useful typedefs

@@ -45,132 +45,132 @@
 
 template <class T>
 class SmartPtr {
-    public:
-        ///////////////////////////////////////////////////
-        // CONSTRUCTORS, DESTRUCTORS, ASSIGNMENT
+ public:
+    ///////////////////////////////////////////////////
+    // CONSTRUCTORS, DESTRUCTORS, ASSIGNMENT
 
-        // Default constructor, initialise both pointers to 0
-        SmartPtr(): m_pT(NULL), m_pCount(NULL){};
+    // Default constructor, initialise both pointers to 0
+    SmartPtr(): m_pT(NULL), m_pCount(NULL){};
 
-        // Parameterised constructor
-        // Create new counter, initialise to 1
-        SmartPtr(T* pT): m_pT(pT), m_pCount(new RbtUInt(1)){};
+    // Parameterised constructor
+    // Create new counter, initialise to 1
+    SmartPtr(T* pT): m_pT(pT), m_pCount(new RbtUInt(1)){};
 
-        // Copy constructor - copy both pointers, increment counter
-        SmartPtr(const SmartPtr<T>& sp): m_pT(sp.m_pT), m_pCount(sp.m_pCount) {
-            if (!Null()) GetRef();
-        };
+    // Copy constructor - copy both pointers, increment counter
+    SmartPtr(const SmartPtr<T>& sp): m_pT(sp.m_pT), m_pCount(sp.m_pCount) {
+        if (!Null()) GetRef();
+    };
 
-        // Copy constructor - template version for creating a base class smart pointer from
-        // a subclass smart pointer. Need to use public accessor methods for copying the pointers
-        template <class T2>
-        SmartPtr(const SmartPtr<T2>& sp) {
-            m_pCount = sp.GetCountPtr();
-            T2* pT2 = const_cast<T2*>(sp.Ptr());
-            m_pT = dynamic_cast<T*>(pT2);
-            if (!Null()) GetRef();
-        }
+    // Copy constructor - template version for creating a base class smart pointer from
+    // a subclass smart pointer. Need to use public accessor methods for copying the pointers
+    template <class T2>
+    SmartPtr(const SmartPtr<T2>& sp) {
+        m_pCount = sp.GetCountPtr();
+        T2* pT2 = const_cast<T2*>(sp.Ptr());
+        m_pT = dynamic_cast<T*>(pT2);
+        if (!Null()) GetRef();
+    }
 
-        // Destructor - decrement counter, delete underlying object
-        // if no refs remaining
-        ~SmartPtr() { UnBind(); };
+    // Destructor - decrement counter, delete underlying object
+    // if no refs remaining
+    ~SmartPtr() { UnBind(); };
 
-        // Assignment operator - check for self assignment
-        const SmartPtr<T>& operator=(const SmartPtr<T>& sp) {
-            if (this != &sp) {
-                UnBind();
-                m_pCount = sp.m_pCount;
-                m_pT = sp.m_pT;
-                if (!sp.Null()) sp.GetRef();
-            }
-            return *this;
-        };
-
-        // Assignment operator - template version for assigning a subclass smart pointer
-        // to a base class smart pointer. Will only compile if T2 is a subclass of T
-        // No need to worry about self assignment here so can unbind the existing ref
-        // first. Need to use public accessor methods to access the pointers on rhs
-        template <class T2>
-        const SmartPtr<T>& operator=(const SmartPtr<T2>& sp) {
+    // Assignment operator - check for self assignment
+    const SmartPtr<T>& operator=(const SmartPtr<T>& sp) {
+        if (this != &sp) {
             UnBind();
-            m_pCount = sp.GetCountPtr();
-            T2* pT2 = const_cast<T2*>(sp.Ptr());
-            m_pT = dynamic_cast<T*>(pT2);
-            if (!Null()) GetRef();
-            return *this;
+            m_pCount = sp.m_pCount;
+            m_pT = sp.m_pT;
+            if (!sp.Null()) sp.GetRef();
         }
+        return *this;
+    };
 
-        /////////////////////////////////////////////////////
-        // FRIEND FUNCTIONS - declaration
-        // operator== checks for equivalence of underlying pointers
-        // friend bool operator==(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs);
+    // Assignment operator - template version for assigning a subclass smart pointer
+    // to a base class smart pointer. Will only compile if T2 is a subclass of T
+    // No need to worry about self assignment here so can unbind the existing ref
+    // first. Need to use public accessor methods to access the pointers on rhs
+    template <class T2>
+    const SmartPtr<T>& operator=(const SmartPtr<T2>& sp) {
+        UnBind();
+        m_pCount = sp.GetCountPtr();
+        T2* pT2 = const_cast<T2*>(sp.Ptr());
+        m_pT = dynamic_cast<T*>(pT2);
+        if (!Null()) GetRef();
+        return *this;
+    }
 
-        ///////////////////////////////////////////////////
-        // PUBLIC ACCESSOR METHODS
+    /////////////////////////////////////////////////////
+    // FRIEND FUNCTIONS - declaration
+    // operator== checks for equivalence of underlying pointers
+    // friend bool operator==(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs);
 
-        // Tests if smart pointer is empty (i.e. does it have a counter?)
-        // Doesn't actually tell you if the underlying pointer is null
-        bool Null() const { return m_pCount == NULL; };
+    ///////////////////////////////////////////////////
+    // PUBLIC ACCESSOR METHODS
 
-        // Returns pointer to counter
-        unsigned* GetCountPtr() const { return m_pCount; };
+    // Tests if smart pointer is empty (i.e. does it have a counter?)
+    // Doesn't actually tell you if the underlying pointer is null
+    bool Null() const { return m_pCount == NULL; };
 
-        // Returns underlying pointer
-        T* Ptr() { return m_pT; };
-        const T* Ptr() const { return m_pT; };
+    // Returns pointer to counter
+    unsigned* GetCountPtr() const { return m_pCount; };
 
-        // Manually remove reference to underlying object
-        void SetNull() { UnBind(); };
+    // Returns underlying pointer
+    T* Ptr() { return m_pT; };
+    const T* Ptr() const { return m_pT; };
 
-        // Various means of dereferencing the underlying object
-        // Const and non-const versions
-        // Throw assert error if smart pointer is empty
-        T* operator->() {
-            // Assert<RbtAssert>(!SMART_CHECK||!Null());
-            return m_pT;
-        };
-        const T* operator->() const {
-            // Assert<RbtAssert>(!SMART_CHECK||!Null());
-            return m_pT;
-        };
-        T& operator*() {
-            // Assert<RbtAssert>(!SMART_CHECK||!Null());
-            return *m_pT;
-        };
-        const T& operator*() const {
-            // Assert<RbtAssert>(!SMART_CHECK||!Null());
-            return *m_pT;
-        };
+    // Manually remove reference to underlying object
+    void SetNull() { UnBind(); };
 
-        // DM 12 Jun 2000 - yet another way to dereference the smart pointer
-        // Allows a smart pointer to be passed as a regular pointer in a function call
-        // for example.
-        operator T*() const { return m_pT; }
+    // Various means of dereferencing the underlying object
+    // Const and non-const versions
+    // Throw assert error if smart pointer is empty
+    T* operator->() {
+        // Assert<RbtAssert>(!SMART_CHECK||!Null());
+        return m_pT;
+    };
+    const T* operator->() const {
+        // Assert<RbtAssert>(!SMART_CHECK||!Null());
+        return m_pT;
+    };
+    T& operator*() {
+        // Assert<RbtAssert>(!SMART_CHECK||!Null());
+        return *m_pT;
+    };
+    const T& operator*() const {
+        // Assert<RbtAssert>(!SMART_CHECK||!Null());
+        return *m_pT;
+    };
 
-        ///////////////////////////////////////////////////
-        // PRIVATE METHODS AND DATA
-    private:
-        // Increments counter and returns new value
-        unsigned GetRef() const { return ++(*m_pCount); };
-        // Decrements counter and returns new value
-        // ASSERT: counter should be non-zero before decrementing
-        unsigned FreeRef() const {
-            // Assert<RbtAssert>(!SMART_CHECK||(*m_pCount)!=0);
-            return --(*m_pCount);
-        };
-        // Decrements counter and deletes underlying object and counter
-        // if count is zero
-        void UnBind() {
-            if (!Null() && FreeRef() == 0) {
-                delete m_pT;
-                delete m_pCount;
-            }
-            m_pT = NULL;
-            m_pCount = NULL;
-        };
+    // DM 12 Jun 2000 - yet another way to dereference the smart pointer
+    // Allows a smart pointer to be passed as a regular pointer in a function call
+    // for example.
+    operator T*() const { return m_pT; }
 
-        T* m_pT;             // Pointer to the underlying object
-        unsigned* m_pCount;  // Pointer to counter
+    ///////////////////////////////////////////////////
+    // PRIVATE METHODS AND DATA
+ private:
+    // Increments counter and returns new value
+    unsigned GetRef() const { return ++(*m_pCount); };
+    // Decrements counter and returns new value
+    // ASSERT: counter should be non-zero before decrementing
+    unsigned FreeRef() const {
+        // Assert<RbtAssert>(!SMART_CHECK||(*m_pCount)!=0);
+        return --(*m_pCount);
+    };
+    // Decrements counter and deletes underlying object and counter
+    // if count is zero
+    void UnBind() {
+        if (!Null() && FreeRef() == 0) {
+            delete m_pT;
+            delete m_pCount;
+        }
+        m_pT = NULL;
+        m_pCount = NULL;
+    };
+
+    T* m_pT;             // Pointer to the underlying object
+    unsigned* m_pCount;  // Pointer to counter
 };
 
 /////////////////////////////////////////////////////

@@ -17,13 +17,13 @@
 #include "RbtPMF.h"
 
 class RbtPMFDirSource: public RbtDirectorySource {
-    public:
-        RbtPMFDirSource(const RbtString &) throw(RbtError);
-        virtual ~RbtPMFDirSource(){};
+ public:
+    RbtPMFDirSource(const RbtString &) throw(RbtError);
+    virtual ~RbtPMFDirSource(){};
 
-        virtual void ReadFiles(vector<vector<RbtPMFValue>> *aVect, vector<string> *aNameVect,
-                               vector<RbtPMFValue> *aSlopeVect);
-        virtual void ParseLines(vector<RbtString> anStrVect, vector<RbtPMFValue> *aValueVect);
+    virtual void ReadFiles(vector<vector<RbtPMFValue>> *aVect, vector<string> *aNameVect,
+                           vector<RbtPMFValue> *aSlopeVect);
+    virtual void ParseLines(vector<RbtString> anStrVect, vector<RbtPMFValue> *aValueVect);
 };
 
 #endif  // _RBTPMFDIRSOURCE_H_

@@ -23,16 +23,16 @@
 // #include <cmath>
 
 class RbtGPFFCrossDock: public RbtGPFitnessFunction {
-    public:
-        static RbtString _CT;
+ public:
+    static RbtString _CT;
 
-        void ReadTables(istream&, RbtReturnTypeArray&, RbtReturnTypeArray&);
-        RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble, RbtBool);
-        RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtBool);
+    void ReadTables(istream&, RbtReturnTypeArray&, RbtReturnTypeArray&);
+    RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtDouble, RbtBool);
+    RbtDouble CalculateFitness(RbtGPGenomePtr, RbtReturnTypeArray&, RbtReturnTypeArray&, RbtBool);
 
-    private:
-        void CreateRandomCtes(RbtInt);
-        RbtDoubleList ctes;
+ private:
+    void CreateRandomCtes(RbtInt);
+    RbtDoubleList ctes;
 };
 
 // Useful typedefs

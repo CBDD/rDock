@@ -21,62 +21,62 @@
 #include "RbtWorkSpace.h"
 
 class RbtBiMolWorkSpace: public RbtWorkSpace {
-        enum eModelID {
-            RECEPTOR = 0,
-            LIGAND = 1,
-            SOLVENT = 2  // Flexible waters are represented as separate models, from 2
-        };
+    enum eModelID {
+        RECEPTOR = 0,
+        LIGAND = 1,
+        SOLVENT = 2  // Flexible waters are represented as separate models, from 2
+    };
 
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
 
-        RbtBiMolWorkSpace();
-        virtual ~RbtBiMolWorkSpace();
+    RbtBiMolWorkSpace();
+    virtual ~RbtBiMolWorkSpace();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        // Model handling
-        RbtModelPtr GetReceptor() const;
-        RbtModelPtr GetLigand() const;
-        RbtModelList GetSolvent() const;
-        RbtBool hasSolvent() const;
-        void SetReceptor(RbtModelPtr spReceptor);
-        void SetLigand(RbtModelPtr spLigand);
-        void SetSolvent(RbtModelList solventList);
-        void RemoveSolvent();
-        void UpdateModelCoordsFromChromRecords(RbtBaseMolecularFileSource* pSource, RbtInt iTrace);
+    // Model handling
+    RbtModelPtr GetReceptor() const;
+    RbtModelPtr GetLigand() const;
+    RbtModelList GetSolvent() const;
+    RbtBool hasSolvent() const;
+    void SetReceptor(RbtModelPtr spReceptor);
+    void SetLigand(RbtModelPtr spLigand);
+    void SetSolvent(RbtModelList solventList);
+    void RemoveSolvent();
+    void UpdateModelCoordsFromChromRecords(RbtBaseMolecularFileSource* pSource, RbtInt iTrace);
 
-        // Model I/O
-        // Saves ligand to file sink
-        virtual void Save(RbtBool bSaveScores = true);
-        virtual void SaveHistory(RbtBool bSaveScores = true);
+    // Model I/O
+    // Saves ligand to file sink
+    virtual void Save(RbtBool bSaveScores = true);
+    virtual void SaveHistory(RbtBool bSaveScores = true);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-        RbtBiMolWorkSpace(const RbtBiMolWorkSpace&);             // Copy constructor disabled by default
-        RbtBiMolWorkSpace& operator=(const RbtBiMolWorkSpace&);  // Copy assignment disabled by default
-        void SaveLigand(RbtMolecularFileSinkPtr spSink, RbtBool bSaveScores = true);
+    RbtBiMolWorkSpace(const RbtBiMolWorkSpace&);             // Copy constructor disabled by default
+    RbtBiMolWorkSpace& operator=(const RbtBiMolWorkSpace&);  // Copy assignment disabled by default
+    void SaveLigand(RbtMolecularFileSinkPtr spSink, RbtBool bSaveScores = true);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
 };
 
 // Useful typedefs

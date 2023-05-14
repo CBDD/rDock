@@ -31,39 +31,39 @@
 #include "RbtObserver.h"
 
 class RbtSubject {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtSubject();
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtSubject();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        virtual void Attach(RbtObserver*) throw(RbtError);
-        virtual void Detach(RbtObserver*) throw(RbtError);
-        virtual void Notify();
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    virtual void Attach(RbtObserver*) throw(RbtError);
+    virtual void Detach(RbtObserver*) throw(RbtError);
+    virtual void Notify();
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtSubject();  // Disable constructor
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtSubject();  // Disable constructor
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtObserverList m_observers;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtObserverList m_observers;
 };
 
 #endif  //_RBTSUBJECT_H_

@@ -24,43 +24,42 @@ const RbtRequestID ID_REQ_SF_PARTITION = 3;
 const RbtRequestID ID_REQ_SF_SETPARAM = 4;
 
 class RbtSFEnableRequest: public RbtRequest {
-    public:
-        // Request to enable a particular named scoring function
-        RbtSFEnableRequest(const RbtString& sfName): RbtRequest(ID_REQ_SF_ENABLE) { AddParameter(sfName); }
+ public:
+    // Request to enable a particular named scoring function
+    RbtSFEnableRequest(const RbtString& sfName): RbtRequest(ID_REQ_SF_ENABLE) { AddParameter(sfName); }
 };
 
 class RbtSFDisableRequest: public RbtRequest {
-    public:
-        // Request to disable a particular named scoring function
-        RbtSFDisableRequest(const RbtString& sfName): RbtRequest(ID_REQ_SF_DISABLE) { AddParameter(sfName); }
+ public:
+    // Request to disable a particular named scoring function
+    RbtSFDisableRequest(const RbtString& sfName): RbtRequest(ID_REQ_SF_DISABLE) { AddParameter(sfName); }
 };
 
 class RbtSFPartitionRequest: public RbtRequest {
-    public:
-        // Request to partition all scoring functions to a particular distance
-        RbtSFPartitionRequest(RbtDouble dist): RbtRequest(ID_REQ_SF_PARTITION) { AddParameter(dist); }
-        // Request to partition a particular named scoring function to a particular distance
-        RbtSFPartitionRequest(const RbtString& sfName, RbtDouble dist): RbtRequest(ID_REQ_SF_PARTITION) {
-            AddParameter(sfName);
-            AddParameter(dist);
-        }
+ public:
+    // Request to partition all scoring functions to a particular distance
+    RbtSFPartitionRequest(RbtDouble dist): RbtRequest(ID_REQ_SF_PARTITION) { AddParameter(dist); }
+    // Request to partition a particular named scoring function to a particular distance
+    RbtSFPartitionRequest(const RbtString& sfName, RbtDouble dist): RbtRequest(ID_REQ_SF_PARTITION) {
+        AddParameter(sfName);
+        AddParameter(dist);
+    }
 };
 
 class RbtSFSetParamRequest: public RbtRequest {
-    public:
-        // Request to set a named parameter of all scoring functions to a new value (e.g. TRACE)
-        RbtSFSetParamRequest(const RbtString& paramName, const RbtVariant& paramValue):
-            RbtRequest(ID_REQ_SF_SETPARAM) {
-            AddParameter(paramName);
-            AddParameter(paramValue);
-        }
-        // Request to set a named parameter of a named scoring function to a new value
-        RbtSFSetParamRequest(const RbtString& sfName, const RbtString& paramName, const RbtVariant& paramValue):
-            RbtRequest(ID_REQ_SF_SETPARAM) {
-            AddParameter(sfName);
-            AddParameter(paramName);
-            AddParameter(paramValue);
-        }
+ public:
+    // Request to set a named parameter of all scoring functions to a new value (e.g. TRACE)
+    RbtSFSetParamRequest(const RbtString& paramName, const RbtVariant& paramValue): RbtRequest(ID_REQ_SF_SETPARAM) {
+        AddParameter(paramName);
+        AddParameter(paramValue);
+    }
+    // Request to set a named parameter of a named scoring function to a new value
+    RbtSFSetParamRequest(const RbtString& sfName, const RbtString& paramName, const RbtVariant& paramValue):
+        RbtRequest(ID_REQ_SF_SETPARAM) {
+        AddParameter(sfName);
+        AddParameter(paramName);
+        AddParameter(paramValue);
+    }
 };
 
 #endif  //_RBTSFREQUEST_H_

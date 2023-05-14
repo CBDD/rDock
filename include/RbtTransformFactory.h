@@ -22,58 +22,58 @@
 #include "RbtTransformAgg.h"
 
 class RbtTransformFactory {
-        // Parameter name which identifies a scoring function definition
-        static RbtString _TRANSFORM;
+    // Parameter name which identifies a scoring function definition
+    static RbtString _TRANSFORM;
 
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
 
-        RbtTransformFactory();  // Default constructor
+    RbtTransformFactory();  // Default constructor
 
-        virtual ~RbtTransformFactory();  // Default destructor
+    virtual ~RbtTransformFactory();  // Default destructor
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        // Creates a single transform object of type strTransformClass, and name strName
-        // e.g. strTransformClass = RbtSimAnnTransform
-        virtual RbtBaseTransform* Create(const RbtString& strTransformClass, const RbtString& strName) throw(RbtError);
+    // Creates a single transform object of type strTransformClass, and name strName
+    // e.g. strTransformClass = RbtSimAnnTransform
+    virtual RbtBaseTransform* Create(const RbtString& strTransformClass, const RbtString& strName) throw(RbtError);
 
-        // Creates an aggregate transform from a parameter file source
-        // Each component transform is in a named section, which should minimally contain a TRANSFORM parameter
-        // whose value is the class name to instantiate
-        // strTransformClasses contains a comma-delimited list of transform class names to instantiate
-        // If strTransformClasses is empty, all named sections in spPrmSource are scanned for valid transform
-        // definitions Transform parameters and scoring function requests are set from the list of parameters in each
-        // named section
-        virtual RbtTransformAgg* CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName,
-                                                   const RbtString& strTransformClasses = RbtString()) throw(RbtError);
+    // Creates an aggregate transform from a parameter file source
+    // Each component transform is in a named section, which should minimally contain a TRANSFORM parameter
+    // whose value is the class name to instantiate
+    // strTransformClasses contains a comma-delimited list of transform class names to instantiate
+    // If strTransformClasses is empty, all named sections in spPrmSource are scanned for valid transform
+    // definitions Transform parameters and scoring function requests are set from the list of parameters in each
+    // named section
+    virtual RbtTransformAgg* CreateAggFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName,
+                                               const RbtString& strTransformClasses = RbtString()) throw(RbtError);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-        RbtTransformFactory(const RbtTransformFactory&);  // Copy constructor disabled by default
+    RbtTransformFactory(const RbtTransformFactory&);  // Copy constructor disabled by default
 
-        RbtTransformFactory& operator=(const RbtTransformFactory&);  // Copy assignment disabled by default
+    RbtTransformFactory& operator=(const RbtTransformFactory&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
 };
 
 // Useful typedefs

@@ -41,55 +41,55 @@
 #include "RbtNoeRestraint.h"
 
 class RbtNmrRestraintFileSource: public RbtBaseFileSource {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtNmrRestraintFileSource(const RbtString& fileName);
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtNmrRestraintFileSource(const RbtString& fileName);
 
-        // Destructor
-        virtual ~RbtNmrRestraintFileSource();
+    // Destructor
+    virtual ~RbtNmrRestraintFileSource();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
-        RbtUInt GetNumNoeRestraints();                   // Number of NOE restraints in file
-        RbtNoeRestraintNamesList GetNoeRestraintList();  // List of NOE restraints
-        RbtUInt GetNumStdRestraints();                   // Number of STD restraints in file
-        RbtStdRestraintNamesList GetStdRestraintList();  // List of STD restraints
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    RbtUInt GetNumNoeRestraints();                   // Number of NOE restraints in file
+    RbtNoeRestraintNamesList GetNoeRestraintList();  // List of NOE restraints
+    RbtUInt GetNumStdRestraints();                   // Number of STD restraints in file
+    RbtStdRestraintNamesList GetStdRestraintList();  // List of STD restraints
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-        RbtNmrRestraintFileSource();                                  // Disable default constructor
-        RbtNmrRestraintFileSource(const RbtNmrRestraintFileSource&);  // Copy constructor disabled by default
-        RbtNmrRestraintFileSource& operator=(const RbtNmrRestraintFileSource&);  // Copy assignment disabled by default
+    RbtNmrRestraintFileSource();                                             // Disable default constructor
+    RbtNmrRestraintFileSource(const RbtNmrRestraintFileSource&);             // Copy constructor disabled by default
+    RbtNmrRestraintFileSource& operator=(const RbtNmrRestraintFileSource&);  // Copy assignment disabled by default
 
-        // Pure virtual in RbtBaseFileSource - needs to be defined here
-        virtual void Parse() throw(RbtError);
-        void ClearRestraintCache();
+    // Pure virtual in RbtBaseFileSource - needs to be defined here
+    virtual void Parse() throw(RbtError);
+    void ClearRestraintCache();
 
-        // Returns NOE restraint type and modifies the atom name string accordingly
-        // Returns UNDEFINED if the atom name string has bad syntax
-        Rbt::eNoeType NoeRestraintType(RbtString& strAtomNames);
+    // Returns NOE restraint type and modifies the atom name string accordingly
+    // Returns UNDEFINED if the atom name string has bad syntax
+    Rbt::eNoeType NoeRestraintType(RbtString& strAtomNames);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtNoeRestraintNamesList m_noeRestraintList;
-        RbtStdRestraintNamesList m_stdRestraintList;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtNoeRestraintNamesList m_noeRestraintList;
+    RbtStdRestraintNamesList m_stdRestraintList;
 };
 
 // Useful typedefs

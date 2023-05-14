@@ -20,47 +20,47 @@
 #include "RbtVble.h"
 
 class RbtToken {
-    public:
-        static RbtString _CT;
-        ///////////////////
-        // Constructors
-        ///////////////////
+ public:
+    static RbtString _CT;
+    ///////////////////
+    // Constructors
+    ///////////////////
 
-        RbtToken(const RbtVble&);
-        RbtToken(RbtCommands);
-        RbtToken(const RbtToken&);
+    RbtToken(const RbtVble&);
+    RbtToken(RbtCommands);
+    RbtToken(const RbtToken&);
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtToken();
-        const RbtVble& GetVble() const;
-        //  void SetVbleNumber(RbtInt);
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtToken();
+    const RbtVble& GetVble() const;
+    //  void SetVbleNumber(RbtInt);
 
-        //  void copy(const RbtToken &);
-        RbtBool IsVble();
-        RbtBool IsLog();
-        RbtBool IsExp();
-        RbtBool IsAdd();
-        RbtBool IsSub();
-        RbtBool IsMul();
-        RbtBool IsDiv();
-        RbtBool IsAnd();
-        RbtBool IsIf();
+    //  void copy(const RbtToken &);
+    RbtBool IsVble();
+    RbtBool IsLog();
+    RbtBool IsExp();
+    RbtBool IsAdd();
+    RbtBool IsSub();
+    RbtBool IsMul();
+    RbtBool IsDiv();
+    RbtBool IsAnd();
+    RbtBool IsIf();
 
-        //  RbtBool operator==(const RbtToken&) const;
-        //  ostream& Print(ostream&) const;
-        //  friend ostream& operator<<(ostream& s, const RbtToken &p);
+    //  RbtBool operator==(const RbtToken&) const;
+    //  ostream& Print(ostream&) const;
+    //  friend ostream& operator<<(ostream& s, const RbtToken &p);
 
-        ////////////////////
-        // Private methods
-        ////////////////////
+    ////////////////////
+    // Private methods
+    ////////////////////
 
-    private:
-        RbtToken();  // Default constructor disabled
-        RbtCommands comm;
-        const RbtVble& vble;
-        RbtBool isvble;
+ private:
+    RbtToken();  // Default constructor disabled
+    RbtCommands comm;
+    const RbtVble& vble;
+    RbtBool isvble;
 };
 
 // Useful typedefs

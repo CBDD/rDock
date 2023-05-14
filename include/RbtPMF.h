@@ -19,8 +19,8 @@
  * Basic data type to represent distance-value pairs of the PMF function
  */
 typedef struct {
-        float distance;
-        float density;
+    float distance;
+    float density;
 } RbtPMFValue;
 
 typedef enum {

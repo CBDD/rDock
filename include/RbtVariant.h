@@ -32,198 +32,196 @@ const RbtString _TRUE("TRUE");
 const RbtString _FALSE("FALSE");
 
 class RbtVariant {
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtVariant(): m_d(0.0) {}
-        RbtVariant(RbtInt i) { SetDouble(i); }
-        RbtVariant(RbtDouble d) { SetDouble(d); }
-        RbtVariant(const RbtString& s) { SetString(s); }
-        RbtVariant(const char* c) { SetString(RbtString(c)); }
-        RbtVariant(const RbtStringList& sl) { SetStringList(sl); }
-        RbtVariant(RbtBool b) { SetBool(b); }
-        RbtVariant(const RbtCoord& c) { SetCoord(c); }
-        // Renders a vector of doubles into comma-separated strings of maxCols in length
-        RbtVariant(const RbtDoubleList& dl, RbtInt maxCols, RbtInt precision) {
-            SetDoubleList(dl, maxCols, precision);
-        }
-        virtual ~RbtVariant() { m_sl.clear(); }
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtVariant(): m_d(0.0) {}
+    RbtVariant(RbtInt i) { SetDouble(i); }
+    RbtVariant(RbtDouble d) { SetDouble(d); }
+    RbtVariant(const RbtString& s) { SetString(s); }
+    RbtVariant(const char* c) { SetString(RbtString(c)); }
+    RbtVariant(const RbtStringList& sl) { SetStringList(sl); }
+    RbtVariant(RbtBool b) { SetBool(b); }
+    RbtVariant(const RbtCoord& c) { SetCoord(c); }
+    // Renders a vector of doubles into comma-separated strings of maxCols in length
+    RbtVariant(const RbtDoubleList& dl, RbtInt maxCols, RbtInt precision) { SetDoubleList(dl, maxCols, precision); }
+    virtual ~RbtVariant() { m_sl.clear(); }
 
-        ///////////////////////////////////////////////
-        // Stream functions
-        ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    // Stream functions
+    ///////////////////////////////////////////////
 
-        // Insertion operator
-        friend ostream& operator<<(ostream& s, const RbtVariant& v) {
-            // Try and guess the most appropriate output format
-            // Empty variant
-            if (v.isEmpty()) s << "Undefined variant";
-            // String/double
-            else if (v.Size() == 1)
-                s << v.m_sl.front();
-            // String list
-            else {
-                s << endl;
-                for (RbtStringListConstIter iter = v.m_sl.begin(); iter != v.m_sl.end(); iter++) s << *iter << endl;
-            }
-            return s;
+    // Insertion operator
+    friend ostream& operator<<(ostream& s, const RbtVariant& v) {
+        // Try and guess the most appropriate output format
+        // Empty variant
+        if (v.isEmpty()) s << "Undefined variant";
+        // String/double
+        else if (v.Size() == 1)
+            s << v.m_sl.front();
+        // String list
+        else {
+            s << endl;
+            for (RbtStringListConstIter iter = v.m_sl.begin(); iter != v.m_sl.end(); iter++) s << *iter << endl;
         }
+        return s;
+    }
 
-        ///////////////////////////////////////////////
-        // Operator functions:
-        /////////////////////
+    ///////////////////////////////////////////////
+    // Operator functions:
+    /////////////////////
 
-        // Set methods
-        RbtVariant& operator=(RbtInt i) {
-            SetDouble(i);
-            return *this;
-        }
-        RbtVariant& operator=(RbtDouble d) {
-            SetDouble(d);
-            return *this;
-        }
-        RbtVariant& operator=(const RbtString& s) {
-            SetString(s);
-            return *this;
-        }
-        RbtVariant& operator=(const char* c) {
-            SetString(RbtString(c));
-            return *this;
-        }
-        RbtVariant& operator=(const RbtStringList& sl) {
-            SetStringList(sl);
-            return *this;
-        }
-        RbtVariant& operator=(RbtBool b) {
-            SetBool(b);
-            return *this;
-        }
-        RbtVariant& operator=(const RbtCoord& c) {
-            SetCoord(c);
-            return *this;
-        }
+    // Set methods
+    RbtVariant& operator=(RbtInt i) {
+        SetDouble(i);
+        return *this;
+    }
+    RbtVariant& operator=(RbtDouble d) {
+        SetDouble(d);
+        return *this;
+    }
+    RbtVariant& operator=(const RbtString& s) {
+        SetString(s);
+        return *this;
+    }
+    RbtVariant& operator=(const char* c) {
+        SetString(RbtString(c));
+        return *this;
+    }
+    RbtVariant& operator=(const RbtStringList& sl) {
+        SetStringList(sl);
+        return *this;
+    }
+    RbtVariant& operator=(RbtBool b) {
+        SetBool(b);
+        return *this;
+    }
+    RbtVariant& operator=(const RbtCoord& c) {
+        SetCoord(c);
+        return *this;
+    }
 
-        void operator+=(const RbtVariant& v) {
-            std::copy(v.m_sl.begin(), v.m_sl.end(), std::back_inserter(m_sl));
-            m_d = atof(String().c_str());
+    void operator+=(const RbtVariant& v) {
+        std::copy(v.m_sl.begin(), v.m_sl.end(), std::back_inserter(m_sl));
+        m_d = atof(String().c_str());
+    }
+
+    // Conversion operators to convert back to basic types
+    operator RbtInt() const { return int(Double()); }
+    operator RbtDouble() const { return Double(); }
+    operator RbtString() const { return String(); }
+    operator RbtStringList() const { return StringList(); }
+    operator RbtBool() const { return Bool(); }
+    operator RbtCoord() const { return Coord(); }
+
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+
+    // Get methods
+    RbtDouble Double() const { return m_d; }
+    RbtString String() const { return m_sl.empty() ? RbtString() : m_sl.front(); }
+    RbtStringList StringList() const { return m_sl; }
+    RbtBool Bool() const { return m_d != 0.0 || String() == _TRUE; }
+    RbtCoord Coord() const {
+        RbtCoord c;
+        if (m_sl.empty())
+            return c;
+        else {
+            /// istrstream istr(m_sl.front().c_str());
+            istringstream istr(m_sl.front().c_str());
+            istr >> c;
+            return c;
         }
+    }
 
-        // Conversion operators to convert back to basic types
-        operator RbtInt() const { return int(Double()); }
-        operator RbtDouble() const { return Double(); }
-        operator RbtString() const { return String(); }
-        operator RbtStringList() const { return StringList(); }
-        operator RbtBool() const { return Bool(); }
-        operator RbtCoord() const { return Coord(); }
+    RbtUInt Size() const { return m_sl.size(); }
+    RbtBool isEmpty() const { return m_sl.empty(); }
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-        // Get methods
-        RbtDouble Double() const { return m_d; }
-        RbtString String() const { return m_sl.empty() ? RbtString() : m_sl.front(); }
-        RbtStringList StringList() const { return m_sl; }
-        RbtBool Bool() const { return m_d != 0.0 || String() == _TRUE; }
-        RbtCoord Coord() const {
-            RbtCoord c;
-            if (m_sl.empty())
-                return c;
-            else {
-                /// istrstream istr(m_sl.front().c_str());
-                istringstream istr(m_sl.front().c_str());
-                istr >> c;
-                return c;
-            }
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    void SetDouble(RbtDouble d) {
+        m_d = d;
+        m_sl.clear();
+        ostringstream ostr;
+        // Don't need "ends" with ostringstream apparently
+        //(was introducing a non-ASCII \0 char into log files
+        // ostr << d << ends;
+        ostr << d;
+        RbtString s(ostr.str());
+        // delete ostr.str();
+        m_sl.push_back(s);
+    }
+
+    void SetString(const RbtString& s) {
+        m_sl.clear();
+        if (!s.empty()) m_sl.push_back(s);
+        m_d = atof(String().c_str());
+    }
+
+    void SetStringList(const RbtStringList& sl) {
+        m_sl = sl;
+        m_d = atof(String().c_str());
+    }
+
+    void SetBool(RbtBool b) {
+        if (b) {
+            SetString(_TRUE);
+        } else {
+            SetString(_FALSE);
         }
+    }
 
-        RbtUInt Size() const { return m_sl.size(); }
-        RbtBool isEmpty() const { return m_sl.empty(); }
+    void SetCoord(const RbtCoord& c) {
+        m_d = c.Length();
+        m_sl.clear();
+        ostringstream ostr;
+        // Don't need "ends" with ostringstream apparently
+        //(was introducing a non-ASCII \0 char into log files
+        // ostr << c << ends;
+        ostr << c;
+        RbtString s(ostr.str());
+        // delete ostr.str();
+        m_sl.push_back(s);
+    }
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        void SetDouble(RbtDouble d) {
-            m_d = d;
-            m_sl.clear();
-            ostringstream ostr;
-            // Don't need "ends" with ostringstream apparently
-            //(was introducing a non-ASCII \0 char into log files
-            // ostr << d << ends;
-            ostr << d;
-            RbtString s(ostr.str());
-            // delete ostr.str();
-            m_sl.push_back(s);
-        }
-
-        void SetString(const RbtString& s) {
-            m_sl.clear();
-            if (!s.empty()) m_sl.push_back(s);
-            m_d = atof(String().c_str());
-        }
-
-        void SetStringList(const RbtStringList& sl) {
-            m_sl = sl;
-            m_d = atof(String().c_str());
-        }
-
-        void SetBool(RbtBool b) {
-            if (b) {
-                SetString(_TRUE);
+    void SetDoubleList(const RbtDoubleList& dl, RbtInt maxColumns, RbtInt precision) {
+        RbtInt nValues = dl.size();
+        m_d = (nValues > 0) ? dl[0] : 0.0;
+        m_sl.clear();
+        ostringstream ostr;
+        ostr.precision(precision);
+        ostr.setf(ios_base::fixed, ios_base::floatfield);
+        RbtInt lastIndex = nValues - 1;
+        for (RbtInt i = 0; i < nValues; ++i) {
+            ostr << dl[i];
+            if ((ostr.tellp() >= maxColumns) || (i == lastIndex)) {
+                m_sl.push_back(ostr.str());
+                ostr.str("");
             } else {
-                SetString(_FALSE);
+                ostr << ",";
             }
         }
+    }
 
-        void SetCoord(const RbtCoord& c) {
-            m_d = c.Length();
-            m_sl.clear();
-            ostringstream ostr;
-            // Don't need "ends" with ostringstream apparently
-            //(was introducing a non-ASCII \0 char into log files
-            // ostr << c << ends;
-            ostr << c;
-            RbtString s(ostr.str());
-            // delete ostr.str();
-            m_sl.push_back(s);
-        }
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-        void SetDoubleList(const RbtDoubleList& dl, RbtInt maxColumns, RbtInt precision) {
-            RbtInt nValues = dl.size();
-            m_d = (nValues > 0) ? dl[0] : 0.0;
-            m_sl.clear();
-            ostringstream ostr;
-            ostr.precision(precision);
-            ostr.setf(ios_base::fixed, ios_base::floatfield);
-            RbtInt lastIndex = nValues - 1;
-            for (RbtInt i = 0; i < nValues; ++i) {
-                ostr << dl[i];
-                if ((ostr.tellp() >= maxColumns) || (i == lastIndex)) {
-                    m_sl.push_back(ostr.str());
-                    ostr.str("");
-                } else {
-                    ostr << ",";
-                }
-            }
-        }
-
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
-
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtDouble m_d;
-        RbtStringList m_sl;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtDouble m_d;
+    RbtStringList m_sl;
 };
 
 // Useful typedefs

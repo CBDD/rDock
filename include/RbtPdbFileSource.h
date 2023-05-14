@@ -19,30 +19,30 @@
 #include "RbtBaseMolecularFileSource.h"
 
 class RbtPdbFileSource: public RbtBaseMolecularFileSource {
-    public:
-        // Constructors
-        RbtPdbFileSource(const char* fileName);
-        RbtPdbFileSource(const RbtString fileName);
+ public:
+    // Constructors
+    RbtPdbFileSource(const char* fileName);
+    RbtPdbFileSource(const RbtString fileName);
 
-        // Default destructor
-        virtual ~RbtPdbFileSource();
+    // Default destructor
+    virtual ~RbtPdbFileSource();
 
-        ////////////////////////////////////////
-        // Override public methods from RbtBaseMolecularDataSource
-        virtual RbtBool isTitleListSupported() { return true; };
-        virtual RbtBool isAtomListSupported() { return true; };
-        virtual RbtBool isCoordinatesSupported() { return true; };
-        virtual RbtBool isBondListSupported() { return false; };
+    ////////////////////////////////////////
+    // Override public methods from RbtBaseMolecularDataSource
+    virtual RbtBool isTitleListSupported() { return true; };
+    virtual RbtBool isAtomListSupported() { return true; };
+    virtual RbtBool isCoordinatesSupported() { return true; };
+    virtual RbtBool isBondListSupported() { return false; };
 
-    protected:
-        // Pure virtual in RbtBaseFileSource - needs to be defined here
-        virtual void Parse() throw(RbtError);
+ protected:
+    // Pure virtual in RbtBaseFileSource - needs to be defined here
+    virtual void Parse() throw(RbtError);
 
-    private:
-        // Private methods
-        RbtPdbFileSource();                                    // Disable default constructor
-        RbtPdbFileSource(const RbtPdbFileSource&);             // Copy constructor disabled by default
-        RbtPdbFileSource& operator=(const RbtPdbFileSource&);  // Copy assignment disabled by default
+ private:
+    // Private methods
+    RbtPdbFileSource();                                    // Disable default constructor
+    RbtPdbFileSource(const RbtPdbFileSource&);             // Copy constructor disabled by default
+    RbtPdbFileSource& operator=(const RbtPdbFileSource&);  // Copy assignment disabled by default
 };
 
 // useful typedefs

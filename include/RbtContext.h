@@ -32,92 +32,92 @@ typedef RbtStringVbleMap::iterator RbtStringVbleMapIter;
 typedef RbtIntVbleMap::iterator RbtIntVbleMapIter;
 
 class RbtContext {
-    public:
-        static RbtString _CT;
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtContext(const RbtContext& c);
-        RbtContext();  // default constructor disabled
-                       ///////////////////
-                       // Destructors
-                       ///////////////////
-        virtual ~RbtContext();
-        virtual void Assign(RbtString, RbtReturnType) = 0;
-        virtual void Assign(RbtInt, RbtReturnType) = 0;
-        virtual const RbtVble& GetVble(RbtInt) = 0;
-        virtual const RbtVble& GetVble(RbtString) = 0;
-        virtual void SetVble(RbtInt key, const RbtVble& v) = 0;
-        //    virtual RbtString GetName(RbtInt)=0;
-        //    virtual RbtReturnType GetValue(RbtInt)=0;
-        //    virtual RbtString GetName(RbtString)=0;
-        //    virtual RbtReturnType GetValue(RbtString)=0;
+ public:
+    static RbtString _CT;
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtContext(const RbtContext& c);
+    RbtContext();  // default constructor disabled
+                   ///////////////////
+                   // Destructors
+                   ///////////////////
+    virtual ~RbtContext();
+    virtual void Assign(RbtString, RbtReturnType) = 0;
+    virtual void Assign(RbtInt, RbtReturnType) = 0;
+    virtual const RbtVble& GetVble(RbtInt) = 0;
+    virtual const RbtVble& GetVble(RbtString) = 0;
+    virtual void SetVble(RbtInt key, const RbtVble& v) = 0;
+    //    virtual RbtString GetName(RbtInt)=0;
+    //    virtual RbtReturnType GetValue(RbtInt)=0;
+    //    virtual RbtString GetName(RbtString)=0;
+    //    virtual RbtReturnType GetValue(RbtString)=0;
 };
 
 class RbtCellContext: public RbtContext {
-    public:
-        // static RbtString _CT;
-        RbtCellContext(ifstream& ifile);
-        RbtCellContext();
-        RbtCellContext(const RbtCellContext& c);
-        virtual ~RbtCellContext();
-        void Assign(RbtInt key, RbtReturnType val) {
-            RbtIntVbleMapIter it = vm.find(key);
-            if (it != vm.end())
-                vm[key]->SetValue(val);
-            else {
-                ostrstream s;
-                s << val << ends;
-                vm[key] = new RbtVble(s.str(), val);
-            }
+ public:
+    // static RbtString _CT;
+    RbtCellContext(ifstream& ifile);
+    RbtCellContext();
+    RbtCellContext(const RbtCellContext& c);
+    virtual ~RbtCellContext();
+    void Assign(RbtInt key, RbtReturnType val) {
+        RbtIntVbleMapIter it = vm.find(key);
+        if (it != vm.end())
+            vm[key]->SetValue(val);
+        else {
+            ostrstream s;
+            s << val << ends;
+            vm[key] = new RbtVble(s.str(), val);
         }
-        void Assign(RbtString s, RbtReturnType val) { throw RbtError(_WHERE_, "This is not a string context"); }
-        //    RbtString GetName(RbtInt key) { return vm[key].GetName();}
-        //    RbtReturnType GetValue(RbtInt key) {return vm[key].GetValue();}
-        //    RbtString GetName(RbtString){return "";}
-        //    RbtReturnType GetValue(RbtString){return 0.0;}
-        const RbtVble& GetVble(RbtInt key) { return *(vm[key]); };
-        void SetVble(RbtInt key, const RbtVble& v) { *(vm[key]) = v; };
-        const RbtVble& GetVble(RbtString key) { throw RbtError(_WHERE_, "This is not a string context"); }
-        //    void Clear();
+    }
+    void Assign(RbtString s, RbtReturnType val) { throw RbtError(_WHERE_, "This is not a string context"); }
+    //    RbtString GetName(RbtInt key) { return vm[key].GetName();}
+    //    RbtReturnType GetValue(RbtInt key) {return vm[key].GetValue();}
+    //    RbtString GetName(RbtString){return "";}
+    //    RbtReturnType GetValue(RbtString){return 0.0;}
+    const RbtVble& GetVble(RbtInt key) { return *(vm[key]); };
+    void SetVble(RbtInt key, const RbtVble& v) { *(vm[key]) = v; };
+    const RbtVble& GetVble(RbtString key) { throw RbtError(_WHERE_, "This is not a string context"); }
+    //    void Clear();
 
-    private:
-        RbtIntVbleMap vm;
-        RbtInt ninputs;
+ private:
+    RbtIntVbleMap vm;
+    RbtInt ninputs;
 };
 
 class RbtStringContext: public RbtContext {
-    public:
-        RbtStringContext();
-        RbtStringContext(SmartPtr<ifstream> ifile);
-        RbtStringContext(const RbtStringContext& c);
-        virtual ~RbtStringContext();
-        void Assign(RbtString key, RbtReturnType val) {
-            RbtStringVbleMapIter it = vm.find(key);
-            if (it != vm.end())
-                vm[key]->SetValue(val);
-            else {
-                vm[key] = new RbtVble(key, val);
-            }
+ public:
+    RbtStringContext();
+    RbtStringContext(SmartPtr<ifstream> ifile);
+    RbtStringContext(const RbtStringContext& c);
+    virtual ~RbtStringContext();
+    void Assign(RbtString key, RbtReturnType val) {
+        RbtStringVbleMapIter it = vm.find(key);
+        if (it != vm.end())
+            vm[key]->SetValue(val);
+        else {
+            vm[key] = new RbtVble(key, val);
         }
-        void Assign(RbtInt i, RbtReturnType val) { throw RbtError(_WHERE_, "This is not a cell context"); }
+    }
+    void Assign(RbtInt i, RbtReturnType val) { throw RbtError(_WHERE_, "This is not a cell context"); }
 
-        //    RbtString GetName(RbtInt){return "";}
-        //    RbtReturnType GetValue(RbtInt){return 0.0;}
-        //    RbtString GetName(RbtString key) { return vm[key].GetName();}
-        //    RbtReturnType GetValue(RbtString key) {return vm[key].GetValue();}
-        RbtDouble Get(RbtModelPtr lig, RbtString name);
-        RbtDouble Get(RbtModelPtr rec, RbtDockingSitePtr site, RbtString name);
-        RbtDouble Get(RbtBaseSF* spSF, RbtString name, RbtModelPtr lig);
-        const RbtVble& GetVble(RbtString key) { return *(vm[key]); }
-        const RbtVble& GetVble(RbtInt key) { throw RbtError(_WHERE_, "This is not a cell context"); }
-        void SetVble(RbtInt key, const RbtVble& v) { *(vm[""]) = v; };
-        void UpdateLigs(RbtModelPtr lig);
-        void UpdateSite(RbtModelPtr rec, RbtDockingSitePtr site);
-        void UpdateScores(RbtBaseSF* spSF, RbtModelPtr lig);
+    //    RbtString GetName(RbtInt){return "";}
+    //    RbtReturnType GetValue(RbtInt){return 0.0;}
+    //    RbtString GetName(RbtString key) { return vm[key].GetName();}
+    //    RbtReturnType GetValue(RbtString key) {return vm[key].GetValue();}
+    RbtDouble Get(RbtModelPtr lig, RbtString name);
+    RbtDouble Get(RbtModelPtr rec, RbtDockingSitePtr site, RbtString name);
+    RbtDouble Get(RbtBaseSF* spSF, RbtString name, RbtModelPtr lig);
+    const RbtVble& GetVble(RbtString key) { return *(vm[key]); }
+    const RbtVble& GetVble(RbtInt key) { throw RbtError(_WHERE_, "This is not a cell context"); }
+    void SetVble(RbtInt key, const RbtVble& v) { *(vm[""]) = v; };
+    void UpdateLigs(RbtModelPtr lig);
+    void UpdateSite(RbtModelPtr rec, RbtDockingSitePtr site);
+    void UpdateScores(RbtBaseSF* spSF, RbtModelPtr lig);
 
-    private:
-        RbtStringVbleMap vm;
+ private:
+    RbtStringVbleMap vm;
 };
 
 // Useful typedefs

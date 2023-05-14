@@ -20,53 +20,53 @@
 #include "RbtSiteMapper.h"
 
 class RbtSiteMapperFactory {
-        // Parameter name which identifies a site mapper definition
-        static RbtString _MAPPER;
+    // Parameter name which identifies a site mapper definition
+    static RbtString _MAPPER;
 
-    public:
-        ////////////////////////////////////////
-        // Constructors/destructors
+ public:
+    ////////////////////////////////////////
+    // Constructors/destructors
 
-        RbtSiteMapperFactory();           // Default constructor
-        virtual ~RbtSiteMapperFactory();  // Default destructor
+    RbtSiteMapperFactory();           // Default constructor
+    virtual ~RbtSiteMapperFactory();  // Default destructor
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        // Creates a single site mapper object of named class
-        virtual RbtSiteMapper* Create(const RbtString& strMapperClass, const RbtString& strName) throw(RbtError);
+    // Creates a single site mapper object of named class
+    virtual RbtSiteMapper* Create(const RbtString& strMapperClass, const RbtString& strName) throw(RbtError);
 
-        // Creates a single site mapper object whose class is defined
-        // as the value of the SITE_MAPPER parameter in the strName section of the
-        // parameter file source argument. Also sets the site mapper parameters from the
-        // remaining parameter values in the current section
-        // Note: the current section is restored to its original value upon exit
-        virtual RbtSiteMapper* CreateFromFile(RbtParameterFileSourcePtr spPrmSource,
-                                              const RbtString& strName) throw(RbtError);
+    // Creates a single site mapper object whose class is defined
+    // as the value of the SITE_MAPPER parameter in the strName section of the
+    // parameter file source argument. Also sets the site mapper parameters from the
+    // remaining parameter values in the current section
+    // Note: the current section is restored to its original value upon exit
+    virtual RbtSiteMapper* CreateFromFile(RbtParameterFileSourcePtr spPrmSource,
+                                          const RbtString& strName) throw(RbtError);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-        RbtSiteMapperFactory(const RbtSiteMapperFactory&);             // Copy constructor disabled by default
-        RbtSiteMapperFactory& operator=(const RbtSiteMapperFactory&);  // Copy assignment disabled by default
+    RbtSiteMapperFactory(const RbtSiteMapperFactory&);             // Copy constructor disabled by default
+    RbtSiteMapperFactory& operator=(const RbtSiteMapperFactory&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
 };
 
 // Useful typedefs

@@ -25,25 +25,25 @@
 class RbtFilterExpression;
 
 class RbtParser {
-    public:
-        static RbtString _CT;
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtParser(const RbtParser&);
-        RbtParser();
-        RbtFilterExpressionPtr Parse(RbtTokenIterPtr, RbtContextPtr);
+ public:
+    static RbtString _CT;
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtParser(const RbtParser&);
+    RbtParser();
+    RbtFilterExpressionPtr Parse(RbtTokenIterPtr, RbtContextPtr);
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtParser();
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtParser();
 
-        ////////////////////
-        // Private methods
-        ////////////////////
+    ////////////////////
+    // Private methods
+    ////////////////////
 
-    private:
+ private:
 };
 
 // Useful typedefs

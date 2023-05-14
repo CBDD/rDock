@@ -19,47 +19,47 @@
 #include "RbtModel.h"
 
 class RbtBaseUniMolTransform: public RbtBaseTransform {
-    public:
-        // Class type string
-        static RbtString _CT;
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtBaseUniMolTransform();
+ public:
+    // Class type string
+    static RbtString _CT;
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtBaseUniMolTransform();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        RbtModelPtr GetLigand() const;
+    RbtModelPtr GetLigand() const;
 
-        // Override RbtObserver pure virtual
-        // Notify observer that subject has changed
-        virtual void Update(RbtSubject* theChangedSubject);
+    // Override RbtObserver pure virtual
+    // Notify observer that subject has changed
+    virtual void Update(RbtSubject* theChangedSubject);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtBaseUniMolTransform(const RbtString& strClass, const RbtString& strName);
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtBaseUniMolTransform(const RbtString& strClass, const RbtString& strName);
 
-        // PURE VIRTUAL - Derived classes must override
-        virtual void SetupTransform() = 0;  // Called by Update when model has changed
+    // PURE VIRTUAL - Derived classes must override
+    virtual void SetupTransform() = 0;  // Called by Update when model has changed
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtModelPtr m_spLigand;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtModelPtr m_spLigand;
 };
 
 #endif  //_RBTBASEUNIMOLTRANSFORM_H_

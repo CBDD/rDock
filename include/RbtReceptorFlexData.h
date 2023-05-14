@@ -17,15 +17,15 @@
 #include "RbtFlexData.h"
 
 class RbtReceptorFlexData: public RbtFlexData {
-    public:
-        // Distance from docking site within which OH/NH3+ groups are flexible (A)
-        static const RbtString& _FLEX_DISTANCE;
-        // Dihedral mutation step length (deg)
-        static const RbtString& _DIHEDRAL_STEP;
-        RbtReceptorFlexData(RbtDockingSite* pDockSite);
-        virtual void Accept(RbtFlexDataVisitor& v) { v.VisitReceptorFlexData(this); }
+ public:
+    // Distance from docking site within which OH/NH3+ groups are flexible (A)
+    static const RbtString& _FLEX_DISTANCE;
+    // Dihedral mutation step length (deg)
+    static const RbtString& _DIHEDRAL_STEP;
+    RbtReceptorFlexData(RbtDockingSite* pDockSite);
+    virtual void Accept(RbtFlexDataVisitor& v) { v.VisitReceptorFlexData(this); }
 
-    private:
-        RbtReceptorFlexData();
+ private:
+    RbtReceptorFlexData();
 };
 #endif  //_RBTRECEPTORFLEXDATA_

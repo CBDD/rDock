@@ -20,38 +20,38 @@
 #include "RbtConstraint.h"
 
 class RbtPharmaSF: public RbtBaseInterSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _CONSTRAINTS_FILE;
-        static RbtString _OPTIONAL_FILE;
-        static RbtString _NOPT;
-        static RbtString _WRITE_ERRORS;
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _CONSTRAINTS_FILE;
+    static RbtString _OPTIONAL_FILE;
+    static RbtString _NOPT;
+    static RbtString _WRITE_ERRORS;
 
-        RbtPharmaSF(const RbtString& strName = "PHARMA");
-        virtual ~RbtPharmaSF();
-        // Override RbtBaseSF::ScoreMap to provide additional raw descriptors
-        virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
+    RbtPharmaSF(const RbtString& strName = "PHARMA");
+    virtual ~RbtPharmaSF();
+    // Override RbtBaseSF::ScoreMap to provide additional raw descriptors
+    virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
-        // DM 25 Oct 2000 - track changes to parameter values in local data members
-        // ParameterUpdated is invoked by RbtParamHandler::SetParameter
-        void ParameterUpdated(const RbtString& strName);
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
+    // DM 25 Oct 2000 - track changes to parameter values in local data members
+    // ParameterUpdated is invoked by RbtParamHandler::SetParameter
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        RbtConstraintList m_constrList;
-        RbtConstraintList m_optList;
-        RbtInt m_nopt;
-        RbtMolecularFileSinkPtr m_spErrorFile;
-        RbtBool m_bWriteErrors;
-        // Keep track of individual constraint scores for ScoreMap
-        mutable RbtDoubleList m_conScores;  // Mandatory constraint scores
-        mutable RbtDoubleList m_optScores;  // Optional constraint scores
+ private:
+    RbtConstraintList m_constrList;
+    RbtConstraintList m_optList;
+    RbtInt m_nopt;
+    RbtMolecularFileSinkPtr m_spErrorFile;
+    RbtBool m_bWriteErrors;
+    // Keep track of individual constraint scores for ScoreMap
+    mutable RbtDoubleList m_conScores;  // Mandatory constraint scores
+    mutable RbtDoubleList m_optScores;  // Optional constraint scores
 };
 
 #endif  //_RBTPHARMASF_H_

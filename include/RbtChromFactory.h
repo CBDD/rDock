@@ -25,18 +25,18 @@
 class RbtChromElement;
 
 class RbtChromFactory: public RbtFlexDataVisitor {
-    public:
-        RbtChromFactory();
-        virtual void VisitReceptorFlexData(RbtReceptorFlexData*);
-        virtual void VisitLigandFlexData(RbtLigandFlexData*);
-        virtual void VisitSolventFlexData(RbtSolventFlexData*);
+ public:
+    RbtChromFactory();
+    virtual void VisitReceptorFlexData(RbtReceptorFlexData*);
+    virtual void VisitLigandFlexData(RbtLigandFlexData*);
+    virtual void VisitSolventFlexData(RbtSolventFlexData*);
 
-        RbtChromElement* GetChrom() const;
-        // Temporary solution whilst we replace the ModelMutator class
-        RbtModelMutatorPtr GetModelMutator() const { return m_spMutator; }
+    RbtChromElement* GetChrom() const;
+    // Temporary solution whilst we replace the ModelMutator class
+    RbtModelMutatorPtr GetModelMutator() const { return m_spMutator; }
 
-    private:
-        RbtChromElement* m_pChrom;
-        RbtModelMutatorPtr m_spMutator;
+ private:
+    RbtChromElement* m_pChrom;
+    RbtModelMutatorPtr m_spMutator;
 };
 #endif  //_RBTCHROMFACTORY_H_

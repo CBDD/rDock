@@ -19,34 +19,34 @@
 #include "RbtRealGrid.h"
 
 class RbtVdwGridSF: public RbtBaseInterSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _GRID;      // Suffix for grid filename
-        static RbtString _SMOOTHED;  // Controls whether to smooth the grid values
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _GRID;      // Suffix for grid filename
+    static RbtString _SMOOTHED;  // Controls whether to smooth the grid values
 
-        RbtVdwGridSF(const RbtString& strName = "VDW");
-        virtual ~RbtVdwGridSF();
+    RbtVdwGridSF(const RbtString& strName = "VDW");
+    virtual ~RbtVdwGridSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupSolvent();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
-        // DM 25 Oct 2000 - track changes to parameter values in local data members
-        // ParameterUpdated is invoked by RbtParamHandler::SetParameter
-        void ParameterUpdated(const RbtString& strName);
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupSolvent();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
+    // DM 25 Oct 2000 - track changes to parameter values in local data members
+    // ParameterUpdated is invoked by RbtParamHandler::SetParameter
+    void ParameterUpdated(const RbtString& strName);
 
-    private:
-        // Read grids from input stream
-        void ReadGrids(istream& istr) throw(RbtError);
+ private:
+    // Read grids from input stream
+    void ReadGrids(istream& istr) throw(RbtError);
 
-        RbtRealGridList m_grids;
-        RbtAtomRList m_ligAtomList;
-        RbtTriposAtomTypeList m_ligAtomTypes;
-        RbtBool m_bSmoothed;
+    RbtRealGridList m_grids;
+    RbtAtomRList m_ligAtomList;
+    RbtTriposAtomTypeList m_ligAtomTypes;
+    RbtBool m_bSmoothed;
 };
 
 #endif  //_RBTVDWGRIDSF_H_

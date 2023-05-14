@@ -26,78 +26,78 @@
 #include "RbtRealGrid.h"
 
 class RbtDockingSite {
-    public:
-        // STL predicate for selecting atoms within a defined distance range from nearest cavity coords
-        // Uses precalculated distance grid
-        class isAtomInRange: public std::unary_function<RbtAtomPtr, RbtBool> {
-            public:
-                explicit isAtomInRange(RbtRealGrid* pGrid, RbtDouble minDist, RbtDouble maxDist):
-                    m_pGrid(pGrid), m_minDist(minDist), m_maxDist(maxDist) {}
-                RbtBool operator()(RbtAtom* pAtom) const;
+ public:
+    // STL predicate for selecting atoms within a defined distance range from nearest cavity coords
+    // Uses precalculated distance grid
+    class isAtomInRange: public std::unary_function<RbtAtomPtr, RbtBool> {
+     public:
+        explicit isAtomInRange(RbtRealGrid* pGrid, RbtDouble minDist, RbtDouble maxDist):
+            m_pGrid(pGrid), m_minDist(minDist), m_maxDist(maxDist) {}
+        RbtBool operator()(RbtAtom* pAtom) const;
 
-            private:
-                RbtRealGrid* m_pGrid;
-                RbtDouble m_minDist;
-                RbtDouble m_maxDist;
-        };
+     private:
+        RbtRealGrid* m_pGrid;
+        RbtDouble m_minDist;
+        RbtDouble m_maxDist;
+    };
 
-    public:
-        // Class type string
-        static RbtString _CT;
+ public:
+    // Class type string
+    static RbtString _CT;
 
-        RbtDockingSite(const RbtCavityList& cavList, RbtDouble border);
-        RbtDockingSite(istream& istr);
+    RbtDockingSite(const RbtCavityList& cavList, RbtDouble border);
+    RbtDockingSite(istream& istr);
 
-        // Destructor
-        ~RbtDockingSite();
+    // Destructor
+    ~RbtDockingSite();
 
-        // Insertion operator
-        friend ostream& operator<<(ostream& s, const RbtDockingSite& site);
+    // Insertion operator
+    friend ostream& operator<<(ostream& s, const RbtDockingSite& site);
 
-        // Virtual function for dumping docking site details to an output stream
-        // Derived classes can override if required
-        virtual void Print(ostream& s) const;
+    // Virtual function for dumping docking site details to an output stream
+    // Derived classes can override if required
+    virtual void Print(ostream& s) const;
 
-        // Public methods
-        void Read(istream& istr);   // Reads docking site from binary stream
-        void Write(ostream& ostr);  // Writes docking site to binary stream
+    // Public methods
+    void Read(istream& istr);   // Reads docking site from binary stream
+    void Write(ostream& ostr);  // Writes docking site to binary stream
 
-        RbtRealGridPtr GetGrid();
-        RbtDouble GetBorder() const { return m_border; }
-        RbtCoord GetMinCoord() const { return m_minCoord; }
-        RbtCoord GetMaxCoord() const { return m_maxCoord; }
-        RbtCavityList GetCavityList() const { return m_cavityList; }
-        RbtInt GetNumCavities() const { return m_cavityList.size(); }
-        RbtDouble GetVolume() const;  // returns total volume of all cavities in A^3
+    RbtRealGridPtr GetGrid();
+    RbtDouble GetBorder() const { return m_border; }
+    RbtCoord GetMinCoord() const { return m_minCoord; }
+    RbtCoord GetMaxCoord() const { return m_maxCoord; }
+    RbtCavityList GetCavityList() const { return m_cavityList; }
+    RbtInt GetNumCavities() const { return m_cavityList.size(); }
+    RbtDouble GetVolume() const;  // returns total volume of all cavities in A^3
 
-        // Returns the combined coord lists of all the cavities
-        void GetCoordList(RbtCoordList& retVal) const;
+    // Returns the combined coord lists of all the cavities
+    void GetCoordList(RbtCoordList& retVal) const;
 
-        // Filters an atom list according to distance from the cavity coords
-        // Only returns atoms within minDist and maxDist from cavity
-        RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(RbtError);
-        // Filters an atom list according to distance from the cavity coords
-        // Only returns atoms within maxDist from cavity
-        // This version does not require the cavity grid
-        RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble maxDist) throw(RbtError);
-        // Returns the count of atoms within minDist and maxDist from cavity
-        RbtUInt GetNumAtoms(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(RbtError);
+    // Filters an atom list according to distance from the cavity coords
+    // Only returns atoms within minDist and maxDist from cavity
+    RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(RbtError);
+    // Filters an atom list according to distance from the cavity coords
+    // Only returns atoms within maxDist from cavity
+    // This version does not require the cavity grid
+    RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble maxDist) throw(RbtError);
+    // Returns the count of atoms within minDist and maxDist from cavity
+    RbtUInt GetNumAtoms(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(RbtError);
 
-        // private methods
-    private:
-        RbtDockingSite();                                  // default constructor disabled
-        RbtDockingSite(const RbtDockingSite&);             // Copy constructor disabled by default
-        RbtDockingSite& operator=(const RbtDockingSite&);  // Copy assignment disabled by default
+    // private methods
+ private:
+    RbtDockingSite();                                  // default constructor disabled
+    RbtDockingSite(const RbtDockingSite&);             // Copy constructor disabled by default
+    RbtDockingSite& operator=(const RbtDockingSite&);  // Copy assignment disabled by default
 
-        void CreateGrid();
+    void CreateGrid();
 
-        // Private data
-    private:
-        RbtCavityList m_cavityList;  // Cavity list
-        RbtCoord m_minCoord;
-        RbtCoord m_maxCoord;
-        RbtRealGridPtr m_spGrid;
-        RbtDouble m_border;
+    // Private data
+ private:
+    RbtCavityList m_cavityList;  // Cavity list
+    RbtCoord m_minCoord;
+    RbtCoord m_maxCoord;
+    RbtRealGridPtr m_spGrid;
+    RbtDouble m_border;
 };
 
 // Useful typedefs

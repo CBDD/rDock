@@ -20,46 +20,46 @@
 #include "RbtRand.h"
 
 class RbtRandLigTransform: public RbtBaseUniMolTransform {
-    public:
-        // Static data member for class type
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _TORS_STEP;
+ public:
+    // Static data member for class type
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _TORS_STEP;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        RbtRandLigTransform(const RbtString& strName = "RANDLIG");
-        virtual ~RbtRandLigTransform();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    RbtRandLigTransform(const RbtString& strName = "RANDLIG");
+    virtual ~RbtRandLigTransform();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        virtual void SetupTransform();  // Called by Update when model has changed
-        virtual void Execute();
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    virtual void SetupTransform();  // Called by Update when model has changed
+    virtual void Execute();
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
-        RbtRandLigTransform(const RbtRandLigTransform&);             // Copy constructor disabled by default
-        RbtRandLigTransform& operator=(const RbtRandLigTransform&);  // Copy assignment disabled by default
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
+    RbtRandLigTransform(const RbtRandLigTransform&);             // Copy constructor disabled by default
+    RbtRandLigTransform& operator=(const RbtRandLigTransform&);  // Copy assignment disabled by default
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtRand& m_rand;  // keep a reference to the singleton random number generator
-        RbtBondList m_rotableBonds;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtRand& m_rand;  // keep a reference to the singleton random number generator
+    RbtBondList m_rotableBonds;
 };
 
 // Useful typedefs

@@ -18,25 +18,25 @@
 #include "RbtSiteMapper.h"
 
 class RbtSphereSiteMapper: public RbtSiteMapper {
-    public:
-        // Static data member for class type
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _VOL_INCR;
-        static RbtString _SMALL_SPHERE;
-        static RbtString _LARGE_SPHERE;
-        static RbtString _GRIDSTEP;
-        static RbtString _CENTER;
-        static RbtString _RADIUS;
-        static RbtString _MIN_VOLUME;
-        static RbtString _MAX_CAVITIES;
+ public:
+    // Static data member for class type
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _VOL_INCR;
+    static RbtString _SMALL_SPHERE;
+    static RbtString _LARGE_SPHERE;
+    static RbtString _GRIDSTEP;
+    static RbtString _CENTER;
+    static RbtString _RADIUS;
+    static RbtString _MIN_VOLUME;
+    static RbtString _MAX_CAVITIES;
 
-        RbtSphereSiteMapper(const RbtString& strName = "SPHERE_MAPPER");
-        virtual ~RbtSphereSiteMapper();
+    RbtSphereSiteMapper(const RbtString& strName = "SPHERE_MAPPER");
+    virtual ~RbtSphereSiteMapper();
 
-        // Override RbtSiteMapper pure virtual
-        // This is the function which actually does the mapping
-        virtual RbtCavityList operator()();
+    // Override RbtSiteMapper pure virtual
+    // This is the function which actually does the mapping
+    virtual RbtCavityList operator()();
 };
 
 // Useful typedefs

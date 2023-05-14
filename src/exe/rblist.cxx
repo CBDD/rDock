@@ -22,20 +22,19 @@ const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rb
 
 namespace Rbt {
 class isAtomNitroN: public std::unary_function<RbtAtomPtr, RbtBool> {
-        // Useful predicates
-        Rbt::isFFType_eq bIsN_SP2P;
-        Rbt::isFFType_eq bIsO_SP2;
-        Rbt::isFFType_eq bIsO_SP3M;
+    // Useful predicates
+    Rbt::isFFType_eq bIsN_SP2P;
+    Rbt::isFFType_eq bIsO_SP2;
+    Rbt::isFFType_eq bIsO_SP3M;
 
-        // DM 11 Jul 2001 - checks for nitro nitrogen (NSP2+ bonded to OSP3- and OSP2)
-    public:
-        explicit isAtomNitroN(): bIsN_SP2P("N_SP2+"), bIsO_SP2("O_SP2"), bIsO_SP3M("O_SP3-") {}
-        RbtBool operator()(RbtAtomPtr spAtom) const {
-            if (!bIsN_SP2P(spAtom)) return false;
-            RbtAtomList bondedAtomList = Rbt::GetBondedAtomList(spAtom);
-            return (Rbt::GetNumAtoms(bondedAtomList, bIsO_SP2) == 1)
-                   && (Rbt::GetNumAtoms(bondedAtomList, bIsO_SP3M) == 1);
-        }
+    // DM 11 Jul 2001 - checks for nitro nitrogen (NSP2+ bonded to OSP3- and OSP2)
+ public:
+    explicit isAtomNitroN(): bIsN_SP2P("N_SP2+"), bIsO_SP2("O_SP2"), bIsO_SP3M("O_SP3-") {}
+    RbtBool operator()(RbtAtomPtr spAtom) const {
+        if (!bIsN_SP2P(spAtom)) return false;
+        RbtAtomList bondedAtomList = Rbt::GetBondedAtomList(spAtom);
+        return (Rbt::GetNumAtoms(bondedAtomList, bIsO_SP2) == 1) && (Rbt::GetNumAtoms(bondedAtomList, bIsO_SP3M) == 1);
+    }
 };
 }  // namespace Rbt
 

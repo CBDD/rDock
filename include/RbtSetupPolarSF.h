@@ -22,29 +22,29 @@
 #include "RbtBaseInterSF.h"
 
 class RbtSetupPolarSF: public RbtBaseInterSF {
-    public:
-        // Class type string
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _RADIUS;
-        static RbtString _NORM;
-        static RbtString _POWER;
-        static RbtString _CHGFACTOR;
-        // DM 14 Nov 2001 - relative strength of guanidinium intns
-        static RbtString _GUANFACTOR;
+ public:
+    // Class type string
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _RADIUS;
+    static RbtString _NORM;
+    static RbtString _POWER;
+    static RbtString _CHGFACTOR;
+    // DM 14 Nov 2001 - relative strength of guanidinium intns
+    static RbtString _GUANFACTOR;
 
-        RbtSetupPolarSF(const RbtString& strName = "SETUP_POLAR");
-        virtual ~RbtSetupPolarSF();
+    RbtSetupPolarSF(const RbtString& strName = "SETUP_POLAR");
+    virtual ~RbtSetupPolarSF();
 
-    protected:
-        virtual void SetupReceptor();
-        virtual void SetupLigand();
-        virtual void SetupSolvent();
-        virtual void SetupScore();
-        virtual RbtDouble RawScore() const;
+ protected:
+    virtual void SetupReceptor();
+    virtual void SetupLigand();
+    virtual void SetupSolvent();
+    virtual void SetupScore();
+    virtual RbtDouble RawScore() const;
 
-    private:
-        void SetupAtomList(RbtAtomList& atomList, const RbtAtomList& neighbourList, RbtInt traceTriggerLevel);
+ private:
+    void SetupAtomList(RbtAtomList& atomList, const RbtAtomList& neighbourList, RbtInt traceTriggerLevel);
 };
 
 #endif  //_RBTSETUPPOLARSF_H_

@@ -26,35 +26,35 @@ using std::stack;
 #include "RbtTokenIter.h"
 
 class RbtCellTokenIter: public RbtTokenIter {
-    public:
-        static RbtString _CT;
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtCellTokenIter(const RbtCellTokenIter &);
-        RbtCellTokenIter(const RbtGPChromosomePtr, RbtContextPtr);
+ public:
+    static RbtString _CT;
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtCellTokenIter(const RbtCellTokenIter &);
+    RbtCellTokenIter(const RbtGPChromosomePtr, RbtContextPtr);
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtCellTokenIter();
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtCellTokenIter();
 
-        virtual void copy(const RbtCellTokenIter &);
-        // void First();
-        void Next(RbtContextPtr);
-        // RbtBool IsDone() const;
-        RbtTokenPtr Current();
+    virtual void copy(const RbtCellTokenIter &);
+    // void First();
+    void Next(RbtContextPtr);
+    // RbtBool IsDone() const;
+    RbtTokenPtr Current();
 
-        ////////////////////
-        // Private methods
-        ////////////////////
+    ////////////////////
+    // Private methods
+    ////////////////////
 
-    private:
-        RbtCellTokenIter();  // Default constructor disabled
-        RbtGPChromosomePtr chrom;
-        RbtTokenPtr current;
-        stack<RbtInt> cells;
-        RbtContextPtr contextp;
+ private:
+    RbtCellTokenIter();  // Default constructor disabled
+    RbtGPChromosomePtr chrom;
+    RbtTokenPtr current;
+    stack<RbtInt> cells;
+    RbtContextPtr contextp;
 };
 
 // Useful typedefs

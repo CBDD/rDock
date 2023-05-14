@@ -18,24 +18,24 @@
 #include "RbtSiteMapper.h"
 
 class RbtLigandSiteMapper: public RbtSiteMapper {
-    public:
-        // Static data member for class type
-        static RbtString _CT;
-        // Parameter names
-        static RbtString _REF_MOL;
-        static RbtString _VOL_INCR;
-        static RbtString _SMALL_SPHERE;
-        static RbtString _GRIDSTEP;
-        static RbtString _RADIUS;
-        static RbtString _MIN_VOLUME;
-        static RbtString _MAX_CAVITIES;
+ public:
+    // Static data member for class type
+    static RbtString _CT;
+    // Parameter names
+    static RbtString _REF_MOL;
+    static RbtString _VOL_INCR;
+    static RbtString _SMALL_SPHERE;
+    static RbtString _GRIDSTEP;
+    static RbtString _RADIUS;
+    static RbtString _MIN_VOLUME;
+    static RbtString _MAX_CAVITIES;
 
-        RbtLigandSiteMapper(const RbtString& strName = "LIGAND_MAPPER");
-        virtual ~RbtLigandSiteMapper();
+    RbtLigandSiteMapper(const RbtString& strName = "LIGAND_MAPPER");
+    virtual ~RbtLigandSiteMapper();
 
-        // Override RbtSiteMapper pure virtual
-        // This is the function which actually does the mapping
-        virtual RbtCavityList operator()();
+    // Override RbtSiteMapper pure virtual
+    // This is the function which actually does the mapping
+    virtual RbtCavityList operator()();
 };
 
 // Useful typedefs

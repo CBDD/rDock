@@ -19,55 +19,55 @@
 #include "RbtModel.h"
 
 class RbtBaseInterSF: public virtual RbtBaseSF {
-    public:
-        // Class type string
-        static RbtString _CT;
+ public:
+    // Class type string
+    static RbtString _CT;
 
-        ////////////////////////////////////////
-        // Constructors/destructors
-        virtual ~RbtBaseInterSF();
+    ////////////////////////////////////////
+    // Constructors/destructors
+    virtual ~RbtBaseInterSF();
 
-        ////////////////////////////////////////
-        // Public methods
-        ////////////////
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
 
-        RbtModelPtr GetReceptor() const;
-        RbtModelPtr GetLigand() const;
-        RbtModelList GetSolvent() const;
+    RbtModelPtr GetReceptor() const;
+    RbtModelPtr GetLigand() const;
+    RbtModelList GetSolvent() const;
 
-        // Override RbtObserver pure virtual
-        // Notify observer that subject has changed
-        virtual void Update(RbtSubject* theChangedSubject);
+    // Override RbtObserver pure virtual
+    // Notify observer that subject has changed
+    virtual void Update(RbtSubject* theChangedSubject);
 
-    protected:
-        ////////////////////////////////////////
-        // Protected methods
-        ///////////////////
-        RbtBaseInterSF();
+ protected:
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    RbtBaseInterSF();
 
-        // PURE VIRTUAL - Derived classes must override
-        virtual void SetupReceptor() = 0;  // Called by Update when receptor is changed
-        virtual void SetupLigand() = 0;    // Called by Update when ligand is changed
-        virtual void SetupSolvent(){};     // Called by Update when solvent is changed
-        virtual void SetupScore() = 0;     // Called by Update when either model has changed
+    // PURE VIRTUAL - Derived classes must override
+    virtual void SetupReceptor() = 0;  // Called by Update when receptor is changed
+    virtual void SetupLigand() = 0;    // Called by Update when ligand is changed
+    virtual void SetupSolvent(){};     // Called by Update when solvent is changed
+    virtual void SetupScore() = 0;     // Called by Update when either model has changed
 
-    private:
-        ////////////////////////////////////////
-        // Private methods
-        /////////////////
+ private:
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
-    protected:
-        ////////////////////////////////////////
-        // Protected data
-        ////////////////
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
 
-    private:
-        ////////////////////////////////////////
-        // Private data
-        //////////////
-        RbtModelPtr m_spReceptor;
-        RbtModelPtr m_spLigand;
-        RbtModelList m_solventList;
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtModelPtr m_spReceptor;
+    RbtModelPtr m_spLigand;
+    RbtModelList m_solventList;
 };
 
 #endif  //_RBTBASEINTERSF_H_

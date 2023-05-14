@@ -18,65 +18,65 @@
 #include "RbtGPTypes.h"
 
 class RbtCell {
-    public:
-        ///////////////////
-        // Constructors
-        ///////////////////
-        RbtCell() {
+ public:
+    ///////////////////
+    // Constructors
+    ///////////////////
+    RbtCell() {
+        evaluated = false;
+        name = "";
+        constant = false;
+    };
+    RbtCell(const RbtCell& c) {
+        evaluated = c.evaluated;
+        name = c.name;
+        constant = c.constant;
+        result = c.result;
+    };
+
+    ///////////////////
+    // Destructor
+    //////////////////
+    virtual ~RbtCell(){};
+
+    RbtBool Evaluated() const { return evaluated; };
+    RbtBool Named() const { return (name != ""); };
+    RbtBool Constant() const { return constant; };
+    void Clear() {
+        if (!constant) {
             evaluated = false;
             name = "";
+        }
+    };
+    RbtReturnType GetResult() const { return result; };
+    RbtString GetName() const { return name; };
+    void SetName(RbtString s) { name = s; };
+    void SetResult(RbtReturnType r) {
+        result = r;
+        evaluated = true;
+    };
+    void SetConstant(RbtReturnType r) {
+        result = r;
+        evaluated = true;
+        constant = true;
+        ostrstream nm;
+        nm << r << ends;
+        name = nm.str();
+    };
+    void ResetConstant() {
+        evaluated = false;
+        name = "";
+        if (constant)
             constant = false;
-        };
-        RbtCell(const RbtCell& c) {
-            evaluated = c.evaluated;
-            name = c.name;
-            constant = c.constant;
-            result = c.result;
-        };
+        else
+            cout << "ERROR\n";
+    };
 
-        ///////////////////
-        // Destructor
-        //////////////////
-        virtual ~RbtCell(){};
-
-        RbtBool Evaluated() const { return evaluated; };
-        RbtBool Named() const { return (name != ""); };
-        RbtBool Constant() const { return constant; };
-        void Clear() {
-            if (!constant) {
-                evaluated = false;
-                name = "";
-            }
-        };
-        RbtReturnType GetResult() const { return result; };
-        RbtString GetName() const { return name; };
-        void SetName(RbtString s) { name = s; };
-        void SetResult(RbtReturnType r) {
-            result = r;
-            evaluated = true;
-        };
-        void SetConstant(RbtReturnType r) {
-            result = r;
-            evaluated = true;
-            constant = true;
-            ostrstream nm;
-            nm << r << ends;
-            name = nm.str();
-        };
-        void ResetConstant() {
-            evaluated = false;
-            name = "";
-            if (constant)
-                constant = false;
-            else
-                cout << "ERROR\n";
-        };
-
-    private:
-        RbtBool evaluated, constant;
-        RbtString name;
-        RbtReturnType result;
-        //    friend ostream& operator<<(ostream& s, const RbtCell &p);
+ private:
+    RbtBool evaluated, constant;
+    RbtString name;
+    RbtReturnType result;
+    //    friend ostream& operator<<(ostream& s, const RbtCell &p);
 };
 
 // Useful typedefs

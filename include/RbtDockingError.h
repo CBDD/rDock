@@ -22,15 +22,15 @@ const RbtString IDS_DOCKING_ERROR = "RBT_DOCKING_ERROR";
 
 // Unspecified model error
 class RbtDockingError: public RbtError {
-    public:
-        RbtDockingError(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
-            RbtError(IDS_DOCKING_ERROR, strFile, nLine, strMessage) {}
-        // Protected constructor to allow derived docking error classes
-        // to set error name
-    protected:
-        RbtDockingError(const RbtString& strName, const RbtString& strFile, RbtInt nLine,
-                        const RbtString& strMessage = ""):
-            RbtError(strName, strFile, nLine, strMessage) {}
+ public:
+    RbtDockingError(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
+        RbtError(IDS_DOCKING_ERROR, strFile, nLine, strMessage) {}
+    // Protected constructor to allow derived docking error classes
+    // to set error name
+ protected:
+    RbtDockingError(const RbtString& strName, const RbtString& strFile, RbtInt nLine,
+                    const RbtString& strMessage = ""):
+        RbtError(strName, strFile, nLine, strMessage) {}
 };
 
 #endif  //_RBTDOCKINGERROR_H_
