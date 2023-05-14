@@ -7,7 +7,19 @@ on:
     - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
 
 jobs:
+  check-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: setup-lint
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends clang-format make
+    - name: check-lint
+      run: make check-lint
+      
   build:
+    needs: check-lint
     strategy:
       fail-fast: false  # we want all the flows to run, to success or failure
       matrix:
