@@ -7,7 +7,7 @@
 # built binaries
 bin/
 obj/
-lib/
+lib/libRbt.so
 
 # build folders
 build/linux-g++-64
