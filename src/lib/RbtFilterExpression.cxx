@@ -77,7 +77,9 @@ FilterAndExp::~FilterAndExp() { _RBTOBJECTCOUNTER_DESTR_(_CT); }
 void FilterAndExp::Accept(RbtFilterExpressionVisitor& visitor) { visitor.VisitAndExp(this); }
 
 FilterIfExp::FilterIfExp(RbtFilterExpressionPtr op1, RbtFilterExpressionPtr op2, RbtFilterExpressionPtr op3):
-    operand1(op1), operand2(op2), operand3(op3) {
+    operand1(op1),
+    operand2(op2),
+    operand3(op3) {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 

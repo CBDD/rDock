@@ -22,7 +22,10 @@ class RbtMOL2Substructure {
  public:
     RbtMOL2Substructure(): root_atom(0), chain("UNK"), sub_type("UNK"){};
     RbtMOL2Substructure(const RbtString& name, RbtInt rr, const RbtString& cc, const RbtString& ss):
-        subst_name(name), root_atom(rr), chain(cc), sub_type(ss){};
+        subst_name(name),
+        root_atom(rr),
+        chain(cc),
+        sub_type(ss){};
     RbtString GetName() const { return subst_name; };
     RbtInt GetRoot() const { return root_atom; };
     RbtString GetChain() const { return chain; };

@@ -15,7 +15,10 @@
 RbtString RbtChromDihedralElement::_CT = "RbtChromDihedralElement";
 
 RbtChromDihedralElement::RbtChromDihedralElement(
-    RbtBondPtr spBond, RbtAtomList tetheredAtoms, RbtDouble stepSize, RbtChromElement::eMode mode,
+    RbtBondPtr spBond,
+    RbtAtomList tetheredAtoms,
+    RbtDouble stepSize,
+    RbtChromElement::eMode mode,
     RbtDouble maxDihedral
 ):
     m_value(0.0) {
@@ -26,7 +29,8 @@ RbtChromDihedralElement::RbtChromDihedralElement(
 }
 
 RbtChromDihedralElement::RbtChromDihedralElement(RbtChromDihedralRefDataPtr spRefData, RbtDouble value):
-    m_spRefData(spRefData), m_value(value) {
+    m_spRefData(spRefData),
+    m_value(value) {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 

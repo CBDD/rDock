@@ -24,7 +24,10 @@ class RbtInteractionCenter {
  public:
     enum eLP { NONE, PLANE, LONEPAIR };
     RbtInteractionCenter(RbtAtom* pAtom1 = NULL, RbtAtom* pAtom2 = NULL, RbtAtom* pAtom3 = NULL, eLP LP = NONE):
-        m_pAtom1(pAtom1), m_pAtom2(pAtom2), m_pAtom3(pAtom3), m_LP(LP) {
+        m_pAtom1(pAtom1),
+        m_pAtom2(pAtom2),
+        m_pAtom3(pAtom3),
+        m_LP(LP) {
         _RBTOBJECTCOUNTER_CONSTR_("RbtInteractionCenter");
     }
     ~RbtInteractionCenter() { _RBTOBJECTCOUNTER_DESTR_("RbtInteractionCenter"); }
@@ -75,7 +78,8 @@ class isInteractionD_lt: public std::unary_function<RbtInteractionCenter*, RbtBo
 
  public:
     explicit isInteractionD_lt(const RbtInteractionCenter* pIC1, RbtDouble dd):
-        d_sq(dd * dd), a(pIC1->GetAtom1Ptr()) {}
+        d_sq(dd * dd),
+        a(pIC1->GetAtom1Ptr()) {}
     RbtBool operator()(const RbtInteractionCenter* pIC2) const {
         return Rbt::Length2(pIC2->GetAtom1Ptr()->GetCoords(), a->GetCoords()) < d_sq;
     }

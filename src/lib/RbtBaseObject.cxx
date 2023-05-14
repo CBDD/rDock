@@ -25,7 +25,9 @@ RbtString RbtBaseObject::_TRACE("TRACE");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtBaseObject::RbtBaseObject(const RbtString& strClass, const RbtString& strName):
-    m_workspace(NULL), m_enabled(true), m_trace(0) {
+    m_workspace(NULL),
+    m_enabled(true),
+    m_trace(0) {
     // Add parameters
     AddParameter(_CLASS, strClass);
     AddParameter(_NAME, strName);

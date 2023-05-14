@@ -21,7 +21,8 @@ RbtString RbtBaseTransform::_CT("RbtBaseTransform");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtBaseTransform::RbtBaseTransform(const RbtString& strClass, const RbtString& strName):
-    RbtBaseObject(strClass, strName), m_parent(NULL) {
+    RbtBaseObject(strClass, strName),
+    m_parent(NULL) {
 #ifdef _DEBUG
     cout << _CT << " parameterised constructor" << endl;
 #endif  //_DEBUG

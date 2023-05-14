@@ -32,7 +32,9 @@ class RbtDockingSite {
     class isAtomInRange: public std::unary_function<RbtAtomPtr, RbtBool> {
      public:
         explicit isAtomInRange(RbtRealGrid* pGrid, RbtDouble minDist, RbtDouble maxDist):
-            m_pGrid(pGrid), m_minDist(minDist), m_maxDist(maxDist) {}
+            m_pGrid(pGrid),
+            m_minDist(minDist),
+            m_maxDist(maxDist) {}
         RbtBool operator()(RbtAtom* pAtom) const;
 
      private:

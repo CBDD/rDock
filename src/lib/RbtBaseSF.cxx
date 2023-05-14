@@ -24,7 +24,10 @@ RbtString RbtBaseSF::_INTRA_SF("SCORE.INTRA");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtBaseSF::RbtBaseSF(const RbtString& strClass, const RbtString& strName):
-    RbtBaseObject(strClass, strName), m_parent(NULL), m_weight(1.0), m_range(10.0) {
+    RbtBaseObject(strClass, strName),
+    m_parent(NULL),
+    m_weight(1.0),
+    m_range(10.0) {
 #ifdef _DEBUG
     cout << _CT << " parameterised constructor for " << strClass << endl;
 #endif  //_DEBUG

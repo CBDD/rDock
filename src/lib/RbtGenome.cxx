@@ -22,7 +22,9 @@ RbtGenome::RbtGenome(RbtChromElement* pChr): m_chrom(pChr->clone()), m_score(0.0
 }
 
 RbtGenome::RbtGenome(const RbtGenome& g):
-    m_chrom((g.m_chrom)->clone()), m_score(g.m_score), m_RWFitness(g.m_RWFitness) {
+    m_chrom((g.m_chrom)->clone()),
+    m_score(g.m_score),
+    m_RWFitness(g.m_RWFitness) {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
 

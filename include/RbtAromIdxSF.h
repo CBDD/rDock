@@ -68,7 +68,10 @@ class RbtAromIdxSF: public RbtBaseInterSF, public RbtBaseIdxSF, public RbtAnnota
     struct f1prms {
         RbtDouble R0, DRMin, DRMax, slope;
         f1prms(RbtDouble R, RbtDouble DMin, RbtDouble DMax):
-            R0(R), DRMin(DMin), DRMax(DMax), slope(1.0 / (DMax - DMin)){};
+            R0(R),
+            DRMin(DMin),
+            DRMax(DMax),
+            slope(1.0 / (DMax - DMin)){};
     };
 
     inline f1prms GetRprms() const { return f1prms(m_R12, m_DR12Min, m_DR12Max); }
@@ -81,7 +84,9 @@ class RbtAromIdxSF: public RbtBaseInterSF, public RbtBaseIdxSF, public RbtAnnota
 
     // The actual aromatic score, between a given interaction center and a list of near neighbour centers
     RbtDouble AromScore(
-        const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List, const f1prms& Rprms,
+        const RbtInteractionCenter* pIC1,
+        const RbtInteractionCenterList& IC2List,
+        const f1prms& Rprms,
         const f1prms& Aprms
     ) const;
     RbtDouble PiScore(const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List) const;

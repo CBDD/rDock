@@ -29,7 +29,8 @@ class RbtChromPositionRefData {
     // Reference Cartesian axes
     static const RbtPrincipalAxes CARTESIAN_AXES;
     RbtChromPositionRefData(
-        const RbtModel* pModel, const RbtDockingSite* pDockSite,
+        const RbtModel* pModel,
+        const RbtDockingSite* pDockSite,
         RbtDouble transStepSize,  // Angstroms
         RbtDouble rotStepSize,    // radians
         RbtChromElement::eMode transMode = RbtChromElement::FREE,

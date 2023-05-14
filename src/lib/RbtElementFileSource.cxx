@@ -26,7 +26,9 @@ using std::ostringstream;
 // }
 
 RbtElementFileSource::RbtElementFileSource(const RbtString& fileName):
-    RbtBaseFileSource(fileName), m_dHBondRadiusIncr(0.0), m_dImplicitRadiusIncr(0.0) {
+    RbtBaseFileSource(fileName),
+    m_dHBondRadiusIncr(0.0),
+    m_dImplicitRadiusIncr(0.0) {
     _RBTOBJECTCOUNTER_CONSTR_("RbtElementFileSource");
 }
 

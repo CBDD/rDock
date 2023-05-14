@@ -208,7 +208,8 @@ long RbtMOEGrid::WriteGrid(std::_Ios_Openmode mode) {
     vector<double> grid_extents = myShape.GetExtents();  // list all the values in the shape vector
     vector<double>::iterator o_iter, e_iter;             // origin and extents
     for (o_iter = grid_origin.begin(), e_iter = grid_extents.begin();
-         o_iter != grid_origin.end() && e_iter != grid_extents.end(); ++o_iter, ++e_iter) {
+         o_iter != grid_origin.end() && e_iter != grid_extents.end();
+         ++o_iter, ++e_iter) {
         for (double grid_coord = (*o_iter); grid_coord <= (*e_iter); grid_coord += myShape.GetStepSize()) {
             svl::write_IEEE8m(ofstr, (grid_coord));  // write shape vector data
         }

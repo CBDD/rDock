@@ -27,7 +27,10 @@ RbtString RbtRealGrid::_CT("RbtRealGrid");
 RbtRealGrid::RbtRealGrid(
     const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad
 ):
-    RbtBaseGrid(gridMin, gridStep, NX, NY, NZ, NPad), m_tol(0.001), m_grid(NULL), m_data(NULL) {
+    RbtBaseGrid(gridMin, gridStep, NX, NY, NZ, NPad),
+    m_tol(0.001),
+    m_grid(NULL),
+    m_data(NULL) {
     CreateArrays();
     // Initialise the grid to zero
     SetAllValues(0.0);
@@ -317,7 +320,8 @@ void RbtRealGrid::SetAccessible(
                         else
                             // SetValues(sphereIndices,newVal,false);//Set all grid points in the sphere
                             SetValues(
-                                sphereIndices, newVal,
+                                sphereIndices,
+                                newVal,
                                 true
                             );  // DM 3 April 2002 - now overwrite ALL gridpoints with newVal
                     }

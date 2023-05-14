@@ -23,7 +23,8 @@ RbtChromOccupancyElement::RbtChromOccupancyElement(RbtModel* pModel, RbtDouble s
 }
 
 RbtChromOccupancyElement::RbtChromOccupancyElement(RbtChromOccupancyRefDataPtr spRefData, RbtDouble value):
-    m_spRefData(spRefData), m_value(value) {
+    m_spRefData(spRefData),
+    m_value(value) {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 

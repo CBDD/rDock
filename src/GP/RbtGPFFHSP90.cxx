@@ -79,7 +79,9 @@ void RbtGPFFHSP90::ReadTables(istream& in, RbtReturnTypeArray& it, RbtReturnType
 }
 
 RbtDouble RbtGPFFHSP90::CalculateFitness(
-    RbtGPGenomePtr g, RbtReturnTypeArray& it, RbtReturnTypeArray& sft,
+    RbtGPGenomePtr g,
+    RbtReturnTypeArray& it,
+    RbtReturnTypeArray& sft,
     //                                         RbtDouble limit,
     RbtBool function
 ) {

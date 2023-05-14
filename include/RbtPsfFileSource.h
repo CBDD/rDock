@@ -24,7 +24,8 @@ class RbtPsfFileSource: public RbtBaseMolecularFileSource {
  public:
     // Constructors
     RbtPsfFileSource(
-        const RbtString& fileName, const RbtString& strMassesFile = Rbt::GetRbtFileName("data", "masses.rtf"),
+        const RbtString& fileName,
+        const RbtString& strMassesFile = Rbt::GetRbtFileName("data", "masses.rtf"),
         RbtBool bImplHydrogens = true
     );
 

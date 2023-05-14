@@ -81,10 +81,17 @@ void RbtPsfFileSink::Render() throw(RbtError) {
 
             m_nAtomId++;
             sprintf(
-                line, "%8d %-4.4s %-4.4s %-4.4s %-4.4s %-4.4s%15.3f%10.3f%12.1f", spAtom->GetAtomId(),
-                spAtom->GetSegmentName().c_str(), spAtom->GetSubunitId().c_str(), spAtom->GetSubunitName().c_str(),
-                spAtom->GetAtomName().c_str(), spAtom->GetFFType().c_str(), spAtom->GetPartialCharge(),
-                spAtom->GetAtomicMass(), 0.0
+                line,
+                "%8d %-4.4s %-4.4s %-4.4s %-4.4s %-4.4s%15.3f%10.3f%12.1f",
+                spAtom->GetAtomId(),
+                spAtom->GetSegmentName().c_str(),
+                spAtom->GetSubunitId().c_str(),
+                spAtom->GetSubunitName().c_str(),
+                spAtom->GetAtomName().c_str(),
+                spAtom->GetFFType().c_str(),
+                spAtom->GetPartialCharge(),
+                spAtom->GetAtomicMass(),
+                0.0
             );
             AddLine(line);
             // Render the atom to a string stream

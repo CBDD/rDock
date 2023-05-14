@@ -13,7 +13,10 @@
 #include "RbtDihedralSF.h"
 
 RbtDihedral::RbtDihedral(RbtAtom* pAtom1, RbtAtom* pAtom2, RbtAtom* pAtom3, RbtAtom* pAtom4, const prms& dihprms):
-    m_pAtom1(pAtom1), m_pAtom2(pAtom2), m_pAtom3(pAtom3), m_pAtom4(pAtom4) {
+    m_pAtom1(pAtom1),
+    m_pAtom2(pAtom2),
+    m_pAtom3(pAtom3),
+    m_pAtom4(pAtom4) {
     m_prms.push_back(dihprms);
 }
 

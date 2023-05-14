@@ -68,7 +68,11 @@ class RbtError {
     // Parameterised constructor
     // Use to create unspecified Rbt Errors
     RbtError(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
-        m_strName(IDS_ERROR), m_strFile(strFile), m_nLine(nLine), m_strMessage(strMessage), m_bOK(false) {}
+        m_strName(IDS_ERROR),
+        m_strFile(strFile),
+        m_nLine(nLine),
+        m_strMessage(strMessage),
+        m_bOK(false) {}
 
     // Default destructor
     virtual ~RbtError() {}
@@ -96,7 +100,11 @@ class RbtError {
  protected:
     // Protected constructor to allow derived error classes to set error name
     RbtError(const RbtString& strName, const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
-        m_strName(strName), m_strFile(strFile), m_nLine(nLine), m_strMessage(strMessage), m_bOK(false) {}
+        m_strName(strName),
+        m_strFile(strFile),
+        m_nLine(nLine),
+        m_strMessage(strMessage),
+        m_bOK(false) {}
 
     ///////////////////////
     // Private data

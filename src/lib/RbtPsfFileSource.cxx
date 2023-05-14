@@ -114,7 +114,10 @@ void RbtPsfFileSource::Parse() throw(RbtError) {
                 RbtAtomPtr spAtom(new RbtAtom(
                     nAtomId,
                     0,  // Atomic number undefined (gets set below)
-                    strAtomName, strSubunitId, strSubunitName, strSegmentName
+                    strAtomName,
+                    strSubunitId,
+                    strSubunitName,
+                    strSegmentName
                 ));
 
                 // Now set the remaining 2-D and 3-D params
@@ -184,7 +187,8 @@ void RbtPsfFileSource::Parse() throw(RbtError) {
                                                                    // numbered from zero in our atom vector
                     RbtBondPtr spBond(new RbtBond(
                         ++nBondId,  // Store a nominal bond ID starting from 1
-                        spAtom1, spAtom2
+                        spAtom1,
+                        spAtom2
                     ));
                     m_bondList.push_back(spBond);
                 }

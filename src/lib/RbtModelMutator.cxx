@@ -29,7 +29,9 @@ void PrintAtomList(RbtAtomRListConstIter i1, RbtAtomRListConstIter i2) {
 ////////////////////////////////////////
 // Constructors/destructors
 RbtModelMutator::RbtModelMutator(RbtModel* pModel, const RbtBondList& rotBonds, const RbtAtomList& tetheredAtoms):
-    m_pModel(pModel), m_rotBonds(rotBonds), m_tetheredAtoms(tetheredAtoms) {
+    m_pModel(pModel),
+    m_rotBonds(rotBonds),
+    m_tetheredAtoms(tetheredAtoms) {
     if (m_pModel != NULL) {
         Setup();
     }

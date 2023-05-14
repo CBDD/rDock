@@ -30,7 +30,10 @@ RbtModel::RbtModel(RbtBaseMolecularFileSource* pMolSource): m_occupancy(1.0), m_
 //(Fairly) temporary constructor taking arbitrary atom and bond lists
 // Use with caution
 RbtModel::RbtModel(RbtAtomList& atomList, RbtBondList& bondList):
-    m_pFlexData(NULL), m_pChrom(NULL), m_occupancy(1.0), m_enabled(true) {
+    m_pFlexData(NULL),
+    m_pChrom(NULL),
+    m_occupancy(1.0),
+    m_enabled(true) {
     AddAtoms(atomList);  // Register atoms with model
     m_bondList = bondList;
     // Rbt::FindRings(m_atomList,m_bondList,m_ringList);

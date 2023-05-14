@@ -46,8 +46,11 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName): RbtBaseSF(_CT, aName) {
     // info similarly like the PMF values
     RbtCoord theSlopeGridCoords(1.0, 1.0, 1.0);
     theSlopeGrid = RbtRealGridPtr(new RbtRealGrid(
-        theSlopeGridCoords, theSlopeGridCoords, 2,  // cPlStart & cPlVal
-        nTypes, nTypes
+        theSlopeGridCoords,
+        theSlopeGridCoords,
+        2,  // cPlStart & cPlVal
+        nTypes,
+        nTypes
     ));
 
     // setup the grids for every types
@@ -72,7 +75,8 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName): RbtBaseSF(_CT, aName) {
             RbtPMFType lType = Rbt::PMFStr2Type(theFileNames[i].substr(2, 2));  // ligand type
             thePMFGrid->SetValue(
                 thePMFGrid->GetIX((RbtDouble)thePMF[i][j].distance),  // distance
-                rType, lType,
+                rType,
+                lType,
                 thePMF[i][j].density  // the density value
             );
         }
@@ -82,13 +86,15 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName): RbtBaseSF(_CT, aName) {
         RbtPMFType rType = Rbt::PMFStr2Type(theFileNames[i].substr(0, 2));  // receptor type
         RbtPMFType lType = Rbt::PMFStr2Type(theFileNames[i].substr(2, 2));  // ligand type
         theSlopeGrid->SetValue(
-            cPlStart,      // index 1 for the distance where the
-            rType, lType,  // plateau starts
+            cPlStart,  // index 1 for the distance where the
+            rType,
+            lType,  // plateau starts
             theSlopeIndex[i].distance
         );
         theSlopeGrid->SetValue(
-            cPlVal,        // that is the actual value
-            rType, lType,  // can be more than 3.0
+            cPlVal,  // that is the actual value
+            rType,
+            lType,  // can be more than 3.0
             theSlopeIndex[i].density
         );
     }

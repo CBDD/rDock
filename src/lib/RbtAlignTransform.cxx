@@ -24,7 +24,9 @@ RbtString RbtAlignTransform::_AXES("AXES");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtAlignTransform::RbtAlignTransform(const RbtString& strName):
-    RbtBaseBiMolTransform(_CT, strName), m_rand(Rbt::GetRbtRand()), m_totalSize(0) {
+    RbtBaseBiMolTransform(_CT, strName),
+    m_rand(Rbt::GetRbtRand()),
+    m_totalSize(0) {
     // Add parameters
     AddParameter(_COM, "ALIGN");
     AddParameter(_AXES, "ALIGN");

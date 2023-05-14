@@ -113,7 +113,10 @@ void RbtPdbFileSource::Parse() throw(RbtError) {
                     RbtAtomPtr spAtom(new RbtAtom(
                         nAtomId,
                         0,  // Atomic number undefined
-                        strAtomName, strSubunitId, strSubunitName, strSegmentName
+                        strAtomName,
+                        strSubunitId,
+                        strSubunitName,
+                        strSegmentName
                     ));
 
                     // Now set the 3-D params we have

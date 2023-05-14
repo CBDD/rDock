@@ -118,7 +118,12 @@ void RbtMdlFileSource::Parse() throw(RbtError) {
 
                 // Construct a new atom (constructor only accepts the 2D params)
                 RbtAtomPtr spAtom(new RbtAtom(
-                    nAtomId, nAtomicNo, strAtomName, strSubunitId, strSubunitName, strSegmentName,
+                    nAtomId,
+                    nAtomicNo,
+                    strAtomName,
+                    strSubunitId,
+                    strSubunitName,
+                    strSegmentName,
                     RbtAtom::UNDEFINED,  // Hybridisation state
                     0,                   // Num implicit hydrogens
                     nFormalCharge
@@ -166,7 +171,9 @@ void RbtMdlFileSource::Parse() throw(RbtError) {
                                                                // from zero in our atom vector
                 RbtBondPtr spBond(new RbtBond(
                     ++nBondId,  // Store a nominal bond ID starting from 1
-                    spAtom1, spAtom2, nBondOrder
+                    spAtom1,
+                    spAtom2,
+                    nBondOrder
                 ));
                 m_bondList.push_back(spBond);
             }
@@ -526,7 +533,8 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
         //(can have very different pKa's)
                             RbtAtomList atoms12Conn;
                             for (RbtAtomListConstIter iter2 = ntriBondedAtomList.begin();
-                                 iter2 != ntriBondedAtomList.end(); iter2++) {
+                                 iter2 != ntriBondedAtomList.end();
+                                 iter2++) {
                                 RbtAtomList tmpList =
                                     Rbt::GetAtomList(nsp2BondedAtomList, Rbt::isAtom_12Connected(*iter2));
                                 std::copy(tmpList.begin(), tmpList.end(), std::back_inserter(atoms12Conn));

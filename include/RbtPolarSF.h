@@ -66,19 +66,27 @@ class RbtPolarSF: public virtual RbtBaseSF, public virtual RbtAnnotationHandler 
     void BuildIntraMap(const RbtInteractionCenterList& ICList, RbtInteractionListMap& intns) const;
 
     RbtDouble IntraScore(
-        const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-        const RbtInteractionListMap& prtIntns, RbtBool attr
+        const RbtInteractionCenterList& posList,
+        const RbtInteractionCenterList& negList,
+        const RbtInteractionListMap& prtIntns,
+        RbtBool attr
     ) const;
     void Partition(
-        const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-        const RbtInteractionListMap& intns, RbtInteractionListMap& prtIntns, RbtDouble dist = 0.0
+        const RbtInteractionCenterList& posList,
+        const RbtInteractionCenterList& negList,
+        const RbtInteractionListMap& intns,
+        RbtInteractionListMap& prtIntns,
+        RbtDouble dist = 0.0
     ) const;
 
     // Generic scoring function params
     struct f1prms {
         RbtDouble R0, DRMin, DRMax, slope;
         f1prms(RbtDouble R, RbtDouble DMin, RbtDouble DMax):
-            R0(R), DRMin(DMin), DRMax(DMax), slope(1.0 / (DMax - DMin)){};
+            R0(R),
+            DRMin(DMin),
+            DRMax(DMax),
+            slope(1.0 / (DMax - DMin)){};
     };
 
     inline f1prms GetRprms() const { return f1prms(0.0, m_DR12Min, m_DR12Max); }
@@ -86,8 +94,11 @@ class RbtPolarSF: public virtual RbtBaseSF, public virtual RbtAnnotationHandler 
     inline f1prms GetA2prms() const { return f1prms(m_A2, m_DA2Min, m_DA2Max); }
 
     RbtDouble PolarScore(
-        const RbtInteractionCenter* intn, const RbtInteractionCenterList& intnList, const f1prms& Rprms,
-        const f1prms& A1prms, const f1prms& A2prms
+        const RbtInteractionCenter* intn,
+        const RbtInteractionCenterList& intnList,
+        const f1prms& Rprms,
+        const f1prms& A1prms,
+        const f1prms& A2prms
     ) const;
 
     // As this has a virtual base class we need a separate OwnParameterUpdated

@@ -31,7 +31,8 @@ RbtString RbtGATransform::_NCONVERGENCE("NCONVERGENCE");
 RbtString RbtGATransform::_HISTORY_FREQ("HISTORY_FREQ");
 
 RbtGATransform::RbtGATransform(const RbtString& strName):
-    RbtBaseBiMolTransform(_CT, strName), m_rand(Rbt::GetRbtRand()) {
+    RbtBaseBiMolTransform(_CT, strName),
+    m_rand(Rbt::GetRbtRand()) {
     AddParameter(_NEW_FRACTION, 0.5);
     AddParameter(_PCROSSOVER, 0.4);
     AddParameter(_XOVERMUT, true);

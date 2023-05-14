@@ -65,7 +65,11 @@ int main(int argc, const char *argv[]) {
         {"viewer", 'v', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'v', "dump Viewer PSF/CRD files"},
         {"list", 'l', POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH, &listDist, 'l', "list receptor atoms within <dist>"},
         {"site", 's', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 's', "print site descriptors"},
-        {"border", 'b', POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH, &borderDist, 'b',
+        {"border",
+         'b',
+         POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH,
+         &borderDist,
+         'b',
          "set the border around the cavities"},
         POPT_AUTOHELP{NULL, 0, 0, NULL, 0}};
 

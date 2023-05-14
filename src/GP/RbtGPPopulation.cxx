@@ -118,7 +118,12 @@ RbtGPGenomePtr RbtGPPopulation::TSelect(RbtDouble tp) const {
 RbtGPGenomePtr RbtGPPopulation::Select(RbtString selector) const { return TSelect(0.7); }
 
 void RbtGPPopulation::GAstep(
-    RbtString selector, RbtDouble pcross, RbtDouble pmut, RbtDouble mean, RbtDouble variance, RbtDouble hitlimit,
+    RbtString selector,
+    RbtDouble pcross,
+    RbtDouble pmut,
+    RbtDouble mean,
+    RbtDouble variance,
+    RbtDouble hitlimit,
     RbtBool function
 ) throw(RbtError) {
     RbtGPGenomePtr mother, father;
@@ -153,7 +158,12 @@ void RbtGPPopulation::GAstep(
 }
 
 void RbtGPPopulation::EPstep(
-    RbtString selector, RbtDouble pcross, RbtDouble pmut, RbtDouble mean, RbtDouble variance, RbtDouble hitlimit,
+    RbtString selector,
+    RbtDouble pcross,
+    RbtDouble pmut,
+    RbtDouble mean,
+    RbtDouble variance,
+    RbtDouble hitlimit,
     RbtBool function
 ) throw(RbtError) {
     *(newpop[0]) = *(pop[bestInd]);

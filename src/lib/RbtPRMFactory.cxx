@@ -36,10 +36,14 @@ const RbtString& RbtPRMFactory::_SOLV_SECTION = "SOLVENT";
 const RbtString& RbtPRMFactory::_SOLV_FILE = "FILE";
 
 RbtPRMFactory::RbtPRMFactory(RbtParameterFileSource* pParamSource):
-    m_pParamSource(pParamSource), m_pDS(NULL), m_iTrace(0) {}
+    m_pParamSource(pParamSource),
+    m_pDS(NULL),
+    m_iTrace(0) {}
 
 RbtPRMFactory::RbtPRMFactory(RbtParameterFileSource* pParamSource, RbtDockingSite* pDS):
-    m_pParamSource(pParamSource), m_pDS(pDS), m_iTrace(0) {}
+    m_pParamSource(pParamSource),
+    m_pDS(pDS),
+    m_iTrace(0) {}
 RbtModelPtr RbtPRMFactory::CreateReceptor() throw(RbtError) {
     RbtModelPtr retVal;
     m_pParamSource->SetSection(_REC_SECTION);

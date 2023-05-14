@@ -49,7 +49,8 @@ class RbtTransformFactory {
     // definitions Transform parameters and scoring function requests are set from the list of parameters in each
     // named section
     virtual RbtTransformAgg* CreateAggFromFile(
-        RbtParameterFileSourcePtr spPrmSource, const RbtString& strName,
+        RbtParameterFileSourcePtr spPrmSource,
+        const RbtString& strName,
         const RbtString& strTransformClasses = RbtString()
     ) throw(RbtError);
 

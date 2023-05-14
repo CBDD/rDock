@@ -69,7 +69,8 @@ RbtString RbtSimAnnTransform::_HISTORY_FREQ("HISTORY_FREQ");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName):
-    RbtBaseBiMolTransform(_CT, strName), m_rand(Rbt::GetRbtRand()) {
+    RbtBaseBiMolTransform(_CT, strName),
+    m_rand(Rbt::GetRbtRand()) {
     // Add parameters
     AddParameter(_START_T, 1000.0);
     AddParameter(_FINAL_T, 300.0);

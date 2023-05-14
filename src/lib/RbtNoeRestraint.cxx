@@ -90,7 +90,9 @@ ostream& operator<<(ostream& s, const RbtNoeRestraintNames& noe) {
 
 // Constructor accepting an RbtNoeRestraintNames and an atom list to match against
 RbtNoeRestraintAtoms::RbtNoeRestraintAtoms(const RbtNoeRestraintNames& n, const RbtAtomList& atomList):
-    from(n.from, atomList), to(n.to, atomList), maxDist(n.maxDist) {}
+    from(n.from, atomList),
+    to(n.to, atomList),
+    maxDist(n.maxDist) {}
 
 RbtBool RbtNoeRestraintAtoms::isOK() const { return from.isOK() && to.isOK(); }
 
@@ -120,7 +122,8 @@ ostream& operator<<(ostream& s, const RbtStdRestraintNames& std) {
 
 // Constructor accepting an RbtStdRestraintNames and an atom list to match against
 RbtStdRestraintAtoms::RbtStdRestraintAtoms(const RbtStdRestraintNames& s, const RbtAtomList& atomList):
-    from(s.from, atomList), maxDist(s.maxDist) {}
+    from(s.from, atomList),
+    maxDist(s.maxDist) {}
 
 RbtBool RbtStdRestraintAtoms::isOK() const { return from.isOK(); }
 

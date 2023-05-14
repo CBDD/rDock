@@ -119,7 +119,13 @@ void RbtChromFactory::VisitLigandFlexData(RbtLigandFlexData* pFlexData) {
         if ((transMode != RbtChromElement::FIXED) || (rotMode != RbtChromElement::FIXED)) {
             // Don't forget that whole body rotation code is in radians (not degrees)
             m_pChrom->Add(new RbtChromPositionElement(
-                pModel, pDockSite, transStepSize, rotStepSize * M_PI / 180.0, transMode, rotMode, maxTrans,
+                pModel,
+                pDockSite,
+                transStepSize,
+                rotStepSize * M_PI / 180.0,
+                transMode,
+                rotMode,
+                maxTrans,
                 maxRot * M_PI / 180.0
             ));
         }

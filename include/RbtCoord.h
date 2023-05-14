@@ -422,7 +422,8 @@ inline RbtCoord Min(const RbtCoordList& cl) {
     std::transform(cl.begin(), cl.end(), std::back_inserter(cz), ExtractZCoord);
     // Compose the min coord from the min of each of the components
     return RbtCoord(
-        *(std::min_element(cx.begin(), cx.end())), *(std::min_element(cy.begin(), cy.end())),
+        *(std::min_element(cx.begin(), cx.end())),
+        *(std::min_element(cy.begin(), cy.end())),
         *(std::min_element(cz.begin(), cz.end()))
     );
 }
@@ -436,7 +437,8 @@ inline RbtCoord Max(const RbtCoordList& cl) {
     std::transform(cl.begin(), cl.end(), std::back_inserter(cz), ExtractZCoord);
     // Compose the max coord from the max of each of the components
     return RbtCoord(
-        *(std::max_element(cx.begin(), cx.end())), *(std::max_element(cy.begin(), cy.end())),
+        *(std::max_element(cx.begin(), cx.end())),
+        *(std::max_element(cy.begin(), cy.end())),
         *(std::max_element(cz.begin(), cz.end()))
     );
 }

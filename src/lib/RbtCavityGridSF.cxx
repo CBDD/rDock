@@ -26,7 +26,10 @@ RbtString RbtCavityGridSF::_QUADRATIC("QUADRATIC");
 // NB - Virtual base class constructor (RbtBaseSF) gets called first,
 // implicit constructor for RbtBaseInterSF is called second
 RbtCavityGridSF::RbtCavityGridSF(const RbtString& strName):
-    RbtBaseSF(_CT, strName), m_maxDist(0.0), m_rMax(0.1), m_bQuadratic(false) {
+    RbtBaseSF(_CT, strName),
+    m_maxDist(0.0),
+    m_rMax(0.1),
+    m_bQuadratic(false) {
     // Add parameters
     AddParameter(_RMAX, m_rMax);
     AddParameter(_QUADRATIC, m_bQuadratic);

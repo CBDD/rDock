@@ -28,7 +28,8 @@ RbtString RbtMOL2FileSource::_IDS_MOL2_RECDELIM("@<TRIPOS>MOLECULE");
 
 // straightforward ctor
 RbtMOL2FileSource::RbtMOL2FileSource(const RbtString& fileName, RbtBool bImplHydrogens):
-    RbtBaseMolecularFileSource(fileName, _IDS_MOL2_RECDELIM, "MOL2_FILE_SOURCE"), m_bImplHydrogens(bImplHydrogens) {
+    RbtBaseMolecularFileSource(fileName, _IDS_MOL2_RECDELIM, "MOL2_FILE_SOURCE"),
+    m_bImplHydrogens(bImplHydrogens) {
     m_spElementData =
         RbtElementFileSourcePtr(new RbtElementFileSource(Rbt::GetRbtFileName("data", "RbtElements.dat")));
     m_spParamSource =
@@ -262,7 +263,9 @@ void RbtMOL2FileSource::ParseRecordATOM(const RbtString& aLine) {
     RbtElementData elementData = m_spElementData->GetElementData(atomic_number);
     RbtAtom::eHybridState hybrid_state = (RbtAtom::eHybridState)m_typer.Type2Hybrid(tt);
     RbtAtomPtr newAtom(new RbtAtom(
-        atom_id, atomic_number, atom_name,
+        atom_id,
+        atomic_number,
+        atom_name,
         sID,    // subunit id undef
         sName,  // subunit name undef
         "UNK"

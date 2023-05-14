@@ -20,7 +20,12 @@
 RbtString RbtPopulation::_CT("RbtPopulation");
 
 RbtPopulation::RbtPopulation(RbtChromElement* pChr, RbtInt size, RbtBaseSF* pSF) throw(RbtError):
-    m_size(size), m_c(2.0), m_pSF(pSF), m_rand(Rbt::GetRbtRand()), m_scoreMean(0.0), m_scoreVariance(0.0) {
+    m_size(size),
+    m_c(2.0),
+    m_pSF(pSF),
+    m_rand(Rbt::GetRbtRand()),
+    m_scoreMean(0.0),
+    m_scoreVariance(0.0) {
     if (pChr == NULL) {
         throw RbtBadArgument(_WHERE_, "Null chromosome element passed to RbtPopulation constructor");
     } else if (size <= 0) {
@@ -55,7 +60,11 @@ void RbtPopulation::SetSF(RbtBaseSF* pSF) throw(RbtError) {
 }
 
 void RbtPopulation::GAstep(
-    RbtInt nReplicates, RbtDouble relStepSize, RbtDouble equalityThreshold, RbtDouble pcross, RbtBool xovermut,
+    RbtInt nReplicates,
+    RbtDouble relStepSize,
+    RbtDouble equalityThreshold,
+    RbtDouble pcross,
+    RbtBool xovermut,
     RbtBool cmutate
 ) throw(RbtError) {
     if (nReplicates <= 0) {

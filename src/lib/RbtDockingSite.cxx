@@ -50,7 +50,8 @@ RbtBool RbtDockingSite::isAtomInRange::operator()(RbtAtom* pAtom) const {
 ////////////////////////////////////////
 // Constructors/destructors
 RbtDockingSite::RbtDockingSite(const RbtCavityList& cavList, RbtDouble border):
-    m_cavityList(cavList), m_border(border) {
+    m_cavityList(cavList),
+    m_border(border) {
     if (!m_cavityList.empty()) {
         RbtCoordList minCoords;
         RbtCoordList maxCoords;

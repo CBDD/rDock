@@ -17,7 +17,9 @@
 RbtString RbtChromOccupancyRefData::_CT = "RbtChromOccupancyRefData";
 
 RbtChromOccupancyRefData::RbtChromOccupancyRefData(RbtModel* pModel, RbtDouble stepSize, RbtDouble threshold):
-    m_pModel(pModel), m_stepSize(stepSize), m_threshold(threshold) {
+    m_pModel(pModel),
+    m_stepSize(stepSize),
+    m_threshold(threshold) {
     m_initialValue = GetModelValue();
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }

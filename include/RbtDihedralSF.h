@@ -38,7 +38,10 @@ class RbtDihedral {
     class prms {
      public:
         prms(RbtDouble ss = 3.0, RbtDouble kk = 0.2, RbtDouble o = 0.0):
-            s(fabs(ss)), k(kk), sign((ss > 0.0) ? +1.0 : -1.0), offset(o) {}
+            s(fabs(ss)),
+            k(kk),
+            sign((ss > 0.0) ? +1.0 : -1.0),
+            offset(o) {}
         RbtDouble s;       // rotational degeneracy
         RbtDouble k;       // barrier height
         RbtDouble sign;    //+1 or -1, to invert potential
@@ -88,7 +91,9 @@ class RbtDihedralSF: public virtual RbtBaseSF {
  private:
     // Lookup the dihedral params for a given set of types
     RbtDihedral::prms FindDihedralParams(
-        RbtTriposAtomType::eType t1, RbtTriposAtomType::eType t2, RbtTriposAtomType::eType t3,
+        RbtTriposAtomType::eType t1,
+        RbtTriposAtomType::eType t2,
+        RbtTriposAtomType::eType t3,
         RbtTriposAtomType::eType t4
     );
 

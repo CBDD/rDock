@@ -156,7 +156,8 @@ int main(int argc, char* argv[]) {
         cout << "Constructing grid of size " << nX << " x " << nY << " x " << nZ << endl;
         vector<RbtString>::iterator strReceptorPrmFilesIter;
         for (strReceptorPrmFilesIter = strReceptorPrmFiles.begin();
-             strReceptorPrmFilesIter != strReceptorPrmFiles.end(); ++strReceptorPrmFilesIter) {
+             strReceptorPrmFilesIter != strReceptorPrmFiles.end();
+             ++strReceptorPrmFilesIter) {
             // Create a bimolecular workspace
             RbtBiMolWorkSpacePtr spWS(new RbtBiMolWorkSpace());
             // Set the workspace name to the root of the receptor .prm filename

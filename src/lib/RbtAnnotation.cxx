@@ -17,7 +17,10 @@
 ////////////////////////////////////////
 // Constructors/destructors
 RbtAnnotation::RbtAnnotation(const RbtAtom* pAtom1, const RbtAtom* pAtom2, RbtDouble dist, RbtDouble score):
-    m_pAtom1(pAtom1), m_pAtom2(pAtom2), m_dist(dist), m_score(score) {}
+    m_pAtom1(pAtom1),
+    m_pAtom2(pAtom2),
+    m_dist(dist),
+    m_score(score) {}
 
 RbtAnnotation::~RbtAnnotation() {}
 

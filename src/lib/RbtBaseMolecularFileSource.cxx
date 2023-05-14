@@ -23,7 +23,8 @@
 
 // Single-record version
 RbtBaseMolecularFileSource::RbtBaseMolecularFileSource(const RbtString& fileName, const RbtString& sourceName):
-    RbtBaseFileSource(fileName), RbtBaseMolecularDataSource(sourceName) {
+    RbtBaseFileSource(fileName),
+    RbtBaseMolecularDataSource(sourceName) {
     _RBTOBJECTCOUNTER_CONSTR_("RbtBaseMolecularFileSource");
 }
 
@@ -31,7 +32,8 @@ RbtBaseMolecularFileSource::RbtBaseMolecularFileSource(const RbtString& fileName
 RbtBaseMolecularFileSource::RbtBaseMolecularFileSource(
     const RbtString& fileName, const RbtString& strRecDelim, const RbtString& sourceName
 ):
-    RbtBaseFileSource(fileName, strRecDelim), RbtBaseMolecularDataSource(sourceName) {
+    RbtBaseFileSource(fileName, strRecDelim),
+    RbtBaseMolecularDataSource(sourceName) {
     _RBTOBJECTCOUNTER_CONSTR_("RbtBaseMolecularFileSource");
 }
 

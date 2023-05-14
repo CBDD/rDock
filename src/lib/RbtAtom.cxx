@@ -56,9 +56,15 @@ RbtAtom::RbtAtom():
 // Constructor supplying all 2-D parameters
 // Initialise 3-D attributes to zero/null
 RbtAtom::RbtAtom(
-    RbtInt nAtomId, RbtInt nAtomicNo /*= 6*/, RbtString strAtomName /*= "C"*/, RbtString strSubunitId /*= "1"*/,
-    RbtString strSubunitName /*= "RES"*/, RbtString strSegmentName /*= "SEG1"*/, eHybridState eState /*= UNDEFINED*/,
-    RbtUInt nHydrogens /*= 0*/, RbtInt nFormalCharge /*= 0.0*/
+    RbtInt nAtomId,
+    RbtInt nAtomicNo /*= 6*/,
+    RbtString strAtomName /*= "C"*/,
+    RbtString strSubunitId /*= "1"*/,
+    RbtString strSubunitName /*= "RES"*/,
+    RbtString strSegmentName /*= "SEG1"*/,
+    eHybridState eState /*= UNDEFINED*/,
+    RbtUInt nHydrogens /*= 0*/,
+    RbtInt nFormalCharge /*= 0.0*/
 ):
     m_nAtomId(nAtomId),
     m_nAtomicNo(nAtomicNo),
@@ -481,7 +487,10 @@ RbtBool Rbt::isAtom_13Connected::operator()(RbtAtom* pAtom2) const {
     // Check if any atoms appear in both bonded atom lists
     // STL find_first_of will do the trick.
     return std::find_first_of(
-               bondedAtomList1.begin(), bondedAtomList1.end(), bondedAtomList2.begin(), bondedAtomList2.end(),
+               bondedAtomList1.begin(),
+               bondedAtomList1.end(),
+               bondedAtomList2.begin(),
+               bondedAtomList2.end(),
                Rbt::isAtomPtr_eq()
            )
            != bondedAtomList1.end();

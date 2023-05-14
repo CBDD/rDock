@@ -24,7 +24,8 @@ class RbtChromPositionElement: public RbtChromElement {
     static RbtString _CT;
 
     RbtChromPositionElement(
-        const RbtModel* pModel, const RbtDockingSite* pDockSite,
+        const RbtModel* pModel,
+        const RbtDockingSite* pDockSite,
         RbtDouble transStepSize,  // Angstroms
         RbtDouble rotStepSize,    // Radians
         RbtChromElement::eMode transMode = RbtChromElement::FREE,

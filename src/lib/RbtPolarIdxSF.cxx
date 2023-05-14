@@ -159,7 +159,8 @@ void RbtPolarIdxSF::SetupReceptor() {
             m_flexRecPrtIntns = RbtInteractionListMap(nAtoms, RbtInteractionCenterList());
             if (m_bAttr) {
                 BuildIntraMap(
-                    m_flexRecPosList, m_flexRecNegList,
+                    m_flexRecPosList,
+                    m_flexRecNegList,
                     m_flexRecIntns
                 );                                                                // flexible donor - flexible acceptor
                 BuildIntraMap(m_flexRecPosList, m_recepNegList, m_flexRecIntns);  // flexible donor - rigid acceptor

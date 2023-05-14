@@ -45,7 +45,9 @@ class RbtEuler {
     // NOTE: For performance reasons, no checks are made that the values
     // are within range
     RbtEuler(RbtDouble heading = 0.0, RbtDouble attitude = 0.0, RbtDouble bank = 0.0):
-        m_heading(heading), m_attitude(attitude), m_bank(bank) {}
+        m_heading(heading),
+        m_attitude(attitude),
+        m_bank(bank) {}
     // Constructor accepting a quaternion.
     // Quaternion is converted to Euler angle representation
     // NOTE: For performance reasons, q is assumed to be of unit length

@@ -27,7 +27,9 @@ RbtGPFitnessFunction::RbtGPFitnessFunction(): m_rand(Rbt::GetRbtRand()), objecti
 }
 
 RbtGPFitnessFunction::RbtGPFitnessFunction(const RbtGPFitnessFunction& g):
-    m_rand(Rbt::GetRbtRand()), objective(g.objective), fitness(g.fitness) {
+    m_rand(Rbt::GetRbtRand()),
+    objective(g.objective),
+    fitness(g.fitness) {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
 

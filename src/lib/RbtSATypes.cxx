@@ -293,7 +293,11 @@ const RbtDouble HHS_Solvation::Pij_13 = 0.3516;                 // ditto for 1-3
 const RbtDouble HHS_Solvation::Pij_14 = 0.3156;                 // and for 1-4+
 
 HHS_Solvation::HHS_Solvation(RbtHHSType::eType t, RbtAtom* a, RbtDouble p, RbtDouble r, RbtDouble s):
-    p_i(p), r_i(r), sigma(s), hhsType(t), atom(a) {
+    p_i(p),
+    r_i(r),
+    sigma(s),
+    hhsType(t),
+    atom(a) {
     Init();
 }
 

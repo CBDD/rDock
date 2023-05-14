@@ -258,8 +258,10 @@ void RbtPolarSF::BuildIntraMap(const RbtInteractionCenterList& ICList, RbtIntera
 }
 
 RbtDouble RbtPolarSF::IntraScore(
-    const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-    const RbtInteractionListMap& intns, RbtBool attr
+    const RbtInteractionCenterList& posList,
+    const RbtInteractionCenterList& negList,
+    const RbtInteractionListMap& intns,
+    RbtBool attr
 ) const {
     RbtDouble score = 0.0;  // Total score
 
@@ -320,8 +322,11 @@ RbtDouble RbtPolarSF::IntraScore(
 }
 
 void RbtPolarSF::Partition(
-    const RbtInteractionCenterList& posList, const RbtInteractionCenterList& negList,
-    const RbtInteractionListMap& intns, RbtInteractionListMap& prtIntns, RbtDouble dist
+    const RbtInteractionCenterList& posList,
+    const RbtInteractionCenterList& negList,
+    const RbtInteractionListMap& intns,
+    RbtInteractionListMap& prtIntns,
+    RbtDouble dist
 ) const {
     RbtInt iTrace = GetTrace();
 
@@ -367,8 +372,11 @@ void RbtPolarSF::Partition(
 }
 
 RbtDouble RbtPolarSF::PolarScore(
-    const RbtInteractionCenter* pIC1, const RbtInteractionCenterList& IC2List, const f1prms& Rprms,
-    const f1prms& A1prms, const f1prms& A2prms
+    const RbtInteractionCenter* pIC1,
+    const RbtInteractionCenterList& IC2List,
+    const f1prms& Rprms,
+    const f1prms& A1prms,
+    const f1prms& A2prms
 ) const {
     RbtDouble s(0.0);
     if (IC2List.empty()) {

@@ -81,7 +81,10 @@ void RbtCrdFileSource::Parse() throw(RbtError) {
                 RbtAtomPtr spAtom(new RbtAtom(
                     nAtomId,
                     0,  // Atomic number undefined (gets set in CheckAtomParams)
-                    strAtomName, strSubunitId, strSubunitName, strSegmentName
+                    strAtomName,
+                    strSubunitId,
+                    strSubunitName,
+                    strSegmentName
                 ));
 
                 // Now set the 3-D params we have

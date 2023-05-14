@@ -2,7 +2,11 @@ BasedOnStyle:    Google
 Language:        Cpp
 AccessModifierOffset: -3
 AlignAfterOpenBracket: BlockIndent
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortFunctionsOnASingleLine: true
+BinPackArguments: false
+BinPackParameters: false
 BreakBeforeBinaryOperators: NonAssignment
 BreakInheritanceList: AfterColon
 BreakConstructorInitializers: AfterColon
@@ -37,6 +41,7 @@ IndentPPDirectives: BeforeHash
 IndentRequires:  true
 IndentWidth:     4
 IndentWrappedFunctionNames: true
+PackConstructorInitializers: CurrentLine
 PointerAlignment: Middle
 ReferenceAlignment: Pointer
 SeparateDefinitionBlocks: Leave

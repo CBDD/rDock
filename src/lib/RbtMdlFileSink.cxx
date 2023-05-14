@@ -19,7 +19,8 @@ using std::setw;
 ////////////////////////////////////////
 // Constructors/destructors
 RbtMdlFileSink::RbtMdlFileSink(const RbtString& fileName, RbtModelPtr spModel):
-    RbtBaseMolecularFileSink(fileName, spModel), m_bFirstRender(true) {
+    RbtBaseMolecularFileSink(fileName, spModel),
+    m_bFirstRender(true) {
     // DM 27 Apr 1999 - default behaviour is for the first Render to overwrite any existing file
     // then subsequent Renders to append.
     SetAppend(false);

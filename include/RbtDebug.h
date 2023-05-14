@@ -51,7 +51,8 @@ extern RbtObjectCounterMap theObjectCounterMap;
     #define _RBTOBJECTCOUNTER_DUMP_(stream)                                       \
         (stream) << endl << "RBT OBJECT COUNTERS:" << endl << endl;               \
         for (RbtObjectCounterMapIter dumpIter = Rbt::theObjectCounterMap.begin(); \
-             dumpIter != Rbt::theObjectCounterMap.end(); dumpIter++) {            \
+             dumpIter != Rbt::theObjectCounterMap.end();                          \
+             dumpIter++) {                                                        \
             (stream) << (*dumpIter).first << ": " << (*dumpIter).second << endl;  \
         }
 

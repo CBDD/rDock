@@ -20,7 +20,8 @@ RbtString RbtRandLigTransform::_TORS_STEP("TORS_STEP");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtRandLigTransform::RbtRandLigTransform(const RbtString& strName):
-    RbtBaseUniMolTransform(_CT, strName), m_rand(Rbt::GetRbtRand()) {
+    RbtBaseUniMolTransform(_CT, strName),
+    m_rand(Rbt::GetRbtRand()) {
     // Add parameters
     AddParameter(_TORS_STEP, 180);
 #ifdef _DEBUG

@@ -69,10 +69,15 @@ class RbtAtom {
 
     // Constructor supplying all 2-D parameters
     RbtAtom(
-        RbtInt nAtomId, RbtInt nAtomicNo = 6, RbtString strAtomName = "C", RbtString strSubunitId = "1",
-        RbtString strSubunitName = "RES", RbtString strSegmentName = "SEG1",
+        RbtInt nAtomId,
+        RbtInt nAtomicNo = 6,
+        RbtString strAtomName = "C",
+        RbtString strSubunitId = "1",
+        RbtString strSubunitName = "RES",
+        RbtString strSegmentName = "SEG1",
         eHybridState eState = UNDEFINED,  // DM 8 Dec 1998 Changed from SP3 to UNDEFINED
-        RbtUInt nHydrogens = 0, RbtInt nFormalCharge = 0
+        RbtUInt nHydrogens = 0,
+        RbtInt nFormalCharge = 0
     );
 
     // Default destructor
@@ -755,16 +760,32 @@ class isCoordinationNumber_eq: public std::unary_function<RbtAtom*, RbtBool> {
  public:
     // Total coordination number
     explicit isCoordinationNumber_eq(RbtInt nn):
-        n(nn), eCNType(TOTAL), atNo(0), ffType(""), hybrid(RbtAtom::UNDEFINED) {}
+        n(nn),
+        eCNType(TOTAL),
+        atNo(0),
+        ffType(""),
+        hybrid(RbtAtom::UNDEFINED) {}
     // Atomic number coordination number
     explicit isCoordinationNumber_eq(RbtInt nn, RbtInt nAt):
-        n(nn), eCNType(ATNO), atNo(nAt), ffType(""), hybrid(RbtAtom::UNDEFINED) {}
+        n(nn),
+        eCNType(ATNO),
+        atNo(nAt),
+        ffType(""),
+        hybrid(RbtAtom::UNDEFINED) {}
     // Force field type coordination number
     explicit isCoordinationNumber_eq(RbtInt nn, const RbtString& strType):
-        n(nn), eCNType(FFTYPE), atNo(0), ffType(strType), hybrid(RbtAtom::UNDEFINED) {}
+        n(nn),
+        eCNType(FFTYPE),
+        atNo(0),
+        ffType(strType),
+        hybrid(RbtAtom::UNDEFINED) {}
     // Hybridisation state coordination number
     explicit isCoordinationNumber_eq(RbtInt nn, RbtAtom::eHybridState eState):
-        n(nn), eCNType(HYBRID), atNo(0), ffType(""), hybrid(eState) {}
+        n(nn),
+        eCNType(HYBRID),
+        atNo(0),
+        ffType(""),
+        hybrid(eState) {}
     RbtBool operator()(RbtAtom* pAtom) const {
         switch (eCNType) {
             case TOTAL:

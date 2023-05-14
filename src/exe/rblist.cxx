@@ -43,7 +43,8 @@ void ListAtoms(const RbtAtomList& atomList, RbtString strTitle, RbtInt nMaxToPri
     RbtInt nToPrint = std::min(nMaxToPrint, nSize);
     cout << endl << "1st " << nToPrint << " " << strTitle << " (out of " << nSize << ")" << endl;
     for (RbtAtomListConstIter iter = atomList.begin();
-         (iter != (atomList.begin() + nMaxToPrint)) && (iter != atomList.end()); iter++)
+         (iter != (atomList.begin() + nMaxToPrint)) && (iter != atomList.end());
+         iter++)
         cout << (**iter) << endl;
 }
 
@@ -52,7 +53,8 @@ void ListBonds(const RbtBondList& bondList, RbtString strTitle, RbtInt nMaxToPri
     RbtInt nToPrint = std::min(nMaxToPrint, nSize);
     cout << endl << "1st " << nToPrint << " " << strTitle << " (out of " << nSize << ")" << endl;
     for (RbtBondListConstIter iter = bondList.begin();
-         (iter != (bondList.begin() + nMaxToPrint)) && (iter != bondList.end()); iter++)
+         (iter != (bondList.begin() + nMaxToPrint)) && (iter != bondList.end());
+         iter++)
         cout << (**iter) << endl;
 }
 
