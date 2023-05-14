@@ -40,25 +40,19 @@ class RbtPopulation {
 
         // Gets the maximum size of the population as defined in the constructor.
         RbtInt GetMaxSize() const { return m_size; }
-
         // Gets the actual size of the population (may be < GetMaxSize())
         RbtInt GetActualSize() const { return m_pop.size(); }
-
         // Gets the best genome in the sorted population (element zero).
         RbtGenomePtr Best() const;
-
         // Gets the average raw score across entire population
         RbtDouble GetScoreMean() const { return m_scoreMean; }
-
         // Gets the raw score variance across entire population
         RbtDouble GetScoreVariance() const { return m_scoreVariance; }
-
         // Gets the vector of genomes in the population.
         const RbtGenomeList& GetGenomeList() const { return m_pop; }
 
         // Gets the scoring function used for ranking genomes
         RbtBaseSF* GetSF() const { return m_pSF; }
-
         // Sets the scoring function used for ranking genomes
         // Forces a recalculation of the genome scores, and the roulette wheel fitness values
         // SetSF should be called whenever the scoring function parameters have changed

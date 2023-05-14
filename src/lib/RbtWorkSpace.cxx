@@ -39,7 +39,6 @@ RbtWorkSpace::~RbtWorkSpace() { _RBTOBJECTCOUNTER_DESTR_("RbtWorkSpace"); }
 
 // Get/set workspace name
 RbtString RbtWorkSpace::GetName() const { return GetParameter(_NAME); }
-
 void RbtWorkSpace::SetName(const RbtString& strName) { SetParameter(_NAME, strName); }
 
 // Model handling
@@ -111,7 +110,6 @@ void RbtWorkSpace::RemoveModels(RbtUInt iModel) throw(RbtError) {
 // Model I/O
 // Get/set the molecular file sink (for outputting ligands)
 RbtMolecularFileSinkPtr RbtWorkSpace::GetSink() const { return m_spSink; }
-
 void RbtWorkSpace::SetSink(RbtMolecularFileSinkPtr spSink) { m_spSink = spSink; }
 
 // Saves models to file sink
@@ -121,9 +119,7 @@ void RbtWorkSpace::Save(RbtBool bSaveScores) {}
 
 // Get/set the history file sink
 RbtMolecularFileSinkPtr RbtWorkSpace::GetHistorySink() const { return m_spHisSink; }
-
 void RbtWorkSpace::SetHistorySink(RbtMolecularFileSinkPtr spHisSink) { m_spHisSink = spHisSink; }
-
 // Saves models to file sink
 // Base workspace does nothing
 // It is up to subclasses to decide what action to take
@@ -132,7 +128,6 @@ void RbtWorkSpace::SaveHistory(RbtBool bSaveScores) {}
 // Scoring function handling
 // SetSF automatically registers the scoring function with the workspace
 RbtBaseSF* RbtWorkSpace::GetSF() const { return m_SF; }
-
 void RbtWorkSpace::SetSF(RbtBaseSF* pSF) {
     if (m_SF) {
         m_SF->Unregister();
@@ -147,7 +142,6 @@ void RbtWorkSpace::SetSF(RbtBaseSF* pSF) {
 // Get/Set the transform
 // SetTransform automatically registers the transform with the workspace
 RbtBaseTransform* RbtWorkSpace::GetTransform() const { return m_transform; }
-
 void RbtWorkSpace::SetTransform(RbtBaseTransform* pTransform) {
     if (m_transform) {
         m_transform->Unregister();

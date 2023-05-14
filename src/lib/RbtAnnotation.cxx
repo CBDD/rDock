@@ -26,11 +26,8 @@ RbtAnnotation::~RbtAnnotation() {}
 ////////////////
 // Get
 const RbtAtom* RbtAnnotation::GetAtom1Ptr() const { return m_pAtom1; }
-
 const RbtAtom* RbtAnnotation::GetAtom2Ptr() const { return m_pAtom2; }
-
 RbtDouble RbtAnnotation::GetDistance() const { return m_dist; }
-
 RbtDouble RbtAnnotation::GetScore() const { return m_score; }
 
 // Get the fully qualified (FQ) residue name for atom 2 (target atom)
@@ -40,11 +37,8 @@ RbtString RbtAnnotation::GetFQResName() const {
 
 // Set
 void RbtAnnotation::SetAtom1Ptr(const RbtAtom* pAt1) { m_pAtom1 = pAt1; }
-
 void RbtAnnotation::SetAtom2Ptr(const RbtAtom* pAt2) { m_pAtom2 = pAt2; }
-
 void RbtAnnotation::SetDistance(RbtDouble d) { m_dist = d; }
-
 void RbtAnnotation::SetScore(RbtDouble s) { m_score = s; }
 
 // Render annotation into string in rDock Viewer format

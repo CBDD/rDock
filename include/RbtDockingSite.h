@@ -33,7 +33,6 @@ class RbtDockingSite {
             public:
                 explicit isAtomInRange(RbtRealGrid* pGrid, RbtDouble minDist, RbtDouble maxDist):
                     m_pGrid(pGrid), m_minDist(minDist), m_maxDist(maxDist) {}
-
                 RbtBool operator()(RbtAtom* pAtom) const;
 
             private:
@@ -64,17 +63,11 @@ class RbtDockingSite {
         void Write(ostream& ostr);  // Writes docking site to binary stream
 
         RbtRealGridPtr GetGrid();
-
         RbtDouble GetBorder() const { return m_border; }
-
         RbtCoord GetMinCoord() const { return m_minCoord; }
-
         RbtCoord GetMaxCoord() const { return m_maxCoord; }
-
         RbtCavityList GetCavityList() const { return m_cavityList; }
-
         RbtInt GetNumCavities() const { return m_cavityList.size(); }
-
         RbtDouble GetVolume() const;  // returns total volume of all cavities in A^3
 
         // Returns the combined coord lists of all the cavities

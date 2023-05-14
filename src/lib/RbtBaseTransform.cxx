@@ -62,7 +62,6 @@ void RbtBaseTransform::Go() {
 void RbtBaseTransform::Add(RbtBaseTransform*) throw(RbtError) {
     throw RbtInvalidRequest(_WHERE_, "Add() invalid for non-aggregate transforms");
 }
-
 void RbtBaseTransform::Remove(RbtBaseTransform*) throw(RbtError) {
     throw RbtInvalidRequest(_WHERE_, "Remove() invalid for non-aggregate transforms");
 }
@@ -70,9 +69,7 @@ void RbtBaseTransform::Remove(RbtBaseTransform*) throw(RbtError) {
 RbtBaseTransform* RbtBaseTransform::GetTransform(RbtUInt i) const throw(RbtError) {
     throw RbtInvalidRequest(_WHERE_, "GetTransform() invalid for non-aggregate transforms");
 }
-
 RbtBool RbtBaseTransform::isAgg() const { return false; }
-
 RbtUInt RbtBaseTransform::GetNumTransforms() const { return 0; }
 
 // Aggregate handling (concrete) methods
@@ -92,9 +89,7 @@ void RbtBaseTransform::Orphan() {
 // Transforms can store up a list of requests to send to the workspace
 // scoring function each time Go() is executed
 void RbtBaseTransform::AddSFRequest(RbtRequestPtr spRequest) { m_SFRequests.push_back(spRequest); }
-
 void RbtBaseTransform::ClearSFRequests() { m_SFRequests.clear(); }
-
 void RbtBaseTransform::SendSFRequests() {
     // Get the current scoring function from the workspace
     RbtWorkSpace* pWorkSpace = GetWorkSpace();

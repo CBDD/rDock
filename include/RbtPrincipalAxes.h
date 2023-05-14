@@ -31,7 +31,6 @@ class RbtPrincipalAxes {
             moment1(1.0),
             moment2(1.0),
             moment3(1.0) {}
-
         RbtCoord com;
         RbtVector axis1;
         RbtVector axis2;

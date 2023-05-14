@@ -41,9 +41,7 @@ class RbtConstraint {
         friend ostream& operator<<(ostream&, const RbtConstraint&);
 
         RbtCoord GetCoords() const { return coord; };
-
         RbtDouble GetTolerance() const { return tolerance; };
-
         virtual void AddAtomList(RbtModelPtr, RbtBool bCheck = true) = 0;
         RbtDouble Score() const;
 

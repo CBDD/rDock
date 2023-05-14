@@ -23,22 +23,15 @@
 class RbtInteractionCenter {
     public:
         enum eLP { NONE, PLANE, LONEPAIR };
-
         RbtInteractionCenter(RbtAtom* pAtom1 = NULL, RbtAtom* pAtom2 = NULL, RbtAtom* pAtom3 = NULL, eLP LP = NONE):
             m_pAtom1(pAtom1), m_pAtom2(pAtom2), m_pAtom3(pAtom3), m_LP(LP) {
             _RBTOBJECTCOUNTER_CONSTR_("RbtInteractionCenter");
         }
-
         ~RbtInteractionCenter() { _RBTOBJECTCOUNTER_DESTR_("RbtInteractionCenter"); }
-
         RbtAtom* GetAtom1Ptr() const { return m_pAtom1; }
-
         RbtAtom* GetAtom2Ptr() const { return m_pAtom2; }
-
         RbtAtom* GetAtom3Ptr() const { return m_pAtom3; }
-
         eLP LP() const { return m_LP; }
-
         // Returns list of constituent atoms
         //(deconvolutes pseudoatoms into their constituent RbtAtom* lists)
         RbtAtomRList GetAtomList() const;
@@ -67,12 +60,10 @@ class InteractionCenterCmp {
             return pIC1 < pIC2;
         }
 };
-
 // Is interaction center selected ?
 class isInteractionCenterSelected: public std::unary_function<RbtInteractionCenter*, RbtBool> {
     public:
         explicit isInteractionCenterSelected() {}
-
         RbtBool operator()(const RbtInteractionCenter* pIC) const { return pIC->isSelected(); }
 };
 
@@ -85,7 +76,6 @@ class isInteractionD_lt: public std::unary_function<RbtInteractionCenter*, RbtBo
     public:
         explicit isInteractionD_lt(const RbtInteractionCenter* pIC1, RbtDouble dd):
             d_sq(dd * dd), a(pIC1->GetAtom1Ptr()) {}
-
         RbtBool operator()(const RbtInteractionCenter* pIC2) const {
             return Rbt::Length2(pIC2->GetAtom1Ptr()->GetCoords(), a->GetCoords()) < d_sq;
         }
@@ -97,7 +87,6 @@ class SelectInteractionCenter {
 
     public:
         explicit SelectInteractionCenter(RbtBool bb): b(bb) {}
-
         void operator()(RbtInteractionCenter* pIC);
 };
 }  // namespace Rbt

@@ -36,26 +36,17 @@ class RbtVariant {
         ////////////////////////////////////////
         // Constructors/destructors
         RbtVariant(): m_d(0.0) {}
-
         RbtVariant(RbtInt i) { SetDouble(i); }
-
         RbtVariant(RbtDouble d) { SetDouble(d); }
-
         RbtVariant(const RbtString& s) { SetString(s); }
-
         RbtVariant(const char* c) { SetString(RbtString(c)); }
-
         RbtVariant(const RbtStringList& sl) { SetStringList(sl); }
-
         RbtVariant(RbtBool b) { SetBool(b); }
-
         RbtVariant(const RbtCoord& c) { SetCoord(c); }
-
         // Renders a vector of doubles into comma-separated strings of maxCols in length
         RbtVariant(const RbtDoubleList& dl, RbtInt maxCols, RbtInt precision) {
             SetDoubleList(dl, maxCols, precision);
         }
-
         virtual ~RbtVariant() { m_sl.clear(); }
 
         ///////////////////////////////////////////////
@@ -87,32 +78,26 @@ class RbtVariant {
             SetDouble(i);
             return *this;
         }
-
         RbtVariant& operator=(RbtDouble d) {
             SetDouble(d);
             return *this;
         }
-
         RbtVariant& operator=(const RbtString& s) {
             SetString(s);
             return *this;
         }
-
         RbtVariant& operator=(const char* c) {
             SetString(RbtString(c));
             return *this;
         }
-
         RbtVariant& operator=(const RbtStringList& sl) {
             SetStringList(sl);
             return *this;
         }
-
         RbtVariant& operator=(RbtBool b) {
             SetBool(b);
             return *this;
         }
-
         RbtVariant& operator=(const RbtCoord& c) {
             SetCoord(c);
             return *this;
@@ -125,15 +110,10 @@ class RbtVariant {
 
         // Conversion operators to convert back to basic types
         operator RbtInt() const { return int(Double()); }
-
         operator RbtDouble() const { return Double(); }
-
         operator RbtString() const { return String(); }
-
         operator RbtStringList() const { return StringList(); }
-
         operator RbtBool() const { return Bool(); }
-
         operator RbtCoord() const { return Coord(); }
 
         ////////////////////////////////////////
@@ -142,13 +122,9 @@ class RbtVariant {
 
         // Get methods
         RbtDouble Double() const { return m_d; }
-
         RbtString String() const { return m_sl.empty() ? RbtString() : m_sl.front(); }
-
         RbtStringList StringList() const { return m_sl; }
-
         RbtBool Bool() const { return m_d != 0.0 || String() == _TRUE; }
-
         RbtCoord Coord() const {
             RbtCoord c;
             if (m_sl.empty())
@@ -162,7 +138,6 @@ class RbtVariant {
         }
 
         RbtUInt Size() const { return m_sl.size(); }
-
         RbtBool isEmpty() const { return m_sl.empty(); }
 
     protected:

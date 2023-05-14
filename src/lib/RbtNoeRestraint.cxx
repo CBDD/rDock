@@ -52,7 +52,6 @@ RbtNoeEndAtoms::RbtNoeEndAtoms(const RbtNoeEndNames& n, const RbtAtomList& atomL
     atoms = Rbt::GetMatchingAtomList(atomList, n.names);
     type = n.type;
 }
-
 RbtBool RbtNoeEndAtoms::isOK() const { return (!atoms.empty() && (type != Rbt::NOE_UNDEFINED)); }
 
 // Insertion operator for the above

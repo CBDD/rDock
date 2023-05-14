@@ -30,11 +30,8 @@ class RbtPdbFileSource: public RbtBaseMolecularFileSource {
         ////////////////////////////////////////
         // Override public methods from RbtBaseMolecularDataSource
         virtual RbtBool isTitleListSupported() { return true; };
-
         virtual RbtBool isAtomListSupported() { return true; };
-
         virtual RbtBool isCoordinatesSupported() { return true; };
-
         virtual RbtBool isBondListSupported() { return false; };
 
     protected:

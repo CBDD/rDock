@@ -36,7 +36,6 @@ class RbtCommands {
         // Constructors
         ///////////////////
         RbtCommands(const RbtCommands& c): name(c.name), nargs(c.nargs){};
-
         inline RbtCommands(RbtInt ncomm) {
             name = RbtCommName(ncomm);
             switch (name) {
@@ -68,21 +67,13 @@ class RbtCommands {
         inline RbtInt GetNArgs() const { return nargs; };
 
         inline RbtBool IsAdd() const { return (name == ADD); };
-
         inline RbtBool IsSub() const { return (name == SUB); };
-
         inline RbtBool IsMul() const { return (name == MUL); };
-
         inline RbtBool IsDiv() const { return (name == DIV); };
-
         inline RbtBool IsIf() const { return (name == IF); };
-
         inline RbtBool IsLog() const { return (name == LOG); };
-
         inline RbtBool IsExp() const { return (name == EXP); };
-
         inline RbtBool IsRCte() const { return (name == RCTE); };
-
         inline RbtBool IsAnd() const { return (name == AND); };
 
         ///////////////////

@@ -77,7 +77,6 @@ RbtMOEGridPoint::RbtMOEGridPoint(RbtCoord& a_coord, double a_value) {
     coords.push_back(Rbt::ExtractZCoord(a_coord));
     value = a_value;
 }
-
 //////////////////////////////////////////////////////////////////////////////////////
 // RbtMOEGridShape
 // SVL grid shape vector related methods
@@ -156,7 +155,6 @@ void RbtMOEGrid::GetDockingSiteExtents(RbtString& a_strPrmFile) {
     c_min = dSite->GetMinCoord();
     c_max = dSite->GetMaxCoord();
 }
-
 // reads all the .prm files and calculates the common extents for all
 // cavities to get a grid that includes them all
 void RbtMOEGrid::CalculateCommonExtents(vector<RbtString> strPrmFiles) {

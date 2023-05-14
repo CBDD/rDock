@@ -121,9 +121,9 @@ RbtBool Rbt::ToSpin(RbtBondPtr spBond, RbtAtomList& atomList, RbtBondList& bondL
 #ifdef _DEBUG
                 //	cout << "ToSpin: Checking bond " << spBnd->GetBondId() << " to atom " << spA2->GetAtomId() << endl;
 #endif  //_DEBUG
-        // If we've got back to atom 1 of the bond passed into ToSpin, then the bond must be in a ring
-        // so set the cyclic flag but don't consider this atom any further (we don't want to set the selection
-        // flag otherwise we'd end up selecting the entire molecule).
+                // If we've got back to atom 1 of the bond passed into ToSpin, then the bond must be in a ring
+                // so set the cyclic flag but don't consider this atom any further (we don't want to set the selection
+                // flag otherwise we'd end up selecting the entire molecule).
                 if (spA2 == spAtom1) {
                     bIsCyclic = true;
 #ifdef _DEBUG

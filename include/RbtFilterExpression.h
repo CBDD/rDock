@@ -34,9 +34,7 @@ class RbtFilterExpression {
         // Destructor
         //////////////////
         virtual ~RbtFilterExpression();
-
         RbtReturnType GetValue() { return value; };
-
         void SetValue(RbtReturnType v) { value = v; };
 
         ////////////////////
@@ -60,13 +58,9 @@ class FilterVbleExp: public RbtFilterExpression {
         FilterVbleExp(const RbtVble&);
         virtual ~FilterVbleExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() { cout << "v" << vble.GetName() << " "; };
-
         RbtInt GetNOps() { return 0; }
-
         const RbtVble& GetVble() const { return vble; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) { throw RbtError(_WHERE_, "Vble Expressions don't have operands"); }
 
     private:
@@ -78,14 +72,11 @@ class FilterLogExp: public RbtFilterExpression {
         FilterLogExp(RbtFilterExpressionPtr);
         virtual ~FilterLogExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "log ";
             operand->Print();
         };
-
         virtual RbtInt GetNOps() { return 1; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0)
                 return operand;
@@ -102,14 +93,11 @@ class FilterExpExp: public RbtFilterExpression {
         FilterExpExp(RbtFilterExpressionPtr);
         virtual ~FilterExpExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "exp ";
             operand->Print();
         };
-
         virtual RbtInt GetNOps() { return 1; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0)
                 return operand;
@@ -126,15 +114,12 @@ class FilterAddExp: public RbtFilterExpression {
         FilterAddExp(RbtFilterExpressionPtr, RbtFilterExpressionPtr);
         virtual ~FilterAddExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "add ";
             operand1->Print();
             operand2->Print();
         };
-
         virtual RbtInt GetNOps() { return 2; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0) return operand1;
             if (i == 1)
@@ -152,15 +137,12 @@ class FilterSubExp: public RbtFilterExpression {
         FilterSubExp(RbtFilterExpressionPtr, RbtFilterExpressionPtr);
         virtual ~FilterSubExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "sub ";
             operand1->Print();
             operand2->Print();
         };
-
         virtual RbtInt GetNOps() { return 2; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0) return operand1;
             if (i == 1)
@@ -178,15 +160,12 @@ class FilterMulExp: public RbtFilterExpression {
         FilterMulExp(RbtFilterExpressionPtr, RbtFilterExpressionPtr);
         virtual ~FilterMulExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "mul ";
             operand1->Print();
             operand2->Print();
         };
-
         virtual RbtInt GetNOps() { return 2; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0) return operand1;
             if (i == 1)
@@ -204,15 +183,12 @@ class FilterDivExp: public RbtFilterExpression {
         FilterDivExp(RbtFilterExpressionPtr, RbtFilterExpressionPtr);
         virtual ~FilterDivExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "div ";
             operand1->Print();
             operand2->Print();
         };
-
         virtual RbtInt GetNOps() { return 2; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0) return operand1;
             if (i == 1)
@@ -230,15 +206,12 @@ class FilterAndExp: public RbtFilterExpression {
         FilterAndExp(RbtFilterExpressionPtr, RbtFilterExpressionPtr);
         virtual ~FilterAndExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "and ";
             operand1->Print();
             operand2->Print();
         };
-
         virtual RbtInt GetNOps() { return 2; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0) return operand1;
             if (i == 1)
@@ -256,16 +229,13 @@ class FilterIfExp: public RbtFilterExpression {
         FilterIfExp(RbtFilterExpressionPtr, RbtFilterExpressionPtr, RbtFilterExpressionPtr);
         virtual ~FilterIfExp();
         void Accept(RbtFilterExpressionVisitor& visitor);
-
         void Print() {
             cout << "if ";
             operand1->Print();
             operand2->Print();
             operand3->Print();
         };
-
         virtual RbtInt GetNOps() { return 3; }
-
         RbtFilterExpressionPtr GetOp(RbtInt i) {
             if (i == 0) return operand1;
             if (i == 1) return operand2;

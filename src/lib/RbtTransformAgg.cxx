@@ -75,9 +75,7 @@ void RbtTransformAgg::Remove(RbtBaseTransform* pTransform) throw(RbtError) {
 }
 
 RbtBool RbtTransformAgg::isAgg() const { return true; }
-
 RbtUInt RbtTransformAgg::GetNumTransforms() const { return m_transforms.size(); }
-
 RbtBaseTransform* RbtTransformAgg::GetTransform(RbtUInt iTransform) const throw(RbtError) {
     if (iTransform >= m_transforms.size()) {
         throw RbtBadArgument(_WHERE_, "GetTransform(): iTransform out of range");

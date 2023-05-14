@@ -72,7 +72,6 @@ class RbtAromIdxSF: public RbtBaseInterSF, public RbtBaseIdxSF, public RbtAnnota
         };
 
         inline f1prms GetRprms() const { return f1prms(m_R12, m_DR12Min, m_DR12Max); }
-
         inline f1prms GetAprms() const { return f1prms(0.0, m_DAMin, m_DAMax); }
 
         // Generic scoring function primitive (deviation from ideal geometry)

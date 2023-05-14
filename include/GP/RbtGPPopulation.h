@@ -28,7 +28,6 @@ class RbtGPPopulation {
         // Constructors
         ///////////////////
         RbtGPPopulation(RbtInt, RbtInt, RbtGPFitnessFunctionPtr, RbtReturnTypeArray&, RbtReturnTypeArray&);
-
         void SetTrainingSets(RbtReturnTypeArray& it, RbtReturnTypeArray sf) {
             ittrain = it;
             sfttrain = sf;
@@ -80,7 +79,6 @@ class RbtGPPopulation {
         RbtGPFitnessFunctionPtr ff;
         RbtReturnTypeArray ittrain, sfttrain;
 };
-
 typedef SmartPtr<RbtGPPopulation> RbtGPPopulationPtr;
 typedef vector<RbtGPPopulationPtr> RbtGPPopulationList;
 typedef RbtGPPopulationList::iterator RbtGPPopulationListIter;

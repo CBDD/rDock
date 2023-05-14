@@ -37,9 +37,7 @@ void RbtDihedralTargetSF::SetupReceptor() {
         m_dihList = CreateDihedralList(GetReceptor()->GetFlexBonds());
     }
 }
-
 void RbtDihedralTargetSF::SetupLigand() {}
-
 void RbtDihedralTargetSF::SetupScore() {}
 
 RbtDouble RbtDihedralTargetSF::RawScore() const {

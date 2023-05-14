@@ -22,7 +22,6 @@
 class RbtElementData {
     public:
         RbtElementData(): atomicNo(0), element(""), minVal(0), maxVal(0), commonVal(0), mass(0.0), vdwRadius(0.0) {}
-
         RbtInt atomicNo;
         RbtString element;
         RbtInt minVal;

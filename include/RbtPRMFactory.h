@@ -53,11 +53,8 @@ class RbtPRMFactory {
         RbtPRMFactory(RbtParameterFileSource* pParamSource, RbtDockingSite* pDS);
 
         RbtInt GetTrace() const { return m_iTrace; }
-
         void SetTrace(RbtInt iTrace) { m_iTrace = iTrace; }
-
         RbtDockingSite* GetDockingSite() const { return m_pDS; }
-
         void SetDockingSite(RbtDockingSite* pDS) { m_pDS = pDS; }
 
         RbtModelPtr CreateReceptor() throw(RbtError);

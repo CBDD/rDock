@@ -111,9 +111,7 @@ void RbtSFAgg::Remove(RbtBaseSF* pSF) throw(RbtError) {
 }
 
 RbtBool RbtSFAgg::isAgg() const { return true; }
-
 RbtUInt RbtSFAgg::GetNumSF() const { return m_sf.size(); }
-
 RbtBaseSF* RbtSFAgg::GetSF(RbtUInt iSF) const throw(RbtError) {
     if (iSF >= m_sf.size()) {
         throw RbtBadArgument(_WHERE_, "GetSF(): iSF out of range");

@@ -40,7 +40,6 @@ RbtString ConvertNoeRestraintTypeToString(const eNoeType type);
 class RbtNoeEndNames {
     public:
         RbtNoeEndNames() {}
-
         RbtBool isOK() const;
         // Public data
         RbtStringList names;
@@ -56,7 +55,6 @@ class RbtNoeEndAtoms {
     public:
         // Default constructor
         RbtNoeEndAtoms() {}
-
         // Constructor accepting an RbtNoeEndNames and an atom list to match against
         RbtNoeEndAtoms(const RbtNoeEndNames& n, const RbtAtomList& atomList);
         RbtBool isOK() const;
@@ -74,7 +72,6 @@ ostream& operator<<(ostream& s, const RbtNoeEndAtoms& n);
 class RbtNoeRestraintNames {
     public:
         RbtNoeRestraintNames(): maxDist(5.0) {}
-
         RbtBool isOK() const;
         // Public data
         RbtNoeEndNames from;
@@ -91,7 +88,6 @@ class RbtNoeRestraintAtoms {
     public:
         // Default constructor
         RbtNoeRestraintAtoms(): maxDist(5.0) {}
-
         // Constructor accepting an RbtNoeRestraintNames and an atom list to match against
         RbtNoeRestraintAtoms(const RbtNoeRestraintNames& n, const RbtAtomList& atomList);
         RbtBool isOK() const;      // true if at least one atom at each end of the NOE and NOE type is not undefined
@@ -112,7 +108,6 @@ ostream& operator<<(ostream& s, const RbtNoeRestraintAtoms& noe);
 class RbtStdRestraintNames {
     public:
         RbtStdRestraintNames(): maxDist(5.0) {}
-
         RbtBool isOK() const;
         // Public data
         RbtNoeEndNames from;
@@ -128,7 +123,6 @@ class RbtStdRestraintAtoms {
     public:
         // Default constructor
         RbtStdRestraintAtoms(): maxDist(5.0) {}
-
         // Constructor accepting an RbtStdRestraintNames and an atom list to match against
         RbtStdRestraintAtoms(const RbtStdRestraintNames& n, const RbtAtomList& atomList);
         RbtBool isOK() const;      // true if at least one atom in the definition and type is not undefined

@@ -64,7 +64,6 @@ RbtNonBondedGrid& RbtNonBondedGrid::operator=(const RbtNonBondedGrid& grid) {
     }
     return *this;
 }
-
 // Copy assignment taking base class argument
 RbtNonBondedGrid& RbtNonBondedGrid::operator=(const RbtBaseGrid& grid) {
     if (this != &grid) {

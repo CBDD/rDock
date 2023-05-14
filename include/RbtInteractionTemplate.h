@@ -21,16 +21,13 @@ class RbtInteractionNode {
 
     public:
         RbtInteractionNode() { _RBTOBJECTCOUNTER_CONSTR_("RbtInteractionNode"); };
-
         RbtInteractionNode(T aProperty) {
             _RBTOBJECTCOUNTER_CONSTR_("RbtInteractionNode");
             property = aProperty;
         };
-
         ~RbtInteractionNode() { _RBTOBJECTCOUNTER_DESTR_("RbtInteractionNode"); };
 
         T GetProperty() const { return property; };
-
         void SetProperty(T aProperty) { property = aProperty; };
 };
 
@@ -45,7 +42,6 @@ class RbtInteractionNodeListMapIter: public RbtInteractionNodeListMap<T>::iterat
 
 template <typename T>
 class RbtInteractionNodeListMapConstIter: public RbtInteractionNodeListMap<T>::const_iterator {};
-
 // Most of the stuff is copied shamelessly from RbtInteractionGrid.[cxx,h]
 template <class T>
 class RbtInteractionGridTemplate: public RbtBaseGrid {
@@ -108,12 +104,10 @@ class RbtInteractionGridTemplate: public RbtBaseGrid {
             RbtBaseGrid::Print(ostr);
             OwnPrint(ostr);
         };
-
         virtual void Write(ostream& ostr) const {  // Binary output (serialisation)
             RbtBaseGrid::Write(ostr);
             OwnWrite(ostr);
         };
-
         virtual void Read(istream& istr) {  // Binary input, replaces existing grid
             ClearInteractionLists();
             RbtBaseGrid::Read(istr);
@@ -160,9 +154,7 @@ class RbtInteractionGridTemplate: public RbtBaseGrid {
             ostr << endl << "Class\t" << _CT << endl;
             ostr << "No. of entries in the map: " << m_intnMap.size() << endl;
         };
-
         void OwnWrite(ostream& ostr) const {};
-
         void OwnRead(istream& istr) throw(RbtError) { CreateMap(); };
 
     private:

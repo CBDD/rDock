@@ -23,7 +23,6 @@ class RbtSolventFlexData: public RbtLigandFlexData {
         // Nominal step size for mutating the occupancy variable
         static const RbtString& _OCCUPANCY_STEP;
         RbtSolventFlexData(RbtDockingSite* pDockSite);
-
         virtual void Accept(RbtFlexDataVisitor& v) { v.VisitSolventFlexData(this); }
 
     private:

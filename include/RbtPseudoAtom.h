@@ -40,7 +40,6 @@ class RbtPseudoAtom: public RbtAtom {
 
         // Derived class methods for returning the constituent atom list
         RbtUInt GetNumAtoms() const { return m_atomList.size(); }
-
         RbtAtomList GetAtomList() const { return m_atomList; }
 
         ///////////////////////////////////////////////

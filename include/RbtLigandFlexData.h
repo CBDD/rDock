@@ -39,7 +39,6 @@ class RbtLigandFlexData: public RbtFlexData {
         //(for tethered dihedrals only)
         static const RbtString& _MAX_DIHEDRAL;
         RbtLigandFlexData(RbtDockingSite* pDockSite);
-
         virtual void Accept(RbtFlexDataVisitor& v) { v.VisitLigandFlexData(this); }
 
     private:

@@ -26,7 +26,6 @@ class RbtLigandError: public RbtError {
     public:
         RbtLigandError(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
             RbtError(IDS_LIGAND_ERROR, strFile, nLine, strMessage) {}
-
         // Protected constructor to allow derived ligand error classes to set error name
     protected:
         RbtLigandError(const RbtString& strName, const RbtString& strFile, RbtInt nLine,

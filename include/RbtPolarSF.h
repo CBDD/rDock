@@ -78,9 +78,7 @@ class RbtPolarSF: public virtual RbtBaseSF, public virtual RbtAnnotationHandler 
         };
 
         inline f1prms GetRprms() const { return f1prms(0.0, m_DR12Min, m_DR12Max); }
-
         inline f1prms GetA1prms() const { return f1prms(m_A1, m_DA1Min, m_DA1Max); }
-
         inline f1prms GetA2prms() const { return f1prms(m_A2, m_DA2Min, m_DA2Max); }
 
         RbtDouble PolarScore(const RbtInteractionCenter* intn, const RbtInteractionCenterList& intnList,

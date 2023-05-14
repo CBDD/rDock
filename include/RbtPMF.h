@@ -15,7 +15,6 @@
 
 // #include <vector>		// STL vector
 #include "RbtTypes.h"
-
 /**
  * Basic data type to represent distance-value pairs of the PMF function
  */

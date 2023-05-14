@@ -15,13 +15,11 @@
 #include "RbtDebug.h"
 
 RbtString RbtParser::_CT("RbtParser");
-
 RbtParser::RbtParser(const RbtParser& p) { _RBTOBJECTCOUNTER_COPYCONSTR_(_CT); }
 
 RbtParser::RbtParser() { _RBTOBJECTCOUNTER_CONSTR_(_CT); }
 
 RbtParser::~RbtParser() { _RBTOBJECTCOUNTER_DESTR_(_CT); }
-
 RbtFilterExpressionPtr RbtParser::Parse(RbtTokenIterPtr ti, RbtContextPtr contextp) {
     RbtTokenPtr t = ti->Current();
     ti->Next(contextp);

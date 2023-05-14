@@ -126,7 +126,6 @@ class RbtVdwSF: public virtual RbtBaseSF, public virtual RbtAnnotationHandler {
 
             public:
                 explicit isD_lt(RbtAtom* aa, RbtDouble dd): d_sq(dd * dd), a(aa) {}
-
                 RbtBool operator()(RbtAtom* aa) const { return Rbt::Length2(aa->GetCoords(), a->GetCoords()) < d_sq; }
         };
 

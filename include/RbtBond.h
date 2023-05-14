@@ -51,36 +51,28 @@ class RbtBond {
 
         // Bond ID
         RbtInt GetBondId() const { return m_nBondId; }
-
         void SetBondId(const RbtInt nBondId) { m_nBondId = nBondId; }
 
         // Atom pointers
         RbtAtomPtr GetAtom1Ptr() const { return m_spAtom1; }
-
         RbtAtomPtr GetAtom2Ptr() const { return m_spAtom2; }
-
         void SetAtom1Ptr(RbtAtomPtr& spAtom1) { m_spAtom1 = spAtom1; }
-
         void SetAtom2Ptr(RbtAtomPtr& spAtom2) { m_spAtom2 = spAtom2; }
 
         // Formal Bond order
         RbtInt GetFormalBondOrder() const { return m_nFormalBondOrder; }
-
         void SetFormalBondOrder(const RbtInt nFormalBondOrder) { m_nFormalBondOrder = nFormalBondOrder; }
 
         // Partial Bond order
         RbtDouble GetPartialBondOrder() const { return m_dPartialBondOrder; }
-
         void SetPartialBondOrder(const RbtDouble dPartialBondOrder) { m_dPartialBondOrder = dPartialBondOrder; }
 
         // CyclicFlag - flag to indicate bond is in a ring (set by RbtModel::FindRing)
         RbtBool GetCyclicFlag() const { return m_bCyclic; }
-
         void SetCyclicFlag(RbtBool bCyclic = true) { m_bCyclic = bCyclic; }
 
         // SelectionFlag - general purpose flag can be set/cleared by various search algorithms (e.g. FindRings)
         RbtBool GetSelectionFlag() const { return m_bSelected; }
-
         void SetSelectionFlag(RbtBool bSelected = true) { m_bSelected = bSelected; }
 
         ////////////////////////////////////////
@@ -140,7 +132,6 @@ typedef std::binary_function<RbtBond*, RbtBond*, RbtBool> RbtBondBinaryPredicate
 class isBondSelected: public RbtBondUnaryPredicate {
     public:
         explicit isBondSelected() {}
-
         RbtBool operator()(RbtBond* pBond) const { return pBond->GetSelectionFlag(); }
 };
 
@@ -148,7 +139,6 @@ class isBondSelected: public RbtBondUnaryPredicate {
 class isBondCyclic: public RbtBondUnaryPredicate {
     public:
         explicit isBondCyclic() {}
-
         RbtBool operator()(RbtBond* pBond) const { return pBond->GetCyclicFlag(); }
 };
 
@@ -156,7 +146,6 @@ class isBondCyclic: public RbtBondUnaryPredicate {
 class isBondRotatable: public RbtBondUnaryPredicate {
     public:
         explicit isBondRotatable() {}
-
         RbtBool operator()(RbtBond*) const;
 };
 
@@ -164,7 +153,6 @@ class isBondRotatable: public RbtBondUnaryPredicate {
 class isBondToNH3: public RbtBondUnaryPredicate {
     public:
         explicit isBondToNH3() {}
-
         RbtBool operator()(RbtBond*) const;
 };
 
@@ -172,7 +160,6 @@ class isBondToNH3: public RbtBondUnaryPredicate {
 class isBondToOH: public RbtBondUnaryPredicate {
     public:
         explicit isBondToOH() {}
-
         RbtBool operator()(RbtBond* pBond) const;
 };
 
@@ -191,7 +178,6 @@ class isBondPtr_eq: public RbtBondUnaryPredicate {
 
     public:
         explicit isBondPtr_eq(RbtBond* pp): p(pp) {}
-
         RbtBool operator()(RbtBond* pBond) const { return pBond == p; }
 };
 
@@ -203,7 +189,6 @@ class isBond_eq: public RbtBondUnaryPredicate {
 
     public:
         explicit isBond_eq(RbtBond* pp): p(pp) {}
-
         RbtBool operator()(RbtBond* pBond) const {
             return ((pBond->GetBondId() == p->GetBondId()) && (bIsAtomEqual(pBond->GetAtom1Ptr(), p->GetAtom1Ptr()))
                     && (bIsAtomEqual(pBond->GetAtom2Ptr(), p->GetAtom2Ptr())));
@@ -215,7 +200,6 @@ class isBond_eq: public RbtBondUnaryPredicate {
 class isBondAmide: public RbtBondUnaryPredicate {
     public:
         explicit isBondAmide() {}
-
         RbtBool operator()(RbtBond*) const;
 };
 
@@ -245,7 +229,6 @@ RbtBondListIter FindBond(RbtBondList& bondList, const Predicate& pred) {
 
 // Selected bonds
 void SetBondSelectionFlags(RbtBondList& bondList, RbtBool bSelected = true);
-
 inline RbtUInt GetNumSelectedBonds(const RbtBondList& bondList) {
     return GetNumBonds(bondList, Rbt::isBondSelected());
 }
@@ -256,9 +239,7 @@ inline RbtBondList GetSelectedBondList(const RbtBondList& bondList) {
 
 // Cyclic bonds
 void SetBondCyclicFlags(RbtBondList& bondList, RbtBool bCyclic = true);
-
 inline RbtUInt GetNumCyclicBonds(const RbtBondList& bondList) { return GetNumBonds(bondList, Rbt::isBondCyclic()); }
-
 inline RbtBondList GetCyclicBondList(const RbtBondList& bondList) {
     return GetBondList(bondList, Rbt::isBondCyclic());
 }
@@ -267,7 +248,6 @@ inline RbtBondList GetCyclicBondList(const RbtBondList& bondList) {
 inline RbtUInt GetNumRotatableBonds(const RbtBondList& bondList) {
     return GetNumBonds(bondList, Rbt::isBondRotatable());
 }
-
 inline RbtBondList GetRotatableBondList(const RbtBondList& bondList) {
     return GetBondList(bondList, Rbt::isBondRotatable());
 }

@@ -49,9 +49,7 @@ void RbtMCStats::Accumulate(RbtDouble score, RbtBool bAccepted) {
 }
 
 RbtDouble RbtMCStats::Mean() const { return _total / _steps; }
-
 RbtDouble RbtMCStats::Variance() const { return _total2 / _steps - pow(Mean(), 2); }
-
 RbtDouble RbtMCStats::AccRate() const { return float(_accepted) / float(_steps); }
 
 // Static data member for class type

@@ -107,92 +107,73 @@ class RbtAtom {
 
         // AtomId
         RbtInt GetAtomId() const { return m_nAtomId; };
-
         void SetAtomId(const RbtInt nAtomId) { m_nAtomId = nAtomId; };
 
         // AtomicNo
         RbtInt GetAtomicNo() const { return m_nAtomicNo; };
-
         void SetAtomicNo(const RbtInt nAtomicNo) { m_nAtomicNo = nAtomicNo; };
 
         // AtomName
         RbtString GetAtomName() const { return m_strAtomName; };
-
         void SetAtomName(const RbtString strAtomName) { m_strAtomName = strAtomName; };
-
         RbtString GetFullAtomName() const;  // Returns composite of segment name, subunit id and name, and atom name
 
         // SubunitId
         RbtString GetSubunitId() const { return m_strSubunitId; }
-
         void SetSubunitId(const RbtString strSubunitId) { m_strSubunitId = strSubunitId; }
 
         // SubunitName
         RbtString GetSubunitName() const { return m_strSubunitName; }
-
         void SetSubunitName(const RbtString strSubunitName) { m_strSubunitName = strSubunitName; }
 
         // SegmentName
         RbtString GetSegmentName() const { return m_strSegmentName; }
-
         void SetSegmentName(const RbtString strSegmentName) { m_strSegmentName = strSegmentName; }
 
         // Hybridisation state
         eHybridState GetHybridState() const { return m_eState; }
-
         void SetHybridState(const eHybridState eState) { m_eState = eState; }
 
         // Attached hydrogens
         RbtUInt GetNumImplicitHydrogens() const { return m_nHydrogens; }
-
         void SetNumImplicitHydrogens(const RbtUInt nHydrogens) { m_nHydrogens = nHydrogens; }
 
         // FormalCharge (DM 24 Mar 1999 - changed from double to int)
         RbtInt GetFormalCharge() const { return m_nFormalCharge; }
-
         void SetFormalCharge(const RbtInt nFormalCharge) { m_nFormalCharge = nFormalCharge; }
 
         // CyclicFlag - flag to indicate atom is in a ring (set by RbtModel::FindRing)
         RbtBool GetCyclicFlag() const { return m_bCyclic; }
-
         void SetCyclicFlag(RbtBool bCyclic = true) { m_bCyclic = bCyclic; }
 
         // SelectionFlag - general purpose flag can be set/cleared by various search algorithms (e.g. FindRings)
         RbtBool GetSelectionFlag() const { return m_bSelected; }
-
         void SetSelectionFlag(RbtBool bSelected = true) { m_bSelected = bSelected; }
-
         void InvertSelectionFlag() { m_bSelected = !m_bSelected; }
 
         // DM 21 Jul 1999 - user-defined flag
         RbtBool GetUser1Flag() const { return m_bUser1; }
-
         void SetUser1Flag(RbtBool bUser1 = true) { m_bUser1 = bUser1; }
 
         // DM 29 Jan 2000 - user-defined double
         RbtDouble GetUser1Value() const { return m_dUser1; }
-
         void SetUser1Value(RbtDouble dUser1 = 0.0) { m_dUser1 = dUser1; }
 
         // DM 27 Jul 2000 - user-defined double#2
         RbtDouble GetUser2Value() const { return m_dUser2; }
-
         void SetUser2Value(RbtDouble dUser2 = 0.0) { m_dUser2 = dUser2; }
 
         // ModelPtr - pointer to the parent model
         RbtModel* GetModelPtr() const { return m_pModel; }
-
         void SetModelPtr(RbtModel* pModel = NULL) { m_pModel = pModel; }
 
         // DM 04 Dec 1998  Add functions to handle bond map
         // Returns number of bonds in map
         RbtUInt GetNumBonds() const { return m_bondMap.size(); }
-
         // Returns the bond map
         // DM 26 Oct 2000 - return by reference
         // RbtBondMap GetBondMap() const {return m_bondMap;}
         const RbtBondMap& GetBondMap() const { return m_bondMap; }
-
         // Add a bond to the bond map - returns true if OK, false if this atom is not a member of the bond
         // or if bond already added
         RbtBool AddBond(RbtBond* pBond);
@@ -218,58 +199,42 @@ class RbtAtom {
         // Pseudo atoms must now refresh their coords each time the constituent atoms move
         // DM 27 Oct 2000 - return by reference
         const RbtCoord& GetCoords() const { return m_coord; }
-
         RbtDouble GetX() const { return m_coord.x; }
-
         RbtDouble GetY() const { return m_coord.y; }
-
         RbtDouble GetZ() const { return m_coord.z; }
 
         void SetCoords(const RbtCoord& coord) { m_coord = coord; }
-
         void SetCoords(const RbtDouble x, const RbtDouble y, const RbtDouble z) {
             m_coord.x = x;
             m_coord.y = y;
             m_coord.z = z;
         }
-
         void SetX(const RbtDouble x) { m_coord.x = x; }
-
         void SetY(const RbtDouble y) { m_coord.y = y; }
-
         void SetZ(const RbtDouble z) { m_coord.z = z; }
 
         // PartialCharge
         RbtDouble GetPartialCharge() const { return m_dPartialCharge; }
-
         void SetPartialCharge(const RbtDouble dPartialCharge) { m_dPartialCharge = dPartialCharge; }
 
         // GroupCharge (added DM 24 Mar 1999, for ionic interaction group charges)
         RbtDouble GetGroupCharge() const { return m_dGroupCharge; }
-
         void SetGroupCharge(const RbtDouble dGroupCharge) { m_dGroupCharge = dGroupCharge; }
 
         // AtomicMass
         RbtDouble GetAtomicMass() const { return m_dAtomicMass; }
-
         void SetAtomicMass(const RbtDouble dAtomicMass) { m_dAtomicMass = dAtomicMass; }
 
         // VdwRadius
         RbtDouble GetVdwRadius() const { return m_dVdwRadius; }
-
         void SetVdwRadius(const RbtDouble dVdwRadius) { m_dVdwRadius = dVdwRadius; }
 
         // AtomType
         RbtString GetFFType() const { return m_strFFType; }
-
         void SetFFType(const RbtString& strFFType) { m_strFFType = strFFType; }
-
         RbtPMFType GetPMFType() const { return m_nPMFType; }
-
         void SetPMFType(RbtPMFType aType) { m_nPMFType = aType; }
-
         RbtTriposAtomType::eType GetTriposType() const { return m_triposType; }
-
         void SetTriposType(RbtTriposAtomType::eType aType) { m_triposType = aType; }
 
         // XB
@@ -419,7 +384,6 @@ RbtString ConvertFormalChargeToString(RbtInt nCharge);
 class isAtomEnabled: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomEnabled() {}
-
         RbtBool operator()(RbtAtom* pAtom) const { return pAtom->GetEnabled(); }
 };
 
@@ -427,7 +391,6 @@ class isAtomEnabled: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomSelected: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomSelected() {}
-
         RbtBool operator()(RbtAtom* pAtom) const { return pAtom->GetSelectionFlag(); }
 };
 
@@ -435,7 +398,6 @@ class isAtomSelected: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomCyclic: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomCyclic() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetCyclicFlag(); }
 };
 
@@ -443,7 +405,6 @@ class isAtomCyclic: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomBridgehead: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomBridgehead() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (pAtom->GetNumCyclicBonds() > 2); }
 };
 
@@ -452,7 +413,6 @@ class isAtomBridgehead: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomHBondAcceptor: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomHBondAcceptor() {}
-
         RbtBool operator()(const RbtAtom*) const;
 };
 
@@ -461,7 +421,6 @@ class isAtomHBondAcceptor: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomHBondDonor: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomHBondDonor() {}
-
         RbtBool operator()(const RbtAtom*) const;
 };
 
@@ -470,7 +429,6 @@ class isAtomHBondDonor: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomCharged: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomCharged() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (pAtom->GetFormalCharge() != 0); }
 };
 
@@ -479,7 +437,6 @@ class isAtomCharged: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomPosCharged: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomPosCharged() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (pAtom->GetFormalCharge() > 0); }
 };
 
@@ -488,7 +445,6 @@ class isAtomPosCharged: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomNegCharged: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomNegCharged() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (pAtom->GetFormalCharge() < 0); }
 };
 
@@ -496,7 +452,6 @@ class isAtomNegCharged: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomExtended: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomExtended() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (pAtom->GetNumImplicitHydrogens() > 0); }
 };
 
@@ -506,7 +461,6 @@ class isAtomExtended: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomPlanar: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomPlanar() {}
-
         RbtBool operator()(const RbtAtom*) const;
 };
 
@@ -515,7 +469,6 @@ class isAtomPlanar: public std::unary_function<RbtAtom*, RbtBool> {
 class isPiAtom: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isPiAtom() {}
-
         RbtBool operator()(const RbtAtom*) const;
 };
 
@@ -525,7 +478,6 @@ class isAtomicNo_eq: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isAtomicNo_eq(RbtInt nn): n(nn) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetAtomicNo() == n; }
 };
 
@@ -535,7 +487,6 @@ class isFFType_eq: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isFFType_eq(const RbtString& ss): s(ss) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetFFType() == s; }
 };
 
@@ -545,7 +496,6 @@ class isAtomName_eq: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isAtomName_eq(const RbtString& ss): s(ss) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetAtomName() == s; }
 };
 
@@ -555,7 +505,6 @@ class isSubunitName_eq: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isSubunitName_eq(const RbtString& ss): s(ss) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetSubunitName() == s; }
 };
 
@@ -565,7 +514,6 @@ class isSubunitId_eq: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isSubunitId_eq(const RbtString& ss): s(ss) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetSubunitId() == s; }
 };
 
@@ -575,7 +523,6 @@ class isSegmentName_eq: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isSegmentName_eq(const RbtString& ss): s(ss) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetSegmentName() == s; }
 };
 
@@ -585,7 +532,6 @@ class isHybridState_eq: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isHybridState_eq(RbtAtom::eHybridState ee): e(ee) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return pAtom->GetHybridState() == e; }
 };
 
@@ -596,7 +542,6 @@ class isHybridState_eq: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomPtr_eq: public std::binary_function<RbtAtom*, RbtAtom*, RbtBool> {
     public:
         explicit isAtomPtr_eq() {}
-
         RbtBool operator()(const RbtAtom* pAtom1, const RbtAtom* pAtom2) const { return pAtom1 == pAtom2; }
 };
 
@@ -606,7 +551,6 @@ class isAtomPtr_eq: public std::binary_function<RbtAtom*, RbtAtom*, RbtBool> {
 class isAtom_eq: public std::binary_function<RbtAtom*, RbtAtom*, RbtBool> {
     public:
         explicit isAtom_eq() {}
-
         RbtBool operator()(const RbtAtom* pAtom1, const RbtAtom* pAtom2) const {
             return ((pAtom1->GetSubunitId() == pAtom2->GetSubunitId())
                     && (pAtom1->GetSubunitName() == pAtom2->GetSubunitName())
@@ -620,7 +564,6 @@ class isAtom_eq: public std::binary_function<RbtAtom*, RbtAtom*, RbtBool> {
 class isAtomId_eq: public std::binary_function<RbtAtom*, RbtAtom*, RbtBool> {
     public:
         explicit isAtomId_eq() {}
-
         RbtBool operator()(const RbtAtom* pAtom1, const RbtAtom* pAtom2) const {
             return (pAtom1->GetAtomId() == pAtom2->GetAtomId());
         }
@@ -633,7 +576,6 @@ class isAtomInsideSphere: public std::unary_function<RbtAtom*, RbtBool> {
         RbtDouble r2;       // radius squared (to avoid taking square roots)
     public:
         explicit isAtomInsideSphere(const RbtCoord& cc, RbtDouble rr): c(cc), r2(rr * rr) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return Rbt::Length2(pAtom->GetCoords() - c) <= r2; }
 };
 
@@ -645,7 +587,6 @@ class isAtomInsideCuboid: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isAtomInsideCuboid(const RbtCoord& ccmin, const RbtCoord& ccmax): cmin(ccmin), cmax(ccmax) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const {
             // DM 27 Oct 2000 - GetCoords now returns by reference
             const RbtCoord& c = pAtom->GetCoords();
@@ -660,7 +601,6 @@ class isAtomNearCoordList: public std::unary_function<RbtAtom*, RbtBool> {
         RbtDouble r2;  // radius squared (to avoid taking square roots)
     public:
         explicit isAtomNearCoordList(const RbtCoordList& ccl, RbtDouble rr): cl(ccl), r2(rr * rr) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const;
 };
 
@@ -688,7 +628,6 @@ class isAtom_13Connected: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomRNA: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomRNA() {}
-
         RbtBool operator()(const RbtAtom*) const;
 };
 
@@ -735,7 +674,6 @@ class isAtomRNA: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomIonic: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomIonic() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (fabs(pAtom->GetGroupCharge()) > 0.001); }
 };
 
@@ -744,7 +682,6 @@ class isAtomIonic: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomCationic: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomCationic() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (pAtom->GetGroupCharge() > 0.001); }
 };
 
@@ -753,7 +690,6 @@ class isAtomCationic: public std::unary_function<RbtAtom*, RbtBool> {
 class isAtomAnionic: public std::unary_function<RbtAtom*, RbtBool> {
     public:
         explicit isAtomAnionic() {}
-
         RbtBool operator()(const RbtAtom* pAtom) const { return (pAtom->GetGroupCharge() < -0.001); }
 };
 
@@ -768,7 +704,6 @@ class isAtomGuanidiniumCarbon: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isAtomGuanidiniumCarbon(): bIsCarbon(6) {}
-
         RbtBool operator()(const RbtAtom* pAtom) const {
             return bIsCationic(pAtom) && bIsCarbon(pAtom) && bIsPi(pAtom) && !bIsCyclic(pAtom);
         }
@@ -797,7 +732,6 @@ class isAtomLipophilic: public std::unary_function<RbtAtom*, RbtBool> {
 
     public:
         explicit isAtomLipophilic(): isSP3(RbtAtom::SP3), isSP2(RbtAtom::SP2), isO(8), isN(7) {}
-
         RbtBool operator()(RbtAtom* pAtom) const;
 };
 
@@ -809,8 +743,7 @@ class isAtomLipophilic: public std::unary_function<RbtAtom*, RbtBool> {
 // Other constructors check atomic number, force field type and hybridisation state coordination numbers
 class isCoordinationNumber_eq: public std::unary_function<RbtAtom*, RbtBool> {
         enum { TOTAL, ATNO, FFTYPE, HYBRID } eCNType;  // Type of coordination number to check
-
-        RbtInt n;  // Coordination number value to check
+        RbtInt n;                                      // Coordination number value to check
         RbtInt atNo;
         RbtString ffType;
         RbtAtom::eHybridState hybrid;
@@ -819,19 +752,15 @@ class isCoordinationNumber_eq: public std::unary_function<RbtAtom*, RbtBool> {
         // Total coordination number
         explicit isCoordinationNumber_eq(RbtInt nn):
             n(nn), eCNType(TOTAL), atNo(0), ffType(""), hybrid(RbtAtom::UNDEFINED) {}
-
         // Atomic number coordination number
         explicit isCoordinationNumber_eq(RbtInt nn, RbtInt nAt):
             n(nn), eCNType(ATNO), atNo(nAt), ffType(""), hybrid(RbtAtom::UNDEFINED) {}
-
         // Force field type coordination number
         explicit isCoordinationNumber_eq(RbtInt nn, const RbtString& strType):
             n(nn), eCNType(FFTYPE), atNo(0), ffType(strType), hybrid(RbtAtom::UNDEFINED) {}
-
         // Hybridisation state coordination number
         explicit isCoordinationNumber_eq(RbtInt nn, RbtAtom::eHybridState eState):
             n(nn), eCNType(HYBRID), atNo(0), ffType(""), hybrid(eState) {}
-
         RbtBool operator()(RbtAtom* pAtom) const {
             switch (eCNType) {
                 case TOTAL:
@@ -906,7 +835,6 @@ class TranslateAtom {
 
     public:
         explicit TranslateAtom(const RbtVector& vv): v(vv) {}
-
         void operator()(RbtAtom* pAtom) { pAtom->Translate(v); }
 };
 
@@ -916,7 +844,6 @@ class TranslateAtomIfSelected {
 
     public:
         explicit TranslateAtomIfSelected(const RbtVector& vv): v(vv) {}
-
         void operator()(RbtAtom* pAtom) {
             if (pAtom->GetSelectionFlag()) pAtom->Translate(v);
         }
@@ -928,7 +855,6 @@ class RotateAtomUsingQuat {
 
     public:
         explicit RotateAtomUsingQuat(const RbtQuat& qq): q(qq) {}
-
         void operator()(RbtAtom* pAtom) { pAtom->RotateUsingQuat(q); }
 };
 
@@ -938,7 +864,6 @@ class RotateAtomUsingQuatIfSelected {
 
     public:
         explicit RotateAtomUsingQuatIfSelected(const RbtQuat& qq): q(qq) {}
-
         void operator()(RbtAtom* pAtom) {
             if (pAtom->GetSelectionFlag()) pAtom->RotateUsingQuat(q);
         }
@@ -950,7 +875,6 @@ class SelectAtom {
 
     public:
         explicit SelectAtom(RbtBool bb): b(bb) {}
-
         void operator()(RbtAtom* pAtom) { pAtom->SetSelectionFlag(b); }
 };
 
@@ -958,7 +882,6 @@ class SelectAtom {
 class InvertSelectAtom {
     public:
         explicit InvertSelectAtom() {}
-
         void operator()(RbtAtom* pAtom) { pAtom->InvertSelectionFlag(); }
 };
 
@@ -966,7 +889,6 @@ class InvertSelectAtom {
 class SelectFlexAtoms {
     public:
         explicit SelectFlexAtoms() {}
-
         void operator()(RbtAtom* pAtom);
 };
 
@@ -976,7 +898,6 @@ class CyclicAtom {
 
     public:
         explicit CyclicAtom(RbtBool bb): b(bb) {}
-
         void operator()(RbtAtom* pAtom) { pAtom->SetCyclicFlag(b); }
 };
 
@@ -1024,7 +945,6 @@ void SetAtomCyclicFlags(RbtAtomList& atomList, RbtBool bCyclic = true);
 inline RbtUInt GetNumCyclicAtoms(const RbtAtomList& atomList) {
     return Rbt::GetNumAtoms(atomList, Rbt::isAtomCyclic());
 }
-
 inline RbtAtomList GetCyclicAtomList(const RbtAtomList& atomList) {
     return Rbt::GetAtomList(atomList, Rbt::isAtomCyclic());
 }
@@ -1033,7 +953,6 @@ inline RbtAtomList GetCyclicAtomList(const RbtAtomList& atomList) {
 inline RbtUInt GetNumHBondAcceptorAtoms(const RbtAtomList& atomList) {
     return Rbt::GetNumAtoms(atomList, Rbt::isAtomHBondAcceptor());
 }
-
 inline RbtAtomList GetHBondAcceptorAtomList(const RbtAtomList& atomList) {
     return Rbt::GetAtomList(atomList, Rbt::isAtomHBondAcceptor());
 }
@@ -1042,7 +961,6 @@ inline RbtAtomList GetHBondAcceptorAtomList(const RbtAtomList& atomList) {
 inline RbtUInt GetNumHBondDonorAtoms(const RbtAtomList& atomList) {
     return Rbt::GetNumAtoms(atomList, Rbt::isAtomHBondDonor());
 }
-
 inline RbtAtomList GetHBondDonorAtomList(const RbtAtomList& atomList) {
     return Rbt::GetAtomList(atomList, Rbt::isAtomHBondDonor());
 }
@@ -1051,7 +969,6 @@ inline RbtAtomList GetHBondDonorAtomList(const RbtAtomList& atomList) {
 inline RbtUInt GetNumChargedAtoms(const RbtAtomList& atomList) {
     return Rbt::GetNumAtoms(atomList, Rbt::isAtomCharged());
 }
-
 inline RbtAtomList GetChargedAtomList(const RbtAtomList& atomList) {
     return Rbt::GetAtomList(atomList, Rbt::isAtomCharged());
 }
@@ -1060,7 +977,6 @@ inline RbtAtomList GetChargedAtomList(const RbtAtomList& atomList) {
 inline RbtUInt GetNumPlanarAtoms(const RbtAtomList& atomList) {
     return Rbt::GetNumAtoms(atomList, Rbt::isAtomPlanar());
 }
-
 inline RbtAtomList GetPlanarAtomList(const RbtAtomList& atomList) {
     return Rbt::GetAtomList(atomList, Rbt::isAtomPlanar());
 }
@@ -1122,7 +1038,6 @@ RbtAtomList GetBondedAtomList(const RbtAtom* pAtom);
 inline RbtUInt GetNumAtomsWithAtomicNo_eq(const RbtAtomList& atomList, RbtInt nAtomicNo) {
     return Rbt::GetNumAtoms(atomList, Rbt::isAtomicNo_eq(nAtomicNo));
 }
-
 inline RbtAtomList GetAtomListWithAtomicNo_eq(const RbtAtomList& atomList, RbtInt nAtomicNo) {
     return Rbt::GetAtomList(atomList, Rbt::isAtomicNo_eq(nAtomicNo));
 }
@@ -1131,7 +1046,6 @@ inline RbtAtomList GetAtomListWithAtomicNo_eq(const RbtAtomList& atomList, RbtIn
 inline RbtUInt GetNumAtomsWithFFType_eq(const RbtAtomList& atomList, RbtString strFFType) {
     return Rbt::GetNumAtoms(atomList, Rbt::isFFType_eq(strFFType));
 }
-
 inline RbtAtomList GetAtomListWithFFType_eq(const RbtAtomList& atomList, RbtString strFFType) {
     return Rbt::GetAtomList(atomList, Rbt::isFFType_eq(strFFType));
 }
@@ -1140,7 +1054,6 @@ inline RbtAtomList GetAtomListWithFFType_eq(const RbtAtomList& atomList, RbtStri
 inline RbtUInt GetNumAtomsWithAtomName_eq(const RbtAtomList& atomList, RbtString strAtomName) {
     return Rbt::GetNumAtoms(atomList, Rbt::isAtomName_eq(strAtomName));
 }
-
 inline RbtAtomList GetAtomListWithAtomName_eq(const RbtAtomList& atomList, RbtString strAtomName) {
     return Rbt::GetAtomList(atomList, Rbt::isAtomName_eq(strAtomName));
 }

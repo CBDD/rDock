@@ -528,7 +528,6 @@ RbtBool Rbt::isAtomLipophilic::operator()(RbtAtom* pAtom) const {
 // DM 24 Jan 2001
 // Checks for common metal ions by atomic number (Na,Mg,K->Zn)
 Rbt::isAtomMetal::isAtomMetal() {}
-
 RbtBool Rbt::isAtomMetal::operator()(const RbtAtom* pAtom) const {
     RbtInt atNo = pAtom->GetAtomicNo();
     return (atNo == 11) || (atNo == 12) || ((atNo >= 19) && (atNo <= 30));

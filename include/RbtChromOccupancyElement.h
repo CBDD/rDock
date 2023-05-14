@@ -32,11 +32,8 @@ class RbtChromOccupancyElement: public RbtChromElement {
         virtual void SyncFromModel();
         virtual void SyncToModel();
         virtual RbtChromElement* clone() const;
-
         virtual RbtInt GetLength() const { return 1; }
-
         virtual RbtInt GetXOverLength() const { return 1; }
-
         virtual void GetVector(RbtDoubleList& v) const;
         virtual void GetVector(RbtXOverList& v) const;
         virtual void SetVector(const RbtDoubleList& v, RbtInt& i) throw(RbtError);

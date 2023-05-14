@@ -40,7 +40,6 @@ RbtPRMFactory::RbtPRMFactory(RbtParameterFileSource* pParamSource):
 
 RbtPRMFactory::RbtPRMFactory(RbtParameterFileSource* pParamSource, RbtDockingSite* pDS):
     m_pParamSource(pParamSource), m_pDS(pDS), m_iTrace(0) {}
-
 RbtModelPtr RbtPRMFactory::CreateReceptor() throw(RbtError) {
     RbtModelPtr retVal;
     m_pParamSource->SetSection(_REC_SECTION);

@@ -178,7 +178,7 @@ void RbtModelMutator::Setup() {
             RbtAtom* pAtom = m_pModel->m_atomList[id];
             cout << "Atom " << pAtom->GetFullAtomName() << " (" << id + 1 << "): with dups=" << (*lIter).size();
 #endif  //_DEBUG
-        // Remove duplicates
+            // Remove duplicates
             (*lIter).erase(uniqIter, (*lIter).end());
 #ifdef _DEBUG
             cout << "; unique=" << (*lIter).size() << endl;

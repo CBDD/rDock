@@ -54,7 +54,6 @@ class RbtBaseFileSource {
 
         // Multi-record methods
         RbtBool isMultiRecordSupported() { return m_bMultiRec; }
-
         void NextRecord();
         void Rewind();
 

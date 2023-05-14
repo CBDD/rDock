@@ -1,7 +1,7 @@
 BasedOnStyle:    Google
 Language:        Cpp
-
 AccessModifierOffset: 0
+AllowShortFunctionsOnASingleLine: true
 BreakBeforeBinaryOperators: NonAssignment
 BreakInheritanceList: AfterColon
 BreakConstructorInitializers: AfterColon
@@ -38,7 +38,7 @@ IndentWidth:     4
 IndentWrappedFunctionNames: true
 PointerAlignment: Middle
 ReferenceAlignment: Pointer
-SeparateDefinitionBlocks: Always
+SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 0
 SpaceBeforeCtorInitializerColon: false
 SpaceBeforeInheritanceColon: false

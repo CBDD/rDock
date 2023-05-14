@@ -48,7 +48,6 @@ void RbtPMFGridSF::SetupReceptor() {
     ReadGrids(istr);
     istr.close();
 }
-
 // Determine PMF grid type for each atom
 void RbtPMFGridSF::SetupLigand() {
     theLigandList.clear();

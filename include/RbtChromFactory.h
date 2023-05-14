@@ -32,7 +32,6 @@ class RbtChromFactory: public RbtFlexDataVisitor {
         virtual void VisitSolventFlexData(RbtSolventFlexData*);
 
         RbtChromElement* GetChrom() const;
-
         // Temporary solution whilst we replace the ModelMutator class
         RbtModelMutatorPtr GetModelMutator() const { return m_spMutator; }
 

@@ -117,7 +117,6 @@ class SmartPtr {
 
         // Returns underlying pointer
         T* Ptr() { return m_pT; };
-
         const T* Ptr() const { return m_pT; };
 
         // Manually remove reference to underlying object
@@ -130,17 +129,14 @@ class SmartPtr {
             // Assert<RbtAssert>(!SMART_CHECK||!Null());
             return m_pT;
         };
-
         const T* operator->() const {
             // Assert<RbtAssert>(!SMART_CHECK||!Null());
             return m_pT;
         };
-
         T& operator*() {
             // Assert<RbtAssert>(!SMART_CHECK||!Null());
             return *m_pT;
         };
-
         const T& operator*() const {
             // Assert<RbtAssert>(!SMART_CHECK||!Null());
             return *m_pT;
@@ -156,14 +152,12 @@ class SmartPtr {
     private:
         // Increments counter and returns new value
         unsigned GetRef() const { return ++(*m_pCount); };
-
         // Decrements counter and returns new value
         // ASSERT: counter should be non-zero before decrementing
         unsigned FreeRef() const {
             // Assert<RbtAssert>(!SMART_CHECK||(*m_pCount)!=0);
             return --(*m_pCount);
         };
-
         // Decrements counter and deletes underlying object and counter
         // if count is zero
         void UnBind() {

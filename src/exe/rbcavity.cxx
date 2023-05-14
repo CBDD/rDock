@@ -61,7 +61,7 @@ int main(int argc, const char *argv[]) {
         {"ras", 'R', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'R', "read active site"},
         {"dump-insight", 'd', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'd', "dump InsightII/PyMol grids"},
         //{"dump-moe",    'm',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'm',"dump MOE grids"}, //not working
-        // right now so commenting it
+        //right now so commenting it
         {"viewer", 'v', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'v', "dump Viewer PSF/CRD files"},
         {"list", 'l', POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH, &listDist, 'l', "list receptor atoms within <dist>"},
         {"site", 's', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 's', "print site descriptors"},

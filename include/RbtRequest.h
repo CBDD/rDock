@@ -39,9 +39,7 @@ class RbtRequest {
         // Public methods
         ////////////////
         RbtRequestID GetID() const { return m_id; }
-
         RbtUInt GetNumParameters() const { return m_parameters.size(); }
-
         RbtVariantList GetParameters() const { return m_parameters; }
 
         ////////////////////////////////////////
@@ -49,7 +47,6 @@ class RbtRequest {
         ////////////////
         // Protected constructor to be used by derived classes to set request ID
         RbtRequest(RbtRequestID id): m_id(id) {}
-
         // AddParameter can be used by derived classes to add parameters to list
         void AddParameter(const RbtVariant& v) { m_parameters.push_back(v); }
 

@@ -153,7 +153,6 @@ void RbtModel::UpdatePseudoAtoms() {
 }
 
 RbtUInt RbtModel::GetNumPseudoAtoms() const { return m_pseudoAtomList.size(); }
-
 RbtPseudoAtomList RbtModel::GetPseudoAtomList() const { return m_pseudoAtomList; }
 
 // DM 1 Jul 2002 - tethered atom handling
@@ -506,7 +505,6 @@ const RbtAtomRList& RbtModel::GetFlexIntns(RbtAtom* pAtom) const throw(RbtError)
         throw RbtInvalidRequest(_WHERE_, "GetFlexIntns invalid for rigid models");
     }
 }
-
 RbtBondList RbtModel::GetFlexBonds() const throw(RbtError) {
     if (isFlexible()) {
         return m_spMutator->GetFlexBonds();
@@ -654,7 +652,6 @@ template <class Predicate>
 RbtUInt RbtModel::GetNumBonds(const Predicate& pred) {
     return Rbt::GetNumBonds(m_bondList, pred);
 }
-
 // Generic template version of GetBondList, passing in your own predicate
 template <class Predicate>
 RbtBondList RbtModel::GetBondList(const Predicate& pred) {

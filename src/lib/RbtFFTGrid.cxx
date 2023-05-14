@@ -59,7 +59,6 @@ RbtFFTGrid& RbtFFTGrid::operator=(const RbtFFTGrid& grid) {
     }
     return *this;
 }
-
 // Copy assignment taking base class arguments
 RbtFFTGrid& RbtFFTGrid::operator=(const RbtRealGrid& grid) {
     if (this != &grid) {
@@ -67,7 +66,6 @@ RbtFFTGrid& RbtFFTGrid::operator=(const RbtRealGrid& grid) {
     }
     return *this;
 }
-
 // Copy assignment taking base class arguments
 RbtFFTGrid& RbtFFTGrid::operator=(const RbtBaseGrid& grid) {
     if (this != &grid) {

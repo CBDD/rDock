@@ -23,7 +23,6 @@ class RbtReceptorFlexData: public RbtFlexData {
         // Dihedral mutation step length (deg)
         static const RbtString& _DIHEDRAL_STEP;
         RbtReceptorFlexData(RbtDockingSite* pDockSite);
-
         virtual void Accept(RbtFlexDataVisitor& v) { v.VisitReceptorFlexData(this); }
 
     private:

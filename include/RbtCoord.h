@@ -64,7 +64,6 @@ class RbtCoord {
             ostr.write((const char*)&z, sizeof(z));
             return ostr;
         }
-
         inline istream& Read(istream& istr) {
             istr.read((char*)&x, sizeof(x));
             istr.read((char*)&y, sizeof(y));
@@ -401,9 +400,7 @@ inline RbtDouble Dihedral(const RbtCoord& c1, const RbtCoord& c2, const RbtCoord
 
 // DM 28 Jul 1999 - functions for use by STL transform
 inline RbtDouble ExtractXCoord(const RbtCoord& c) { return c.x; }
-
 inline RbtDouble ExtractYCoord(const RbtCoord& c) { return c.y; }
-
 inline RbtDouble ExtractZCoord(const RbtCoord& c) { return c.z; }
 
 // Returns minimum of two coords (component-wise minimum)

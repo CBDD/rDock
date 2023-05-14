@@ -21,15 +21,12 @@
 #include "RbtGPGenome.h"
 #include "RbtGPTypes.h"
 #include "RbtRand.h"
-
 // #include <cmath>
 
 class RbtGPFFCHK1: public RbtGPFitnessFunction {
     public:
         static RbtString _CT;
-
         RbtGPFFCHK1(RbtContextPtr c): contextp(c) { _RBTOBJECTCOUNTER_CONSTR_(_CT); };
-
         virtual ~RbtGPFFCHK1() { _RBTOBJECTCOUNTER_DESTR_(_CT); };
 
         void ReadTables(istream&, RbtReturnTypeArray&, RbtReturnTypeArray&);

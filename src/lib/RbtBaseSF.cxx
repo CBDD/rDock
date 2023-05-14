@@ -63,11 +63,9 @@ RbtString RbtBaseSF::GetFullName() const {
 }
 
 RbtDouble RbtBaseSF::GetWeight() const { return m_weight; }
-
 void RbtBaseSF::SetWeight(RbtDouble weight) { SetParameter(_WEIGHT, weight); }
 
 RbtDouble RbtBaseSF::GetRange() const { return m_range; }
-
 void RbtBaseSF::SetRange(RbtDouble range) { SetParameter(_RANGE, range); }
 
 // Returns weighted score if scoring function is enabled, else returns zero
@@ -113,7 +111,6 @@ void RbtBaseSF::AddToParentMapEntry(RbtStringVariantMap& scoreMap, RbtDouble rs)
 void RbtBaseSF::Add(RbtBaseSF*) throw(RbtError) {
     throw RbtInvalidRequest(_WHERE_, "Add() invalid for non-aggregate scoring functions");
 }
-
 void RbtBaseSF::Remove(RbtBaseSF*) throw(RbtError) {
     throw RbtInvalidRequest(_WHERE_, "Remove() invalid for non-aggregate scoring functions");
 }
@@ -121,14 +118,11 @@ void RbtBaseSF::Remove(RbtBaseSF*) throw(RbtError) {
 RbtBaseSF* RbtBaseSF::GetSF(RbtUInt iSF) const throw(RbtError) {
     throw RbtInvalidRequest(_WHERE_, "GetSF() invalid for non-aggregate scoring functions");
 }
-
 RbtBool RbtBaseSF::isAgg() const { return false; }
-
 RbtUInt RbtBaseSF::GetNumSF() const { return 0; }
 
 // Aggregate handling (concrete) methods
 RbtBaseSF* RbtBaseSF::GetParentSF() const { return m_parent; }
-
 // Force removal from the parent aggregate
 void RbtBaseSF::Orphan() {
     if (m_parent) {

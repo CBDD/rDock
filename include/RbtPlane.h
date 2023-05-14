@@ -69,7 +69,6 @@ class RbtPlane {
         // Public methods
         ////////////////
         inline RbtDouble D() const { return m_d; }
-
         inline RbtVector VNorm() const { return m_vnorm; }
 
         ///////////////////////////////////////////////

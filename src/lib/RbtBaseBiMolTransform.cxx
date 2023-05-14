@@ -39,9 +39,7 @@ RbtBaseBiMolTransform::~RbtBaseBiMolTransform() {
 ////////////////
 
 RbtModelPtr RbtBaseBiMolTransform::GetReceptor() const { return m_spReceptor; }
-
 RbtModelPtr RbtBaseBiMolTransform::GetLigand() const { return m_spLigand; }
-
 RbtModelList RbtBaseBiMolTransform::GetSolvent() const { return m_solventList; }
 
 // Override RbtObserver pure virtual

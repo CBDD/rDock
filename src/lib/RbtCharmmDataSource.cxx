@@ -57,7 +57,6 @@ RbtCharmmDataSource::RbtCharmmDataSource(const RbtString& strMassesFile) {
 
     _RBTOBJECTCOUNTER_CONSTR_("RbtCharmmDataSource");
 }
-
 // Default destructor
 RbtCharmmDataSource::~RbtCharmmDataSource() { _RBTOBJECTCOUNTER_DESTR_("RbtCharmmDataSource"); }
 

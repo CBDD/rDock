@@ -117,45 +117,31 @@ class HHS_Solvation {
 
         // Get properties
         RbtDouble GetA_i(void) const { return A_i; }
-
         RbtDouble GetS_i(void) const { return S_i; }
-
         RbtDouble GetP_i(void) const { return p_i; }
-
         RbtDouble GetR_i(void) const { return r_i; }
-
         RbtDouble GetSigma(void) const { return sigma; }
-
         RbtHHSType::eType GetHHSType() const { return hhsType; };
-
         RbtAtom* GetAtom() const { return atom; };
-
-        inline RbtDouble GetArea() const { return S_i * A_i; };  // Exposed area
-
+        inline RbtDouble GetArea() const { return S_i * A_i; };    // Exposed area
         inline RbtDouble GetEnergy() const { return E_i * A_i; };  // Surface energy
 
         // Actions
         // Initialise all calculated parameters to an isolated atom (no overlap)
         void Init();
-
         // Saves current value of A_i to A_inv
         // Use to memorise the partially calculated area due to invariant interaction distances
         inline void Save() { A_inv = A_i; };
-
         // Restores A_inv to A_i
         // Use prior to continuing the calculation due to variable interaction distances
         inline void Restore() { A_i = A_inv; };
-
         // Calculate overlap between this center and another (h)
         // Updates the exposed fractions (A_i) for both centers
         // p_ij is the correction factor for 1-2, 1-3, and 1-4+ connected atoms
         void Overlap(HHS_Solvation* h, RbtDouble p_ij);
-
         // Get a list of all the current (partitioned) variable-distance interactions to this center
         const vector<HHS_Solvation*>& GetVariable() const { return m_prt; }
-
         RbtInt GetNumVariable() const { return m_prt.size(); }
-
         // Add a variable-distance interaction
         void AddVariable(HHS_Solvation* anAtom);
         // Helper function to calculate the overlap for all the variable interactions to this center
@@ -203,47 +189,36 @@ namespace Rbt {
 class InitHHS {
     public:
         explicit InitHHS() {}
-
         void operator()(HHS_Solvation* pHHS) { pHHS->Init(); }
 };
-
 class SaveHHS {
     public:
         explicit SaveHHS() {}
-
         void operator()(HHS_Solvation* pHHS) { pHHS->Save(); }
 };
-
 class RestoreHHS {
     public:
         explicit RestoreHHS() {}
-
         void operator()(HHS_Solvation* pHHS) { pHHS->Restore(); }
 };
-
 class PartitionHHS {
         RbtDouble d;
 
     public:
         explicit PartitionHHS(RbtDouble dd): d(dd) {}
-
         void operator()(HHS_Solvation* pHHS) { pHHS->Partition(d); }
 };
-
 class OverlapVariableHHS {
     public:
         explicit OverlapVariableHHS() {}
-
         void operator()(HHS_Solvation* pHHS) { pHHS->OverlapVariable(); }
 };
-
 class OverlapHHS {
         HHS_Solvation* pHHSi;
         RbtDouble p_ij;
 
     public:
         explicit OverlapHHS(HHS_Solvation* pHHS, RbtDouble p): pHHSi(pHHS), p_ij(p) {}
-
         void operator()(HHS_Solvation* pHHSj) { pHHSi->Overlap(pHHSj, p_ij); }
 };
 
@@ -253,7 +228,6 @@ class isHHSType_eq: public std::unary_function<HHS_Solvation*, RbtBool> {
 
     public:
         explicit isHHSType_eq(RbtHHSType::eType tt): t(tt) {}
-
         RbtBool operator()(const HHS_Solvation* pHHS) const { return pHHS->GetHHSType() == t; }
 };
 
@@ -261,7 +235,6 @@ class isHHSType_eq: public std::unary_function<HHS_Solvation*, RbtBool> {
 class isHHSSelected: public std::unary_function<HHS_Solvation*, RbtBool> {
     public:
         explicit isHHSSelected() {}
-
         RbtBool operator()(const HHS_Solvation* pHHS) const;
 };
 

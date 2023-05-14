@@ -62,21 +62,16 @@ RbtBaseObject::~RbtBaseObject() {
 RbtString RbtBaseObject::GetClass() const { return GetParameter(_CLASS); }
 
 RbtString RbtBaseObject::GetName() const { return GetParameter(_NAME); }
-
 void RbtBaseObject::SetName(const RbtString& strName) { SetParameter(_NAME, strName); }
-
 // Fully qualified name (should be overridden by subclasses which can be aggregated
 // to prefix the name with the parent's name)
 RbtString RbtBaseObject::GetFullName() const { return GetName(); }
 
 void RbtBaseObject::Enable() { SetParameter(_ENABLED, true); }
-
 void RbtBaseObject::Disable() { SetParameter(_ENABLED, false); }
-
 RbtBool RbtBaseObject::isEnabled() const { return m_enabled; }
 
 RbtInt RbtBaseObject::GetTrace() const { return m_trace; }
-
 void RbtBaseObject::SetTrace(RbtInt trace) { SetParameter(_TRACE, trace); }
 
 // WorkSpace handling methods
@@ -182,7 +177,6 @@ void RbtBaseObject::HandleRequest(RbtRequestPtr spRequest) {
             break;
     }
 }
-
 // Virtual function for dumping parameters to an output stream
 // Called by operator <<
 void RbtBaseObject::Print(ostream& s) const {

@@ -133,7 +133,7 @@ void RbtSetupPolarSF::SetupAtomList(RbtAtomList& atomList, const RbtAtomList& ne
             //   cout << _CT << ": " << (*iter)->GetFullAtomName() << "\t," << setw(10) << fNeighb << "," << setw(10)
             //   << charge
             //	   << "," << setw(7) << (*iter)->GetUser1Flag() << "," << setw(7) << bIsHBA(*iter) << "," << setw(7) <<
-            // bIsHBD(*iter) << endl;
+            //bIsHBD(*iter) << endl;
         }
     }
     cout.flags(oldflags);

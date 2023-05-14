@@ -51,7 +51,6 @@ inline void Assert(A assertion) {
         throw X();
     }
 }
-
 /////////////////////////////////////
 // BASE ERROR CLASS
 // Note: This is a concrete class so can be instantiated
@@ -83,15 +82,11 @@ class RbtError {
         }
 
         // Attribute methods
-        RbtString File() const { return m_strFile; }  // Get filename
-
-        RbtInt Line() const { return m_nLine; }  // Get line number
-
+        RbtString File() const { return m_strFile; }        // Get filename
+        RbtInt Line() const { return m_nLine; }             // Get line number
         RbtString Message() const { return m_strMessage; }  // Get message
-
-        RbtString Name() const { return m_strName; }  // Get error name
-
-        RbtBool isOK() const { return m_bOK; }  // If true, status is OK (not an error)
+        RbtString Name() const { return m_strName; }        // Get error name
+        RbtBool isOK() const { return m_bOK; }              // If true, status is OK (not an error)
 
         // Append new message to existing message
         void AddMessage(const RbtString& strMessage) { m_strMessage += strMessage; }
@@ -123,14 +118,12 @@ class RbtInvalidRequest: public RbtError {
         RbtInvalidRequest(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
             RbtError(IDS_INVALID_REQUEST, strFile, nLine, strMessage) {}
 };
-
 // Bad argument - e.g. empty atom list
 class RbtBadArgument: public RbtError {
     public:
         RbtBadArgument(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
             RbtError(IDS_BAD_ARGUMENT, strFile, nLine, strMessage) {}
 };
-
 // Assertion failure
 // Assert template doesn't pass params to exception class so can't pass file and line number
 class RbtAssert: public RbtError {

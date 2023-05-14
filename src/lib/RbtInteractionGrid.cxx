@@ -102,7 +102,6 @@ RbtInteractionGrid& RbtInteractionGrid::operator=(const RbtInteractionGrid& grid
     }
     return *this;
 }
-
 // Copy assignment taking base class argument
 RbtInteractionGrid& RbtInteractionGrid::operator=(const RbtBaseGrid& grid) {
     if (this != &grid) {

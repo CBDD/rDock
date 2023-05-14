@@ -26,7 +26,6 @@ class RbtCommand {
         virtual RbtString GetName() = 0;
         virtual void SetArg(int i, RbtReturnType f) = 0;   // { *(Arg[i]) = f;};
         virtual void SetNameArg(int i, RbtString& n) = 0;  // { NameArg[i] = n;};
-
         static void Clear() { ntabs = 0; };
 
         ///////////////////
@@ -41,7 +40,6 @@ class RbtCommand {
         // Constructors
         ///////////////////
         RbtCommand(){};  // Default constructor disabled
-
         RbtString tabs(RbtInt n) {
             RbtString st = "";
             for (RbtInt i = 0; i < n; i++) st += "  ";
@@ -57,19 +55,13 @@ typedef SmartPtr<RbtCommand> RbtCommandPtr;    // Smart pointer
 typedef vector<RbtCommandPtr> RbtCommandList;  // Vector of smart pointers
 typedef RbtCommandList::iterator RbtCommandListIter;
 typedef RbtCommandList::const_iterator RbtCommandListConstIter;
-
 class AddCommand: public RbtCommand {
     public:
         int GetNArgs() { return 2; };
-
         RbtString GetName() { return ("(" + NameArg[0] + "+ " + NameArg[1] + ")"); };
-
         AddCommand(){};  //{Arg = RbtReturnType(2);};
-
         void SetArg(int i, RbtReturnType f) { Arg[i] = f; };
-
         void SetNameArg(int i, RbtString& n) { NameArg[i] = n; };
-
         RbtReturnType Execute() { return Arg[0] + Arg[1]; };
 
     private:
@@ -80,15 +72,10 @@ class AddCommand: public RbtCommand {
 class SubCommand: public RbtCommand {
     public:
         int GetNArgs() { return 2; };
-
         RbtString GetName() { return ("(" + NameArg[0] + "- " + NameArg[1] + ")"); };
-
         void SetArg(int i, RbtReturnType f) { Arg[i] = f; };
-
         void SetNameArg(int i, RbtString& n) { NameArg[i] = n; };
-
         SubCommand(){};
-
         RbtReturnType Execute() { return Arg[0] - Arg[1]; };
 
     private:
@@ -99,15 +86,10 @@ class SubCommand: public RbtCommand {
 class MulCommand: public RbtCommand {
     public:
         int GetNArgs() { return 2; };
-
         RbtString GetName() { return ("(" + NameArg[0] + "* " + NameArg[1] + ")"); };
-
         void SetArg(int i, RbtReturnType f) { Arg[i] = f; };
-
         void SetNameArg(int i, RbtString& n) { NameArg[i] = n; };
-
         MulCommand(){};
-
         RbtReturnType Execute() { return Arg[0] * Arg[1]; };
 
     private:
@@ -118,15 +100,10 @@ class MulCommand: public RbtCommand {
 class DivCommand: public RbtCommand {
     public:
         int GetNArgs() { return 2; };
-
         RbtString GetName() { return ("(" + NameArg[0] + "div " + NameArg[1] + ")"); };
-
         DivCommand(){};
-
         void SetArg(int i, RbtReturnType f) { Arg[i] = f; };
-
         void SetNameArg(int i, RbtString& n) { NameArg[i] = n; };
-
         RbtReturnType Execute() {
             if (fabs(Arg[1]) < 0.000001) return Arg[0];
             return Arg[0] / Arg[1];
@@ -140,7 +117,6 @@ class DivCommand: public RbtCommand {
 class IfCommand: public RbtCommand {
     public:
         int GetNArgs() { return 3; };
-
         RbtString GetName() {
             //	return ("\niff(" + NameArg[0] + "," + NameArg[1] + "," +
             //			NameArg[2] + ")");};
@@ -148,13 +124,9 @@ class IfCommand: public RbtCommand {
             return ("\n" + tabs(ntabs - 1) + "if " + NameArg[0] + "> 0 then\n" + tabs(ntabs) + NameArg[1] + "\n"
                     + tabs(ntabs - 1) + "else \n" + tabs(ntabs) + NameArg[2] + "\n" + tabs(ntabs - 1) + "end\n");
         };
-
         IfCommand(){};
-
         void SetArg(int i, RbtReturnType f) { Arg[i] = f; };
-
         void SetNameArg(int i, RbtString& n) { NameArg[i] = n; };
-
         RbtReturnType Execute() {
             if (Arg[0] > 0.0) return Arg[1];
             return Arg[2];
@@ -168,15 +140,10 @@ class IfCommand: public RbtCommand {
 class LogCommand: public RbtCommand {
     public:
         int GetNArgs() { return 1; };
-
         RbtString GetName() { return ("log(" + NameArg[0] + ")"); };
-
         LogCommand(){};
-
         void SetArg(int i, RbtReturnType f) { Arg[i] = f; };
-
         void SetNameArg(int i, RbtString& n) { NameArg[i] = n; };
-
         RbtReturnType Execute() {
             if (fabs(Arg[0]) < 0.000001) return 0;
             return (log(fabs(Arg[0])));
@@ -190,15 +157,10 @@ class LogCommand: public RbtCommand {
 class ExpCommand: public RbtCommand {
     public:
         int GetNArgs() { return 1; };
-
         RbtString GetName() { return ("exp(" + NameArg[0] + ")"); };
-
         ExpCommand(){};
-
         void SetArg(int i, RbtReturnType f) { Arg[i] = f; };
-
         void SetNameArg(int i, RbtString& n) { NameArg[i] = n; };
-
         RbtReturnType Execute() {
             if (Arg[0] > 200) return exp(200);
             if (Arg[0] < -200) return 0;

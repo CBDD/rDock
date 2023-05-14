@@ -197,10 +197,8 @@ RbtTriposAtomType::eType RbtTriposAtomType::operator()(RbtAtom* pAtom, RbtBool u
 
 // Converts Tripos type to string
 RbtString RbtTriposAtomType::Type2Str(RbtTriposAtomType::eType aType) const { return m_typeInfo[aType].name; }
-
 // Get hybridisation from Tripos type
 int RbtTriposAtomType::Type2Hybrid(RbtTriposAtomType::eType aType) const { return m_typeInfo[aType].hybrid; }
-
 // Get atomic number from Tripos type
 RbtInt RbtTriposAtomType::Type2AtomicNo(RbtTriposAtomType::eType aType) const { return m_typeInfo[aType].atomicNo; }
 

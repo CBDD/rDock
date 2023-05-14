@@ -56,23 +56,18 @@ RbtString Rbt::GetRbtHome() {
 
 // Rbt::GetCopyright - returns legalese statement
 RbtString Rbt::GetCopyright() { return IDS_COPYRIGHT; }
-
 // Rbt::GetVersion - returns current library version
 RbtString Rbt::GetVersion() { return IDS_VERSION; }
-
 // GetBuildNum - returns current library build number
 RbtString Rbt::GetBuild() { return IDS_BUILDNUM; }
-
 // GetProduct - returns library product name
 RbtString Rbt::GetProduct() { return IDS_PRODUCT; }
-
 // GetTime - returns current time as an RbtString
 RbtString Rbt::GetTime() {
     time_t t = ::time(NULL);                  // Get time in seconds since 1970
     tm* pLocalTime = ::localtime(&t);         // Convert to local time struct
     return RbtString(::asctime(pLocalTime));  // Convert to ascii string
 }
-
 // GetCurrentDirectory - returns current working directory
 RbtString Rbt::GetCurrentDirectory() {
     RbtString strCwd(".");

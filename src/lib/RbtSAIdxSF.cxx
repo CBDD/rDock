@@ -202,7 +202,6 @@ void RbtSAIdxSF::SetupReceptor() {
         }
     }
 }
-
 /////////////////////////////////////////////////////////////////
 //
 // SetupLigand:
@@ -607,7 +606,6 @@ void RbtSAIdxSF::HandleRequest(RbtRequestPtr spRequest) {
             break;
     }
 }
-
 void RbtSAIdxSF::Partition(HHS_SolvationRList& intnCenters, RbtDouble dist) {
     // Rbt::PartitionHHS partition(dist);
     // std::for_each(intnCenters.begin(),intnCenters.end(),partition);

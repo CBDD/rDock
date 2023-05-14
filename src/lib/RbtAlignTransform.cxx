@@ -62,8 +62,7 @@ void RbtAlignTransform::SetupReceptor() {
     }
 }
 
-void RbtAlignTransform::SetupLigand() {}  // No ligand setup required
-
+void RbtAlignTransform::SetupLigand() {}     // No ligand setup required
 void RbtAlignTransform::SetupTransform() {}  // No further setup required
 
 ////////////////////////////////////////

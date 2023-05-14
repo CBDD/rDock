@@ -33,7 +33,6 @@ class RbtSiteMapper: public RbtBaseObject {
         ////////////////////////////////////////
         // Constructors/destructors
         virtual ~RbtSiteMapper();
-
         ////////////////////////////////////////
         // Public methods
         ////////////////

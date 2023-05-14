@@ -29,11 +29,8 @@ RbtBiMolWorkSpace::~RbtBiMolWorkSpace() { _RBTOBJECTCOUNTER_DESTR_("RbtBiMolWork
 
 // Model handling
 RbtModelPtr RbtBiMolWorkSpace::GetReceptor() const { return GetModel(RECEPTOR); }
-
 RbtModelPtr RbtBiMolWorkSpace::GetLigand() const { return GetModel(LIGAND); }
-
 RbtModelList RbtBiMolWorkSpace::GetSolvent() const { return GetModels(SOLVENT); }
-
 RbtBool RbtBiMolWorkSpace::hasSolvent() const { return GetNumModels() > SOLVENT; }
 
 void RbtBiMolWorkSpace::SetReceptor(RbtModelPtr spReceptor) {

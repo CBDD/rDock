@@ -25,7 +25,6 @@ class RbtTokenIter {
         //  virtual void copy(const RbtTokenIter &) = 0;
         virtual void Next(RbtContextPtr) = 0;
         virtual RbtTokenPtr Current() = 0;
-
         virtual ~RbtTokenIter() {}
 
         //  virtual RbtTokenPtr IsDone() const = 0;

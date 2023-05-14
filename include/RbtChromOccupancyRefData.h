@@ -30,10 +30,8 @@ class RbtChromOccupancyRefData {
         virtual ~RbtChromOccupancyRefData();
 
         RbtDouble GetStepSize() const { return m_stepSize; }
-
         RbtDouble GetModelValue() const;
         void SetModelValue(RbtDouble occupancy);
-
         RbtDouble GetInitialValue() const { return m_initialValue; }
 
     private:

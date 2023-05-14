@@ -23,13 +23,9 @@ class RbtMOL2Substructure {
         RbtMOL2Substructure(): root_atom(0), chain("UNK"), sub_type("UNK"){};
         RbtMOL2Substructure(const RbtString& name, RbtInt rr, const RbtString& cc, const RbtString& ss):
             subst_name(name), root_atom(rr), chain(cc), sub_type(ss){};
-
         RbtString GetName() const { return subst_name; };
-
         RbtInt GetRoot() const { return root_atom; };
-
         RbtString GetChain() const { return chain; };
-
         RbtString GetType() const { return sub_type; };
 
     private:
@@ -54,15 +50,10 @@ class RbtMOL2FileSource: public RbtBaseMolecularFileSource {
 
         RbtMOL2FileSource(const RbtString& fileName, RbtBool bImplHydrogens = true);
         ~RbtMOL2FileSource();
-
         RbtBool isTitleListSupported() { return true; };
-
         RbtBool isAtomListSupported() { return true; };
-
         RbtBool isCoordinatesSupported() { return true; };
-
         RbtBool isBondListSupported() { return true; };
-
         RbtBool isDataSupported() { return false; };
 
     protected:

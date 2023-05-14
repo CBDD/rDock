@@ -36,12 +36,9 @@ class RbtBaseFileSink {
         // Public methods
         ////////////////
         RbtString GetFileName() const { return m_strFileName; }
-
         // void SetFileName(const char* fileName);
         void SetFileName(const RbtString& fileName);
-
         RbtBool StatusOK() { return Status().isOK(); }
-
         RbtError Status();
 
         // PURE VIRTUAL - MUST BE OVERRIDDEN IN DERIVED CLASSES
@@ -58,13 +55,11 @@ class RbtBaseFileSink {
         void AddLine(const RbtString& fileRec);
         // Replace a complete line in the cache
         void ReplaceLine(const RbtString& fileRec, RbtUInt nRec);
-
         // Is cache empty
         RbtBool isCacheEmpty() const { return m_lineRecs.empty(); }
 
         // DM 06 Apr 1999 - append attribute is for derived class use only
-        RbtBool GetAppend() const { return m_bAppend; }  // Get append status (true=append, false=overwrite)
-
+        RbtBool GetAppend() const { return m_bAppend; }           // Get append status (true=append, false=overwrite)
         void SetAppend(RbtBool bAppend) { m_bAppend = bAppend; }  // Set append status (true=append, false=overwrite)
 
     private:

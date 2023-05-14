@@ -25,7 +25,6 @@ const int NEXT = 1;
 
 // Static data members
 RbtString RbtFilter::_CT("RbtFilter");
-
 ////////////////////////////////////////
 // Constructors/destructors
 
@@ -88,7 +87,6 @@ RbtFilter::~RbtFilter() {
 ////////////////
 
 RbtModelPtr RbtFilter::GetReceptor() const { return m_spReceptor; }
-
 RbtModelPtr RbtFilter::GetLigand() const { return m_spLigand; }
 
 // Override RbtObserver pure virtual

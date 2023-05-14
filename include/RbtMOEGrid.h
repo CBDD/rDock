@@ -39,7 +39,6 @@
 #include "Rbt.h"
 #include "RbtBiMolWorkSpace.h"
 #include "RbtCoord.h"
-
 // single point in a multi-dimensional grid
 // the coords contains N values where N is the dimension of the grid
 class RbtMOEGridPoint {
@@ -55,14 +54,10 @@ class RbtMOEGridPoint {
         // parametrized ctor getting coord values from RbtCoord (default 3D
         // grid for convenience)
         RbtMOEGridPoint(RbtCoord&, double);
-
         // data access methods
         double GetValue() { return value; };
-
         const vector<double>& GetCoords() { return coords; };
-
         void SetCoords(double a_val) { coords.push_back(a_val); };
-
         void SetValue(double a_val) { value = a_val; };
 };
 
@@ -95,13 +90,9 @@ class RbtMOEGridShape {
         RbtMOEGridShape(vector<double>, vector<double>, double);
 
         const vector<double>& GetOrigin() { return origin; };
-
         const vector<double>& GetExtents() { return extents; };
-
         const vector<int>& GetIExtents() { return i_extents; };
-
         double GetStepSize() { return step_size; };
-
         long GetDataSize() { return data_size; };
 };
 
@@ -122,22 +113,16 @@ class RbtMOEGrid {
         // parameterised ctor for a single grid
         // pass shape, data and outfilename
         RbtMOEGrid(RbtMOEGridShape&, RbtMOEGridData&, RbtString);
-
         // or pass parameters using these functions (when it is about
         // to save multiple grids into a single file)
         void SetShape(RbtMOEGridShape& a_shape) { myShape = a_shape; };
-
         void SetData(RbtMOEGridData& a_data) { myData = a_data; };
-
         void SetOutputFileName(RbtString& a_filename) { stream_name = a_filename; };
-
         // methods to calculate grid extents
         void CalculateCommonExtents(vector<RbtString> strPrmFiles);  // for all
         void GetDockingSiteExtents(RbtString& a_strPrmFile);         // for a single
-
         // get methods
         RbtCoord GetMinExtents() { return min; };
-
         RbtCoord GetMaxExtents() { return max; };
 
         // iofstream methods

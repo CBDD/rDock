@@ -39,20 +39,16 @@ class RbtChromDihedralRefData {
 
         // Gets the maximum step size for this bond
         RbtDouble GetStepSize() const { return m_stepSize; }
-
         // Gets the sampling mode for this bond
         RbtChromElement::eMode GetMode() const { return m_mode; }
-
         // Gets the maximum deviation from the reference dihedral (tethered mode only)
         RbtDouble GetMaxDihedral() const { return m_maxDihedral; }
-
         // Gets the current dihedral angle (phenotype) for this bond
         // from the model coords
         RbtDouble GetModelValue() const;
         // Sets the phenotype (model coords) for this bond
         // to a given dihedral angle
         void SetModelValue(RbtDouble dihedralAngle);
-
         // Gets the initial dihedral angle for this bond
         //(initialised from model coords in RbtChromDihedralRefData constructor)
         RbtDouble GetInitialValue() const { return m_initialValue; }

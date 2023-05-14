@@ -39,7 +39,6 @@ class RbtDihedral {
             public:
                 prms(RbtDouble ss = 3.0, RbtDouble kk = 0.2, RbtDouble o = 0.0):
                     s(fabs(ss)), k(kk), sign((ss > 0.0) ? +1.0 : -1.0), offset(o) {}
-
                 RbtDouble s;       // rotational degeneracy
                 RbtDouble k;       // barrier height
                 RbtDouble sign;    //+1 or -1, to invert potential
@@ -49,15 +48,10 @@ class RbtDihedral {
         // Constructor takes the real atom specifiers, plus the first term of the potential
         RbtDihedral(RbtAtom* pAtom1, RbtAtom* pAtom2, RbtAtom* pAtom3, RbtAtom* pAtom4, const prms& dihprms);
         RbtDouble operator()() const;  // Calculate dihedral score for this interaction
-
         RbtAtom* GetAtom1Ptr() const { return m_pAtom1; }
-
         RbtAtom* GetAtom2Ptr() const { return m_pAtom2; }
-
         RbtAtom* GetAtom3Ptr() const { return m_pAtom3; }
-
         RbtAtom* GetAtom4Ptr() const { return m_pAtom4; }
-
         // Add additional terms to the potential
         void AddTerm(const prms& dihprms);
 

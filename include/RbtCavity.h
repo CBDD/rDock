@@ -108,19 +108,12 @@ class RbtCavity {
         // Public methods
         ////////////////
         const RbtCoord& GetCenterOfMass() const { return m_prAxes.com; }
-
         const RbtPrincipalAxes& GetPrincipalAxes() const { return m_prAxes; }
-
         RbtInt GetNumCoords() const { return m_coordList.size(); }
-
         const RbtCoordList& GetCoordList() const { return m_coordList; }
-
         const RbtCoord& GetMinCoord() const { return m_minCoord; }
-
         const RbtCoord& GetMaxCoord() const { return m_maxCoord; }
-
         const RbtVector& GetGridStep() const { return m_gridStep; }
-
         RbtDouble GetVolume() const { return m_coordList.size() * m_gridStep.x * m_gridStep.y * m_gridStep.z; }
 
     protected:
@@ -169,22 +162,18 @@ class RbtCavityPtrCmp_Distance {
 
     public:
         RbtCavityPtrCmp_Distance(const RbtCoord& cc): c(cc) {}
-
         RbtBool operator()(RbtCavityPtr spCav1, RbtCavityPtr spCav2) const {
             return Rbt::Length2(spCav1->GetCenterOfMass() - c) < Rbt::Length2(spCav2->GetCenterOfMass() - c);
         }
 };
-
 // Less than operator for sorting RbtCavityPtrs into descending order by volume
 class RbtCavityPtrCmp_Volume {
     public:
         RbtCavityPtrCmp_Volume() {}
-
         RbtBool operator()(RbtCavityPtr spCav1, RbtCavityPtr spCav2) const {
             return spCav1->GetNumCoords() > spCav2->GetNumCoords();
         }
 };
-
 ////////////////////////////////////////////////////////
 // Predicate functions for RbtCavityPtr
 // For use by STL algorithms
@@ -194,7 +183,6 @@ class isCavityNearCoord: public std::unary_function<RbtCavityPtr, RbtBool> {
         RbtDouble r2;  // radius squared (to avoid taking square roots)
     public:
         explicit isCavityNearCoord(const RbtCoord& cc, RbtDouble rr): c(cc), r2(rr * rr) {}
-
         RbtBool operator()(RbtCavityPtr spCavity) const { return Rbt::Length2(spCavity->GetCenterOfMass() - c) <= r2; }
 };
 
@@ -203,7 +191,6 @@ class isCavityNearCoord: public std::unary_function<RbtCavityPtr, RbtBool> {
 // For use by STL algorithms
 ////////////////////////////////////////////
 inline const RbtCoord& ExtractCavityMinCoord(RbtCavityPtr spCav) { return spCav->GetMinCoord(); }
-
 inline const RbtCoord& ExtractCavityMaxCoord(RbtCavityPtr spCav) { return spCav->GetMaxCoord(); }
 }  // namespace Rbt
 

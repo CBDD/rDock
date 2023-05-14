@@ -5,7 +5,6 @@ template <class singleton_type>
 class Singleton {
     protected:
         enum action { DESTROY, CREATE, GET };
-
         static singleton_type* object(const action& a) {
             static singleton_type* obj = NULL;
             switch (a) {

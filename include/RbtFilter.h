@@ -42,7 +42,6 @@ class RbtFilter: public RbtBaseObject {
         RbtBool Terminate();   // Finished with ligand?
         RbtModelPtr GetReceptor() const;
         RbtModelPtr GetLigand() const;
-
         void SetMaxNRuns(RbtInt n) { maxnruns = n; }
 
         ////////////////////

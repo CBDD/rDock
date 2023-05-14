@@ -32,7 +32,6 @@ RbtGPChromosome::RbtGPChromosome(RbtInt npi, RbtInt nfi, RbtInt nn, RbtInt no, R
     cells = RbtCellList(ncells);
     for (RbtInt i = 0; i < ncells; i++) cells[i] = new RbtCell();
 }
-
 RbtGPChromosome::RbtGPChromosome(const RbtGPChromosome& c) {
     chrom = RbtIntList(c.chrom.size());
     cells = RbtCellList(c.cells.size());
@@ -52,7 +51,6 @@ void RbtGPChromosome::Clear() {
     for (RbtInt i = 0; i < cells.size(); i++) cells[i]->Clear();
     RbtCommand::Clear();
 }
-
 RbtGPChromosome& RbtGPChromosome::operator=(const RbtGPChromosome& c) {
     for (RbtInt i = 0; i < cells.size(); i++) *(cells[i]) = *(c.cells[i]);
     for (RbtInt i = 0; i < chrom.size(); i++) chrom[i] = c.chrom[i];

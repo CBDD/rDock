@@ -40,10 +40,8 @@ class RbtRand {
         void SeedFromClock();
         // Returns current seed
         RbtInt GetSeed();
-
         // Get a random double between 0 and 1 (inlined)
         RbtDouble GetRandom01() { return m_rand.fdraw(); };
-
         // Get a random integer between 0 and nMax-1
         RbtInt GetRandomInt(RbtInt nMax);
         // Get a random unit vector distributed evenly over the surface of a sphere

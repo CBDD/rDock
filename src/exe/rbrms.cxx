@@ -29,7 +29,6 @@ class RbtSymBond {
         RbtSymBond(RbtBondPtr bond, RbtInt n, RbtBool swap): m_bond(bond), m_n(n), m_swap(swap) {
             m_dih = (m_n > 0) ? 360.0 / m_n : 360.0;
         }
-
         RbtBondPtr m_bond;  // The smart pointer to the bond itself
         RbtInt m_n;         // The symmetry operator (n-fold rotation)
         RbtBool m_swap;     // false = spin atom 2 in bond; true = spin atom 1 in bond

@@ -32,7 +32,6 @@ class RbtFileError: public RbtError {
     public:
         RbtFileError(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
             RbtError(IDS_FILE_ERROR, strFile, nLine, strMessage) {}
-
         // Protected constructor to allow derived file error classes to set error name
     protected:
         RbtFileError(const RbtString& strName, const RbtString& strFile, RbtInt nLine,

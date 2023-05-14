@@ -30,7 +30,6 @@ class isAtomNitroN: public std::unary_function<RbtAtomPtr, RbtBool> {
         // DM 11 Jul 2001 - checks for nitro nitrogen (NSP2+ bonded to OSP3- and OSP2)
     public:
         explicit isAtomNitroN(): bIsN_SP2P("N_SP2+"), bIsO_SP2("O_SP2"), bIsO_SP3M("O_SP3-") {}
-
         RbtBool operator()(RbtAtomPtr spAtom) const {
             if (!bIsN_SP2P(spAtom)) return false;
             RbtAtomList bondedAtomList = Rbt::GetBondedAtomList(spAtom);

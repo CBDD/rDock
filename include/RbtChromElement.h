@@ -41,7 +41,6 @@ class RbtChromElement {
         // For use by subclasses of RbtChromElement if desired.
         // There is no functionality in the base class that uses this enum.
         enum eMode { FIXED = 0, TETHERED = 1, FREE = 2 };
-
         // Static methods to convert from mode enum to string and vice versa
         static eMode StrToMode(const RbtString& modeStr) throw(RbtError);  // case insensitive
         static RbtString ModeToStr(eMode mode);                            // returns "FIXED", "TETHERED" or "FREE"ss
@@ -108,12 +107,10 @@ class RbtChromElement {
         virtual void Add(RbtChromElement* pChromElement) throw(RbtError);
         // Prints details of element to stream (null implementation in base class)
         virtual void Print(ostream& s) const {};
-
         //
         // NON-VIRTUAL METHODS
         //
         RbtRand& GetRand() const { return m_rand; }
-
         void CauchyMutate(RbtDouble mean, RbtDouble variance);
         // Compares two chromosome elements. Returns -1 if the comparison is invalid
         //(unequal lengths), else returns the maximum relative pair-wise difference

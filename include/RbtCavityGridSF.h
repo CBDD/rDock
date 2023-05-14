@@ -29,7 +29,6 @@ class RbtCavityGridSF: public RbtBaseInterSF {
                 virtual void VisitReceptorFlexData(RbtReceptorFlexData*);
                 virtual void VisitLigandFlexData(RbtLigandFlexData*);
                 virtual void VisitSolventFlexData(RbtSolventFlexData*);
-
                 RbtAtomRList GetAtomList() const { return m_atomList; }
 
             private:

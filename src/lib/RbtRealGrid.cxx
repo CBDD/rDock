@@ -79,7 +79,6 @@ RbtRealGrid& RbtRealGrid::operator=(const RbtRealGrid& grid) {
     }
     return *this;
 }
-
 // Copy assignment taking a base class argument
 // Sets up the grid dimensions, then creates an empty data array
 RbtRealGrid& RbtRealGrid::operator=(const RbtBaseGrid& grid) {

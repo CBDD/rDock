@@ -44,26 +44,17 @@ const RbtVble& RbtToken::GetVble() const {
     if (!isvble) throw RbtError(_WHERE_, "the token is not a vble");
     return vble;
 }
-
 /* void RbtToken::SetVbleNumber(RbtInt vn)
 {
     vble.SetValue(vn);
 }*/
 
 RbtBool RbtToken::IsVble() { return (isvble); }
-
 RbtBool RbtToken::IsLog() { return (!isvble && comm.IsLog()); }
-
 RbtBool RbtToken::IsExp() { return (!isvble && comm.IsExp()); }
-
 RbtBool RbtToken::IsAdd() { return (!isvble && comm.IsAdd()); }
-
 RbtBool RbtToken::IsSub() { return (!isvble && comm.IsSub()); }
-
 RbtBool RbtToken::IsMul() { return (!isvble && comm.IsMul()); }
-
 RbtBool RbtToken::IsDiv() { return (!isvble && comm.IsDiv()); }
-
 RbtBool RbtToken::IsAnd() { return (!isvble && comm.IsAnd()); }
-
 RbtBool RbtToken::IsIf() { return (!isvble && comm.IsIf()); }

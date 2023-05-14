@@ -27,7 +27,6 @@ class RbtCell {
             name = "";
             constant = false;
         };
-
         RbtCell(const RbtCell& c) {
             evaluated = c.evaluated;
             name = c.name;
@@ -41,29 +40,21 @@ class RbtCell {
         virtual ~RbtCell(){};
 
         RbtBool Evaluated() const { return evaluated; };
-
         RbtBool Named() const { return (name != ""); };
-
         RbtBool Constant() const { return constant; };
-
         void Clear() {
             if (!constant) {
                 evaluated = false;
                 name = "";
             }
         };
-
         RbtReturnType GetResult() const { return result; };
-
         RbtString GetName() const { return name; };
-
         void SetName(RbtString s) { name = s; };
-
         void SetResult(RbtReturnType r) {
             result = r;
             evaluated = true;
         };
-
         void SetConstant(RbtReturnType r) {
             result = r;
             evaluated = true;
@@ -72,7 +63,6 @@ class RbtCell {
             nm << r << ends;
             name = nm.str();
         };
-
         void ResetConstant() {
             evaluated = false;
             name = "";

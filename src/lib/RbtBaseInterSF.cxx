@@ -38,9 +38,7 @@ RbtBaseInterSF::~RbtBaseInterSF() {
 ////////////////
 
 RbtModelPtr RbtBaseInterSF::GetReceptor() const { return m_spReceptor; }
-
 RbtModelPtr RbtBaseInterSF::GetLigand() const { return m_spLigand; }
-
 RbtModelList RbtBaseInterSF::GetSolvent() const { return m_solventList; }
 
 // Override RbtObserver pure virtual

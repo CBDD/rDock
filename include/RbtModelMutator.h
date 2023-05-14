@@ -87,7 +87,7 @@ class RbtModelMutator {
         // bond: (these interaction distances are conformation dependent) This is a symmetric matrix - For a flexible
         // interaction i,j, atom j will appear in the RbtAtomList for atom i, and vice versa. Atoms which are NOT in
         // this list are therefore in the same rigid fragment as atom i: (these interaction distances are fixed and can
-        // therefore be ignored by any scoring function)
+        //therefore be ignored by any scoring function)
         RbtAtomRListList m_flexIntns;
 
         // DM 2 Jul 2002 - if model has tethered atoms we need to modify the behaviour of RbtModelMutator

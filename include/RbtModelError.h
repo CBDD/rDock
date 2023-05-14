@@ -24,7 +24,6 @@ class RbtModelError: public RbtError {
     public:
         RbtModelError(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
             RbtError(IDS_MODEL_ERROR, strFile, nLine, strMessage) {}
-
         // Protected constructor to allow derived model error classes to set error name
     protected:
         RbtModelError(const RbtString& strName, const RbtString& strFile, RbtInt nLine,

@@ -86,14 +86,14 @@ void RbtGPGenome::SetStructure(RbtInt inpi, RbtInt infi, RbtInt insfi, RbtInt in
     nfi = infi;    // number of inputs per function
     nsfi = insfi;  // number of inputs needed to calculate the SF
     no = ino;      // number of outputs of the program.
-                   // Assumption: functions return one output
+               // Assumption: functions return one output
     nf = inf;      // number of functions
     nr = inr;      // number of rows
     nc = inc;      // number of columns
     nn = nr * nc;  // number of nodes
     l = il;        // connectivity level, i.e., how many previous columns
-                   // of cells may have their outputs connected to a
-                   // node in the current column
+             // of cells may have their outputs connected to a
+             // node in the current column
 }
 
 void RbtGPGenome::Initialise() {

@@ -33,11 +33,8 @@ class RbtPsfFileSource: public RbtBaseMolecularFileSource {
         ////////////////////////////////////////
         // Override public methods from RbtBaseMolecularDataSource
         virtual RbtBool isTitleListSupported() { return true; };
-
         virtual RbtBool isAtomListSupported() { return true; };
-
         virtual RbtBool isCoordinatesSupported() { return false; };
-
         virtual RbtBool isBondListSupported() { return true; };
 
     protected:
@@ -55,14 +52,12 @@ class RbtPsfFileSource: public RbtBaseMolecularFileSource {
         void SetupVdWRadii() throw(RbtError);
         void SetupPartialIonicGroups();
         void RemoveNonPolarHydrogens();
-
         // Is atom in same substructure
         class isSS_eq: public std::unary_function<RbtAtom*, RbtBool> {
                 const RbtAtom* a1;
 
             public:
                 explicit isSS_eq(const RbtAtom* aa): a1(aa) {}
-
                 RbtBool operator()(const RbtAtom* a2) const {
                     return (a1->GetSubunitName() == a2->GetSubunitName()) && (a1->GetSubunitId() == a2->GetSubunitId())
                            && (a1->GetSegmentName() == a2->GetSegmentName());

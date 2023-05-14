@@ -38,35 +38,24 @@ class RbtGPChromosome {
         ostream& Print(ostream&) const;
         friend ostream& operator<<(ostream& s, const RbtGPChromosome& p);
         friend istream& operator>>(istream& s, RbtGPChromosome& p);
-
         const int& operator[](int idx) const { return chrom[idx]; };
-
         int& operator[](int idx) { return chrom[idx]; };
-
         RbtGPChromosome& operator=(const RbtGPChromosome& c);
-
         RbtInt size() const { return chrom.size(); };
-
         RbtCellPtr Cells(RbtInt idx) const { return (cells[idx]); }
-
         void SetConstant(RbtReturnType, RbtInt);
         void ResetConstant(RbtInt);
-
         RbtInt GetStartingCell() { return (chrom[chrom.size() - 1]); };
-
         RbtReturnType GetRCte(RbtInt ncell) { return cells[ncell]->GetResult(); };
-
         RbtCommands GetCommand(RbtInt ncell) {
             if (ncell < nProgramInputs) throw RbtError(_WHERE_, "This cell does not have a command");
             RbtCommands comm(chrom[(nFunctionsInputs + 1) * (ncell - nProgramInputs) + nFunctionsInputs]);
             return comm;
         }
-
         RbtInt GetArgument(RbtInt ncell, RbtInt narg) {
             if (ncell < nProgramInputs) throw RbtError(_WHERE_, "This cell does not have arguments");
             return (chrom[(nFunctionsInputs + 1) * (ncell - nProgramInputs) + narg]);
         }
-
         RbtBool IsProgramInput(RbtInt ncell) { return (ncell < nProgramInputs); }
 
     private:

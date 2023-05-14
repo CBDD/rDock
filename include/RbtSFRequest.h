@@ -39,7 +39,6 @@ class RbtSFPartitionRequest: public RbtRequest {
     public:
         // Request to partition all scoring functions to a particular distance
         RbtSFPartitionRequest(RbtDouble dist): RbtRequest(ID_REQ_SF_PARTITION) { AddParameter(dist); }
-
         // Request to partition a particular named scoring function to a particular distance
         RbtSFPartitionRequest(const RbtString& sfName, RbtDouble dist): RbtRequest(ID_REQ_SF_PARTITION) {
             AddParameter(sfName);
@@ -55,7 +54,6 @@ class RbtSFSetParamRequest: public RbtRequest {
             AddParameter(paramName);
             AddParameter(paramValue);
         }
-
         // Request to set a named parameter of a named scoring function to a new value
         RbtSFSetParamRequest(const RbtString& sfName, const RbtString& paramName, const RbtVariant& paramValue):
             RbtRequest(ID_REQ_SF_SETPARAM) {

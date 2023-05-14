@@ -22,7 +22,6 @@
 class CharmmType {
     public:
         CharmmType(): nAtomType(0), strAtomType(""), mass(0.0), element(""), comment("") {}
-
         RbtInt nAtomType;
         RbtString strAtomType;
         RbtDouble mass;

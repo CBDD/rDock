@@ -20,7 +20,6 @@
 #include "RbtGPGenome.h"
 #include "RbtGPTypes.h"
 #include "RbtRand.h"
-
 // #include <cmath>
 
 class RbtGPFFGold: public RbtGPFitnessFunction {

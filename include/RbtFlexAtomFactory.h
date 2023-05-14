@@ -60,12 +60,9 @@ class RbtFlexAtomFactory: public RbtFlexDataVisitor {
         virtual void VisitReceptorFlexData(RbtReceptorFlexData*);
         virtual void VisitLigandFlexData(RbtLigandFlexData*);
         virtual void VisitSolventFlexData(RbtSolventFlexData*);
-
         // Get methods for the partitioned atom lists
         RbtAtomRList GetFixedAtomList() const { return m_fixedAtomList; }
-
         RbtAtomRList GetTetheredAtomList() const { return m_tetheredAtomList; }
-
         RbtAtomRList GetFreeAtomList() const { return m_freeAtomList; }
 
     private:

@@ -20,7 +20,6 @@
 #include "RbtGPGenome.h"
 #include "RbtGPPopulation.h"
 #include "RbtParser.h"
-
 void main(int argc, char* argv[]) {
     try {
         RbtRand& theRand = Rbt::GetRbtRand();  // ref to random number generator

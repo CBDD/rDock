@@ -25,7 +25,6 @@
 #include "RbtTokenIter.h"
 
 typedef SmartPtr<istream> istreamPtr;
-
 class RbtStringTokenIter: public RbtTokenIter {
     public:
         static RbtString _CT;

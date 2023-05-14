@@ -273,7 +273,6 @@ void RbtAromIdxSF::ClearReceptor() {
     }
     m_recepGuanList.clear();
 }
-
 void RbtAromIdxSF::ClearLigand() {
     // Delete the ligand interaction centers
     for (RbtInteractionCenterListIter iter = m_ligAromList.begin(); iter != m_ligAromList.end(); iter++) {

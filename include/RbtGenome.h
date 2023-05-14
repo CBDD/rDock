@@ -43,7 +43,6 @@ class RbtGenome {
         // pSF is a pointer to a scoring function object.
         // If pSF is null, a zero score is set.
         void SetScore(RbtBaseSF* pSF);
-
         // Gets the stored raw score (without re-evaluation of the scoring function).
         RbtDouble GetScore() const { return m_score; }
 
@@ -62,7 +61,6 @@ class RbtGenome {
         // total is the total sum of absolute fitness values returned by the last call
         // to SetRWFitness
         void NormaliseRWFitness(RbtDouble total);
-
         // Gets the fitness value for roulette wheel selection
         RbtDouble GetRWFitness() const { return m_RWFitness; }
 
@@ -71,7 +69,6 @@ class RbtGenome {
         RbtBool Equals(const RbtGenome& g, RbtDouble threshold) const {
             return m_chrom->Equals(*(g.m_chrom), threshold);
         }
-
         friend bool operator==(const RbtGenome& g1, const RbtGenome& g2) {
             return g1.Equals(g2, RbtChromElement::_THRESHOLD);
         }
@@ -118,7 +115,6 @@ class isGenome_eq: public std::binary_function<RbtGenome*, RbtGenome*, RbtBool> 
         RbtDouble m_threshold;  // equality threshold
     public:
         explicit isGenome_eq(RbtDouble threshold): m_threshold(threshold) {}
-
         RbtBool operator()(const RbtGenome* pG1, const RbtGenome* pG2) const { return pG1->Equals(*pG2, m_threshold); }
 };
 }  // namespace Rbt

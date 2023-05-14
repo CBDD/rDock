@@ -41,7 +41,6 @@ class RbtMCStats {
         RbtInt _steps;
         RbtInt _accepted;
 };
-
 typedef SmartPtr<RbtMCStats> RbtMCStatsPtr;  // Smart pointer
 
 class RbtSimAnnTransform: public RbtBaseBiMolTransform {

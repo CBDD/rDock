@@ -69,16 +69,13 @@ class RbtRealGrid: public RbtBaseGrid {
 
         // Get/Set tolerance used for assessing value equality
         RbtDouble GetTolerance() const { return m_tol; }
-
         void SetTolerance(RbtDouble tol) { m_tol = tol; }
 
         // Get/Set single grid point value with bounds checking
         RbtDouble GetValue(const RbtCoord& c) const { return isValid(c) ? m_grid[GetIX(c)][GetIY(c)][GetIZ(c)] : 0.0; }
-
         RbtDouble GetValue(RbtUInt iX, RbtUInt iY, RbtUInt iZ) const {
             return isValid(iX, iY, iZ) ? m_grid[iX][iY][iZ] : 0.0;
         }
-
         RbtDouble GetValue(RbtUInt iXYZ) const { return isValid(iXYZ) ? m_data[iXYZ] : 0.0; }
 
         // DM 20 Jul 2000 - get values smoothed by trilinear interpolation
@@ -88,23 +85,19 @@ class RbtRealGrid: public RbtBaseGrid {
         void SetValue(const RbtCoord& c, RbtDouble val) {
             if (isValid(c)) m_grid[GetIX(c)][GetIY(c)][GetIZ(c)] = val;
         }
-
         void SetValue(RbtUInt iX, RbtUInt iY, RbtUInt iZ, RbtDouble val) {
             if (isValid(iX, iY, iZ)) m_grid[iX][iY][iZ] = val;
         }
-
         void SetValue(RbtUInt iXYZ, RbtDouble val) {
             if (isValid(iXYZ)) m_data[iXYZ] = val;
         }
 
         // Set all grid points to the given value
         void SetAllValues(RbtDouble val);
-
         // Replaces all grid points with a given value (+/- tolerance) with newVal
         void ReplaceValue(RbtDouble oldVal, RbtDouble newVal) {
             ReplaceValueRange(oldVal - m_tol, oldVal + m_tol, newVal);
         }
-
         // Replaces all grid points between oldValMin and oldValMax with newVal
         void ReplaceValueRange(RbtDouble oldValMin, RbtDouble oldValMax, RbtDouble newVal);
 
@@ -141,7 +134,6 @@ class RbtRealGrid: public RbtBaseGrid {
 
         // Returns number of occurrences of a given value (+/- tolerance)
         RbtUInt Count(RbtDouble val) const { return CountRange(val - m_tol, val + m_tol); }
-
         // Returns number of occurrences of a given value range
         RbtUInt CountRange(RbtDouble valMin, RbtDouble valMax) const;
 
