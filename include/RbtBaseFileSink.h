@@ -1,19 +1,19 @@
 /***********************************************************************
-* The rDock program was developed from 1998 - 2006 by the software team 
-* at RiboTargets (subsequently Vernalis (R&D) Ltd).
-* In 2006, the software was licensed to the University of York for 
-* maintenance and distribution.
-* In 2012, Vernalis and the University of York agreed to release the 
-* program as Open Source software.
-* This version is licensed under GNU-LGPL version 3.0 with support from
-* the University of Barcelona.
-* http://rdock.sourceforge.net/
-***********************************************************************/
+ * The rDock program was developed from 1998 - 2006 by the software team
+ * at RiboTargets (subsequently Vernalis (R&D) Ltd).
+ * In 2006, the software was licensed to the University of York for
+ * maintenance and distribution.
+ * In 2012, Vernalis and the University of York agreed to release the
+ * program as Open Source software.
+ * This version is licensed under GNU-LGPL version 3.0 with support from
+ * the University of Barcelona.
+ * http://rdock.sourceforge.net/
+ ***********************************************************************/
 
-//Abstract base class for text file-based output. Knows how to Open a file,
-//Write a text cache to the file, and Close the file.
-//It is up to derived classes to provide a Render method to populate the cache
-//with text records of the appropriate format.
+// Abstract base class for text file-based output. Knows how to Open a file,
+// Write a text cache to the file, and Close the file.
+// It is up to derived classes to provide a Render method to populate the cache
+// with text records of the appropriate format.
 
 #ifndef _RBTBASEFILESINK_H_
 #define _RBTBASEFILESINK_H_
@@ -23,81 +23,74 @@ using std::ofstream;
 
 #include "RbtConfig.h"
 
-class RbtBaseFileSink
-{
+class RbtBaseFileSink {
  public:
-  ////////////////////////////////////////
-  //Constructors/destructors
-  //RbtBaseFileSink(const char* fileName);
-  RbtBaseFileSink(const RbtString& fileName);
+    ////////////////////////////////////////
+    // Constructors/destructors
+    // RbtBaseFileSink(const char* fileName);
+    RbtBaseFileSink(const RbtString& fileName);
 
-  virtual ~RbtBaseFileSink(); //Default destructor
+    virtual ~RbtBaseFileSink();  // Default destructor
 
+    ////////////////////////////////////////
+    // Public methods
+    ////////////////
+    RbtString GetFileName() const { return m_strFileName; }
+    // void SetFileName(const char* fileName);
+    void SetFileName(const RbtString& fileName);
+    RbtBool StatusOK() { return Status().isOK(); }
+    RbtError Status();
 
-  ////////////////////////////////////////
-  //Public methods
-  ////////////////
-  RbtString GetFileName() const {return m_strFileName;}
-  //void SetFileName(const char* fileName);
-  void SetFileName(const RbtString& fileName);
-  RbtBool StatusOK() {return Status().isOK();}
-  RbtError Status();
-
-  //PURE VIRTUAL - MUST BE OVERRIDDEN IN DERIVED CLASSES
-  virtual void Render() throw (RbtError) = 0;
-
- protected:
-  ////////////////////////////////////////
-  //Protected methods
-  ///////////////////
-  //Write the cache to the file
-  //DM 11 Feb 1999 - add flag to allow the cache to be written without clearing it
-  void Write(RbtBool bClearCache = true) throw (RbtError);
-  //Add a complete line to the cache
-  void AddLine(const RbtString& fileRec);
-  //Replace a complete line in the cache
-  void ReplaceLine(const RbtString& fileRec, RbtUInt nRec);
-  //Is cache empty
-  RbtBool isCacheEmpty() const {return m_lineRecs.empty();}
-
-  //DM 06 Apr 1999 - append attribute is for derived class use only
-  RbtBool GetAppend() const {return m_bAppend;}//Get append status (true=append, false=overwrite)
-  void SetAppend(RbtBool bAppend) {m_bAppend = bAppend;}//Set append status (true=append, false=overwrite)
-
-
- private:
-  ////////////////////////////////////////
-  //Private methods
-  /////////////////
-
-  RbtBaseFileSink(); //Disable default constructor
-  RbtBaseFileSink(const RbtBaseFileSink&);//Copy constructor disabled by default
-  RbtBaseFileSink& operator=(const RbtBaseFileSink&);//Copy assignment disabled by default
-
-  void Open(RbtBool bAppend=false) throw (RbtError);
-  void Close();
-  void ClearCache();
-
+    // PURE VIRTUAL - MUST BE OVERRIDDEN IN DERIVED CLASSES
+    virtual void Render() throw(RbtError) = 0;
 
  protected:
-  ////////////////////////////////////////
-  //Protected data
-  ////////////////
+    ////////////////////////////////////////
+    // Protected methods
+    ///////////////////
+    // Write the cache to the file
+    // DM 11 Feb 1999 - add flag to allow the cache to be written without clearing it
+    void Write(RbtBool bClearCache = true) throw(RbtError);
+    // Add a complete line to the cache
+    void AddLine(const RbtString& fileRec);
+    // Replace a complete line in the cache
+    void ReplaceLine(const RbtString& fileRec, RbtUInt nRec);
+    // Is cache empty
+    RbtBool isCacheEmpty() const { return m_lineRecs.empty(); }
 
+    // DM 06 Apr 1999 - append attribute is for derived class use only
+    RbtBool GetAppend() const { return m_bAppend; }           // Get append status (true=append, false=overwrite)
+    void SetAppend(RbtBool bAppend) { m_bAppend = bAppend; }  // Set append status (true=append, false=overwrite)
 
  private:
-  ////////////////////////////////////////
-  //Private data
-  //////////////
-  RbtStringList m_lineRecs;
-  RbtString m_strFileName;
-  ofstream m_fileOut;
-  RbtBool m_bAppend;//If true, Write() appends to file rather than overwriting
+    ////////////////////////////////////////
+    // Private methods
+    /////////////////
 
+    RbtBaseFileSink();                                   // Disable default constructor
+    RbtBaseFileSink(const RbtBaseFileSink&);             // Copy constructor disabled by default
+    RbtBaseFileSink& operator=(const RbtBaseFileSink&);  // Copy assignment disabled by default
+
+    void Open(RbtBool bAppend = false) throw(RbtError);
+    void Close();
+    void ClearCache();
+
+ protected:
+    ////////////////////////////////////////
+    // Protected data
+    ////////////////
+
+ private:
+    ////////////////////////////////////////
+    // Private data
+    //////////////
+    RbtStringList m_lineRecs;
+    RbtString m_strFileName;
+    ofstream m_fileOut;
+    RbtBool m_bAppend;  // If true, Write() appends to file rather than overwriting
 };
 
-//Useful typedefs
-typedef SmartPtr<RbtBaseFileSink> RbtBaseFileSinkPtr;//Smart pointer
+// Useful typedefs
+typedef SmartPtr<RbtBaseFileSink> RbtBaseFileSinkPtr;  // Smart pointer
 
-#endif //_RBTBASEFILESINK_H_
-
+#endif  //_RBTBASEFILESINK_H_

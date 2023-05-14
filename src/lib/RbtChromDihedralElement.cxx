@@ -1,48 +1,42 @@
 /***********************************************************************
-* The rDock program was developed from 1998 - 2006 by the software team 
-* at RiboTargets (subsequently Vernalis (R&D) Ltd).
-* In 2006, the software was licensed to the University of York for 
-* maintenance and distribution.
-* In 2012, Vernalis and the University of York agreed to release the 
-* program as Open Source software.
-* This version is licensed under GNU-LGPL version 3.0 with support from
-* the University of Barcelona.
-* http://rdock.sourceforge.net/
-***********************************************************************/
+ * The rDock program was developed from 1998 - 2006 by the software team
+ * at RiboTargets (subsequently Vernalis (R&D) Ltd).
+ * In 2006, the software was licensed to the University of York for
+ * maintenance and distribution.
+ * In 2012, Vernalis and the University of York agreed to release the
+ * program as Open Source software.
+ * This version is licensed under GNU-LGPL version 3.0 with support from
+ * the University of Barcelona.
+ * http://rdock.sourceforge.net/
+ ***********************************************************************/
 
 #include "RbtChromDihedralElement.h"
 
 RbtString RbtChromDihedralElement::_CT = "RbtChromDihedralElement";
 
-RbtChromDihedralElement::RbtChromDihedralElement(RbtBondPtr spBond,
-                                RbtAtomList tetheredAtoms,
-                                RbtDouble stepSize,
-                                RbtChromElement::eMode mode,
-                                RbtDouble maxDihedral)
-        : m_value(0.0) {
-	m_spRefData = new RbtChromDihedralRefData(spBond,
-                                                tetheredAtoms,
-                                                stepSize,
-                                                mode,
-                                                maxDihedral);
-    //Set the initial genotype to match the current phenotype
-	SyncFromModel();
-    _RBTOBJECTCOUNTER_CONSTR_(_CT);
-}
-
 RbtChromDihedralElement::RbtChromDihedralElement(
-        RbtChromDihedralRefDataPtr spRefData, RbtDouble value)
-        : m_spRefData(spRefData), m_value(value) {
+    RbtBondPtr spBond,
+    RbtAtomList tetheredAtoms,
+    RbtDouble stepSize,
+    RbtChromElement::eMode mode,
+    RbtDouble maxDihedral
+):
+    m_value(0.0) {
+    m_spRefData = new RbtChromDihedralRefData(spBond, tetheredAtoms, stepSize, mode, maxDihedral);
+    // Set the initial genotype to match the current phenotype
+    SyncFromModel();
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
-RbtChromDihedralElement::~RbtChromDihedralElement() {
-    _RBTOBJECTCOUNTER_DESTR_(_CT);
+RbtChromDihedralElement::RbtChromDihedralElement(RbtChromDihedralRefDataPtr spRefData, RbtDouble value):
+    m_spRefData(spRefData),
+    m_value(value) {
+    _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
-void RbtChromDihedralElement::Reset() {
-    m_value = m_spRefData->GetInitialValue();    
-}
+RbtChromDihedralElement::~RbtChromDihedralElement() { _RBTOBJECTCOUNTER_DESTR_(_CT); }
+
+void RbtChromDihedralElement::Reset() { m_value = m_spRefData->GetInitialValue(); }
 
 void RbtChromDihedralElement::Randomise() {
     RbtDouble maxDelta = m_spRefData->GetMaxDihedral();
@@ -62,40 +56,32 @@ void RbtChromDihedralElement::Randomise() {
 }
 
 void RbtChromDihedralElement::Mutate(RbtDouble relStepSize) {
-	RbtDouble absStepSize = relStepSize * m_spRefData->GetStepSize();
+    RbtDouble absStepSize = relStepSize * m_spRefData->GetStepSize();
     RbtDouble delta;
     if (absStepSize > 0) {
         switch (m_spRefData->GetMode()) {
             case RbtChromElement::TETHERED:
-        	   delta = 2.0 * absStepSize * GetRand().GetRandom01() - absStepSize;
-        	   m_value = StandardisedValue(m_value + delta);
-               CorrectTetheredDihedral();
-               break;
+                delta = 2.0 * absStepSize * GetRand().GetRandom01() - absStepSize;
+                m_value = StandardisedValue(m_value + delta);
+                CorrectTetheredDihedral();
+                break;
             case RbtChromElement::FREE:
-               delta = 2.0 * absStepSize * GetRand().GetRandom01() - absStepSize;
-               m_value = StandardisedValue(m_value + delta);
-               break;
+                delta = 2.0 * absStepSize * GetRand().GetRandom01() - absStepSize;
+                m_value = StandardisedValue(m_value + delta);
+                break;
             default:
                 break;
         }
     }
 }
 
-void RbtChromDihedralElement::SyncFromModel() {
-	m_value = m_spRefData->GetModelValue();
-}
+void RbtChromDihedralElement::SyncFromModel() { m_value = m_spRefData->GetModelValue(); }
 
-void RbtChromDihedralElement::SyncToModel() {
-	m_spRefData->SetModelValue(m_value);
-}
+void RbtChromDihedralElement::SyncToModel() { m_spRefData->SetModelValue(m_value); }
 
-RbtChromElement* RbtChromDihedralElement::clone() const {
-	return new RbtChromDihedralElement(m_spRefData, m_value);
-}
+RbtChromElement* RbtChromDihedralElement::clone() const { return new RbtChromDihedralElement(m_spRefData, m_value); }
 
-void RbtChromDihedralElement::GetVector(RbtDoubleList& v) const {
-    v.push_back(m_value);
-}
+void RbtChromDihedralElement::GetVector(RbtDoubleList& v) const { v.push_back(m_value); }
 
 void RbtChromDihedralElement::GetVector(RbtXOverList& v) const {
     RbtXOverElement dihedralElement;
@@ -103,40 +89,34 @@ void RbtChromDihedralElement::GetVector(RbtXOverList& v) const {
     v.push_back(dihedralElement);
 }
 
-void RbtChromDihedralElement::SetVector(const RbtDoubleList& v, RbtInt& i) throw (RbtError) {
-    if (VectorOK(v,i)) {
+void RbtChromDihedralElement::SetVector(const RbtDoubleList& v, RbtInt& i) throw(RbtError) {
+    if (VectorOK(v, i)) {
         m_value = StandardisedValue(v[i++]);
-    }
-    else {
+    } else {
         throw RbtBadArgument(_WHERE_, "Index out of range or insufficient elements remaining");
     }
 }
 
-void RbtChromDihedralElement::SetVector(const RbtXOverList& v, RbtInt& i) throw (RbtError) {
-    if (VectorOK(v,i)) {
+void RbtChromDihedralElement::SetVector(const RbtXOverList& v, RbtInt& i) throw(RbtError) {
+    if (VectorOK(v, i)) {
         RbtXOverElement dihedralElement(v[i++]);
         if (dihedralElement.size() == 1) {
             m_value = dihedralElement[0];
-        }
-        else {
+        } else {
             throw RbtBadArgument(_WHERE_, "dihedralElement vector is of incorrect length");
         }
-    }
-    else {
+    } else {
         throw RbtBadArgument(_WHERE_, "Index out of range or insufficient elements remaining");
     }
 }
 
-void RbtChromDihedralElement::GetStepVector(RbtDoubleList& v) const {
-    v.push_back(m_spRefData->GetStepSize());
-}
+void RbtChromDihedralElement::GetStepVector(RbtDoubleList& v) const { v.push_back(m_spRefData->GetStepSize()); }
 
 RbtDouble RbtChromDihedralElement::CompareVector(const RbtDoubleList& v, RbtInt& i) const {
     RbtDouble retVal(0.0);
-    if (!VectorOK(v,i)) {
+    if (!VectorOK(v, i)) {
         retVal = -1.0;
-    }
-    else {
+    } else {
         RbtDouble otherAngle = v[i++];
         RbtDouble stepSize = m_spRefData->GetStepSize();
         if (stepSize > 0.0) {
@@ -147,18 +127,16 @@ RbtDouble RbtChromDihedralElement::CompareVector(const RbtDoubleList& v, RbtInt&
     return retVal;
 }
 
-void RbtChromDihedralElement::Print(ostream& s) const {
-    s << "DIHEDRAL " << m_value << endl;
-}
+void RbtChromDihedralElement::Print(ostream& s) const { s << "DIHEDRAL " << m_value << endl; }
 
 RbtDouble RbtChromDihedralElement::StandardisedValue(RbtDouble dihedralAngle) {
-   while (dihedralAngle >= 180) {
-      dihedralAngle -= 360.0;
-   }
-   while (dihedralAngle < -180.0) {
-       dihedralAngle += 360.0;
-   }
-   return dihedralAngle;
+    while (dihedralAngle >= 180) {
+        dihedralAngle -= 360.0;
+    }
+    while (dihedralAngle < -180.0) {
+        dihedralAngle += 360.0;
+    }
+    return dihedralAngle;
 }
 
 void RbtChromDihedralElement::CorrectTetheredDihedral() {
@@ -167,8 +145,7 @@ void RbtChromDihedralElement::CorrectTetheredDihedral() {
     RbtDouble delta = StandardisedValue(m_value - initialValue);
     if (delta > maxDelta) {
         m_value = StandardisedValue(initialValue + maxDelta);
-    }
-    else if (delta < -maxDelta) {
+    } else if (delta < -maxDelta) {
         m_value = StandardisedValue(initialValue - maxDelta);
     }
 }
