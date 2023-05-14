@@ -23,6 +23,9 @@
 #   install: install the library, binaries, and headers in PREFIX folder
 #   full: cleans everything and rebuilds the library and binaries from scratch,
 #         then runs the tests and install everything into PREFIX folder
+#   lint: format the code using clang-format. Requires clang-format to be installed
+#         it is recommended to run this target before committing any changes to the code
+#         as the CI will fail if the code is not properly formatted.
 #
 #
 # the following variables can be configured by the user:
@@ -106,6 +109,7 @@ bin_sources = $(addprefix src/exe/, $(addsuffix .cxx $(bins)))
 	build build_lib build_bin \
 	test test_dock_run test_rbcavity \
 	clean clean_bin clean_lib veryclean \
+	lint lint-check \
 
 ## User directed targets
 
@@ -153,6 +157,10 @@ clean_tests:
 
 veryclean: clean clean_bin clean_lib clean_tests
 
+lint:
+	@clang-format --style=file -i $(shell find src/ include/ -iname '*.cxx' -o -iname '*.h')
+
+
 ## Internal targets
 
 target_folders:
@@ -186,3 +194,8 @@ bin/%: src/exe/%.cxx lib/libRbt.so
 
 tests/data/%.as: tests/data/%.prm bin/rbcavity
 	cd tests/data ; RBT_ROOT=../.. LD_LIBRARY_PATH=../../lib:$(LD_LIBRARY_PATH) ../../bin/rbcavity -r$(notdir $<) -was
+
+lint-check:
+	@echo "Checking code style..."
+	# --ferror-limit=1 is used to stop the execution after the first error until we fix all the code
+	@clang-format --style=file -Werror --dry-run --ferror-limit=1 $(shell find src/ include/ -iname '*.cxx' -o -iname '*.h')
