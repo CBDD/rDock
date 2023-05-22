@@ -59,7 +59,7 @@ class RbtCell {
         result = r;
         evaluated = true;
         constant = true;
-        ostrstream nm;
+        ostringstream nm;
         nm << r << ends;
         name = nm.str();
     };

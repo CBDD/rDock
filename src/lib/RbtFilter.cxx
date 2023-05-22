@@ -39,7 +39,7 @@ RbtFilter::RbtFilter(RbtString strfilter, RbtBool filter): RbtBaseObject(_CT, "F
         //  RbtString filterfilen = GetParameter("_FILTER_FILE");
     SmartPtr<istream> filterfile;
     if (filter)  // filterfilen is the filter
-        filterfile = new istrstream(strfilter.c_str());
+        filterfile = new istringstream(strfilter.c_str());
     else  // assume the strfilter is the name of the file
           // where the filter is
         filterfile = new ifstream(strfilter.c_str(), ios_base::in);
@@ -51,7 +51,7 @@ RbtFilter::RbtFilter(RbtString strfilter, RbtBool filter): RbtBaseObject(_CT, "F
         cout << "\n------------- Terminate filter " << i << "------------" << endl;
         RbtString s;
         getline(*filterfile, s, ',');
-        SmartPtr<istream> istrp(new istrstream(s.c_str()));
+        SmartPtr<istream> istrp(new istringstream(s.c_str()));
         RbtTokenIterPtr ti(new RbtStringTokenIter(istrp, contextp));
         RbtFilterExpressionPtr filter = p.Parse(ti, contextp);
         PrettyPrintVisitor visitor1(contextp);
@@ -63,7 +63,7 @@ RbtFilter::RbtFilter(RbtString strfilter, RbtBool filter): RbtBaseObject(_CT, "F
         cout << "\n------------- Write filter -----------------" << endl;
         RbtString s;
         getline(*filterfile, s, ',');
-        SmartPtr<istream> istrp(new istrstream(s.c_str()));
+        SmartPtr<istream> istrp(new istringstream(s.c_str()));
         RbtTokenIterPtr ti(new RbtStringTokenIter(istrp, contextp));
         RbtFilterExpressionPtr filter = p.Parse(ti, contextp);
         PrettyPrintVisitor visitor1(contextp);

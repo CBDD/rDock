@@ -128,7 +128,7 @@ class RbtVariant {
         if (m_sl.empty())
             return c;
         else {
-            /// istrstream istr(m_sl.front().c_str());
+            /// istringstream istr(m_sl.front().c_str());
             istringstream istr(m_sl.front().c_str());
             istr >> c;
             return c;
@@ -156,7 +156,6 @@ class RbtVariant {
         // ostr << d << ends;
         ostr << d;
         RbtString s(ostr.str());
-        // delete ostr.str();
         m_sl.push_back(s);
     }
 
@@ -188,7 +187,6 @@ class RbtVariant {
         // ostr << c << ends;
         ostr << c;
         RbtString s(ostr.str());
-        // delete ostr.str();
         m_sl.push_back(s);
     }
 
