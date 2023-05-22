@@ -273,7 +273,7 @@ void RbtAtom::ClearBondMap() { m_bondMap.clear(); }
 // map key=0 is reserved for the default SaveCoords and RevertCoords
 void RbtAtom::SaveCoords(RbtUInt coordNum) { m_savedCoords[coordNum] = m_coord; }
 
-void RbtAtom::RevertCoords(RbtUInt coordNum) throw(RbtError) {
+void RbtAtom::RevertCoords(RbtUInt coordNum) {
     RbtUIntCoordMapConstIter iter = m_savedCoords.find(coordNum);
     if (iter != m_savedCoords.end()) {
         m_coord = (*iter).second;

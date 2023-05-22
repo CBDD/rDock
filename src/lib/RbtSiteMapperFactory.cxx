@@ -44,7 +44,7 @@ RbtSiteMapper* RbtSiteMapperFactory::Create(const RbtString& strMapperClass, con
 // Note: the current section is restored to its original value upon exit
 RbtSiteMapper* RbtSiteMapperFactory::CreateFromFile(
     RbtParameterFileSourcePtr spPrmSource, const RbtString& strName
-) throw(RbtError) {
+) {
     RbtString strOrigSection(spPrmSource->GetSection());
     spPrmSource->SetSection(strName);
     if (spPrmSource->isParameterPresent(_MAPPER)) {

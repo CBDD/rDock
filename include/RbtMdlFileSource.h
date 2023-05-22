@@ -45,7 +45,7 @@ class RbtMdlFileSource: public RbtBaseMolecularFileSource {
 
  protected:
     // Pure virtual in RbtBaseFileSource - needs to be defined here
-    virtual void Parse() throw(RbtError);
+    virtual void Parse();
 
  private:
     // Private methods
@@ -54,23 +54,23 @@ class RbtMdlFileSource: public RbtBaseMolecularFileSource {
     RbtMdlFileSource& operator=(const RbtMdlFileSource&);  // Copy assignment disabled by default
 
     // Sets up all the atomic attributes that are not explicitly stored in the MDL file
-    void SetupAtomParams() throw(RbtError);
+    void SetupAtomParams();
 
     // Helper functions for SetupAtomParams()
 
     // Sets hybridisation state and checks for Nsp3 next to sp2 special case
-    void SetupHybridState() throw(RbtError);
+    void SetupHybridState();
 
     // Checks for valency within range
     // Adds implicit hydrogens to C,N,S
     // Defines vdW radius, correcting for extended atoms and H-bond donor hydrogens
     // Defines formal "force-field" type string
-    void SetupTheRest() throw(RbtError);
+    void SetupTheRest();
 
     void SetupPosIonisableGroups();
     void SetupNegIonisableGroups();
 
-    void AddHydrogen(RbtAtomPtr spAtom) throw(RbtError);
+    void AddHydrogen(RbtAtomPtr spAtom);
 
     // SetupIonicGroups sets the "group charge" attribute of the atoms. The idea is that the "group charge" is
     // file-format independent, and eliminates the need for the scoring function setup to have any knowledge of

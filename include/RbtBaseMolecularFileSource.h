@@ -33,27 +33,27 @@ class RbtBaseMolecularFileSource: public RbtBaseFileSource, public RbtBaseMolecu
 
     // Pure virtual methods from RbtBaseMolecularDataSource
     void Reset();
-    RbtInt GetNumTitles() throw(RbtError);
-    RbtInt GetNumAtoms() throw(RbtError);
-    RbtInt GetNumBonds() throw(RbtError);
-    RbtInt GetNumSegments() throw(RbtError);
+    RbtInt GetNumTitles();
+    RbtInt GetNumAtoms();
+    RbtInt GetNumBonds();
+    RbtInt GetNumSegments();
 
-    RbtStringList GetTitleList() throw(RbtError);
-    RbtAtomList GetAtomList() throw(RbtError);
-    RbtBondList GetBondList() throw(RbtError);
-    RbtSegmentMap GetSegmentMap() throw(RbtError);
+    RbtStringList GetTitleList();
+    RbtAtomList GetAtomList();
+    RbtBondList GetBondList();
+    RbtSegmentMap GetSegmentMap();
 
     // DM 12 May 1999 - support for data records (e.g. SD file)
     // Get number of data fields
-    virtual RbtInt GetNumData() throw(RbtError);
+    virtual RbtInt GetNumData();
     // Get list of field names as string list
-    virtual RbtStringList GetDataFieldList() throw(RbtError);
+    virtual RbtStringList GetDataFieldList();
     // Get all data as map of key=field name, value=variant (double,string or string list)
-    virtual RbtStringVariantMap GetDataMap() throw(RbtError);
+    virtual RbtStringVariantMap GetDataMap();
     // Query as to whether a particular data field name is present
     virtual RbtBool isDataFieldPresent(const RbtString& strDataField);
     // Get a particular data value
-    virtual RbtVariant GetDataValue(const RbtString& strDataField) throw(RbtError);
+    virtual RbtVariant GetDataValue(const RbtString& strDataField);
 
     // These methods allow filtering of the data source by segment name
     // So for example, we could just read the segment named TAR from the source

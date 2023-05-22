@@ -35,7 +35,7 @@ class RbtCrdFileSource: public RbtBaseMolecularFileSource {
 
  protected:
     // Pure virtual in RbtBaseFileSource - needs to be defined here
-    virtual void Parse() throw(RbtError);
+    virtual void Parse();
 
  private:
     // Private methods

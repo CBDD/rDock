@@ -35,7 +35,7 @@ class RbtSiteMapperFactory {
     ////////////////
 
     // Creates a single site mapper object of named class
-    virtual RbtSiteMapper* Create(const RbtString& strMapperClass, const RbtString& strName) throw(RbtError);
+    virtual RbtSiteMapper* Create(const RbtString& strMapperClass, const RbtString& strName);
 
     // Creates a single site mapper object whose class is defined
     // as the value of the SITE_MAPPER parameter in the strName section of the

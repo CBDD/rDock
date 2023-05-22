@@ -63,7 +63,7 @@ RbtCharmmDataSource::~RbtCharmmDataSource() { _RBTOBJECTCOUNTER_DESTR_("RbtCharm
 ////////////////////////////////////////
 // Public methods
 ////////////////
-RbtString RbtCharmmDataSource::AtomTypeString(RbtInt nAtomType) throw(RbtError) {
+RbtString RbtCharmmDataSource::AtomTypeString(RbtInt nAtomType) {
     RbtIntStringMapIter iter = m_atomTypes.find(nAtomType);
     if (iter != m_atomTypes.end())
         return (*iter).second;
@@ -76,7 +76,7 @@ RbtString RbtCharmmDataSource::AtomTypeString(RbtInt nAtomType) throw(RbtError) 
     }
 }
 
-RbtInt RbtCharmmDataSource::ImplicitHydrogens(const RbtString& strFFType) throw(RbtError) {
+RbtInt RbtCharmmDataSource::ImplicitHydrogens(const RbtString& strFFType) {
     RbtStringIntMapIter iter = m_implicitHydrogens.find(strFFType);
     if (iter != m_implicitHydrogens.end())
         return (*iter).second;
@@ -84,7 +84,7 @@ RbtInt RbtCharmmDataSource::ImplicitHydrogens(const RbtString& strFFType) throw(
         return 0;
 }
 
-RbtInt RbtCharmmDataSource::AtomicNumber(const RbtString& strFFType) throw(RbtError) {
+RbtInt RbtCharmmDataSource::AtomicNumber(const RbtString& strFFType) {
     RbtStringIntMapIter iter = m_atomicNumber.find(strFFType);
     if (iter != m_atomicNumber.end())
         return (*iter).second;
@@ -92,7 +92,7 @@ RbtInt RbtCharmmDataSource::AtomicNumber(const RbtString& strFFType) throw(RbtEr
         throw RbtFileMissingParameter(_WHERE_, "CHARMm atom type " + strFFType + " not found in CharmmDataSource");
 }
 
-RbtInt RbtCharmmDataSource::FormalCharge(const RbtString& strFFType) throw(RbtError) {
+RbtInt RbtCharmmDataSource::FormalCharge(const RbtString& strFFType) {
     RbtStringIntMapIter iter = m_formalCharge.find(strFFType);
     if (iter != m_formalCharge.end()) {
         return (*iter).second;
@@ -101,7 +101,7 @@ RbtInt RbtCharmmDataSource::FormalCharge(const RbtString& strFFType) throw(RbtEr
 }
 
 // DM 8 Dec 1998
-RbtAtom::eHybridState RbtCharmmDataSource::HybridState(const RbtString& strFFType) throw(RbtError) {
+RbtAtom::eHybridState RbtCharmmDataSource::HybridState(const RbtString& strFFType) {
     RbtStringHybridStateMapIter iter = m_hybridState.find(strFFType);
     if (iter != m_hybridState.end())
         return (*iter).second;

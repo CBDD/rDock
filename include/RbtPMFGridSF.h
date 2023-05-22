@@ -22,7 +22,7 @@ class RbtPMFGridSF: public RbtBaseInterSF {
     vector<RbtPMFType> theTypeList;   // store PMF used types here
     vector<RbtRealGridPtr> theGrids;  // grids with PMF data
 
-    void ReadGrids(istream& istr) throw(RbtError);
+    void ReadGrids(istream& istr);
 
  public:
     static RbtString _CT;        // class name

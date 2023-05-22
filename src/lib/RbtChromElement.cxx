@@ -17,7 +17,7 @@
 RbtString RbtChromElement::_CT = "RbtChromElement";
 RbtDouble RbtChromElement::_THRESHOLD = 1E-4;
 
-RbtChromElement::eMode RbtChromElement::StrToMode(const RbtString& modeStr) throw(RbtError) {
+RbtChromElement::eMode RbtChromElement::StrToMode(const RbtString& modeStr) {
     eMode retVal;
     RbtString modeStrUpper = modeStr;
     std::transform(modeStrUpper.begin(), modeStrUpper.end(), modeStrUpper.begin(), toupper);
@@ -56,7 +56,7 @@ RbtChromElement::RbtChromElement(): m_rand(Rbt::GetRbtRand()) { _RBTOBJECTCOUNTE
 
 RbtChromElement::~RbtChromElement() { _RBTOBJECTCOUNTER_DESTR_(_CT); }
 
-void RbtChromElement::Add(RbtChromElement* pChromElement) throw(RbtError) {
+void RbtChromElement::Add(RbtChromElement* pChromElement) {
     throw RbtInvalidRequest(_WHERE_, "Add(RbtChromElement*) invalid for non-aggregate chromosome element");
 }
 
@@ -120,7 +120,7 @@ ostream& operator<<(ostream& s, const RbtChromElement& c) {
 
 void Rbt::Crossover(
     RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3, RbtChromElement* pChr4
-) throw(RbtError) {
+) {
     // Check all chromosomes have the same crossover length
     RbtInt length1 = pChr1->GetXOverLength();
     if ((length1 != pChr2->GetXOverLength()) || (length1 != pChr3->GetXOverLength())

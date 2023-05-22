@@ -128,7 +128,7 @@ void RbtNonBondedHHSGrid::OwnPrint(ostream& ostr) const {
 
 void RbtNonBondedHHSGrid::OwnWrite(ostream& ostr) const {}
 
-void RbtNonBondedHHSGrid::OwnRead(istream& istr) throw(RbtError) {}
+void RbtNonBondedHHSGrid::OwnRead(istream& istr) {}
 
 void RbtNonBondedHHSGrid::CopyGrid(const RbtNonBondedHHSGrid& grid) { m_hhsMap = grid.m_hhsMap; }
 

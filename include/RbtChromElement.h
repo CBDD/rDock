@@ -42,7 +42,7 @@ class RbtChromElement {
     // There is no functionality in the base class that uses this enum.
     enum eMode { FIXED = 0, TETHERED = 1, FREE = 2 };
     // Static methods to convert from mode enum to string and vice versa
-    static eMode StrToMode(const RbtString& modeStr) throw(RbtError);  // case insensitive
+    static eMode StrToMode(const RbtString& modeStr);  // case insensitive
     static RbtString ModeToStr(eMode mode);                            // returns "FIXED", "TETHERED" or "FREE"ss
 
     virtual ~RbtChromElement();
@@ -85,12 +85,12 @@ class RbtChromElement {
     // Number of double values read should match GetLength().
     // v = vector of doubles to extract from
     // i = index of next vector element to read (should be updated by method)
-    virtual void SetVector(const RbtDoubleList& v, RbtInt& i) throw(RbtError) = 0;
+    virtual void SetVector(const RbtDoubleList& v, RbtInt& i) = 0;
     // Updates chromosome element from a vector of XOverElements,
     // Number of XOverElements read should match GetXOverLength().
     // v = vector of XOverElements to extract from
     // i = index of next vector element to read (should be updated by method)
-    virtual void SetVector(const RbtXOverList& v, RbtInt& i) throw(RbtError) = 0;
+    virtual void SetVector(const RbtXOverList& v, RbtInt& i) = 0;
     // Gets the vector of absolute step sizes that correspond to each double value.
     virtual void GetStepVector(RbtDoubleList& v) const = 0;
     // Gets the maximum relative difference between this element and another element
@@ -104,7 +104,7 @@ class RbtChromElement {
     // IMPLEMENTED VIRTUAL METHODS
     //
     // Invalid operation in base class
-    virtual void Add(RbtChromElement* pChromElement) throw(RbtError);
+    virtual void Add(RbtChromElement* pChromElement);
     // Prints details of element to stream (null implementation in base class)
     virtual void Print(ostream& s) const {};
     //
@@ -157,8 +157,6 @@ typedef RbtChromElementList::const_iterator RbtChromElementListConstIter;
 
 namespace Rbt {
 // 2-point crossover
-void Crossover(RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3, RbtChromElement* pChr4) throw(
-    RbtError
-);
+void Crossover(RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3, RbtChromElement* pChr4);
 }  // namespace Rbt
 #endif /*RBTCHROMELEMENT_H_*/

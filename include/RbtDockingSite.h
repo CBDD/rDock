@@ -77,13 +77,13 @@ class RbtDockingSite {
 
     // Filters an atom list according to distance from the cavity coords
     // Only returns atoms within minDist and maxDist from cavity
-    RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(RbtError);
+    RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist);
     // Filters an atom list according to distance from the cavity coords
     // Only returns atoms within maxDist from cavity
     // This version does not require the cavity grid
-    RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble maxDist) throw(RbtError);
+    RbtAtomList GetAtomList(const RbtAtomList& atomList, RbtDouble maxDist);
     // Returns the count of atoms within minDist and maxDist from cavity
-    RbtUInt GetNumAtoms(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(RbtError);
+    RbtUInt GetNumAtoms(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist);
 
     // private methods
  private:

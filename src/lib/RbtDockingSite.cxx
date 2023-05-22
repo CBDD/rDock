@@ -217,7 +217,7 @@ RbtAtomList RbtDockingSite::GetAtomList(const RbtAtomList& atomList, RbtDouble m
 // Filters an atom list according to distance from the cavity coords
 // Only returns atoms within maxDist from cavity
 // This version does not require the cavity grid
-RbtAtomList RbtDockingSite::GetAtomList(const RbtAtomList& atomList, RbtDouble maxDist) throw(RbtError) {
+RbtAtomList RbtDockingSite::GetAtomList(const RbtAtomList& atomList, RbtDouble maxDist) {
     RbtAtomList newAtomList;
     RbtCoordList allCoords;
     GetCoordList(allCoords);

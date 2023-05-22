@@ -57,7 +57,7 @@ void RbtChromOccupancyElement::GetVector(RbtXOverList& v) const {
     v.push_back(occupancyElement);
 }
 
-void RbtChromOccupancyElement::SetVector(const RbtDoubleList& v, RbtInt& i) throw(RbtError) {
+void RbtChromOccupancyElement::SetVector(const RbtDoubleList& v, RbtInt& i) {
     if (VectorOK(v, i)) {
         m_value = StandardisedValue(v[i++]);
     } else {
@@ -65,7 +65,7 @@ void RbtChromOccupancyElement::SetVector(const RbtDoubleList& v, RbtInt& i) thro
     }
 }
 
-void RbtChromOccupancyElement::SetVector(const RbtXOverList& v, RbtInt& i) throw(RbtError) {
+void RbtChromOccupancyElement::SetVector(const RbtXOverList& v, RbtInt& i) {
     if (VectorOK(v, i)) {
         RbtXOverElement occupancyElement(v[i++]);
         if (occupancyElement.size() == 1) {

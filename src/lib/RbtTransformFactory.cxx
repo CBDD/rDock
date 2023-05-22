@@ -61,7 +61,7 @@ RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass
 // Transform parameters and scoring function requests are set from the list of parameters in each named section
 RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
     RbtParameterFileSourcePtr spPrmSource, const RbtString& strName, const RbtString& strTransformClasses
-) throw(RbtError) {
+) {
     // Get list of transform objects to create
     RbtStringList transformList = Rbt::ConvertDelimitedStringToList(strTransformClasses);
     // If strTransformClasses is empty, then default to reading all sections of the

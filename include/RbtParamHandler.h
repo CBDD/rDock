@@ -33,7 +33,7 @@ class RbtParamHandler {
     // Get number of stored parameters
     RbtUInt GetNumParameters() const;
     // Get a named parameter, throws error if name not found
-    RbtVariant GetParameter(const RbtString& strName) const throw(RbtBadArgument);
+    RbtVariant GetParameter(const RbtString& strName) const;
     // Check if named parameter is present
     RbtBool isParameterValid(const RbtString& strName) const;
     // Get list of all parameter names
@@ -42,7 +42,7 @@ class RbtParamHandler {
     RbtStringVariantMap GetParameters() const;
 
     // Set named parameter to new value, throws error if name not found
-    void SetParameter(const RbtString& strName, const RbtVariant& vValue) throw(RbtBadArgument);
+    void SetParameter(const RbtString& strName, const RbtVariant& vValue);
 
     // Virtual function for dumping parameters to an output stream
     // Called by operator <<

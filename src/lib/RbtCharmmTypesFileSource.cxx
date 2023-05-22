@@ -41,7 +41,7 @@ RbtCharmmTypeList RbtCharmmTypesFileSource::GetTypeList() {
 
 // Private methods
 // Pure virtual in RbtBaseFileSource - needs to be defined here
-void RbtCharmmTypesFileSource::Parse() throw(RbtError) {
+void RbtCharmmTypesFileSource::Parse() {
     // Expected string constants in MASSES.RTF file
     const RbtString strMassKey("MASS");
 

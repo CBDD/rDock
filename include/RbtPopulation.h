@@ -35,7 +35,7 @@ class RbtPopulation {
     // 4) Roulette wheel fitness values are calculated.
     // 5) Model coords are updated to match the fittest chromosome
     // An RbtBadArgument error is thrown if size is <=0, or if pChr or pSF is null.
-    RbtPopulation(RbtChromElement* pChr, RbtInt size, RbtBaseSF* pSF) throw(RbtError);
+    RbtPopulation(RbtChromElement* pChr, RbtInt size, RbtBaseSF* pSF);
     virtual ~RbtPopulation();
 
     // Gets the maximum size of the population as defined in the constructor.
@@ -59,7 +59,7 @@ class RbtPopulation {
     // e.g. in between GA stages.
     // An RbtBadArgument error is thrown if pSF is null.
     // Model coords are updated to match the fittest chromosome
-    void SetSF(RbtBaseSF* pSF) throw(RbtError);
+    void SetSF(RbtBaseSF* pSF);
 
     // Main method for performing a GA iteration
     void GAstep(
@@ -69,7 +69,7 @@ class RbtPopulation {
         RbtDouble pcross,             // Probability of crossover
         RbtBool xovermut,             // if true, perform cauchy mutation following crossover
         RbtBool cmutate               // true=cauchy mutations, false=regular mutations
-    ) throw(RbtError);
+    );
     RbtGenomePtr RouletteWheelSelect() const;
 
     void Print(ostream&) const;

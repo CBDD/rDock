@@ -35,7 +35,7 @@ RbtMdlFileSource::RbtMdlFileSource(
 // Default destructor
 RbtMdlFileSource::~RbtMdlFileSource() { _RBTOBJECTCOUNTER_DESTR_("RbtMdlFileSource"); }
 
-void RbtMdlFileSource::Parse() throw(RbtError) {
+void RbtMdlFileSource::Parse() {
     // Only parse if we haven't already done so
     if (!m_bParsedOK) {
         ClearMolCache();  // Clear current cache
@@ -223,7 +223,7 @@ void RbtMdlFileSource::Parse() throw(RbtError) {
 }
 
 // Sets up all the atomic attributes that are not explicitly stored in the PSF file
-void RbtMdlFileSource::SetupAtomParams() throw(RbtError) {
+void RbtMdlFileSource::SetupAtomParams() {
     // In the SD/MOL file we have:
     //   Element names
     //   X,Y,Z coords
@@ -256,7 +256,7 @@ void RbtMdlFileSource::SetupAtomParams() throw(RbtError) {
 // Helper functions for SetupAtomParams()
 
 // Sets hybridisation state and checks for Nsp3,Osp3 or Ssp3 next to sp2 special cases
-void RbtMdlFileSource::SetupHybridState() throw(RbtError) {
+void RbtMdlFileSource::SetupHybridState() {
     //////////////////
     // FIRST PASS
     //////////////////
@@ -346,7 +346,7 @@ void RbtMdlFileSource::SetupHybridState() throw(RbtError) {
 // Adds implicit hydrogens to C,N,S
 // Defines vdW radius, correcting for extended atoms and H-bond donor hydrogens
 // Defines formal "force-field" type string
-void RbtMdlFileSource::SetupTheRest() throw(RbtError) {
+void RbtMdlFileSource::SetupTheRest() {
     // Radius increment for atoms with implicit hydrogens
     // DM 22 Jul 1999 - only increase the radius for sp3 atoms with implicit hydrogens
     // For sp2 and aromatic, leave as is
@@ -647,7 +647,7 @@ void RbtMdlFileSource::SetupNegIonisableGroups() {
 }
 
 // Adds a proton to N_SP3 and N_SP2 atoms
-void RbtMdlFileSource::AddHydrogen(RbtAtomPtr spAtom) throw(RbtError) {
+void RbtMdlFileSource::AddHydrogen(RbtAtomPtr spAtom) {
     Rbt::isFFType_eq bIsNSP3("N_SP3");
     Rbt::isFFType_eq bIsNSP2("N_SP2");
 

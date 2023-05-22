@@ -41,7 +41,7 @@ class RbtPsfFileSource: public RbtBaseMolecularFileSource {
 
  protected:
     // Pure virtual in RbtBaseFileSource - needs to be defined here
-    virtual void Parse() throw(RbtError);
+    virtual void Parse();
 
  private:
     // Private methods
@@ -50,8 +50,8 @@ class RbtPsfFileSource: public RbtBaseMolecularFileSource {
     RbtPsfFileSource& operator=(const RbtPsfFileSource&);  // Copy assignment disabled by default
 
     // Sets up all the atomic attributes that are not explicitly stored in the PSF file
-    void SetupAtomParams() throw(RbtError);
-    void SetupVdWRadii() throw(RbtError);
+    void SetupAtomParams();
+    void SetupVdWRadii();
     void SetupPartialIonicGroups();
     void RemoveNonPolarHydrogens();
     // Is atom in same substructure

@@ -28,7 +28,7 @@ RbtPdbFileSource::RbtPdbFileSource(const RbtString fileName):
 // Default destructor
 RbtPdbFileSource::~RbtPdbFileSource() { _RBTOBJECTCOUNTER_DESTR_("RbtPdbFileSource"); }
 
-void RbtPdbFileSource::Parse() throw(RbtError) {
+void RbtPdbFileSource::Parse() {
     // Expected string constants in PDB files
     const RbtString strTitleKey("REMARK ");
     const RbtString strAtomKey("ATOM ");
