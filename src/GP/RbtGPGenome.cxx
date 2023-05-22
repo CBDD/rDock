@@ -13,7 +13,7 @@
 #include "RbtGPGenome.h"
 
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 #include "RbtDebug.h"
 #include "RbtGPParser.h"
@@ -58,7 +58,7 @@ RbtGPGenome::RbtGPGenome(istream& in): m_rand(Rbt::GetRbtRand()) {
 }
 
 RbtGPGenome::RbtGPGenome(RbtString str): m_rand(Rbt::GetRbtRand()) {
-    istrstream ist(str.c_str());
+    istringstream ist(str.c_str());
     // Get structure
     ist >> npi >> nfi >> nsfi >> no >> nf >> nr >> nc >> l;
     nn = nr * nc;  // number of nodes

@@ -57,7 +57,6 @@ void RbtPsfFileSink::Render() {
         ostringstream ostr;
         ostr << setw(8) << titleList.size() << setw(0) << " " << strTitleKey << ends;
         AddLine(ostr.str());
-        // delete ostr.str();
         for (RbtStringListConstIter iter = titleList.begin(); iter != titleList.end(); iter++) {
             // Add an initial star if the title does not already commence with a star
             if ((*iter).find("*") != 0)
@@ -94,25 +93,6 @@ void RbtPsfFileSink::Render() {
                 0.0
             );
             AddLine(line);
-            // Render the atom to a string stream
-            // ostringstream ostr;
-            // ostr.precision(5);
-            // ostr.setf(ios_base::fixed,ios_base::floatfield);
-            // ostr.setf(ios_base::right,ios_base::adjustfield);
-            // ostr.fill('#');
-            // ostr << setw(8) << spAtom->GetAtomId() << " ";
-            // ostr.setf(ios_base::left,ios_base::adjustfield);
-            // ostr << setw(4) << spAtom->GetSegmentName() << " ";
-            // ostr << setw(4) << spAtom->GetSubunitId() << " ";
-            // ostr << setw(4) << spAtom->GetSubunitName() << " ";
-            // ostr << setw(4) << spAtom->GetAtomName() << " ";
-            // ostr << setw(4) << spAtom->GetFFType() << " ";
-            // ostr.setf(ios_base::right,ios_base::adjustfield);
-            // ostr << setw(14) << spAtom->GetPartialCharge();
-            // ostr << setw(10) << spAtom->GetAtomicMass();
-            // ostr << setw(12) << 0.0 << ends;
-            // AddLine(ostr.str());
-            // delete ostr.str();
         }
         delete[] line;
         // 4. Write number of bonds
@@ -139,7 +119,6 @@ void RbtPsfFileSink::Render() {
             bIter++;
             ostr << ends;
             AddLine(ostr.str());
-            // delete ostr.str();
         }
         // Remaining bonds on final incomplete line
         if (nRem > 0) {
@@ -150,7 +129,6 @@ void RbtPsfFileSink::Render() {
             }
             ostr << ends;
             AddLine(ostr.str());
-            // delete ostr.str();
         }
 
         Write();  // Commit the cache to the file

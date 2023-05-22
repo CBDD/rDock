@@ -14,7 +14,7 @@
 
 #include <cassert>
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 #include "RbtCellTokenIter.h"
 #include "RbtDebug.h"

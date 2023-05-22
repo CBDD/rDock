@@ -95,7 +95,6 @@ RbtElementData RbtElementFileSource::GetElementData(RbtInt nAtomicNumber) {
         ostringstream ostr;
         ostr << "Atomic number " << nAtomicNumber << " not found in " << GetFileName() << ends;
         RbtString strError(ostr.str());
-        // delete ostr.str();
         throw RbtFileMissingParameter(_WHERE_, strError);
     }
 }

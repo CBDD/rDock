@@ -62,7 +62,7 @@ CXX_EXTRA_FLAGS				?=
 CXX_BASE_FLAGS              += -pipe -std=$(CXX_STD) -fPIC -fpermissive
 CXX_DEBUG_CONFIG_FLAGS      += -O0 -g
 CXX_RELEASE_CONFIG_FLAGS    += -O3 -ffast-math
-CXX_WARNING_FLAGS           += -Wno-deprecated
+CXX_WARNING_FLAGS           +=
 
 DEBUG_DEFINES               := -D_DEBUG
 RELEASE_DEFINES             := -D_NDEBUG

@@ -13,7 +13,7 @@
 #include "RbtGPFFCrossDock.h"
 
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 #include "RbtDebug.h"
 #include "RbtGPGenome.h"

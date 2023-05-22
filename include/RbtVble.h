@@ -15,7 +15,7 @@
 #ifndef _RBT_VBLE_H_
 #define _RBT_VBLE_H_
 
-#include <strstream>
+#include <sstream>
 
 #include "RbtGPTypes.h"
 #include "RbtTypes.h"
@@ -40,7 +40,7 @@ class RbtVble {
     void SetValue(RbtReturnType val) {
         value = val;
         if (name == "") {
-            ostrstream s;
+            ostringstream s;
             s << value << ends;
             name = s.str();
         }

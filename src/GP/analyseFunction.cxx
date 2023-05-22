@@ -10,10 +10,17 @@
  * http://rdock.sourceforge.net/
  ***********************************************************************/
 
+/*
+
+    WARNING: this whole file is deprecated. It is only kept for reference
+    and will very likely be removed in the future
+
+*/
+
 #include <stdio.h>
 
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 #include "../inc/RbtGPGenome.h"
 #include "../inc/RbtGPPopulation.h"

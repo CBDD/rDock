@@ -13,7 +13,7 @@
 #include "RbtGPFFCHK1.h"
 
 #include <fstream>
-#include <strstream>
+#include <sstream>
 
 #include "RbtCellTokenIter.h"
 #include "RbtDebug.h"

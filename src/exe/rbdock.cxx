@@ -221,7 +221,7 @@ int main(int argc, const char *argv[]) {
 
     // BGD 26 Feb 2003 - Create filters to simulate old rbdock
     // behaviour
-    ostrstream strFilter;
+    ostringstream strFilter;
     if (!bFilter) {
         if (bTarget)  // -t<TS>
         {
@@ -372,7 +372,7 @@ int main(int argc, const char *argv[]) {
         cout << endl << "DOCKING SITE" << endl << (*spDS) << endl;
 
         // Prepare the SD file sink for saving the docked conformations for each ligand
-        // DM 3 Dec 1999 - replaced ostrstream with RbtString in determining SD file name
+        // DM 3 Dec 1999 - replaced ostringstream with RbtString in determining SD file name
         // SRC 2014 moved here this block to allow WRITE_ERROR TRUE
         if (bOutput) {
             RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(strRunName + ".sd", RbtModelPtr()));
@@ -480,10 +480,9 @@ int main(int argc, const char *argv[]) {
                     // Catching errors with this specific run
                     try {
                         if (bOutput) {
-                            ostrstream histr;
+                            ostringstream histr;
                             histr << strRunName << "_" << strMolName << nRec << "_his_" << iRun << ".sd" << ends;
                             RbtMolecularFileSinkPtr spHistoryFileSink(new RbtMdlFileSink(histr.str(), spLigand));
-                            delete histr.str();
                             spWS->SetHistorySink(spHistoryFileSink);
                         }
                         spWS->Run();  // Dock!

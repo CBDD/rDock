@@ -244,10 +244,9 @@ int main(int argc, const char *argv[]) {
         if (bDump) {
             RbtCavityList cavList = spDockSite->GetCavityList();
             for (RbtInt i = 0; i < cavList.size(); i++) {
-                ostrstream filename;
+                ostringstream filename;
                 filename << wsName << "_cav" << i + 1 << ".grd" << ends;
                 ofstream dumpFile(filename.str());
-                delete filename.str();
                 if (dumpFile) {
                     cavList[i]->GetGrid()->PrintInsightGrid(dumpFile);
                     dumpFile.close();

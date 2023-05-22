@@ -50,7 +50,7 @@
 //#include <stdlib.h>
 //#include <assert.h>
 #include <iostream>
-#include <strstream>
+#include <sstream>
 #include <iomanip>
 
 #define D_PRECISION 16
@@ -205,8 +205,7 @@ class Vector
     Vector(Subscript N, char *s) :  v_(0), vm1_(0), n_(0)
     {
         initialize(N);
-        istrstream ins(s);
-        //        std::istrstream ins(s);        
+        std::istringstream ins(s);
 
         Subscript i;
 
@@ -332,10 +331,10 @@ class Vector
 
   //  friend std::istream & operator>>(std::istream &s, Vector<T> &A);
 #ifdef OLD_LIBC
-  friend istream & operator>>(istream &s, Vector<T> &A);
+  friend std::istream & operator>>(std::istream &s, Vector<T> &A);
 #else
   //  template<class T>
-  friend istream & operator>><>(istream &s, Vector<T> &A);
+  friend std::istream & operator>><>(std::istream &s, Vector<T> &A);
 #endif
   
 // *******************[ basic norm algorithms ]***********************cmsief
@@ -427,7 +426,7 @@ class Vector
 /* ***************************  I/O  ********************************/
 //std::ostream& operator<<(std::ostream &s, const Vector<T> &A)
 template <class T>
-ostream& operator<<(ostream &s, const Vector<T> &A)
+std::ostream& operator<<(std::ostream &s, const Vector<T> &A)
 {
     Subscript N=A.dim();
 
@@ -441,7 +440,7 @@ ostream& operator<<(ostream &s, const Vector<T> &A)
 }
 //std::istream & operator>>(std::istream &s, Vector<T> &A)
 template <class T>
-istream & operator>>(istream &s, Vector<T> &A)
+std::istream & operator>>(std::istream &s, Vector<T> &A)
 {
 
     Subscript N;

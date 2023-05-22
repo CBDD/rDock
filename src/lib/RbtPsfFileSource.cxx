@@ -68,7 +68,7 @@ void RbtPsfFileSource::Parse() {
             // 2a Read number of title lines and check for correct title key...
             RbtInt nTitleRec;
             fileIter += 2;
-            istrstream((*fileIter).c_str()) >> nTitleRec >> strKey;
+            istringstream((*fileIter).c_str()) >> nTitleRec >> strKey;
             if (strKey != strTitleKey)
                 throw RbtFileParseError(_WHERE_, "Missing " + strTitleKey + " string in " + GetFileName());
 
@@ -87,7 +87,7 @@ void RbtPsfFileSource::Parse() {
             // 3a. Read number of atoms and check for correct atom key...
             RbtInt nAtomRec;
             fileIter++;
-            istrstream((*fileIter).c_str()) >> nAtomRec >> strKey;
+            istringstream((*fileIter).c_str()) >> nAtomRec >> strKey;
             if (strKey != strAtomKey)
                 throw RbtFileParseError(_WHERE_, "Missing " + strAtomKey + " string in " + GetFileName());
 
@@ -106,7 +106,7 @@ void RbtPsfFileSource::Parse() {
             RbtDouble dAtomicMass;     // atomic mass from PSF file
 
             while ((m_atomList.size() < nAtomRec) && (fileIter != fileEnd)) {
-                istrstream istr((*fileIter++).c_str());
+                istringstream istr((*fileIter++).c_str());
                 istr >> nAtomId >> strSegmentName >> strSubunitId >> strSubunitName >> strAtomName >> strFFType
                     >> dPartialCharge >> dAtomicMass;
 
@@ -152,8 +152,8 @@ void RbtPsfFileSource::Parse() {
             // 4a. Read number of bonds and check for correct bond key...
             RbtInt nBondRec;
             fileIter++;
-            // istrstream((*fileIter).c_str()) >> nBondRec >> strKey;
-            istrstream((*fileIter).c_str()) >> nBondRec >> strKey;
+            // istringstream((*fileIter).c_str()) >> nBondRec >> strKey;
+            istringstream((*fileIter).c_str()) >> nBondRec >> strKey;
             // cout << "strKey "<<strKey << " strBondKey " << strBondKey << endl;
             // if(strBondKey.compare(strKey,0,6)) {// 6 for "!NBOND" old style API
             RbtInt iCmp = strBondKey.compare(0, 5, strKey);
@@ -170,7 +170,7 @@ void RbtPsfFileSource::Parse() {
             RbtUInt idxAtom1;
             RbtUInt idxAtom2;
             while ((m_bondList.size() < nBondRec) && (fileIter != fileEnd)) {
-                istrstream istr((*fileIter++).c_str());
+                istringstream istr((*fileIter++).c_str());
 
                 // Read bonds slightly differently to atoms as we have 4 bonds per line
                 // Current method assumes atoms are numbered consectively from 1
