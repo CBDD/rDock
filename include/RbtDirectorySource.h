@@ -51,7 +51,7 @@ class RbtDirectorySource {
     void CheckDirectory(RbtString &);  // to check directory access
 
  public:
-    RbtDirectorySource(const RbtString &) throw(RbtError);
+    RbtDirectorySource(const RbtString &);
     virtual ~RbtDirectorySource();
 
     static RbtString _CT;

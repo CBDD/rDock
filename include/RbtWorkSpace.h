@@ -62,23 +62,23 @@ class RbtWorkSpace: public RbtSubject, public RbtParamHandler {
     RbtModelList GetModels() const;
     // Returns a specific (numbered) model
     // Throws RbtBadArgument if iModel out of range
-    RbtModelPtr GetModel(RbtUInt iModel) const throw(RbtError);
+    RbtModelPtr GetModel(RbtUInt iModel) const;
 
     // Replace an existing model
     // Throws RbtBadArgument if iModel out of range
-    void SetModel(RbtUInt iModel, RbtModelPtr spModel) throw(RbtError);
+    void SetModel(RbtUInt iModel, RbtModelPtr spModel);
 
     // Returns vector of models, starting from index iModel
-    RbtModelList GetModels(RbtUInt iModel) const throw(RbtError);
+    RbtModelList GetModels(RbtUInt iModel) const;
     // Append a number of models to the workspace, increasing the total number of models
     void AddModels(RbtModelList modelList);
     // Replace a number of existing models
     // iModel is the index of the first model to replace
     // Throws RbtBadArgument if iModel out of range or modelList too large
-    void SetModels(RbtUInt iModel, RbtModelList modelList) throw(RbtError);
+    void SetModels(RbtUInt iModel, RbtModelList modelList);
     // Removes a number of models from the workspace
     // Removes from index iModel to end of model list
-    void RemoveModels(RbtUInt iModel) throw(RbtError);
+    void RemoveModels(RbtUInt iModel);
 
     // Model I/O
     // Get/set the molecular file sink (for outputting ligands)

@@ -30,7 +30,7 @@ RbtCrdFileSource::RbtCrdFileSource(const RbtString fileName):
 // Default destructor
 RbtCrdFileSource::~RbtCrdFileSource() { _RBTOBJECTCOUNTER_DESTR_("RbtCrdFileSource"); }
 
-void RbtCrdFileSource::Parse() throw(RbtError) {
+void RbtCrdFileSource::Parse() {
     // Only parse if we haven't already done so
     if (!m_bParsedOK) {
         ClearMolCache();  // Clear current cache

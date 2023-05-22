@@ -159,12 +159,12 @@ RbtUInt RbtModel::GetNumPseudoAtoms() const { return m_pseudoAtomList.size(); }
 RbtPseudoAtomList RbtModel::GetPseudoAtomList() const { return m_pseudoAtomList; }
 
 // DM 1 Jul 2002 - tethered atom handling
-RbtUInt RbtModel::GetNumTetheredAtoms() const throw(RbtError) { return GetTetheredAtomList().size(); }
+RbtUInt RbtModel::GetNumTetheredAtoms() const { return GetTetheredAtomList().size(); }
 
 // Parses the ">  <TETHERED ATOMS>" data field
 //(comma-separated list of atom IDs)
 // and returns an atomlist of tethered atoms in the same order
-RbtAtomList RbtModel::GetTetheredAtomList() const throw(RbtError) {
+RbtAtomList RbtModel::GetTetheredAtomList() const {
     RbtAtomList tetheredAtomList;
     // Can be multi-line so process as a vector of strings (RbtStringList)
     RbtStringList dataField = GetDataValue("TETHERED ATOMS");
@@ -190,7 +190,7 @@ void RbtModel::SetOccupancy(RbtDouble occupancy, RbtDouble threshold) {
 }
 
 // Update coords from a data source
-void RbtModel::UpdateCoords(RbtBaseMolecularFileSource* pMolSource) throw(RbtError) {
+void RbtModel::UpdateCoords(RbtBaseMolecularFileSource* pMolSource) {
     try {
         // Read coord atom list
         // DM 16 Feb 2000 - attempt to match atom names in the source with those already in the model
@@ -415,7 +415,7 @@ void RbtModel::SaveCoords(const RbtString& coordName) {
     }
 }
 
-void RbtModel::RevertCoords(const RbtString& coordName) throw(RbtError) {
+void RbtModel::RevertCoords(const RbtString& coordName) {
     // Look up the coord name in the map
     RbtStringIntMapConstIter iter = m_coordNames.find(coordName);
     if (iter != m_coordNames.end()) {
@@ -491,7 +491,7 @@ RbtChromElement* RbtModel::GetChrom() const { return (m_pChrom) ? m_pChrom->clon
 
 RbtBool RbtModel::isFlexible() const { return !m_spMutator.Null(); }
 
-const RbtAtomRList& RbtModel::GetFlexIntns(RbtAtom* pAtom) const throw(RbtError) {
+const RbtAtomRList& RbtModel::GetFlexIntns(RbtAtom* pAtom) const {
     if (isFlexible()) {
         // Check if atom is actually in the model
         if (pAtom->GetModelPtr() != this) {
@@ -509,7 +509,7 @@ const RbtAtomRList& RbtModel::GetFlexIntns(RbtAtom* pAtom) const throw(RbtError)
         throw RbtInvalidRequest(_WHERE_, "GetFlexIntns invalid for rigid models");
     }
 }
-RbtBondList RbtModel::GetFlexBonds() const throw(RbtError) {
+RbtBondList RbtModel::GetFlexBonds() const {
     if (isFlexible()) {
         return m_spMutator->GetFlexBonds();
     } else {
@@ -757,7 +757,7 @@ void RbtModel::Clear() {
 
 // Helper function for the constructor
 // Create a new model from a data source
-void RbtModel::Create(RbtBaseMolecularFileSource* pMolSource) throw(RbtError) {
+void RbtModel::Create(RbtBaseMolecularFileSource* pMolSource) {
     m_pFlexData = NULL;
     m_pChrom = NULL;
     Clear();  // Clear previous model, if any

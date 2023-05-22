@@ -81,63 +81,63 @@ void ReadConstraints(istream& ii, RbtConstraintList& cl, RbtBool bCount = true);
 class RbtHeavyConstraint: public RbtConstraint {
  public:
     RbtHeavyConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtHBAConstraint: public RbtConstraint {
  public:
     RbtHBAConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtHBDConstraint: public RbtConstraint {
  public:
     RbtHBDConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtHydroConstraint: public RbtConstraint {
  public:
     RbtHydroConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtHydroAliphaticConstraint: public RbtConstraint {
  public:
     RbtHydroAliphaticConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtHydroAromaticConstraint: public RbtConstraint {
  public:
     RbtHydroAromaticConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtNegChargeConstraint: public RbtConstraint {
  public:
     RbtNegChargeConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtPosChargeConstraint: public RbtConstraint {
  public:
     RbtPosChargeConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 
 class RbtRingAromaticConstraint: public RbtConstraint {
  public:
     RbtRingAromaticConstraint(RbtCoord c, RbtDouble t): RbtConstraint(c, t){};
-    void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
+    void AddAtomList(RbtModelPtr, RbtBool bCheck = true);
     static RbtInt counter;
 };
 

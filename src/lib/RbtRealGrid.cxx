@@ -450,7 +450,7 @@ void RbtRealGrid::OwnWrite(ostream& ostr) const {
 // Protected method for reading data members for this class from binary stream
 // WARNING: Assumes grid data array has already been created
 // and is of the correct size
-void RbtRealGrid::OwnRead(istream& istr) throw(RbtError) {
+void RbtRealGrid::OwnRead(istream& istr) {
     // Read title
     RbtInt length;
     Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));

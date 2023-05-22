@@ -254,7 +254,7 @@ void RbtBaseGrid::OwnWrite(ostream& ostr) const {
 }
 
 // Protected method for reading data members for this class from binary stream
-void RbtBaseGrid::OwnRead(istream& istr) throw(RbtError) {
+void RbtBaseGrid::OwnRead(istream& istr) {
     // Read title
     RbtInt length;
     Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));

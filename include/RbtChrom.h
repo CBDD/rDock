@@ -43,8 +43,8 @@ class RbtChrom: public RbtChromElement {
     virtual RbtInt GetXOverLength() const;
     virtual void GetVector(RbtDoubleList& v) const;
     virtual void GetVector(RbtXOverList& v) const;
-    virtual void SetVector(const RbtDoubleList& v, RbtInt& i) throw(RbtError);
-    virtual void SetVector(const RbtXOverList& v, RbtInt& i) throw(RbtError);
+    virtual void SetVector(const RbtDoubleList& v, RbtInt& i);
+    virtual void SetVector(const RbtXOverList& v, RbtInt& i);
     virtual void GetStepVector(RbtDoubleList& v) const;
     virtual RbtDouble CompareVector(const RbtDoubleList& v, RbtInt& i) const;
     virtual void Print(ostream& s) const;
@@ -53,7 +53,7 @@ class RbtChrom: public RbtChromElement {
     // Appends a new chromosome element to the vector
     // RbtChrom destructor is responsible for deleting the new element
     // Null operation if pChromElement is NULL
-    virtual void Add(RbtChromElement* pChromElement) throw(RbtError);
+    virtual void Add(RbtChromElement* pChromElement);
 
  protected:
  private:

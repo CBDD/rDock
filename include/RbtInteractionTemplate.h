@@ -156,7 +156,7 @@ class RbtInteractionGridTemplate: public RbtBaseGrid {
         ostr << "No. of entries in the map: " << m_intnMap.size() << endl;
     };
     void OwnWrite(ostream& ostr) const {};
-    void OwnRead(istream& istr) throw(RbtError) { CreateMap(); };
+    void OwnRead(istream& istr) { CreateMap(); };
 
  private:
     RbtInteractionGridTemplate();

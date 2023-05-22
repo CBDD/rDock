@@ -104,8 +104,8 @@ class RbtModel {
     RbtPseudoAtomList GetPseudoAtomList() const;
 
     // DM 1 Jul 2002 - tethered atom handling
-    RbtUInt GetNumTetheredAtoms() const throw(RbtError);
-    RbtAtomList GetTetheredAtomList() const throw(RbtError);
+    RbtUInt GetNumTetheredAtoms() const;
+    RbtAtomList GetTetheredAtomList() const;
 
     // DM 7 June 2006 - occupancy handling
     // The model occupancy is represented in two ways:
@@ -126,7 +126,7 @@ class RbtModel {
     //////////////////////
 
     // Update coords from a data source
-    void UpdateCoords(RbtBaseMolecularFileSource* pMolSource) throw(RbtError);
+    void UpdateCoords(RbtBaseMolecularFileSource* pMolSource);
 
     // DM 07 Jan 1999
     // Translate molecule by the given vector
@@ -147,7 +147,7 @@ class RbtModel {
 
     // DM 8 Feb 1999
     void SaveCoords(const RbtString& coordName = "");
-    void RevertCoords(const RbtString& coordName = "") throw(RbtError);
+    void RevertCoords(const RbtString& coordName = "");
     RbtStringIntMap GetSavedCoordNames() const { return m_coordNames; }
     RbtInt GetNumSavedCoords() const { return m_coordNames.size(); }
     RbtInt GetCurrentCoords() const { return m_currentCoord; }
@@ -183,8 +183,8 @@ class RbtModel {
     RbtChromElement* GetChrom() const;
 
     RbtBool isFlexible() const;
-    const RbtAtomRList& GetFlexIntns(RbtAtom* pAtom) const throw(RbtError);
-    RbtBondList GetFlexBonds() const throw(RbtError);
+    const RbtAtomRList& GetFlexIntns(RbtAtom* pAtom) const;
+    RbtBondList GetFlexBonds() const;
     // Selects all atoms that are rotated by at least one rotable bond
     void SelectFlexAtoms();
     void SelectFlexAtoms(RbtAtom* pAtom);
@@ -302,7 +302,7 @@ class RbtModel {
     RbtModel& operator=(const RbtModel&);  // Copy assignment disabled by default
 
     // Create a new model from a data source
-    void Create(RbtBaseMolecularFileSource* pMolSource) throw(RbtError);
+    void Create(RbtBaseMolecularFileSource* pMolSource);
     void Clear();                          // Clear the current model
     void AddAtoms(RbtAtomList& atomList);  // Register an atom list with the model
 

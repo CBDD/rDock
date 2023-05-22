@@ -23,7 +23,7 @@ class RbtPseudoAtom: public RbtAtom {
     // Constructors / destructors
 
     // Constructor supplying atom list of constituent atoms
-    RbtPseudoAtom(const RbtAtomList& atomList, RbtInt nAtomId = -1, RbtString strAtomName = "PSEUDO") throw(RbtError);
+    RbtPseudoAtom(const RbtAtomList& atomList, RbtInt nAtomId = -1, RbtString strAtomName = "PSEUDO");
 
     // Default destructor
     virtual ~RbtPseudoAtom();

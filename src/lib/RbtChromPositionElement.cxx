@@ -204,7 +204,7 @@ void RbtChromPositionElement::GetVector(RbtXOverList& v) const {
     }
 }
 
-void RbtChromPositionElement::SetVector(const RbtDoubleList& v, RbtInt& i) throw(RbtError) {
+void RbtChromPositionElement::SetVector(const RbtDoubleList& v, RbtInt& i) {
     if (VectorOK(v, i)) {
         if (!m_spRefData->IsTransFixed()) {
             // 2013Nov26 (DM) Bug fix to unsafe code.
@@ -232,7 +232,7 @@ void RbtChromPositionElement::SetVector(const RbtDoubleList& v, RbtInt& i) throw
     }
 }
 
-void RbtChromPositionElement::SetVector(const RbtXOverList& v, RbtInt& i) throw(RbtError) {
+void RbtChromPositionElement::SetVector(const RbtXOverList& v, RbtInt& i) {
     if (VectorOK(v, i)) {
         if (!m_spRefData->IsTransFixed()) {
             RbtXOverElement comElement(v[i++]);

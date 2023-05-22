@@ -31,8 +31,8 @@ class RbtSetupPMFSF: public RbtBaseInterSF {
     virtual void SetupScore();
     virtual RbtDouble RawScore() const;
 
-    void SetupReceptorPMFTypes(void) throw(RbtError);
-    void SetupLigandPMFTypes(void) throw(RbtError);
+    void SetupReceptorPMFTypes(void);
+    void SetupLigandPMFTypes(void);
     /**
      * Routines to figure out complex PMF types
      */

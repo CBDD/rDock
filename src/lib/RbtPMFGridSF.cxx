@@ -83,7 +83,7 @@ RbtDouble RbtPMFGridSF::RawScore() const {
     return theScore;
 }
 
-void RbtPMFGridSF::ReadGrids(istream& istr) throw(RbtError) {
+void RbtPMFGridSF::ReadGrids(istream& istr) {
     cout << "**************************************************************" << endl;
     cout << "                    Reading grid..." << endl;
     cout << "**************************************************************" << endl;

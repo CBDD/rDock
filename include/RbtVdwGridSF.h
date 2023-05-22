@@ -41,7 +41,7 @@ class RbtVdwGridSF: public RbtBaseInterSF {
 
  private:
     // Read grids from input stream
-    void ReadGrids(istream& istr) throw(RbtError);
+    void ReadGrids(istream& istr);
 
     RbtRealGridList m_grids;
     RbtAtomRList m_ligAtomList;

@@ -44,7 +44,7 @@ class RbtMdlFileSink: public RbtBaseMolecularFileSink {
     //
     ////////////////////////////////////////
     // Override public methods from RbtBaseFileSink
-    virtual void Render() throw(RbtError);
+    virtual void Render();
 
  protected:
     ////////////////////////////////////////

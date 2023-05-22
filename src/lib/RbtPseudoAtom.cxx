@@ -19,7 +19,7 @@
 // Note: the base RbtAtom constructor sets up default attributes for the pseudoatom only
 //(the constituent atoms are already constructed so we don't need to worry about them)
 // Use Atomic No = -1 to signify a pseudoatom
-RbtPseudoAtom::RbtPseudoAtom(const RbtAtomList& atomList, RbtInt nAtomId, RbtString strAtomName) throw(RbtError):
+RbtPseudoAtom::RbtPseudoAtom(const RbtAtomList& atomList, RbtInt nAtomId, RbtString strAtomName):
     RbtAtom(nAtomId, -1, strAtomName) {
     // Check atom list isn't empty (should be an assert)
     if (atomList.empty()) throw RbtBadArgument(_WHERE_, "Null atom list passed to RbtPseudoAtom constructor");

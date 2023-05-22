@@ -47,11 +47,11 @@ class RbtSFAgg: public RbtBaseSF {
     virtual void ScoreMap(RbtStringVariantMap& scoreMap) const;
 
     // Aggregate handling methods
-    virtual void Add(RbtBaseSF*) throw(RbtError);
-    virtual void Remove(RbtBaseSF*) throw(RbtError);
+    virtual void Add(RbtBaseSF*);
+    virtual void Remove(RbtBaseSF*);
     virtual RbtBool isAgg() const;
     virtual RbtUInt GetNumSF() const;
-    virtual RbtBaseSF* GetSF(RbtUInt iSF) const throw(RbtError);
+    virtual RbtBaseSF* GetSF(RbtUInt iSF) const;
 
     // WorkSpace handling methods
     // Register scoring function with a workspace

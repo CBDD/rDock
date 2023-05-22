@@ -57,13 +57,13 @@ class RbtPRMFactory {
     RbtDockingSite* GetDockingSite() const { return m_pDS; }
     void SetDockingSite(RbtDockingSite* pDS) { m_pDS = pDS; }
 
-    RbtModelPtr CreateReceptor() throw(RbtError);
-    RbtModelPtr CreateLigand(RbtBaseMolecularFileSource* pSource) throw(RbtError);
-    RbtModelList CreateSolvent() throw(RbtError);
+    RbtModelPtr CreateReceptor();
+    RbtModelPtr CreateLigand(RbtBaseMolecularFileSource* pSource);
+    RbtModelList CreateSolvent();
 
  private:
     // Creates the appropriate source according to the file extension
-    RbtMolecularFileSourcePtr CreateMolFileSource(const RbtString& fileName) throw(RbtError);
+    RbtMolecularFileSourcePtr CreateMolFileSource(const RbtString& fileName);
     void AttachReceptorFlexData(RbtModel* pReceptor);
     void AttachLigandFlexData(RbtModel* pLigand);
     void AttachSolventFlexData(RbtModel* pSolvent);

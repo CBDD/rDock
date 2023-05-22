@@ -61,9 +61,9 @@ class RbtBaseFileSource {
     //////////////////////////////////////////////////////
     // Protected member functions
     // PURE VIRTUAL - MUST BE OVERRIDDEN IN DERIVED CLASSES
-    virtual void Parse() throw(RbtError) = 0;
+    virtual void Parse() = 0;
     // chance to give false when record delimiter at the beginning
-    void Read(RbtBool aDelimiterAtEnd = true) throw(RbtError);
+    void Read(RbtBool aDelimiterAtEnd = true);
     //////////////////////////////////////////////////////
 
     // Protected data
@@ -76,7 +76,7 @@ class RbtBaseFileSource {
     RbtBaseFileSource();                                     // Disable default constructor
     RbtBaseFileSource(const RbtBaseFileSource&);             // Copy constructor disabled by default
     RbtBaseFileSource& operator=(const RbtBaseFileSource&);  // Copy assignment disabled by default
-    void Open() throw(RbtError);
+    void Open();
     void Close();
     void ClearCache();
 

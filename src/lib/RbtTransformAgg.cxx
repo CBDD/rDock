@@ -48,7 +48,7 @@ RbtTransformAgg::~RbtTransformAgg() {
 ////////////////
 
 // Aggregate handling methods
-void RbtTransformAgg::Add(RbtBaseTransform* pTransform) throw(RbtError) {
+void RbtTransformAgg::Add(RbtBaseTransform* pTransform) {
     // By first orphaning the transform to be added,
     // we handle attempts to readd existing children automatically,
     pTransform->Orphan();
@@ -59,7 +59,7 @@ void RbtTransformAgg::Add(RbtBaseTransform* pTransform) throw(RbtError) {
     m_transforms.push_back(pTransform);
 }
 
-void RbtTransformAgg::Remove(RbtBaseTransform* pTransform) throw(RbtError) {
+void RbtTransformAgg::Remove(RbtBaseTransform* pTransform) {
     RbtBaseTransformListIter iter = std::find(m_transforms.begin(), m_transforms.end(), pTransform);
     if (iter == m_transforms.end()) {
         throw RbtBadArgument(_WHERE_, "Remove(): pTransform is not a member of this aggregate");
@@ -76,7 +76,7 @@ void RbtTransformAgg::Remove(RbtBaseTransform* pTransform) throw(RbtError) {
 
 RbtBool RbtTransformAgg::isAgg() const { return true; }
 RbtUInt RbtTransformAgg::GetNumTransforms() const { return m_transforms.size(); }
-RbtBaseTransform* RbtTransformAgg::GetTransform(RbtUInt iTransform) const throw(RbtError) {
+RbtBaseTransform* RbtTransformAgg::GetTransform(RbtUInt iTransform) const {
     if (iTransform >= m_transforms.size()) {
         throw RbtBadArgument(_WHERE_, "GetTransform(): iTransform out of range");
     } else {

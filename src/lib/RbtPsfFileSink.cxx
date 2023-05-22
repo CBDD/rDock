@@ -36,7 +36,7 @@ RbtPsfFileSink::~RbtPsfFileSink() { _RBTOBJECTCOUNTER_DESTR_("RbtPsfFileSink"); 
 //
 ////////////////////////////////////////
 // Override public methods from RbtBaseFileSink
-void RbtPsfFileSink::Render() throw(RbtError) {
+void RbtPsfFileSink::Render() {
     // String constants in PSF files
     const RbtString strPsfKey("PSF");
     const RbtString strTitleKey("!NTITLE");

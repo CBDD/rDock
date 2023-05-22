@@ -39,9 +39,9 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // DM 06 Jun 2000 - limits params to those in named section
     RbtStringList GetParameterList();
     // DM 4 Feb 1999 Get a particular named parameter value as a double
-    RbtDouble GetParameterValue(const RbtString& strParamName) throw(RbtError);
+    RbtDouble GetParameterValue(const RbtString& strParamName);
     // DM 12 Feb 1999 Get a particular named parameter value as a string
-    RbtString GetParameterValueAsString(const RbtString& strParamName) throw(RbtError);
+    RbtString GetParameterValueAsString(const RbtString& strParamName);
     // DM 11 Feb 1999 Check if parameter is present
     RbtBool isParameterPresent(const RbtString& strParamName);
 
@@ -67,11 +67,11 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     RbtParameterFileSource& operator=(const RbtParameterFileSource&);  // Copy assignment disabled by default
 
     // Pure virtual in RbtBaseFileSource - needs to be defined here
-    virtual void Parse() throw(RbtError);
+    virtual void Parse();
     void ClearParamsCache();
     // Add a new section name
     // Throws an error if section name is empty, or is a duplicate
-    void AddSection(const RbtString& strSection) throw(RbtError);
+    void AddSection(const RbtString& strSection);
     // Returns the fully qualified parameter name (<section>::<parameter name>)
     // Checks if name already contains a section name, if so just returns the name unchanged
     // If not, prefixes the name with the current section name
