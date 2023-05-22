@@ -43,7 +43,7 @@ class RbtChromElement {
     enum eMode { FIXED = 0, TETHERED = 1, FREE = 2 };
     // Static methods to convert from mode enum to string and vice versa
     static eMode StrToMode(const RbtString& modeStr);  // case insensitive
-    static RbtString ModeToStr(eMode mode);                            // returns "FIXED", "TETHERED" or "FREE"ss
+    static RbtString ModeToStr(eMode mode);            // returns "FIXED", "TETHERED" or "FREE"ss
 
     virtual ~RbtChromElement();
     //

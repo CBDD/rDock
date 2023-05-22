@@ -198,9 +198,7 @@ void RbtDockingSite::GetCoordList(RbtCoordList& retVal) const {
 
 // Filters an atom list according to distance from the cavity coords
 // Only returns atoms within minDist and maxDist from cavity
-RbtAtomList RbtDockingSite::GetAtomList(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(
-    RbtError
-) {
+RbtAtomList RbtDockingSite::GetAtomList(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) {
     if (maxDist > m_border) {
         throw RbtBadArgument(_WHERE_, "maxDist is greater than grid border; recalculate grid");
     }
@@ -227,8 +225,7 @@ RbtAtomList RbtDockingSite::GetAtomList(const RbtAtomList& atomList, RbtDouble m
 }
 
 // Returns the count of atoms within minDist and maxDist from cavity
-RbtUInt RbtDockingSite::GetNumAtoms(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) throw(RbtError
-) {
+RbtUInt RbtDockingSite::GetNumAtoms(const RbtAtomList& atomList, RbtDouble minDist, RbtDouble maxDist) {
     if (maxDist > m_border) {
         throw RbtBadArgument(_WHERE_, "maxDist is greater than grid border; recalculate grid");
     }

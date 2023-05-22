@@ -36,9 +36,7 @@ RbtTransformFactory::~RbtTransformFactory() {}
 ////////////////
 // Creates a single transform object of type strTransformClass, and name strName
 // e.g. strTransformClass = RbtSimAnnTransform
-RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass, const RbtString& strName) throw(
-    RbtError
-) {
+RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass, const RbtString& strName) {
     // Component transforms
     if (strTransformClass == RbtSimAnnTransform::_CT) return new RbtSimAnnTransform(strName);
     if (strTransformClass == RbtGATransform::_CT) return new RbtGATransform(strName);

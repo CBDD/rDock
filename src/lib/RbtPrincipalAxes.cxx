@@ -237,9 +237,7 @@ RbtPrincipalAxes Rbt::GetPrincipalAxes(const RbtCoordList& coordList) {
 // If required (bAlignCOM=true), also aligns the center of mass with refAxes.com
 //
 // LIMITATION: does not check for non-orthogonal alignAxes
-RbtQuat Rbt::AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& refAxes, RbtBool bAlignCOM) throw(
-    RbtError
-) {
+RbtQuat Rbt::AlignPrincipalAxes(RbtAtomList& atomList, const RbtPrincipalAxes& refAxes, RbtBool bAlignCOM) {
     RbtPrincipalAxes prAxes = Rbt::GetPrincipalAxes(atomList);
     RbtQuat q = Rbt::GetQuatFromAlignAxes(prAxes, refAxes);
 

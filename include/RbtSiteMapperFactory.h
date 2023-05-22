@@ -42,9 +42,7 @@ class RbtSiteMapperFactory {
     // parameter file source argument. Also sets the site mapper parameters from the
     // remaining parameter values in the current section
     // Note: the current section is restored to its original value upon exit
-    virtual RbtSiteMapper* CreateFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName) throw(
-        RbtError
-    );
+    virtual RbtSiteMapper* CreateFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName);
 
  protected:
     ////////////////////////////////////////

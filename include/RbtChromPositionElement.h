@@ -12,11 +12,11 @@
 
 // Chromosome element for model centre of mass and orientation
 #ifndef RBTCHROMPOSITIONELEMENT_H_
-    #define RBTCHROMPOSITIONELEMENT_H_
+#define RBTCHROMPOSITIONELEMENT_H_
 
-    #include "RbtChromElement.h"
-    #include "RbtChromPositionRefData.h"
-    #include "RbtRand.h"
+#include "RbtChromElement.h"
+#include "RbtChromPositionRefData.h"
+#include "RbtRand.h"
 
 class RbtChromPositionElement: public RbtChromElement {
  public:

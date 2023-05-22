@@ -39,8 +39,7 @@ class RbtCharmmDataSource {
     RbtString AtomTypeString(RbtInt nAtomType);
     RbtInt ImplicitHydrogens(const RbtString& strFFType);
     RbtInt AtomicNumber(const RbtString& strFFType);
-    RbtInt FormalCharge(const RbtString& strFFType);  // DM 24 Mar 1999 - changed from double to
-                                                                      // int
+    RbtInt FormalCharge(const RbtString& strFFType);                // DM 24 Mar 1999 - changed from double to int
     RbtAtom::eHybridState HybridState(const RbtString& strFFType);  // DM 8 Dec 1998
 
  protected:
