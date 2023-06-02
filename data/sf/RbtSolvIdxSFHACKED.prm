@@ -1,0 +1,50 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE Intermolecular scoring function (with SOLVATION, indexed VDW)
+VERSION $Id: //depot/dev/client3/rdock/2013.1/data/sf/RbtSolvIdxSF.prm#3 $
+
+################################################################################
+# Constant scoring function
+# Represents loss of translation, rotational entropy of ligand
+# DM 14 June 2006 - also calculates solvent penalty for all enabled solvent
+# SOLVENT_PENALTY is defined as a fraction of the ligand binding penalty
+# i.e. ligand binding penalty = 1.0 * WEIGHT
+# solvent binding penalty = N(enabled solvent) * SOLVENT_PENALTY * WEIGHT
+# 0.37 * 5.4 = 2.0 kJ/mol, which corresponds to GOLD Chemscore penalty
+# Verdonk et al, J. Med. Chem. 2005 (48) 6504-6515
+SECTION CONST
+        SCORING_FUNCTION        RbtConstSF
+        SOLVENT_PENALTY         0.37
+        WEIGHT                  +5.4
+END_SECTION
+
+################################################################################
+# Rotational scoring function
+# Represents loss of torsional entropy of ligand
+SECTION ROT
+	SCORING_FUNCTION	RbtRotSF
+	WEIGHT			+1.0
+END_SECTION
+
+################################################################################
+# Pseudo SFs for setting up atomic attributes for polar and lipo atoms
+SECTION SETUP_POLAR
+	SCORING_FUNCTION	RbtSetupPolarSF
+	RADIUS			5.0
+	NORM			25
+	POWER			0.5
+	CHGFACTOR		0.5
+	GUANFACTOR		0.5
+END_SECTION
+
+################################################################################
+# Van der Waals scoring function
+SECTION VDW
+	SCORING_FUNCTION	RbtVdwIdxSF
+	WEIGHT			1.5
+	USE_4_8			FALSE
+	USE_TRIPOS		FALSE
+	RMAX			1.5
+	ECUT			120.0
+	E0			1.5
+END_SECTION
+
