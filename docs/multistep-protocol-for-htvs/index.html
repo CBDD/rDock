@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<link rel="shortcut icon" href="../wp-content/uploads/2022/09/favicon.png" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>Multi-Step Protocol for HTVS | rDock</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="../xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="../wp-content/themes/forever/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Feed" href="../feed/" />
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Comments Feed" href="../comments/feed/" />
+
+            <script type="text/javascript">//<![CDATA[
+            // Google Analytics for WordPress by Yoast v4.3.3 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-46080156-1']);
+				            _gaq.push(['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+            //]]></script>
+			<link rel='stylesheet' id='forever-style-css'  href='../wp-content/themes/forever/style.css?ver=3.7.1' type='text/css' media='all' />
+<link rel='stylesheet' id='raleway-css'  href='https://fonts.googleapis.com/css?family=Raleway%3A100&#038;ver=3.7.1' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Docking in 3 steps' href='../docking-in-3-steps/' />
+<link rel='next' title='Pharmacophoric Restraints' href='../pharmacophoric-restraints/' />
+<meta name="generator" content="WordPress 3.7.1" />
+<link rel='canonical' href='../multistep-protocol-for-htvs/' />
+<link rel='shortlink' href='../?p=480' />
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+	<style type="text/css">
+	#masthead img {
+		margin: 1.615em 0 0;
+	}
+	.custom-header {
+		display: block;
+		text-align: center;
+	}
+			#site-title a {
+			color: #1982d1;
+		}
+		</style>
+	<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; background-image: url('../wp-content/themes/forever/images/body-bg.png'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+</style>
+</head>
+
+<body class="page page-id-480 page-template page-template-nosidebar-page-php custom-background siteorigin-panels single-author">
+
+<div id="page" class="hfeed">
+
+		
+<header id="masthead" role="banner">
+	
+	<div style='display:table-cell;min-width:130px;padding-left:30px;'>
+			<a class="custom-header" href="../" rel="home">
+			<img class="custom-header-image" src="../wp-content/uploads/2022/09/copy-rdocklogo.png" width="885" height="742" alt="" />
+		</a>
+		</div>
+
+	<div style='display:table-cell;vertical-align:top;'>
+	<h1 id="site-title"><a href="../" title="rDock" rel="home">rDock</a></h1>
+	<h1 id="site-subtitle">A Fast, Versatile and Open Source Program for Docking Ligands to Proteins and Nucleic Acids</h1>
+	</div>
+
+
+
+	<nav id="access" role="navigation">
+		<h1 class="assistive-text section-heading">Main menu</h1>
+		<div class="skip-link assistive-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+		<div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-388" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-388"><a href="../" >Home</a></li>
+<li id="menu-item-389" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-389"><a href="../about/" >About</a></li>
+<li id="menu-item-392" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-392"><a href="../installation/" >Installation</a></li>
+<li id="menu-item-461" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-461"><a>Manuals</a>
+<ul class="sub-menu">
+	<li id="menu-item-393" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-393"><a href="../getting-started/" >Getting Started</a></li>
+	<li id="menu-item-391" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-391"><a href="../documentation/" >Full Documentation</a></li>
+</ul>
+</li>
+<li id="menu-item-398" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor current-menu-parent menu-item-has-children menu-item-398"><a>Tutorials</a>
+<ul class="sub-menu">
+	<li id="menu-item-477" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-477"><a href="../docking-in-3-steps/" >Docking in 3 steps</a></li>
+	<li id="menu-item-482" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-480 current_page_item menu-item-482"><a href="../multistep-protocol-for-htvs/" >Multi-Step Protocol for HTVS</a></li>
+	<li id="menu-item-394" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-394"><a href="../validation-sets/" >Validation Sets</a></li>
+	<li id="menu-item-395" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-395"><a href="../how-to-calculate-roc-curves/" >How to calculate ROC curves</a></li>
+	<li id="menu-item-451" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-451"><a href="../how-to-run-rdock-in-parallel/" >How to run rDock in parallel</a></li>
+	<li id="menu-item-506" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-506"><a href="../pharmacophoric-restraints/" >Pharmacophoric Restraints</a></li>
+</ul>
+</li>
+<li id="menu-item-396" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-396"><a href="../support/" >Support</a></li>
+<li id="menu-item-397" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-397"><a href="../download/" >Download</a></li>
+</ul></div>	</nav><!-- #access -->
+</header><!-- #masthead -->	
+	<div id="supplementary" class="one">
+				<div id="first" class="widget-area" role="complementary" style="width:700px;float:left;display:inline-block;font-weight:bold;">
+			<aside id="bcn_widget-2" class="widget widget_breadcrumb_navxt"><!-- Breadcrumb NavXT 4.4.0 -->
+<a title="Go to rDock." href="http://rdock.sourceforge.net" class="home">rDock</a> &gt; Multi-Step Protocol for HTVS</aside>		</div><!-- #first .widget-area -->
+				<div style="margin-left:700px;">
+        	<form method="get" id="searchform" action="../">
+			<label for="s" class="assistive-text">Search</label>
+			<input type="text" class="field" name="s" id="s" placeholder="Search">
+			<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search">
+		</form>
+		</div>
+	</div>
+	
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					
+<article id="post-480" class="post-480 page type-page status-publish hentry">
+	<header class="entry-header">
+		<h1section class="entry-title">Multi-Step Protocol for HTVS</h1section>
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>For HTVS applications, where computing performance is important, the recommended rDock protocol is to limit the search space (i.e. rigid receptor), apply the grid-based scoring function and/or to use a multi-step protocol to stop sampling of poor scorers as soon as possible.<br />
+Using a Multi-Step protocol for the DUD system COMT, the computational time can be reduced by 7.5-fold without affecting performance by:<br />
+1) Running 5 docking runs for all ligands;<br />
+2) ligands achieving a score of -22 or lower run 10 further runs;<br />
+3) for those ligands achieving a score of -25 or lower, continue up to 50 runs.<br />
+The optimal protocol is specific for each particular system and parameter-set, but can be identified with a purpose-built script (see the Manual in <a href="../documentation/"  title="Documentation" target="_blank">Full Documentation</a>, section <code>rbhtfinder</code>)</p>
+<p>Here you will find a tutorial to show you how to create and run a Multi-Step Protocol for a HTVS campaign.</p>
+<h1>1.- Create the Multi-Step Protocol</h1>
+<p>These are the instructions for running <code>rbhtfinder</code>:</p>
+<pre>
+1st) exhaustive docking of a small representative part of the
+     whole library.
+2nd) Store the result of sdreport -t over that exhaustive dock.
+     in file <sdreport_file> that will be the input of this
+     script.
+3rd) rbhtfinder &lt;sdreport_file&gt; &lt;output_file&gt; &lt;thr1max&gt; &lt;thr1min&gt; &lt;ns1&gt; &lt;ns2&gt;
+     &lt;ns1&gt; and &lt;ns2&gt; are the number of steps in stage 1 and in
+     stage 2. If not present, the default values are 5 and 15
+     &lt;thrmax&gt; and &lt;thrmin&gt; setup the range of thresholds that will
+     be simulated in stage 1. The threshold of stage 2 depends
+     on the value of the threshold of stage 1.
+     An input of -22 -24 will try protocols:
+            5   -22     15      -27
+            5   -22     15      -28
+            5   -22     15      -29
+            5   -23     15      -28
+            5   -23     15      -29
+            5   -23     15      -30
+            5   -24     15      -29
+            5   -24     15      -30
+            5   -24     15      -31
+     Output of the program is a 7 column values. First column
+     represents the time. This is a percentage of the time it
+     would take to do the docking in exhaustive mode, i.e. 
+     docking each ligand 100 times. Anything
+     above 12 is too long.
+     Second column is the first percentage. Percentage of
+     ligands that pass the first stage.
+     Third column is the second percentage. Percentage of
+     ligands that pass the second stage.
+     The four last columns represent the protocol.
+     All the protocols tried are written at the end.
+     The ones for which time is less than 12%, perc1 is
+     less than 30% and perc2 is less than 5% but bigger than 1%
+     will have a series of *** after, to indicate they are good choices
+     WARNING! This is a simulation based in a small set.
+     The numbers are an indication, not factual values.
+</pre>
+<h2>1.1.- Exhaustive docking</h2>
+<p>Hence, as stated, the first step is to run an <strong>exhaustive docking</strong> of a representative part of the whole desired library to dock.<br />
+For rDock, exhaustive docking means doing <strong>100 runs</strong> for each ligand, whereas standard docking means 50 runs for each ligand:</p>
+<pre>
+rbdock -i INPUT.sd -o OUTPUT -r PRMFILE.prm -p dock.prm -n 100
+</pre>
+<h2>1.2.- sdreport summary</h2>
+<p>Once the exhaustive docking has finished, the results have to be saved in a <strong>single file</strong> and the output of the script <code>sdreport -t</code> will be used as <strong>input for <code>rbhtfinder</code></strong>:</p>
+<pre>
+sdreport -t OUTPUT.sd &gt; sdreport_results.txt
+</pre>
+<h2>1.3.- rbhtfinder script</h2>
+<p>The <strong>last step</strong> is to run the <code>rbhtfinder</code> script (download <a href="../wp-content/uploads/2014/06/sdreport_results.txt.zip" onclick="javascript:_gaq.push(['_trackEvent','download','../wp-content/uploads/2014/06/sdreport_results.txt.zip']);" title="sdreport file" target="_blank">sdreport_results.txt</a> for testing):</p>
+<pre>
+rbhtfinder sdreport_results.txt htvs_protocol.txt -10 -20 7 25
+</pre>
+<p>Which will result in a file called <code>htvs_protocol.txt</code>.<br />
+The parameters are explained in the script instructions. They are not always the same and as they depend on the system, you will probably have to play a little with different values in order to <strong>obtain good parameters sets</strong> (marked with &#8220;***&#8221; in the output).<br />
+This will happen when <strong>time</strong> is less than 12%, <strong>perc1</strong> (number of ligands that pass the first filter) is less than 30% and <strong>perc2</strong> (number of ligands that pass the second filter) is less than 5% but bigger than 1%.</p>
+<h1>2.- Run rDock with the Multi-Step Protocol</h1>
+<p>The script finished with <strong>two good parameters sets</strong>:</p>
+<p>  TIME   PERC1   PERC2    N1  THR1    N2  THR2<br />
+[...]<br />
+11.928, 27.461,  3.207,    7,  -12,   25,  -17 ***<br />
+[...]<br />
+10.508, 18.773,  1.511,    7,  -13,   25,  -18 ***<br />
+[...]</p>
+<p>These parameters have to be adapted to a <strong>file</strong> with the HTVS <strong>protocol format</strong> that rDock understands.<br />
+A <strong>template file</strong> looks as follows (THR1, THR2, N1 and N2 are the parameters found above):</p>
+<div style="width:95%;background-color:#FAB208;padding-top:10px;padding-bottom:20px;padding-left:20px;padding-right:20px;margin-bottom:20px">
+3<br />
+if &#8211; &lt;THR1&gt; SCORE.INTER 1.0 if &#8211; SCORE.NRUNS &lt;N1-1&gt; 0.0 -1.0,<br />
+if &#8211; &lt;THR2&gt; SCORE.INTER 1.0 if &#8211; SCORE.NRUNS &lt;N2-1&gt; 0.0 -1.0,<br />
+if &#8211; SCORE.NRUNS 49 0.0 -1.0,<br />
+1<br />
+- SCORE.INTER -10,
+</div>
+<p>It is divided in 2 sections, <strong>Running Filters</strong> and <strong>Writing Filters</strong> (defined by the lines with one number).<br />
+The first line (the number 3) indicates the number of lines in the Running Filters:</p>
+<ul>
+<li>The first filter is defined as follows: if the number of runs reaches <strong>N1</strong> and the score is lower than <strong>THR1</strong>, continue to filter 2, else stop with that ligand and go to the next one.</li>
+<li>The second filter is defined similar to the first one: if the number of runs reaches <strong>N2</strong> and the score is lower than <strong>THR2</strong>, continue to filter 3, else stop and go to the next ligand.</li>
+<li>If a ligand has passed the first two filters, continue up to 50 runs.</li>
+</ul>
+<p>The fifth line (the number 1 after the three Running Filters) indicates the number of lines in the Writing Filters:</p>
+<ul>
+<li>Only print out all those poses where SCORE.INTER is lower than -10 (for avoiding excessive printing).</li>
+</ul>
+<p>For the parameters obtained in the first Section of this tutorial (<strong>first line with &#8220;***&#8221;</strong>), we will have to <strong>generate a file</strong> as follows:</p>
+<div style="width:95%;background-color:#FAB208;padding-top:10px;padding-bottom:20px;padding-left:20px;padding-right:20px;margin-bottom:20px">
+3<br />
+if &#8211; -12 SCORE.INTER 1.0 if &#8211; SCORE.NRUNS 6 0.0 -1.0,<br />
+if &#8211; -17 SCORE.INTER 1.0 if &#8211; SCORE.NRUNS 24 0.0 -1.0,<br />
+if &#8211; SCORE.NRUNS 49 0.0 -1.0,<br />
+1<br />
+- SCORE.INTER -10,
+</div>
+<p>Please note that the parameters N1 and N2 are 7 and 25 but we write 6 and 24, respectively, as stated in the template.<br />
+Finally, <strong>run rDock</strong> changing the flag &#8220;-n XX&#8221; for &#8220;<strong>-t PROTOCOLFILE.txt</strong>&#8220;:</p>
+<pre>
+rbdock -i INPUT.sd -o OUTPUT -r PRMFILE.prm -p dock.prm -t PROTOCOLFILE.txt
+</pre>
+			</div><!-- .entry-content -->
+
+	
+</article><!-- #post-480 -->
+
+						<div id="comments">
+	
+	
+	
+	
+			
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+
+		
+	</div><!-- #main -->
+
+		<div id="supplementary" class="one">
+		
+		
+		
+			</div><!-- #supplementary -->
+	
+	
+<footer id="colophon" role="contentinfo">
+	<div id="site-info">
+				© Copyright 2012 - 2020, rDock Development Team
+	</div>
+</footer><!-- #colophon --></div><!-- #page -->
+
+
+</body>
+</html>

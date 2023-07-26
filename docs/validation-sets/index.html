@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<!-- SRC OLD FAVICON <link rel="shortcut icon" href="../wp-content/uploads/2022/09/favicon.png" /> -->
+<link rel="shortcut icon" href="../wp-content/uploads/2022/09/favicon.png" />
+
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>Validation Sets | rDock</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="../xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="../wp-content/themes/forever/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Feed" href="../feed/" />
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Comments Feed" href="../comments/feed/" />
+
+            <script type="text/javascript">//<![CDATA[
+            // Google Analytics for WordPress by Yoast v4.3.3 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-46080156-1']);
+				            _gaq.push(['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+            //]]></script>
+			<link rel='stylesheet' id='forever-style-css'  href='../wp-content/themes/forever/style.css?ver=3.7.1' type='text/css' media='all' />
+<link rel='stylesheet' id='raleway-css'  href='https://fonts.googleapis.com/css?family=Raleway%3A100&#038;ver=3.7.1' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Getting Started' href='../getting-started/' />
+<link rel='next' title='How to calculate ROC curves' href='../how-to-calculate-roc-curves/' />
+<meta name="generator" content="WordPress 3.7.1" />
+<link rel='canonical' href='../validation-sets/' />
+<link rel='shortlink' href='../?p=170' />
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+	<style type="text/css">
+	#masthead img {
+		margin: 1.615em 0 0;
+	}
+	.custom-header {
+		display: block;
+		text-align: center;
+	}
+			#site-title a {
+			color: #1982d1;
+		}
+		</style>
+	<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; background-image: url('../wp-content/themes/forever/images/body-bg.png'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+</style>
+</head>
+
+<body class="page page-id-170 page-template page-template-nosidebar-page-php custom-background siteorigin-panels single-author">
+
+<div id="page" class="hfeed">
+
+		
+<header id="masthead" role="banner">
+	
+	<div style='display:table-cell;min-width:130px;padding-left:30px;'>
+			<a class="custom-header" href="../" rel="home">
+			<img class="custom-header-image" src="../wp-content/uploads/2022/09/copy-rdocklogo.png" width="400" height="250" alt="" />
+		</a>
+		</div>
+
+	<div style='display:table-cell;vertical-align:top;'>
+	<h1 id="site-title"><a href="../" title="rDock" rel="home">rDock</a></h1>
+	<h1 id="site-subtitle">A Fast, Versatile and Open Source Program for Docking Ligands to Proteins and Nucleic Acids</h1>
+	</div>
+
+
+
+	<nav id="access" role="navigation">
+		<h1 class="assistive-text section-heading">Main menu</h1>
+		<div class="skip-link assistive-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+		<div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-388" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-388"><a href="../" >Home</a></li>
+<li id="menu-item-389" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-389"><a href="../about/" >About</a></li>
+<li id="menu-item-392" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-392"><a href="../installation/" >Installation</a></li>
+<li id="menu-item-461" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-461"><a>Manuals</a>
+<ul class="sub-menu">
+	<li id="menu-item-393" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-393"><a href="../getting-started/" >Getting Started</a></li>
+	<li id="menu-item-391" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-391"><a href="../documentation/" >Full Documentation</a></li>
+</ul>
+</li>
+<li id="menu-item-398" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor current-menu-parent menu-item-has-children menu-item-398"><a>Tutorials</a>
+<ul class="sub-menu">
+	<li id="menu-item-477" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-477"><a href="../docking-in-3-steps/" >Docking in 3 steps</a></li>
+	<li id="menu-item-482" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-482"><a href="../multistep-protocol-for-htvs/" >Multi-Step Protocol for HTVS</a></li>
+	<li id="menu-item-394" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-170 current_page_item menu-item-394"><a href="../validation-sets/" >Validation Sets</a></li>
+	<li id="menu-item-395" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-395"><a href="../how-to-calculate-roc-curves/" >How to calculate ROC curves</a></li>
+	<li id="menu-item-451" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-451"><a href="../how-to-run-rdock-in-parallel/" >How to run rDock in parallel</a></li>
+	<li id="menu-item-506" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-506"><a href="../pharmacophoric-restraints/" >Pharmacophoric Restraints</a></li>
+</ul>
+</li>
+<li id="menu-item-396" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-396"><a href="../support/" >Support</a></li>
+<li id="menu-item-397" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-397"><a href="../download/" >Download</a></li>
+</ul></div>	</nav><!-- #access -->
+</header><!-- #masthead -->	
+	<div id="supplementary" class="one">
+				<div id="first" class="widget-area" role="complementary" style="width:700px;float:left;display:inline-block;font-weight:bold;">
+			<aside id="bcn_widget-2" class="widget widget_breadcrumb_navxt"><!-- Breadcrumb NavXT 4.4.0 -->
+<a title="Go to rDock." href="http://rdock.sourceforge.net" class="home">rDock</a> &gt; Validation Sets</aside>		</div><!-- #first .widget-area -->
+				<div style="margin-left:700px;">
+        	<form method="get" id="searchform" action="../">
+			<label for="s" class="assistive-text">Search</label>
+			<input type="text" class="field" name="s" id="s" placeholder="Search">
+			<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search">
+		</form>
+		</div>
+	</div>
+	
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					
+<article id="post-170" class="post-170 page type-page status-publish hentry">
+	<header class="entry-header">
+		<h1section class="entry-title">Validation Sets</h1section>
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>In this section you will find the instructions about how to reproduce our validation experiments using different test sets.<br />
+This is also found in the Getting Started <strong>pdf format</strong> file, which can be downloaded following <a href="../wp-content/uploads/2014/03/rDock_Getting_Started.pdf" onclick="javascript:_gaq.push(['_trackEvent','download','../wp-content/uploads/2014/03/rDock_Getting_Started.pdf']);" target="_blank">this link</a>.<br />
+Three different sets were analyzed for three different purposes:</p>
+<ul>
+<li><a href="#ASTEX">ASTEX set for binding mode prediction in Proteins.</a></li>
+<li><a href="#RNA">RNA set for assess RNA-ligand docking.</a></li>
+<li><a href="#DUD">DUD set for database enrichment.</a></li>
+</ul>
+<h1section>Binding Mode Prediction in Proteins<a name="ASTEX"></a></h1section>
+<p>First of all, please go to <a href="http://sourceforge.net/projects/rdock/files/Validation_Sets/ASTEX_rDock_TestSet.tar.gz/download"  target="_blank">sourceforge download page</a> to download a compressed file with the necessary data.</p>
+<p>After downloading the file <code>ASTEX_rDock_TestSet.tar.gz</code>, uncompress the file with the following command, which will create a folder called  <code>ASTEX_rDock_TestSet</code>:</p>
+<pre>
+tar -xvzf ASTEX_rDock_TestSet.tar.gz
+cd ASTEX_rDock_TestSet/
+</pre>
+<p>Here you will have the instructions for one of the systems (1sj0), to run with the rest of the systems, just change the pdb code with the one desired.<br />
+Then, make sure that the necessary environmental variables for running rDock are well defined and run the following commands for entering to the folder and running rDock with the same settings that we have used:</p>
+<pre>
+cd 1sj0/
+
+#first create the cavity using rbcavity
+rbcavity -r 1sj0_rdock.prm -was > 1sj0_cavity.log
+
+#then use rbdock to run docking
+rbdock -r 1sj0_rdock.prm -p dock.prm -n 100 -i 1sj0_ligand.sd -o 1sj0_docking_out > 1sj0_docking_out.log
+
+#sdsort for sorting the results according to their score
+sdsort -n -f'SCORE' 1sj0_docking_out.sd > 1sj0_docking_out_sorted.sd
+
+#calculate rmsd from the output comparing with the crystal structure of the ligand
+sdrmsd 1sj0_ligand.sd 1sj0_docking_out_sorted.sd
+</pre>
+<h1section>Binding Mode Prediction in RNA<a name="RNA"></a></h1section>
+<p>In a similar way of the section above, here you will find a brief tutorial on how to run rDock with the RNA TestSet used in the validation.<br />
+As in the first section, please go to <a href="http://sourceforge.net/projects/rdock/files/Validation_Sets/RNA_rDock_TestSet.tar.gz/download"  target="_blank">sourceforge download page</a> to download a compressed file with the necessary data.</p>
+<p>After downloading the file <code>RNA_rDock_TestSet.tar.gz</code>, uncompress the file with the following command, which will create a folder called  <code>RNA_rDock_TestSet</code>:</p>
+<pre>
+tar -xvzf RNA_rDock_TestSet.tar.gz
+cd RNA_rDock_TestSet/
+</pre>
+<p>Here you will have the instructions for one of the systems (1nem), to run with the rest of the systems, just change the pdb code with the one desired.<br />
+Then, make sure that the necessary environmental variables for running rDock are well defined and run the following commands for entering to the folder and running rDock with the same settings that we have used (if you have run the previous set, the variables should already be correctly defined):</p>
+<pre>
+cd 1nem/
+
+#first create the cavity using rbcavity
+rbcavity -r 1nem_rdock.prm -was > 1nem_cavity.log
+
+#then use rbdock to run docking
+rbdock -r 1nem_rdock.prm -p dock.prm -n 100 -i 1nem_lig.sd -o 1nem_docking_out > 1nem_docking_out.log
+
+#sdsort for sorting the results according to their score
+sdsort -n -f'SCORE' 1nem_docking_out.sd > 1nem_docking_out_sorted.sd
+
+#calculate rmsd from the output comparing with the crystal structure of the ligand
+sdrmsd 1nem_lig.sd 1nem_docking_out_sorted.sd
+</pre>
+<h1section>Database Enrichment (actives vs decoys &#8211; for HTVS)<a name="DUD"></a></h1section>
+<p>In this section you will find a brief tutorial on how to run rDock with the DUD TestSet used in the validation and how to perform different analysis of the results.<br />
+As in the sections above, please go to <a href="http://sourceforge.net/projects/rdock/files/Validation_Sets/DUD_rDock_TestSet.tar.gz/download"  target="_blank">sourceforge download page</a> to download a compressed file with the necessary data.</p>
+<p>After downloading the file <code>DUD_rDock_TestSet.tar.gz</code>, uncompress the file with the following command, which will create a folder called  <code>DUD_rDock_TestSet</code>:</p>
+<pre>
+tar -xvzf DUD_rDock_TestSet.tar.gz
+cd DUD_rDock_TestSet/
+</pre>
+<p>Here you will have the instructions for one of the systems (hivpr), to run with the rest of the systems, just change the DUD system code with the one desired.<br />
+Then, make sure that the necessary environmental variables for running rDock are well defined and run the following commands for entering to the folder and running rDock with the same settings that we have used (if you have run the previous sets, the variables should already be correctly defined):</p>
+<pre>
+cd hivpr/
+
+#first create the cavity using rbcavity
+rbcavity -r hivpr_rdock.prm -was > hivpr_cavity.log
+</pre>
+<p>As the number of ligands to dock is very high, we suggest you to use any distributed computing environments, such as SGE or Condor, and configure rDock to run in multiple CPUs. Namely, split the input ligands file in as many parts as desired (very easy using sdsplit tool) and run independent rDock docking jobs for each &#8220;splitted&#8221; input file.<br />
+However, for this example purpose, you will have the instructions for running all set of actives and decoys in one docking job:</p>
+<pre style="overflow-x:scroll">
+#uncompress ligand file
+gunzip hivpr_ligprep.sdf.gz
+
+#use rbdock to run docking
+rbdock -r hivpr_rdock.prm -p dock.prm -n 100 -i hivpr_ligprep.sdf -o hivpr_docking_out > hivpr_docking_out.log
+
+#sdsort with -n and -s flags will sort internally each ligand by increasing score and sdfilter will get only the first entry of each ligand.
+sdsort -n -s -fSCORE hivpr_docking_out.sd | sdfilter -f'$_COUNT == 1' >  hivpr_1poseperlig.sd
+
+#sdreport will print all the scores of the output in a tabular format and, with command awk, we will format the results
+sdreport -t hivpr_1poseperlig.sd | awk '{print $2,$3,$4,$5,$6,$7}' > dataforR_uq.txt
+</pre>
+<p>At this point, you should have a file called <code>hivpr_docking_out.sd</code> with all docking poses written by rDock (100 * input ligands), a file called <code>hivpr_1poseperlig.sd</code> with the best scored docking pose for each ligand and a file called <code>dataforR_uq.txt</code> that will be used for calculating ROC Curves using R.<br />
+The next step is to calculate ROC Curves and other statistics. To do so, please visit section &#8220;<a href="../how-to-calculate-roc-curves/#RCommands"  title="How to calculate ROC curves" target="_blank">How to calculate ROC curves</a>&#8221; and jump to the subsection &#8220;R Commands for generating ROC Curves&#8221;.</p>
+			</div><!-- .entry-content -->
+
+	
+</article><!-- #post-170 -->
+
+						<div id="comments">
+	
+	
+	
+	
+			
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+
+		
+	</div><!-- #main -->
+
+		<div id="supplementary" class="one">
+		
+		
+		
+			</div><!-- #supplementary -->
+	
+	
+<footer id="colophon" role="contentinfo">
+	<div id="site-info">
+				© Copyright 2012 - 2023, rDock Development Team
+	</div>
+</footer><!-- #colophon --></div><!-- #page -->
+
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+sed '-e s|wp-content/themes/forever/favicon.ico|wp-content/uploads/2022/09/favicon.png|g' $1 | sed -e 's|wp-content/uploads/2013/11/copy-rdock_logo.jpg|wp-content/uploads/2022/09/copy-rdocklogo.png|g' | sed -e 's|http://rdock.sourceforge.net/|../|g' | sed -e 's|http://fonts.googleapis|https://fonts.googleapis|g'

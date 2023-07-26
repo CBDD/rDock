@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<link rel="shortcut icon" href="http://rdock.sourceforge.net/wp-content/themes/forever/favicon.ico" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>How to calculate ROC curves | rDock</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://rdock.sourceforge.net/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="http://rdock.sourceforge.net/wp-content/themes/forever/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Feed" href="http://rdock.sourceforge.net/feed/" />
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Comments Feed" href="http://rdock.sourceforge.net/comments/feed/" />
+
+            <script type="text/javascript">//<![CDATA[
+            // Google Analytics for WordPress by Yoast v4.3.3 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-46080156-1']);
+				            _gaq.push(['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+            //]]></script>
+			<link rel='stylesheet' id='forever-style-css'  href='http://rdock.sourceforge.net/wp-content/themes/forever/style.css?ver=3.7.1' type='text/css' media='all' />
+<link rel='stylesheet' id='raleway-css'  href='http://fonts.googleapis.com/css?family=Raleway%3A100&#038;ver=3.7.1' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://rdock.sourceforge.net/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://rdock.sourceforge.net/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Validation Sets' href='http://rdock.sourceforge.net/manuals/validation-sets/' />
+<link rel='next' title='Documentation' href='http://rdock.sourceforge.net/documentation/' />
+<meta name="generator" content="WordPress 3.7.1" />
+<link rel='canonical' href='http://rdock.sourceforge.net/manuals/how-to-calculate-roc-curves/' />
+<link rel='shortlink' href='http://rdock.sourceforge.net/?p=290' />
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+	<style type="text/css">
+	#masthead img {
+		margin: 1.615em 0 0;
+	}
+	.custom-header {
+		display: block;
+		text-align: center;
+	}
+			#site-title a {
+			color: #1982d1;
+		}
+		</style>
+	<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; background-image: url('http://rdock.sourceforge.net/wp-content/themes/forever/images/body-bg.png'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+</style>
+</head>
+
+<body class="page page-id-290 page-child parent-pageid-25 page-template page-template-nosidebar-page-php custom-background siteorigin-panels single-author">
+
+<div id="page" class="hfeed">
+
+		
+<header id="masthead" role="banner">
+	
+	<div style='display:table-cell;min-width:130px;padding-left:30px;'>
+			<a class="custom-header" href="http://rdock.sourceforge.net/" rel="home">
+			<img class="custom-header-image" src="http://rdock.sourceforge.net/wp-content/uploads/2013/11/copy-rdock_logo.jpg" width="885" height="742" alt="" />
+		</a>
+		</div>
+
+	<div style='display:table-cell;vertical-align:top;'>
+	<h1 id="site-title"><a href="http://rdock.sourceforge.net/" title="rDock" rel="home">rDock</a></h1>
+	<h1 id="site-subtitle">A Fast Open Source Docking Program for Proteins and Nucleic Acids</h1>
+	</div>
+
+
+
+	<nav id="access" role="navigation">
+		<h1 class="assistive-text section-heading">Main menu</h1>
+		<div class="skip-link assistive-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+		<div class="menu"><ul><li ><a href="http://rdock.sourceforge.net/">Home</a></li><li class="page_item page-item-16"><a href="http://rdock.sourceforge.net/about/">About</a></li><li class="page_item page-item-316"><a href="http://rdock.sourceforge.net/documentation/">Documentation</a></li><li class="page_item page-item-25 page_item_has_children current_page_ancestor current_page_parent"><a href="http://rdock.sourceforge.net/manuals/">Manuals and Tutorials</a><ul class='children'><li class="page_item page-item-53"><a href="http://rdock.sourceforge.net/manuals/getting-started/">Getting Started</a></li><li class="page_item page-item-170"><a href="http://rdock.sourceforge.net/manuals/validation-sets/">Validation Sets</a></li><li class="page_item page-item-290 current_page_item"><a href="http://rdock.sourceforge.net/manuals/how-to-calculate-roc-curves/">How to calculate ROC curves</a></li></ul></li><li class="page_item page-item-27"><a href="http://rdock.sourceforge.net/support/">Support</a></li><li class="page_item page-item-22"><a href="http://rdock.sourceforge.net/download/">Download</a></li></ul></div>
+	</nav><!-- #access -->
+</header><!-- #masthead -->	
+	<div id="supplementary" class="one">
+				<div id="first" class="widget-area" role="complementary" style="width:700px;float:left;display:inline-block;">
+			<aside id="bcn_widget-2" class="widget widget_breadcrumb_navxt"><!-- Breadcrumb NavXT 4.4.0 -->
+<a title="Go to rDock." href="http://rdock.sourceforge.net" class="home">rDock</a> &gt; <a title="Go to Manuals and Tutorials." href="http://rdock.sourceforge.net/manuals/" class="page">Manuals and Tutorials</a> &gt; How to calculate ROC curves</aside>		</div><!-- #first .widget-area -->
+				<div style="margin-left:700px;">
+        	<form method="get" id="searchform" action="http://rdock.sourceforge.net/">
+			<label for="s" class="assistive-text">Search</label>
+			<input type="text" class="field" name="s" id="s" placeholder="Search">
+			<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search">
+		</form>
+		</div>
+	</div>
+	
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					
+<article id="post-290" class="post-290 page type-page status-publish hentry">
+	<header class="entry-header">
+		<h1 class="entry-title">How to calculate ROC curves</h1>
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p><span style="color: #999999;">Original entry published in </span><a href="http://www.ub.edu/cbdd/?q=content/how-calculate-roc-curves" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://www.ub.edu']);" target="_blank">CBDD Research Group Blog</a>.</p>
+<p>Here you will find a a short tutorial about how to generate ROC curves and other statistics after running rDock molecular docking (for other programs such as Vina or Glide, just a little modification on the way <code>dataforR_uq.txt</code> file is interpreted will make it work, see below).</p>
+<p>I assume all of you are familiar with what ROC curves are, what are they for and how they are made.</p>
+<p>Just in case, a very brief summary would be:</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Receiver_operating_characteristic" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://en.wikipedia.org']);">ROC curves </a>are graphic representations of the relation existing between the sensibility and the specificity of a test. It is generated by plotting the fraction of true positives out of the total actual positives versus the fraction of false positives out of the total actual negatives.</li>
+<li>In our case, we will use it for checking whether a docking program is able to select active ligands with respect to inactive ligands (decoys) and whether it is able to select these active ligands in the top % of a ranked database.</li>
+<li>R Library <a href="http://rocr.bioinf.mpi-sb.mpg.de/" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://rocr.bioinf.mpi-sb.mpg.de']);">ROCR</a> is mandatory (try with command <code>install.packages("ROCR")</code> in R before downloading from source).</li>
+</ul>
+<p>The example selected for this tutorial is a system from the DUD benchmark set, &#8220;hivpr&#8221; or &#8220;hiv protease&#8221;.</p>
+<p>These are the files you will need:</p>
+<ul>
+<li>List of active <a href="https://dl.dropboxusercontent.com/u/64144151/BlogROC/ligands.txt?dl=1" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://dl.dropboxusercontent.com']);">ligands</a>.</li>
+<li>List of inactive ligands (<a href="https://dl.dropboxusercontent.com/u/64144151/BlogROC/decoys.txt?dl=1" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://dl.dropboxusercontent.com']);">decoys</a>).</li>
+<li>Output file with the docked poses of each ligand with the corresponding docking scores (<a href="https://dl.dropboxusercontent.com/u/64144151/BlogROC/hivpr_all_results.sd.gz" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://dl.dropboxusercontent.com']);">in sd format</a>).</li>
+<li>R script with all the R commands in this tutorial (<a href="http://goo.gl/6Sd755" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://goo.gl']);">download</a>).</li>
+</ul>
+<p>Before getting into R, the resulted docked poses have to be filtered out for only having the best pose for each ligand (the smallest score &#8211; or highest in negative value). To do so run:</p>
+<p><strong>NOTE</strong>: <code>sdsort</code> and <code>sdreport</code> are really useful tools for managing sd formatted compound collections. They are very user-friendly and free to download. They are provided along with rDock software in <a href="http://rdock.sourceforge.net"  target="_blank">rDock website</a>. Go to <a title="Download" href="http://rdock.sourceforge.net/download/"  target="_blank">Download section</a> for downloading rDock.</p>
+<pre style="overflow-x: scroll;">gunzip hivpr_all_results.sd.gz
+sdsort -n -s -fSCORE hivpr_all_results.sd | sdfilter -f'$_COUNT == 1' &gt;  hivpr_1poseperlig.sd
+#sdsort with -n and -s flags will sort internally each ligand by increasing score and sdfilter will get only the first entry of each ligand.
+
+sdreport -t hivpr_1poseperlig.sd | awk '{print $2,$3,$4,$5,$6,$7}' &gt; dataforR_uq.txt
+#sdreport will print all the scores of the output in a tabular format and, with command awk, we will format the results</pre>
+<p>This <a href="https://dl.dropboxusercontent.com/u/64144151/BlogROC/dataforR_uq.txt?dl=1" onclick="javascript:_gaq.push(['_trackEvent','outbound-article','http://dl.dropboxusercontent.com']);"> dataforR_uq.txt</a> file must contain one entry per ligand with the docked scores (what R will use to rank and plot the ROC curves).</p>
+<h2><a name="RCommands"></a><br />
+R Commands for generating ROC Curves<br />
+</h2>
+<p>Then, run the following commands in R for plotting the ROC curves:</p>
+<pre>
+#load ROCR
+library(ROCR);
+ 
+#load ligands and decoys
+lig <- unique(read.table("ligands.txt")[,1]);
+dec <- unique(read.table("decoys.txt")[,1]);
+ 
+#load data file from docking
+uniqRes <- read.table("dataforR_uq.txt",header=T);
+ 
+#change colnames
+colnames(uniqRes)[1]="LigandName";
+ 
+#add column with ligand/decoy info
+uniqRes$IsActive <- as.numeric(uniqRes$LigandName %in% lig)
+
+#define ROC parameters 
+#here INTER is selected to compare between ligands using rDock SCORE.INTER
+#this could be changed for also running with other programs
+predINTERuq <- prediction(uniqRes$INTER*-1, uniqRes$IsActive)
+perfINTERuq <- performance(predINTERuq, 'tpr','fpr')
+
+#plot in jpg format with a grey line with theoretical random results
+jpeg("hivpr_Rinter_ROC.jpg")
+plot(perfINTERuq,main="hivpr - ROC Curves",col="blue")
+abline(0,1,col="grey")
+dev.off()
+</pre>
+<p>Which will give us the following plot:</p>
+<p><center><br />
+<a href="http://rdock.sourceforge.net/wp-content/uploads/2013/12/hivpr_Rinter_ROC.jpg" ><img class="alignnone size-medium wp-image-291" alt="hivpr_Rinter_ROC" src="http://rdock.sourceforge.net/wp-content/uploads/2013/12/hivpr_Rinter_ROC-300x300.jpg" width="400" height="400" /></a></center>Afterwards, other useful statistics such as AUC or Enrichment factors can also be calculated:</p>
+<pre>
+#AUC (area under the curve)
+auc_rdock <- performance(predINTERuq, "auc")
+auc.area_rdock <- slot(auc_rdock, "y.values")[[1]]
+cat("AUC: \n")
+cat(auc.area_rdock)
+cat("\n\n")
+</pre>
+<pre style="background: rgba(25, 130, 209, 0.02);">AUC:
+0.7700965</pre>
+<pre>
+#Enrichment Factors
+EF_rdock <- perfINTERuq@y.values[[1]]/perfINTERuq@x.values[[1]]
+EF_rdock_1 <- EF_rdock[which(perfINTERuq@x.values[[1]] > 0.01)[1]]
+EF_rdock_20 <- EF_rdock[which(perfINTERuq@x.values[[1]] > 0.2)[1]]
+cat("Enrichment Factor top1%:\n")
+cat(EF_rdock_1)
+cat("\n\n")
+</pre>
+<pre style="background: rgba(25, 130, 209, 0.02);">Enrichment Factor top1%:
+11.11817</pre>
+<pre>cat("Enrichment Factor top20%:\n")
+cat(EF_rdock_20)
+cat("\n\n")</pre>
+<pre style="background: rgba(25, 130, 209, 0.02);">Enrichment Factor top20%:
+3.200686</pre>
+<p>Moreover, a good analysis of these curves is to re-plot them in semilogarithmic scale (x axis in logarithmic scale). This way, one can focus on the early enrichment of the database and have a more detailed view of the selected actives in the top % of all the ligands.</p>
+<pre style="overflow-x: scroll;">jpeg("hivpr_semilog_ROC.jpg")
+rdockforsemilog=perfINTERuq@x.values[[1]]
+rdockforsemilog[rdockforsemilog &lt; 0.0005]=0.0005
+plot(rdockforsemilog,perfINTERuq@y.values[[1]],type="l",xlab="False Positive Rate", ylab="True Positive Rate",xaxt="n", log="x", col="blue",main="hivpr - Semilog ROC Curves")
+axis(1, c(0,0.001,0.01,0.1,1))
+x&lt;-seq(0,1,0.001)
+points(x,x,col="gray",type="l")
+dev.off()</pre>
+<p>Obtaining the following semi-logarithmic ROC curves:</p>
+<p><center><br />
+<a href="http://rdock.sourceforge.net/wp-content/uploads/2013/12/hivpr_semilog_ROC.jpg" ><img class="alignnone size-medium wp-image-292" alt="hivpr_semilog_ROC" src="http://rdock.sourceforge.net/wp-content/uploads/2013/12/hivpr_semilog_ROC-300x300.jpg" width="400" height="400" /></a></center></p>
+			</div><!-- .entry-content -->
+
+	
+</article><!-- #post-290 -->
+
+						<div id="comments">
+	
+	
+	
+	
+			
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+
+		
+	</div><!-- #main -->
+
+		<div id="supplementary" class="one">
+		
+		
+		
+			</div><!-- #supplementary -->
+	
+	
+<footer id="colophon" role="contentinfo">
+	<div id="site-info">
+				
+	</div>
+</footer><!-- #colophon --></div><!-- #page -->
+
+
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<!-- SRC OLD FAVICON <link rel="shortcut icon" href="../wp-content/uploads/2022/09/favicon.png" /> -->
+<link rel="shortcut icon" href="../wp-content/uploads/2022/09/favicon.png" />
+
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>Getting Started | rDock</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="../xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="../wp-content/themes/forever/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Feed" href="../feed/" />
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Comments Feed" href="../comments/feed/" />
+
+            <script type="text/javascript">//<![CDATA[
+            // Google Analytics for WordPress by Yoast v4.3.3 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-46080156-1']);
+				            _gaq.push(['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+            //]]></script>
+			<link rel='stylesheet' id='forever-style-css'  href='../wp-content/themes/forever/style.css?ver=3.7.1' type='text/css' media='all' />
+<link rel='stylesheet' id='raleway-css'  href='https://fonts.googleapis.com/css?family=Raleway%3A100&#038;ver=3.7.1' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Support' href='../support/' />
+<link rel='next' title='Validation Sets' href='../validation-sets/' />
+<meta name="generator" content="WordPress 3.7.1" />
+<link rel='canonical' href='../getting-started/' />
+<link rel='shortlink' href='../?p=53' />
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+	<style type="text/css">
+	#masthead img {
+		margin: 1.615em 0 0;
+	}
+	.custom-header {
+		display: block;
+		text-align: center;
+	}
+			#site-title a {
+			color: #1982d1;
+		}
+		</style>
+	<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; background-image: url('../wp-content/themes/forever/images/body-bg.png'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+</style>
+</head>
+
+<body class="page page-id-53 page-template page-template-nosidebar-page-php custom-background siteorigin-panels single-author">
+
+<div id="page" class="hfeed">
+
+		
+<header id="masthead" role="banner">
+	
+	<div style='display:table-cell;min-width:130px;padding-left:30px;'>
+			<a class="custom-header" href="../" rel="home">
+			<img class="custom-header-image" src="../wp-content/uploads/2022/09/copy-rdocklogo.png" width="400" height="250" alt="" />
+		</a>
+		</div>
+
+	<div style='display:table-cell;vertical-align:top;'>
+	<h1 id="site-title"><a href="../" title="rDock" rel="home">rDock</a></h1>
+	<h1 id="site-subtitle">A Fast, Versatile and Open Source Program for Docking Ligands to Proteins and Nucleic Acids</h1>
+	</div>
+
+
+
+	<nav id="access" role="navigation">
+		<h1 class="assistive-text section-heading">Main menu</h1>
+		<div class="skip-link assistive-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+		<div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-388" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-388"><a href="../" >Home</a></li>
+<li id="menu-item-389" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-389"><a href="../about/" >About</a></li>
+<li id="menu-item-392" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-392"><a href="../installation/" >Installation</a></li>
+<li id="menu-item-461" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor current-menu-parent menu-item-has-children menu-item-461"><a>Manuals</a>
+<ul class="sub-menu">
+	<li id="menu-item-393" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-53 current_page_item menu-item-393"><a href="../getting-started/" >Getting Started</a></li>
+	<li id="menu-item-391" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-391"><a href="../documentation/" >Full Documentation</a></li>
+</ul>
+</li>
+<li id="menu-item-398" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-398"><a>Tutorials</a>
+<ul class="sub-menu">
+	<li id="menu-item-477" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-477"><a href="../docking-in-3-steps/" >Docking in 3 steps</a></li>
+	<li id="menu-item-482" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-482"><a href="../multistep-protocol-for-htvs/" >Multi-Step Protocol for HTVS</a></li>
+	<li id="menu-item-394" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-394"><a href="../validation-sets/" >Validation Sets</a></li>
+	<li id="menu-item-395" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-395"><a href="../how-to-calculate-roc-curves/" >How to calculate ROC curves</a></li>
+	<li id="menu-item-451" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-451"><a href="../how-to-run-rdock-in-parallel/" >How to run rDock in parallel</a></li>
+	<li id="menu-item-506" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-506"><a href="../pharmacophoric-restraints/" >Pharmacophoric Restraints</a></li>
+</ul>
+</li>
+<li id="menu-item-396" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-396"><a href="../support/" >Support</a></li>
+<li id="menu-item-397" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-397"><a href="../download/" >Download</a></li>
+</ul></div>	</nav><!-- #access -->
+</header><!-- #masthead -->	
+	<div id="supplementary" class="one">
+				<div id="first" class="widget-area" role="complementary" style="width:700px;float:left;display:inline-block;font-weight:bold;">
+			<aside id="bcn_widget-2" class="widget widget_breadcrumb_navxt"><!-- Breadcrumb NavXT 4.4.0 -->
+<a title="Go to rDock." href="http://rdock.sourceforge.net" class="home">rDock</a> &gt; Getting Started</aside>		</div><!-- #first .widget-area -->
+				<div style="margin-left:700px;">
+        	<form method="get" id="searchform" action="../">
+			<label for="s" class="assistive-text">Search</label>
+			<input type="text" class="field" name="s" id="s" placeholder="Search">
+			<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search">
+		</form>
+		</div>
+	</div>
+	
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					
+<article id="post-53" class="post-53 page type-page status-publish hentry">
+	<header class="entry-header">
+		<h1section class="entry-title">Getting Started</h1section>
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>In this section, you have the documentation with installation and validation instructions for first-time users.<br />
+You can read the documentation in <strong>HTML format</strong> in this same page, or you can download it in <strong>pdf format</strong> following <a href="../wp-content/uploads/2014/03/rDock_Getting_Started.pdf" onclick="javascript:_gaq.push(['_trackEvent','download','../wp-content/uploads/2014/03/rDock_Getting_Started.pdf']);" target="_blank">this link</a>.</p>
+<h3 class="likesectionHead"><a id="x1-1000"></a>Contents</h3>
+<div class="tableofcontents">
+   <span class="sectionToc" >1 <a href="#x1-20001" id="QQ2-1-2">Overview</a></span><br />
+<br />   <span class="sectionToc" >2 <a href="#x1-30002" id="QQ2-1-3">Prerequisites</a></span><br />
+<br />   <span class="sectionToc" >3 <a href="#x1-60003" id="QQ2-1-6">Unpacking the distribution files</a></span><br />
+<br />   <span class="sectionToc" >4 <a href="#x1-80004" id="QQ2-1-8">Building rDock</a></span>
+   </div>
+<p><!--l. 71-->
+<p class="noindent" >
+<h3 class="sectionHead"><span class="titlemark">1   </span> <a  id="x1-20001"></a>Overview</h3>
+<p><!--l. 73-->
+<p class="noindent" >rDock is a fast and versatile Open Source docking program that can be used against proteins and nucleic acids. Itis designed for High Throughput Virtual Screening (HTVS) campaigns and Binding Mode prediction studies.<br />
+<!--l. 75-->
+<p class="indent" >   The rDock program was developed from 1998 to 2006 (formerly known as RiboDock[1]) by the software team at RiboTargets (subsequently Vernalis (R&amp;D) Ltd). In 2006, the software was licensed to the University of York for maintenance and distribution. In 2012, Vernalis and the University of York agreed to release the program as Open Source software. This version is licensed under GNU-LGPL version 3.0 with support from the University of Barcelona &#8211; <a href="../"  >rdock.sourceforge.net</a>.<br />
+<!--l. 80-->
+<p class="indent" >   The major components of the platform now include fast intermolecular scoring functions (van der Waals, polar, desolvation) validated against protein and RNA targets, a Genetic Algorithm-based stochastic search engine, a wide variety of external Structure-Based Drug Discovery (SBDD) derived restraint terms (tethered template, pharmacophore, noe distance restraints), and novel Genetic Programming-based post-docking filtering. A variety of scripts are provided to perform automated validation experiments and to launch virtual screening campaigns.<br />
+<!--l. 82-->
+<p class="indent" >   This introductory guide is aimed at new users of rDock. It describes the minimal set of steps required to build rDock from the source code distribution, and to run one of the automated validation experiments provided in the test suite distribution. The instructions assume that you are comfortable with simple Linux command line administration tasks, and with building Linux applications from make files. Once you are familiar with these steps you should proceed to the User and Reference Guide for more detailed documentation on the usage of rDock.<br />
+<!--l. 85-->
+<p class="indent" >   [1] Validation of an empirical RNA-ligand scoring function for fast flexible docking using RiboDock, SD Morley and M Afshar, J. Comput.-Aided Mol. Des., 18 (2004) 189-208.<br />
+<!--l. 87-->
+<p class="noindent" >
+<h3 class="sectionHead"><span class="titlemark">2   </span> <a  id="x1-30002"></a>Prerequisites</h3>
+<p><!--l. 89-->
+<p class="noindent" ><span class="paragraphHead"><a  id="x1-40002"></a><span class="cmbx-10">Compilers</span></span><br />
+   rDock is supplied as source code, which means that you will have to compile the binary files (run-time libraries and executable programs) before you can use them. rDock has been developed largely on the Linux operating system, most recently with the GNU g++ compiler (tested under openSuSE 11.3. The code will almost certainly compile and run under other Linux distributions with little or no modification. For the moment, it has been tested in latest Ubuntu and openSuSE releases for both 32 and 64 bits system architectures (by November 2013) and compilation was possible without any code modification. However, no other distributions or compilers have been tested extensively to date.<br />
+<!--l. 93-->
+<p class="indent" >   For full production use, you would typically compile rDock on a separate build machine and run the docking calculations on a cluster of compute machines. However, for the purposes of getting started, these instructions assume that you will be compiling rDock and running the initial validation experiments on the same machine.<br />
+<!--l. 95-->
+<p class="noindent" ><span class="paragraphHead"><a  id="x1-50002"></a><span class="cmbx-10">Required packages</span></span><br />
+   Make sure you have the following packages installed on your machine before you continue. The versions listed are appropriate for openSuSE 11.3; other versions may be required for your particular Linux distribution.<br class="newline" /><br />
+<!--l. 97-->
+<p class="indent" >   <span class="cmbx-10">Table 2.1. </span>Required packages for building and running rDock</p>
+<div class="tabular">
+<table id="TBL-2" class="tabular" cellspacing="0" cellpadding="0" rules="groups" >
+<colgroup id="TBL-2-1g">
+<col id="TBL-2-1"></colgroup>
+<colgroup id="TBL-2-2g">
+<col id="TBL-2-2"></colgroup>
+<colgroup id="TBL-2-3g">
+<col id="TBL-2-3"></colgroup>
+<colgroup id="TBL-2-4g">
+<col id="TBL-2-4"></colgroup>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-2-1-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-1"  class="td11"> <span class="cmbx-10">Package      </span></td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-2"  class="td11"> <span class="cmbx-10">Description                                 </span></td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-3"  class="td11"> <span class="cmbx-10">Required at  </span></td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-1-4"  class="td11"> <span class="cmbx-10">Version   </span></td>
+</tr>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-2-2-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-1"  class="td11"> gcc               </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-2"  class="td11"> GNU C compiler                                  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-3"  class="td11"> Compile-time  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-2-4"  class="td11"> <span class="cmmi-10">&#x003E; </span>3.3.4     </td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-2-3-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-1"  class="td11"> g++             </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-2"  class="td11"> GNU C++ compiler                             </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-3"  class="td11"> Compile-time  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-3-4"  class="td11"> <span class="cmmi-10">&#x003E; </span>3.3.4     </td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-2-4-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-1"  class="td11"> popt             </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-2"  class="td11"> C++ command-line argument processing  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-3"  class="td11"> Run-time       </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-4-4"  class="td11"> <span class="cmmi-10">&#x003E; </span>1.7-190  </td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-2-5-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-1"  class="td11"> popt-devel      </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-2"  class="td11"> Development files for popt library           </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-3"  class="td11"> Run-time       </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-5-4"  class="td11"> <span class="cmmi-10">&#x003E; </span>1.7-190  </td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-2-6-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-1"  class="td11"> cppunit         </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-2"  class="td11"> C++ unit test framework                      </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-3"  class="td11"> Compile-time  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-6-4"  class="td11"> <span class="cmmi-10">&#x003E; </span>1.10.2   </td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-2-7-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-1"  class="td11"> cppunit-devel  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-2"  class="td11"> Development files for cppunit                 </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-3"  class="td11"> Compile-time  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-7-4"  class="td11"> <span class="cmmi-10">&#x003E; </span>1.10.2   </td>
+</tr>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr  style="vertical-align:baseline;" id="TBL-2-8-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-2-8-1" class="td11">              </td>
+</tr>
+</table>
+</div>
+<p><!--l. 115-->
+<p class="indent" >
+<h3 class="sectionHead"><span class="titlemark">3   </span> <a  id="x1-60003"></a>Unpacking the distribution files</h3>
+<p><!--l. 119-->
+<p class="noindent" >The rDock source files and test suite files are provided as independent gzipped tar (.tar.gz) distributions.<br />
+Depending on your requirements, the two distributions can be unpacked to entirely separate locations, or can be unpacked under the same location.<br class="newline" /><br />
+<!--l. 121-->
+<p class="indent" >   <span class="cmbx-10">Table 3.1. </span>rDock distribution files</p>
+<div class="tabular">
+<table id="TBL-3" class="tabular" cellspacing="0" cellpadding="0" rules="groups" >
+<colgroup id="TBL-3-1g">
+<col id="TBL-3-1"></colgroup>
+<colgroup id="TBL-3-2g">
+<col id="TBL-3-2"></colgroup>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-3-1-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-1"  class="td11"> <span class="cmbx-10">File                               </span></td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-3-1-2"  class="td11"> <span class="cmbx-10">Description                      </span></td>
+</tr>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-3-2-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-1"  class="td11"> rDock_[CODELINE]_src.tar.gz  </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-3-2-2"  class="td11"> rDock source distribution         </td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-3-3-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-1"  class="td11"> &#x00A0;[TEST]_rDock_TestSet.tar.gz    </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-3-3-2"  class="td11"> Test suite data files and scripts  </td>
+</tr>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-3-4-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-3-4-1"  class="td11">                            </td>
+</tr>
+</table>
+<p><!--l. 134-->
+<p class="indent" >   where [CODELINE], and [TEST] will vary depending on the release and test set. [CODELINE] represents the major version string (for example, 2013.1) and [TEST] represents the given dataset (ASTEX, RNA or DUD).<br />
+<!--l. 137-->
+<p class="noindent" >
+<h4 class="likesubsectionHead"><a  id="x1-70003"></a>Procedure 3.1. Example unpacking procedure</h4>
+<p><!--l. 139-->
+<p class="noindent" >Create a new directory for building rDock.</p>
+<pre>
+$&#x00A0;mkdir&#x00A0;~/dev
+</pre>
+<p><!--l. 143-->
+<p class="nopar" > The directory you created is referred to as [BUILDDIR] in the subsequents steps.<br />
+<!--l. 146-->
+<p class="indent" >   Copy or download the distribution files to [BUILDDIR].</p>
+<pre>
+$&#x00A0;cp&#x00A0;~/mydownloads/rDock_2013.1_src.tar.gz&#x00A0;~/dev/
+&#x00A0;
+</pre>
+<p><!--l. 150-->
+<p class="nopar" > Extract the distributions.</p>
+<pre>
+$&#x00A0;cd&#x00A0;~/dev/
+$&#x00A0;tar&#x00A0;-xvzf&#x00A0;rdock_2013.1_src.tar.gz
+</pre>
+<p><!--l. 156-->
+<p class="nopar" >
+<!--l. 159-->
+<p class="indent" >   The distributions contain files with relative path names, and you should find the following subdirectories created under rDock_[CODELINE]_src. Note that the ./rDock_2013.1_src subdirectory may have a different name depending on the major version string (see above).</p>
+<pre>
+$&#x00A0;find&#x00A0;.&#x00A0;-type&#x00A0;d
+&#x00A0;.
+&#x00A0;./fw
+&#x00A0;./src
+&#x00A0;./src/daylight
+&#x00A0;./src/lib
+&#x00A0;./src/exe
+&#x00A0;./src/GP
+&#x00A0;./build
+&#x00A0;./build/test
+&#x00A0;./build/test/RBT_HOME
+&#x00A0;./build/tmakelib
+&#x00A0;./build/tmakelib/linux-pathCC-64
+&#x00A0;./build/tmakelib/linux-g++-64
+&#x00A0;./build/tmakelib/linux-g++
+&#x00A0;./build/tmakelib/unix
+&#x00A0;./data
+&#x00A0;./data/filters
+&#x00A0;./data/sf
+&#x00A0;./data/pmf
+&#x00A0;./data/pmf/smoothed
+&#x00A0;./data/scripts
+&#x00A0;./lib
+&#x00A0;./import
+&#x00A0;./import/tnt
+&#x00A0;./import/tnt/include
+&#x00A0;./import/simplex
+&#x00A0;./import/simplex/src
+&#x00A0;./import/simplex/include
+&#x00A0;./docs
+&#x00A0;./include
+&#x00A0;./include/GP
+&#x00A0;./bin
+</pre>
+<p><!--l. 203-->
+<p class="nopar" >
+<!--l. 205-->
+<p class="indent" >   Make a note of the following locations for later use.<br />
+<!--l. 209-->
+<p class="indent" >   The rDock root directory is [BUILDDIR]/rDock_[CODELINE]_src and will be referred to as [RBT_ROOT] in later instructions. In this example, [RBT_ROOT] is &#x00A0;/dev/rDock_2013.1_src/.<br />
+<!--l. 211-->
+<p class="indent" >
+<h3 class="sectionHead"><span class="titlemark">4   </span> <a  id="x1-80004"></a>Building rDock</h3>
+<p><!--l. 215-->
+<p class="noindent" >rDock is written in C++ (with a small amount of C code from Numerical Recipes) and makes heavy use of the C++ Standard Template Library (STL). The majority of the source code is compiled into a single shared library (libRbt.so). The executable programs themselves are relatively light-weight command-line applications linked with libRbt.so.<br />
+<!--l. 217-->
+<p class="indent" >   The tmake build system (from Trolltech) is used to generate makefiles automatically for a particular build target (i.e. combination of operating system and compiler). The source distribution comes with tmake templates defining the compiler options and flags for three Linux build targets (linux-g++ and linux-g++-64). The build targets have been tested under openSuSE 11.3 (2.6.34.10-0.2 kernel) with GNU g++ (versions 3.3.4, 4.5.0 and 4.7.2).<br class="newline" /><br />
+<!--l. 220-->
+<p class="indent" >   <span class="cmbx-10">Table 4.1. </span>Standard tmake build targets provided.</p>
+<div class="tabular">
+<table id="TBL-4" class="tabular" cellspacing="0" cellpadding="0" rules="groups" >
+<colgroup id="TBL-4-1g">
+<col id="TBL-4-1"></colgroup>
+<colgroup id="TBL-4-2g">
+<col id="TBL-4-2"></colgroup>
+<colgroup id="TBL-4-3g">
+<col id="TBL-4-3"></colgroup>
+<colgroup id="TBL-4-4g">
+<col id="TBL-4-4"></colgroup>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-4-1-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-1"  class="td11"> <span class="cmbx-10">Target Name  </span></td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-2"  class="td11"> <span class="cmbx-10">Architecture         </span></td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-3"  class="td11"> <span class="cmbx-10">Compiler  </span></td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-1-4"  class="td11"> <span class="cmbx-10">Compiler flags (release build)  </span></td>
+</tr>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-4-2-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-1"  class="td11"> linux-g++          </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-2"  class="td11"> 32-bit              </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-3"  class="td11"> g++          </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-2-4"  class="td11"> -m32 -O3 -ffast-math                   </td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-4-3-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-1" class="td11"> linux-g++-64      </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-2"  class="td11"> 64-bit</td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-3"  class="td11"> g++          </td>
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-3-4"  class="td11"> -m64 -O3 -ffast-math                   </td>
+</tr>
+<tr class="hline">
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+<td>
+<hr /></td>
+</tr>
+<tr   style="vertical-align:baseline;" id="TBL-4-5-">
+<td  style="white-space:nowrap; text-align:left;" id="TBL-4-5-1" class="td11">                </td>
+</tr>
+</table>
+</div>
+<p><!--l. 232-->
+<p class="indent" >   Customising the tmake template for a build target. If none of the tmake templates are suitable for your machine, or if you wish to customise the compiler options, you should first customise one of the existing templates. The tmake template files are stored under [RBT_ROOT]/build/tmakelib/. Locate and edit the tmake.conf file for the build target you wish to customise. For example, to customise the linux-g++ build target, edit [RBT_ROOT]/build/tmakelib/linux-g++/tmake.conf and localise the values to suit your compiler.<br />
+<!--l. 234-->
+<p class="noindent" >
+<h4 class="likesubsectionHead"><a  id="x1-90004"></a>Procedure 4.1. rDock build procedure</h4>
+<p><!--l. 236-->
+<p class="noindent" >To build rDock, first go to the [RBT_ROOT]/build/ directory.</p>
+<pre>
+$&#x00A0;cd&#x00A0;[RBT_ROOT]/build
+</pre>
+<p><!--l. 239-->
+<p class="nopar" >
+<!--l. 241-->
+<p class="noindent" >
+<h5 class="likesubsubsectionHead"><a  id="x1-100004"></a>4.1.1. Compile</h5>
+<p><!--l. 243-->
+<p class="noindent" >Make one of the build targets listed below.</p>
+<pre>
+$&#x00A0;make&#x00A0;linux-g++
+$&#x00A0;make&#x00A0;linux-g++-64
+</pre>
+<p><!--l. 249-->
+<p class="nopar" >
+<!--l. 251-->
+<p class="noindent" >
+<h5 class="likesubsubsectionHead"><a  id="x1-110004"></a>4.1.2. Test</h5>
+<p><!--l. 253-->
+<p class="noindent" >Run the rDock unit tests to check build integrity. If no failed tests are reported you should be all<br />
+set.</p>
+<pre>
+$&#x00A0;make&#x00A0;test
+</pre>
+<p><!--l. 257-->
+<p class="nopar" >
+<!--l. 271-->
+<p class="noindent" >
+<h5 class="likesubsubsectionHead"><a  id="x1-120004"></a>4.1.3. Cleanup (optional)</h5>
+<p><!--l. 273-->
+<p class="noindent" >To remove all intermediate build files from [RBT_ROOT]/build/, leaving just the final executables (in [RBT_ROOT]/bin/) and shared libraries (in [RBT_ROOT]/lib/):</p>
+<pre>
+$&#x00A0;make&#x00A0;clean
+</pre>
+<p><!--l. 277-->
+<p class="nopar" >
+<!--l. 279-->
+<p class="indent" >   To remove the final executables and shared libraries as well, returning to a source-only distribution:</p>
+<pre>
+$&#x00A0;make&#x00A0;distclean
+</pre>
+<p><!--l. 283-->
+<p class="nopar" >
+<p>To continue with a short validation experiment (also found in the Getting Started pdf file), please visit the following page: <a href="../validation-sets/"  title="Validation Sets">Validation Sets</a>.</p>
+			</div><!-- .entry-content -->
+
+	
+</article><!-- #post-53 -->
+
+						<div id="comments">
+	
+	
+	
+	
+			
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+
+		
+	</div><!-- #main -->
+
+		<div id="supplementary" class="one">
+		
+		
+		
+			</div><!-- #supplementary -->
+	
+	
+<footer id="colophon" role="contentinfo">
+	<div id="site-info">
+				© Copyright 2012 - 2023, rDock Development Team
+	</div>
+</footer><!-- #colophon --></div><!-- #page -->
+
+
+</body>
+</html>

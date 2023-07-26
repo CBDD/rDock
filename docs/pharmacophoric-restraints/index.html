@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<link rel="shortcut icon" href="../wp-content/uploads/2022/09/favicon.png" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>Pharmacophoric Restraints | rDock</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="../xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="../wp-content/themes/forever/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Feed" href="../feed/" />
+<link rel="alternate" type="application/rss+xml" title="rDock &raquo; Comments Feed" href="../comments/feed/" />
+
+            <script type="text/javascript">//<![CDATA[
+            // Google Analytics for WordPress by Yoast v4.3.3 | http://yoast.com/wordpress/google-analytics/
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-46080156-1']);
+				            _gaq.push(['_trackPageview']);
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+            //]]></script>
+			<link rel='stylesheet' id='forever-style-css'  href='../wp-content/themes/forever/style.css?ver=3.7.1' type='text/css' media='all' />
+<link rel='stylesheet' id='raleway-css'  href='https://fonts.googleapis.com/css?family=Raleway%3A100&#038;ver=3.7.1' type='text/css' media='all' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Multi-Step Protocol for HTVS' href='../multistep-protocol-for-htvs/' />
+<meta name="generator" content="WordPress 3.7.1" />
+<link rel='canonical' href='../pharmacophoric-restraints/' />
+<link rel='shortlink' href='../?p=504' />
+	<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+	<style type="text/css">
+	#masthead img {
+		margin: 1.615em 0 0;
+	}
+	.custom-header {
+		display: block;
+		text-align: center;
+	}
+			#site-title a {
+			color: #1982d1;
+		}
+		</style>
+	<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; background-image: url('../wp-content/themes/forever/images/body-bg.png'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+</style>
+</head>
+
+<body class="page page-id-504 page-template page-template-nosidebar-page-php custom-background siteorigin-panels single-author">
+
+<div id="page" class="hfeed">
+
+		
+<header id="masthead" role="banner">
+	
+	<div style='display:table-cell;min-width:130px;padding-left:30px;'>
+			<a class="custom-header" href="../" rel="home">
+			<img class="custom-header-image" src="../wp-content/uploads/2022/09/copy-rdocklogo.png" width="885" height="742" alt="" />
+		</a>
+		</div>
+
+	<div style='display:table-cell;vertical-align:top;'>
+	<h1 id="site-title"><a href="../" title="rDock" rel="home">rDock</a></h1>
+	<h1 id="site-subtitle">A Fast, Versatile and Open Source Program for Docking Ligands to Proteins and Nucleic Acids</h1>
+	</div>
+
+
+
+	<nav id="access" role="navigation">
+		<h1 class="assistive-text section-heading">Main menu</h1>
+		<div class="skip-link assistive-text"><a href="#content" title="Skip to content">Skip to content</a></div>
+
+		<div class="menu-menu-1-container"><ul id="menu-menu-1" class="menu"><li id="menu-item-388" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-388"><a href="../" >Home</a></li>
+<li id="menu-item-389" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-389"><a href="../about/" >About</a></li>
+<li id="menu-item-392" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-392"><a href="../installation/" >Installation</a></li>
+<li id="menu-item-461" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-461"><a>Manuals</a>
+<ul class="sub-menu">
+	<li id="menu-item-393" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-393"><a href="../getting-started/" >Getting Started</a></li>
+	<li id="menu-item-391" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-391"><a href="../documentation/" >Full Documentation</a></li>
+</ul>
+</li>
+<li id="menu-item-398" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor current-menu-parent menu-item-has-children menu-item-398"><a>Tutorials</a>
+<ul class="sub-menu">
+	<li id="menu-item-477" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-477"><a href="../docking-in-3-steps/" >Docking in 3 steps</a></li>
+	<li id="menu-item-482" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-482"><a href="../multistep-protocol-for-htvs/" >Multi-Step Protocol for HTVS</a></li>
+	<li id="menu-item-394" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-394"><a href="../validation-sets/" >Validation Sets</a></li>
+	<li id="menu-item-395" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-395"><a href="../how-to-calculate-roc-curves/" >How to calculate ROC curves</a></li>
+	<li id="menu-item-451" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-451"><a href="../how-to-run-rdock-in-parallel/" >How to run rDock in parallel</a></li>
+	<li id="menu-item-506" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-504 current_page_item menu-item-506"><a href="../pharmacophoric-restraints/" >Pharmacophoric Restraints</a></li>
+</ul>
+</li>
+<li id="menu-item-396" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-396"><a href="../support/" >Support</a></li>
+<li id="menu-item-397" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-397"><a href="../download/" >Download</a></li>
+</ul></div>	</nav><!-- #access -->
+</header><!-- #masthead -->	
+	<div id="supplementary" class="one">
+				<div id="first" class="widget-area" role="complementary" style="width:700px;float:left;display:inline-block;font-weight:bold;">
+			<aside id="bcn_widget-2" class="widget widget_breadcrumb_navxt"><!-- Breadcrumb NavXT 4.4.0 -->
+<a title="Go to rDock." href="http://rdock.sourceforge.net" class="home">rDock</a> &gt; Pharmacophoric Restraints</aside>		</div><!-- #first .widget-area -->
+				<div style="margin-left:700px;">
+        	<form method="get" id="searchform" action="../">
+			<label for="s" class="assistive-text">Search</label>
+			<input type="text" class="field" name="s" id="s" placeholder="Search">
+			<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search">
+		</form>
+		</div>
+	</div>
+	
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					
+<article id="post-504" class="post-504 page type-page status-publish hentry">
+	<header class="entry-header">
+		<h1section class="entry-title">Pharmacophoric Restraints</h1section>
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>In this short tutorial you will find how to prepare and run Docking with pharmacophoric restraints.</p>
+<div style="width:95%;background-color:#FAB208;padding-top:10px;padding-bottom:20px;padding-left:20px;padding-right:20px;margin-bottom:20px">
+<strong> NOTE: </strong> <br />
+rDock assumes the user knows how to compute and find pharmacophores. The user will need the coordinates, tolerance and type of restraint, which will be the input for rDock.
+</div>
+<h1>1.- Pharmacophoric restraints file</h1>
+<p>The first step is to create the input file for rDock with the necessary info.<br />
+As you can find in the User Manual, this file needs one line per pharmacophore with the next structure (each element separated with a space):</p>
+<pre>
+x y z (coords of restraint centre), tolerance radius (in Angstroms), restraint type (string)
+</pre>
+<p>The pharmacophore types accepted by rDock are the following:</p>
+<table style="width:100%">
+<tr>
+<td><strong>String</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Matches</strong></td>
+</tr>
+<tr>
+<td>Any</td>
+<td>Any atom</td>
+<td>Any non-hydrogen atom</td>
+</tr>
+<tr>
+<td>Don</td>
+<td>H-Bond donor</td>
+<td>Any neutral donor hydrogen</td>
+</tr>
+<tr>
+<td>Acc</td>
+<td>H-Bond acceptor</td>
+<td>Any neutral acceptor</td>
+</tr>
+<tr>
+<td>Aro</td>
+<td>Aromatic</td>
+<td>Any aromatic ring centre (pseudo atom)</td>
+</tr>
+<tr>
+<td>Hyd</td>
+<td>Hydrophobic</td>
+<td>Any C or S sp3, any C od S not bonded to O sp2, any Cl, Br, I</td>
+</tr>
+<tr>
+<td>Hal</td>
+<td>Hydrophobic, aliphatic</td>
+<td>Subset of Hyd, sp3 atoms only</td>
+</tr>
+<tr>
+<td>Har</td>
+<td>Hydrophobic, aromatic</td>
+<td>Subset of Hyd, aromatic atoms only</td>
+</tr>
+<tr>
+<td>Ani</td>
+<td>Anionic</td>
+<td>Any atom with negative distributed formal charge</td>
+</tr>
+<tr>
+<td>Cat</td>
+<td>Cationic</td>
+<td>Any atom with positive distributed formal charge</td>
+</tr>
+</table>
+<p>A sample file (<code>pharma.restr</code>) has been created containing two restraints (Acc and Hyd) with a tolerance radius of 2 and located at points (-1.75,1.25,0.25) and (-2,2,-3) respectively.</p>
+<pre>
+-1.75 1.25 0.25 2.0 Acc
+-2.00 2.00 -3.0 2.0 Hyd
+</pre>
+<h1>2.- rDock System Definition File</h1>
+<p>The second and final step is to modify the system definition file (<code>FILE.prm</code>) to take into account the defined restraints.<br />
+Just add a &#8220;SECTION PHARMA&#8221; (see the User Guide for more info) with the following lines:</p>
+<pre>
+SECTION PHARMA
+    SCORING_FUNCTION RbtPharmaSF
+    WEIGHT 1.0
+    CONSTRAINTS_FILE pharma.restr
+END_SECTION
+</pre>
+<p>With the <code>FILE.prm</code> finally being:</p>
+<pre>
+RBT_PARAMETER_FILE_V1.00
+TITLE title 
+
+RECEPTOR_FILE receptor_file.mol2
+RECEPTOR_FLEX 3.0
+
+#################################################################
+## CAVITY DEFINITION: REFERENCE LIGAND METHOD
+#################################################################
+SECTION MAPPER
+    SITE_MAPPER RbtLigandSiteMapper
+    REF_MOL reference.sdf
+    RADIUS 5.0
+    SMALL_SPHERE 1.0
+    MIN_VOLUME 100
+    MAX_CAVITIES 1
+    VOL_INCR 0.0
+    GRIDSTEP 0.5
+END_SECTION
+
+#################################
+#CAVITY RESTRAINT PENALTY
+#################################
+SECTION CAVITY
+    SCORING_FUNCTION RbtCavityGridSF
+    WEIGHT 1.0
+END_SECTION
+
+#################################
+## PHARMACOPHORIC RESTRAINTS
+#################################
+<strong>SECTION PHARMA
+    SCORING_FUNCTION RbtPharmaSF
+    WEIGHT 1.0
+    CONSTRAINTS_FILE pharma.restr
+END_SECTION</strong>
+</pre>
+<div style="width:95%;background-color:#FAB208;padding-top:10px;padding-bottom:20px;padding-left:20px;padding-right:20px;margin-bottom:20px">
+<strong> NOTE: </strong> <br />
+This <code>FILE.prm</code> is an example file for the sake of the tutorial. The point here is to clarify how to define pharmacophoric restraints and how to configure rDock to take them into account.
+</div>
+<p>Finally, when running rDock, the user can check if the program writes similar lines as the following to be sure that the restraints have been correctly read.</p>
+<pre>
+[...]
+RbtPharmaSF: Reading mandatory ph4 constraints from /path/to/pharma.restr
+(-1.75,1.25,0.25)  2.0     Acc
+(-2.0,2.0,-3.0)    2.0     Hyd
+RbtPharmaSF: No optional ph4 constraints file found
+[...]
+</pre>
+<h1>3.- Optional Constraints</h1>
+<p>This tutorial is an example for mandatory constraints. Optional constraints can also be configured in a different file (same format as <code>pharma.restr</code> created above). The &#8220;SECTION PHARMA&#8221; in the rDock System Configuration File should be modified as follows (<code>NOPT=1</code> means that only one of the optional restraints has to be met):</p>
+<pre>
+SECTION PHARMA
+    SCORING_FUNCTION RbtPharmaSF
+    WEIGHT 1.0
+    CONSTRAINTS_FILE pharma.restr
+    OPTIONAL_FILE optional_pharma.restr
+    NOPT 1
+END_SECTION
+</pre>
+<div style="width:95%;background-color:#FAB208;padding-top:10px;padding-bottom:20px;padding-left:20px;padding-right:20px;margin-bottom:20px">
+For more information about the pharmacophoric restraints and the parameters in SECTION PHARMA, please go to the <a href="../documentation/"  title="Documentation">User Guide</a>.
+</div>
+			</div><!-- .entry-content -->
+
+	
+</article><!-- #post-504 -->
+
+						<div id="comments">
+	
+	
+	
+	
+			
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+
+		
+	</div><!-- #main -->
+
+		<div id="supplementary" class="one">
+		
+		
+		
+			</div><!-- #supplementary -->
+	
+	
+<footer id="colophon" role="contentinfo">
+	<div id="site-info">
+				© Copyright 2012 - 2020, rDock Development Team
+	</div>
+</footer><!-- #colophon --></div><!-- #page -->
+
+
+</body>
+</html>
