@@ -1,4 +1,0 @@
-FROM tgagor/centos-stream:stream8 as base
-
-# Install dependencies
-RUN yum install -y popt-devel gcc-c++ make
