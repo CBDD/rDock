@@ -7,11 +7,14 @@ try:
 except ImportError:
     pd = None
 
+import os
 import sys
 from collections import Counter
 import argparse
 from pathlib import Path
 import itertools
+import multiprocessing
+from functools import partial
 
 
 def apply_threshold(scored_poses, column, steps, threshold):
@@ -57,9 +60,9 @@ def prepare_array(sdreport_array, name_column):
 
 
 def calculate_results_for_filter_combination(
+    filter_combination,
     molecule_array,
     filters,
-    filter_combination,
     min_score_indices,
     number_of_validation_mols,
 ):
@@ -87,8 +90,10 @@ def calculate_results_for_filter_combination(
             )
             if n in mols_passed_threshold
         ]
-
         filter_percentages.append(len(mols_passed_threshold) / molecule_array.shape[0])
+    number_of_simulated_poses += len(mols_passed_threshold) * (
+        molecule_array.shape[1] - filters[-1]["steps"]
+    )
     perc_val = {
         k: len([n for n in v if n in mols_passed_threshold]) / number_of_validation_mols
         for k, v in min_score_indices.items()
@@ -124,9 +129,12 @@ def write_output(
                 )
             for n in result["perc_val"]:
                 f.write(f"{result['perc_val'][n]*100:.2f}\t")
-                f.write(
-                    f"{result['perc_val'][n]/result['filter_percentages'][-1]:.2f}\t"
-                )
+                if result["filter_percentages"][-1]:
+                    f.write(
+                        f"{result['perc_val'][n]/result['filter_percentages'][-1]:.2f}\t"
+                    )
+                else:
+                    f.write("NaN\t")
             f.write(f"{result['time']:.4f}\n")
     return
 
@@ -138,17 +146,20 @@ def select_best_filter_combination(results):
     (= percentage of validation compounds / percentage of all compounds); we select the
     threshold with the highest enrichment factor
     """
-
     enrichment_factors = [
         max(result["perc_val"].values()) / result["filter_percentages"][-1]
+        if result["time"] < 0.1 and result["filter_percentages"][-1] >= 0.01
+        else 0
         for result in results
-        if result["time"] < 0.1
     ]
-    return np.argmax(enrichment_factors)
+    if enrichment_factors:
+        return np.argmax(enrichment_factors)
+    else:
+        return None
 
 
 def write_threshold_file(
-    filters, best_filter_combination, threshold_file, column_names
+    filters, best_filter_combination, threshold_file, column_names, max_number_of_runs
 ):
     with open(threshold_file, "w") as f:
         # write number of filters to apply
@@ -158,8 +169,8 @@ def write_threshold_file(
             f.write(
                 f'if - {best_filter_combination[n]} {column_names[filtr["column"]]} 1.0 if - SCORE.NRUNS  {filtr["steps"]} 0.0 -1.0,\n'
             )
-        # write filter to terminate docking when NRUNS reaches 24 (arbitrary number)
-        f.write(f"if - SCORE.NRUNS 24 0.0 -1.0\n")
+        # write filter to terminate docking when NRUNS reaches the number of runs used in the input file
+        f.write(f"if - SCORE.NRUNS {max_number_of_runs - 1} 0.0 -1.0\n")
 
         # write final filters - find strictest filters for all columns and apply them again
         filters_by_column = {
@@ -318,10 +329,36 @@ throughput protocol. The following steps should be followed:
 
     for filtr in filters:
         # user inputs with 1-based numbering whereas python uses 0-based
-        filtr["column"] -= 1  
+        filtr["column"] -= 1
 
     # sort filters by step at which they are applied
     filters.sort(key=lambda n: n["steps"])
+
+    # generates all possible combinations from filters provided
+    filter_combinations = list(
+        itertools.product(
+            *(
+                np.arange(*n)
+                for n in [
+                    (
+                        filtr["min"],
+                        filtr["max"] + filtr.get("interval", 1),
+                        filtr.get("interval", 1),
+                    )
+                    for filtr in filters
+                ]
+            )
+        )
+    )
+    if len(filter_combinations):
+        print(
+            f"Calculated {len(filter_combinations)} combinations of filters - starting calculations"
+        )
+    else:
+        print(
+            "No filter combinations could be calculated - check the thresholds specified."
+        )
+        exit(1)
 
     if pd:
         # pandas is weird... i.e., skip line 0 if there's a header, else read all lines
@@ -341,29 +378,10 @@ throughput protocol. The following steps should be followed:
         else:
             column_names = [f"COL{n+1}" for n in range(np_array.shape[1])]
             sdreport_array = np_array
+    print("Data read in from input file.")
 
     # convert to 3D array (molecules x poses x columns)
     molecule_array = prepare_array(sdreport_array, args.name)
-
-    # generates all possible combinations from filters provided
-    filter_combinations = list(
-        itertools.product(
-            *(
-                np.arange(*n)
-                for n in [
-                    (
-                        filtr["min"],
-                        filtr["max"] + filtr.get("interval", 1),
-                        filtr.get("interval", 1),
-                    )
-                    for filtr in filters
-                ]
-            )
-        )
-    )
-    print(
-        f"Calculated {len(filter_combinations)} combinations of filters - starting calculations"
-    )
 
     # find the top scoring compounds for validation of the filter combinations
     min_score_indices = {}
@@ -374,28 +392,37 @@ throughput protocol. The following steps should be followed:
         ]
 
     results = []
-    for filter_combination in filter_combinations:
-        result = calculate_results_for_filter_combination(
-            molecule_array,
-            filters,
-            filter_combination,
-            min_score_indices,
-            args.validation,
-        )
-        results.append(result)
+
+    pool = multiprocessing.Pool(os.cpu_count())
+    results = pool.map(
+        partial(
+            calculate_results_for_filter_combination,
+            molecule_array=molecule_array,
+            filters=filters,
+            min_score_indices=min_score_indices,
+            number_of_validation_mols=args.validation,
+        ),
+        filter_combinations,
+    )
+
+    write_output(results, filters, args.validation, args.output, column_names)
 
     best_filter_combination = select_best_filter_combination(results)
     if args.threshold:
-        write_threshold_file(
-            filters,
-            filter_combinations[best_filter_combination],
-            args.threshold,
-            column_names,
-        )
-
-    write_output(results, filters, args.validation, args.output, column_names)
+        if best_filter_combination:
+            write_threshold_file(
+                filters,
+                filter_combinations[best_filter_combination],
+                args.threshold,
+                column_names,
+                molecule_array.shape[1],
+            )
+        else:
+            print(
+                "Filter combinations defined are too strict or would take too long to run; no threshold file was written."
+            )
+            exit(1)
 
 
 if __name__ == "__main__":
     main()
-
