@@ -164,7 +164,7 @@ lint:
 ## Internal targets
 
 target_folders:
-	@mkdir $(PREFIX)/{bin,lib,include} -p
+	@mkdir -p $(PREFIX)/bin $(PREFIX)/lib $(PREFIX)/include
 
 build_directories:
 	@mkdir -p $(objdirs) ./lib ./bin ./log ./tests/tmp
