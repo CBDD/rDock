@@ -14,6 +14,7 @@
 
 #include <string>
 #include <iomanip>
+#include <set>
 using std::setw;
 
 #include <popt.h>  // for popt command-line parsing
@@ -47,107 +48,16 @@ void PrintUsage(void) {
 
 struct RBCavityConfig {
     std::string prmFile;
-    bool readAS;
-    bool writeAS;
-    bool dump;
-    bool viewer;
-    bool list;
-    bool site;
-    bool moeGrid;
-    double border;
-    double dist;
-
+    bool readAS {false};
+    bool writeAS {false};
+    bool dump {false};
+    bool viewer {false};
+    bool list {false};
+    bool site {false};
+    bool moeGrid {false};
+    double border {8.0};
+    double dist {5.0};
 };
-
-RBCavityConfig parseCommandLine(int argc, const char *argv[]) {
-    RBCavityConfig config;
-    config.readAS = false;
-    config.writeAS = false;
-    config.dump = false;
-    config.viewer = false;
-    config.list = false;
-    config.site = false;
-    config.moeGrid = false;
-    config.border = 8.0;
-    config.dist = 5.0;
-
-    poptContext optCon;       // ditto
-    char *prmFile = NULL;     // will be strReceptorPrmFile
-    char *listDist = NULL;    // will be 'dist'
-    char *borderDist = NULL;  // will be 'border'
-    struct poptOption optionsTable[] = {
-        // command line options
-        {"receptor", 'r', POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH, &prmFile, 0, "receptor file"},
-        {"was", 'W', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'W', "write active site"},
-        {"ras", 'R', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'R', "read active site"},
-        {"dump-insight", 'd', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'd', "dump InsightII/PyMol grids"},
-        //{"dump-moe",    'm',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'm',"dump MOE grids"}, //not working
-        // right now so commenting it
-        {"viewer", 'v', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'v', "dump Viewer PSF/CRD files"},
-        {"list", 'l', POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH, &listDist, 'l', "list receptor atoms within <dist>"},
-        {"site", 's', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 's', "print site descriptors"},
-        {"border",
-         'b',
-         POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH,
-         &borderDist,
-         'b',
-         "set the border around the cavities"},
-        POPT_AUTOHELP{NULL, 0, 0, NULL, 0}};
-    optCon = poptGetContext(NULL, argc, argv, optionsTable, 0);
-    poptSetOtherOptionHelp(optCon, "-r<receptor.prm> [options]");
-    if (argc < 2) {
-        poptPrintUsage(optCon, stderr, 0);
-        exit(1);
-    }
-    char c;
-    while ((c = poptGetNextOpt(optCon)) >= 0) {
-        switch (c) {
-            case 'b':
-                config.border = atof(borderDist);
-                break;
-            case 'R':  // also for -ras
-                config.readAS = true;
-                break;
-            case 'W':
-                config.writeAS = true;
-                break;
-            case 'd':
-                config.dump = true;
-                break;
-            case 'v':
-                config.viewer = true;
-                break;
-            case 'l':
-                config.list = true;
-                config.dist = atof(listDist);
-                break;
-            case 'm':
-                config.moeGrid = true;
-                break;
-            case 's':
-                config.site = true;
-                break;
-            default:
-                cout << "WARNING: unknown argument: " << c << endl;
-                ;
-                break;
-        }
-    }
-    cout << endl;
-    poptFreeContext(optCon);
-    if (prmFile) {
-        config.prmFile = prmFile;
-    } else {
-        cout << "Missing receptor parameter file name" << endl;
-        PrintUsage();
-        exit(1);
-    }
-    return config;
-}
-
-/////////////////////////////////////////////////////////////////////
-// MAIN PROGRAM STARTS HERE
-/////////////////////////////////////////////////////////////////////
 
 void showConfig(const RBCavityConfig &config) {
     cout << "Command line arguments:" << endl;
@@ -162,6 +72,120 @@ void showConfig(const RBCavityConfig &config) {
     if (config.viewer) cout << "-v" << endl;
 }
 
+class RBCavityCommandLineParser {
+    char *prmFile;
+    char *listDist;
+    char *borderDist;
+    std::vector<poptOption> optionsTable;
+
+    // this is quite ugly, but sets in c++ didn't have a contains method until c++20
+    // this function will be removed once we can use c++20...
+ public:
+    
+    bool contains(std::set<char> & flags, char c) { return flags.find(c) != flags.end(); }
+
+    std::vector<poptOption> createOptionsTable() {
+        return {
+            // command line options
+            {"receptor", 'r', POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH, &prmFile, 0, "receptor file"},
+            {"was", 'W', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'W', "write active site"},
+            {"ras", 'R', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'R', "read active site"},
+            {"dump-insight", 'd', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'd', "dump InsightII/PyMol grids"},
+            //{"dump-moe",    'm',POPT_ARG_NONE  |POPT_ARGFLAG_ONEDASH,0,          'm',"dump MOE grids"}, //not working
+            // right now so commenting it
+            {"viewer", 'v', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 'v', "dump Viewer PSF/CRD files"},
+            {"list", 'l', POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH, &listDist, 'l', "list receptor atoms within <dist>"},
+            {"site", 's', POPT_ARG_NONE | POPT_ARGFLAG_ONEDASH, 0, 's', "print site descriptors"},
+            {"border",
+            'b',
+            POPT_ARG_STRING | POPT_ARGFLAG_ONEDASH,
+            &borderDist,
+            'b',
+            "set the border around the cavities"},
+            POPT_AUTOHELP{NULL, 0, 0, NULL, 0}
+        };
+    }
+
+    RBCavityCommandLineParser():
+        prmFile(nullptr),
+        listDist(nullptr),
+        borderDist(nullptr),
+        optionsTable(createOptionsTable())
+    {}
+
+    std::set<char> getFlags(poptContext & optCon) {
+        std::set<char> flags;
+        char c;
+        while ((c = poptGetNextOpt(optCon)) >= 0){
+            flags.emplace(c);
+            cerr << "FLAG: " << c << endl;
+            if (borderDist != nullptr) {
+            cerr << string(borderDist) << endl;
+            } else {
+                cerr << "NULL" << endl;
+            }
+        }
+        auto a = flags.find('r');
+        return flags;
+    }
+
+    std::set<char> getKnownFlags() {
+        std::set<char> knownFlags;
+        for (auto & option : optionsTable) {
+            if (option.shortName) knownFlags.emplace(option.shortName);
+        }
+        return knownFlags;
+    }
+
+    RBCavityConfig parse(int argc, const char * argv[]) {
+        RBCavityConfig config{};
+        poptContext optCon = poptGetContext(NULL, argc, argv, optionsTable.data(), 0);
+        poptSetOtherOptionHelp(optCon, "-r<receptor.prm> [options]");
+        if (argc < 2) {
+            poptPrintUsage(optCon, stderr, 0);
+            throw RbtError(_WHERE_, "Not enough parameters");
+        }
+
+        // extract configuration
+        auto flags = getFlags(optCon);
+        config.readAS = contains(flags, 'R');
+        config.writeAS = contains(flags, 'W');
+        config.dump = contains(flags, 'd');
+        config.viewer = contains(flags, 'v');
+        config.list = contains(flags, 'l');
+        config.site = contains(flags, 's');
+        config.moeGrid = contains(flags, 'm');
+        showConfig(config);
+        if (config.list) config.dist = atof(listDist);
+        if (contains(flags, 'b')) config.border = atof(borderDist);
+        if (!prmFile) {
+            PrintUsage();
+            throw RbtError(_WHERE_, "Missing receptor parameter file name");
+        }
+        config.prmFile = prmFile;
+
+        
+        // cleanup
+        poptFreeContext(optCon);
+
+        // warn the user about possible typos
+        warnUnknownFlags(flags);
+
+        return config;
+    }
+
+    void warnUnknownFlags(std::set<char> & flags) {
+        auto knownFlags = getKnownFlags();
+        for (auto & flag : flags) {
+            if (!contains(knownFlags, flag)) {
+                cout << "WARNING: unknown argument: " << flag << endl;
+            }
+        }
+    }
+
+};
+
+
 ios_base::openmode addBinaryMode(ios_base::openmode mode) {
 #if defined(__sgi) && !defined(__GNUC__)
     return mode;
@@ -169,6 +193,11 @@ ios_base::openmode addBinaryMode(ios_base::openmode mode) {
     return mode | ios_base::binary;
 #endif
 }
+
+
+/////////////////////////////////////////////////////////////////////
+// MAIN PROGRAM STARTS HERE
+/////////////////////////////////////////////////////////////////////
 
 void rbcavity(const RBCavityConfig &config) {
     // Create a bimolecular workspace
@@ -354,23 +383,22 @@ void printHeader(const char *argv[]) {
 }
 
 int main(int argc, const char *argv[]) {
-    auto config = parseCommandLine(argc, argv);
-
     printHeader(argv);
-
-    showConfig(config);
-
-    cout.setf(ios_base::left, ios_base::adjustfield);
-
+    int exitCode = 0;
     try {
+        auto config = RBCavityCommandLineParser().parse(argc, argv);
+        showConfig(config);
+        cout.setf(ios_base::left, ios_base::adjustfield);
         rbcavity(config);
     } catch (RbtError &e) {
         cout << e << endl;
+        exitCode = 1;
     } catch (...) {
         cout << "Unknown exception" << endl;
+        exitCode = 1;
     }
 
     _RBTOBJECTCOUNTER_DUMP_(cout)
 
-    return 0;
+    return exitCode;
 }
