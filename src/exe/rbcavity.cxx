@@ -12,6 +12,7 @@
 
 // Standalone executable for generating docking site .as files for rbdock
 
+#include <string>
 #include <iomanip>
 using std::setw;
 
@@ -44,12 +45,32 @@ void PrintUsage(void) {
     cout << "\t\t-m          - write active site into a MOE grid" << endl;
 }
 
-/////////////////////////////////////////////////////////////////////
-// MAIN PROGRAM STARTS HERE
-/////////////////////////////////////////////////////////////////////
+struct RBCavityConfig {
+    std::string prmFile;
+    bool readAS;
+    bool writeAS;
+    bool dump;
+    bool viewer;
+    bool list;
+    bool site;
+    bool moeGrid;
+    double border;
+    double dist;
 
-int main(int argc, const char *argv[]) {
-    char c;                   // for argument parsing
+};
+
+RBCavityConfig parseCommandLine(int argc, const char *argv[]) {
+    RBCavityConfig config;
+    config.readAS = false;
+    config.writeAS = false;
+    config.dump = false;
+    config.viewer = false;
+    config.list = false;
+    config.site = false;
+    config.moeGrid = false;
+    config.border = 8.0;
+    config.dist = 5.0;
+
     poptContext optCon;       // ditto
     char *prmFile = NULL;     // will be strReceptorPrmFile
     char *listDist = NULL;    // will be 'dist'
@@ -72,65 +93,39 @@ int main(int argc, const char *argv[]) {
          'b',
          "set the border around the cavities"},
         POPT_AUTOHELP{NULL, 0, 0, NULL, 0}};
-
-    // Display brief help message if no args
-    if (argc < 2) {
-        PrintUsage();
-        return 1;
-    }
-
-    // Strip off the path to the executable, leaving just the file name
-    RbtString strExeName(argv[0]);
-    RbtString::size_type i = strExeName.rfind("/");
-    if (i != RbtString::npos) strExeName.erase(0, i + 1);
-
-    // Print a standard header
-    Rbt::PrintStdHeader(cout, strExeName + EXEVERSION);
-
-    // Command line arguments and default values
-    RbtString strReceptorPrmFile;
-    RbtBool bReadAS(false);   // If true, read Active Site from file
-    RbtBool bWriteAS(false);  // If true, write Active Site to file
-    RbtBool bDump(false);     // If true, dump cavity grids in Insight format
-    RbtBool bViewer(false);   // If true, dump PSF/CRD files for rDock Viewer
-    RbtBool bList(false);     // If true, list atoms within 'distance' of cavity
-    RbtBool bSite(false);     // If true, print out "SITE" descriptors (counts of exposed atoms)
-    RbtBool bMOEgrid(false);  // If true, create a MOE grid file for AS visualisation
-    RbtDouble border(8.0);    // Border to allow around cavities for distance grid
-    RbtDouble dist(5.0);
-
     optCon = poptGetContext(NULL, argc, argv, optionsTable, 0);
     poptSetOtherOptionHelp(optCon, "-r<receptor.prm> [options]");
     if (argc < 2) {
         poptPrintUsage(optCon, stderr, 0);
         exit(1);
     }
+    char c;
     while ((c = poptGetNextOpt(optCon)) >= 0) {
         switch (c) {
             case 'b':
-                border = atof(borderDist);
+                config.border = atof(borderDist);
                 break;
             case 'R':  // also for -ras
-                bReadAS = true;
+                config.readAS = true;
                 break;
             case 'W':
-                bWriteAS = true;
+                config.writeAS = true;
                 break;
             case 'd':
-                bDump = true;
+                config.dump = true;
                 break;
             case 'v':
-                bViewer = true;
+                config.viewer = true;
                 break;
             case 'l':
-                bList = true;
-                dist = atof(listDist);
+                config.list = true;
+                config.dist = atof(listDist);
                 break;
             case 'm':
-                bMOEgrid = true;
+                config.moeGrid = true;
                 break;
             case 's':
-                bSite = true;
+                config.site = true;
                 break;
             default:
                 cout << "WARNING: unknown argument: " << c << endl;
@@ -140,208 +135,235 @@ int main(int argc, const char *argv[]) {
     }
     cout << endl;
     poptFreeContext(optCon);
-
-    // check for parameter file name
     if (prmFile) {
-        strReceptorPrmFile = prmFile;
+        config.prmFile = prmFile;
     } else {
         cout << "Missing receptor parameter file name" << endl;
-        // SRC poptPrintUsage(optCon, stderr, 0);
         PrintUsage();
         exit(1);
     }
-    // writing command line arguments
+    return config;
+}
+
+/////////////////////////////////////////////////////////////////////
+// MAIN PROGRAM STARTS HERE
+/////////////////////////////////////////////////////////////////////
+
+void showConfig(const RBCavityConfig &config) {
     cout << "Command line arguments:" << endl;
-    cout << "-r " << strReceptorPrmFile << endl;
-    if (listDist) cout << "-l " << dist << endl;
-    if (borderDist) cout << "-b " << border << endl;
-    if (bWriteAS) cout << "-was" << endl;
-    if (bReadAS) cout << "-ras" << endl;
-    if (bMOEgrid) cout << "-m" << endl;
-    if (bDump) cout << "-d" << endl;
-    if (bSite) cout << "-s" << endl;
-    if (bViewer) cout << "-v" << endl;
+    cout << "-r " << config.prmFile << endl;
+    if (config.list) cout << "-l " << config.dist << endl;
+    if (config.border) cout << "-b " << config.border << endl;
+    if (config.writeAS) cout << "-was" << endl;
+    if (config.readAS) cout << "-ras" << endl;
+    if (config.moeGrid) cout << "-m" << endl;
+    if (config.dump) cout << "-d" << endl;
+    if (config.site) cout << "-s" << endl;
+    if (config.viewer) cout << "-v" << endl;
+}
+
+ios_base::openmode addBinaryMode(ios_base::openmode mode) {
+#if defined(__sgi) && !defined(__GNUC__)
+    return mode;
+#else
+    return mode | ios_base::binary;
+#endif
+}
+
+void rbcavity(const RBCavityConfig &config) {
+    // Create a bimolecular workspace
+    RbtBiMolWorkSpacePtr spWS(new RbtBiMolWorkSpace());
+    // Set the workspace name to the root of the receptor .prm filename
+    RbtStringList componentList = Rbt::ConvertDelimitedStringToList(config.prmFile, ".");
+    RbtString wsName = componentList.front();
+    spWS->SetName(wsName);
+
+    // Read the protocol parameter file
+    RbtParameterFileSourcePtr spRecepPrmSource(
+        new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", config.prmFile))
+    );
+
+    // Create the receptor model from the file names in the parameter file
+    spRecepPrmSource->SetSection();
+    RbtPRMFactory prmFactory(spRecepPrmSource);
+    RbtModelPtr spReceptor = prmFactory.CreateReceptor();
+
+    RbtDockingSitePtr spDockSite;
+    RbtString strASFile = wsName + ".as";
+
+    // Either read the docking site from the .as file
+    if (config.readAS) {
+        RbtString strInputFile = Rbt::GetRbtFileName("data/grids", strASFile);
+        auto mode = addBinaryMode(ios_base::in);
+        ifstream istr(strInputFile.c_str(), mode);
+        spDockSite = RbtDockingSitePtr(new RbtDockingSite(istr));
+        istr.close();
+    }
+    // Or map the site using the prescribed mapping algorithm
+    else {
+        RbtSiteMapperFactoryPtr spMapperFactory(new RbtSiteMapperFactory());
+        RbtSiteMapperPtr spMapper = spMapperFactory->CreateFromFile(spRecepPrmSource, "MAPPER");
+        spMapper->Register(spWS);
+        spWS->SetReceptor(spReceptor);
+        cout << *spMapper << endl;
+
+        RbtInt nRI = spReceptor->GetNumSavedCoords() - 1;
+        if (nRI == 0) {
+            spDockSite = RbtDockingSitePtr(new RbtDockingSite((*spMapper)(), config.border));
+        } else {
+            RbtCavityList allCavs;
+            for (RbtInt i = 1; i <= nRI; i++) {
+                spReceptor->RevertCoords(i);
+                RbtCavityList cavs((*spMapper)());
+                std::copy(cavs.begin(), cavs.end(), std::back_inserter(allCavs));
+            }
+            spDockSite = RbtDockingSitePtr(new RbtDockingSite(allCavs, config.border));
+        }
+    }
+
+    cout << endl << "DOCKING SITE" << endl << (*spDockSite) << endl;
+    if (config.writeAS) {
+        auto mode = addBinaryMode(ios_base::out | ios_base::trunc);
+        ofstream ostr(strASFile.c_str(), mode);
+        spDockSite->Write(ostr);
+        ostr.close();
+    }
+
+    // Write PSF/CRD files to keep the rDock Viewer happy (it doesn't read MOL2 files yet)
+    if (config.viewer) {
+        RbtMolecularFileSinkPtr spRecepSink = new RbtPsfFileSink(wsName + "_for_viewer.psf", spReceptor);
+        cout << "Writing PSF file: " << spRecepSink->GetFileName() << endl;
+        spRecepSink->Render();
+        spRecepSink = new RbtCrdFileSink(wsName + "_for_viewer.crd", spReceptor);
+        cout << "Writing CRD file: " << spRecepSink->GetFileName() << endl;
+        spRecepSink->Render();
+    }
+
+    // Write an ASCII InsightII grid file for each defined cavity
+    if (config.dump) {
+        RbtCavityList cavList = spDockSite->GetCavityList();
+        for (RbtInt i = 0; i < cavList.size(); i++) {
+            ostringstream filename;
+            filename << wsName << "_cav" << i + 1 << ".grd" << ends;
+            ofstream dumpFile(filename.str());
+            if (dumpFile) {
+                cavList[i]->GetGrid()->PrintInsightGrid(dumpFile);
+                dumpFile.close();
+            }
+        }
+    }
+    // writing active site into MOE grid
+    if (config.moeGrid) {
+        cout << "MOE grid feature not yet implemented, sorry." << endl;
+    }
+    // List all receptor atoms within given distance of any cavity
+    if (config.list) {
+        RbtRealGridPtr spGrid = spDockSite->GetGrid();
+        RbtAtomList atomList = spDockSite->GetAtomList(spReceptor->GetAtomList(), 0.0, config.dist);
+        cout << atomList.size() << " receptor atoms within " << config.dist << " A of any cavity" << endl;
+        cout << endl << "DISTANCE,ATOM" << endl;
+        for (RbtAtomListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
+            cout << spGrid->GetSmoothedValue((*iter)->GetCoords()) << "\t" << **iter << endl;
+        }
+        cout << endl;
+    }
+
+    // DM 15 Jul 2002 - print out SITE descriptors
+    // Use a crude measure of solvent accessibility - count #atoms within 4A of each atom
+    // Use an empirical threshold to determine if atom is exposed or not
+    if (config.site) {
+        RbtDouble cavDist = 4.0;  // Use a fixed definition of cavity atoms - all those within 4A of docking volume
+        RbtDouble neighbR = 4.0;  // Sphere radius for counting nearest neighbours
+        RbtDouble threshold = 15;  // Definition of solvent exposed: neighbours < threshold
+        // RbtRealGridPtr spGrid = spDockSite->GetGrid();
+        RbtAtomList recepAtomList = spReceptor->GetAtomList();
+        RbtAtomList cavAtomList = spDockSite->GetAtomList(recepAtomList, cavDist);
+        RbtAtomList exposedAtomList;  // The list of exposed cavity atoms
+        cout << endl << "SOLVENT EXPOSED CAVITY ATOMS" << endl;
+        cout << "1) Consider atoms within " << cavDist << "A of docking site" << endl;
+        cout << "2) Determine #neighbours within " << neighbR << "A of each atom" << endl;
+        cout << "3) If #neighbours < " << threshold << " => exposed" << endl;
+        cout << "4) Calculate SITE* descriptors over exposed cavity atoms only" << endl;
+        cout << endl << "ATOM NAME\t#NEIGHBOURS" << endl;
+
+        // Get the list of solvent exposed cavity atoms
+        for (RbtAtomListConstIter iter = cavAtomList.begin(); iter != cavAtomList.end(); iter++) {
+            RbtInt nNeighb =
+                Rbt::GetNumAtoms(recepAtomList, Rbt::isAtomInsideSphere((*iter)->GetCoords(), neighbR));
+            nNeighb--;
+            if (nNeighb < threshold) {
+                cout << (*iter)->GetFullAtomName() << "\t" << nNeighb << endl;
+                exposedAtomList.push_back(*iter);
+            }
+        }
+
+        // Total +ve and -ve charges
+        RbtDouble posChg(0.0);
+        RbtDouble negChg(0.0);
+        for (RbtAtomListConstIter iter = exposedAtomList.begin(); iter != exposedAtomList.end(); iter++) {
+            RbtDouble chg = (*iter)->GetGroupCharge();
+            if (chg > 0.0) {
+                posChg += chg;
+            } else if (chg < 0.0) {
+                negChg += chg;
+            }
+        }
+
+        // Atom type counts
+        Rbt::isHybridState_eq bIsArom(RbtAtom::AROM);
+        RbtInt nAtoms = exposedAtomList.size();
+        RbtInt nLipoC = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomLipophilic());
+        RbtInt nArom = Rbt::GetNumAtoms(exposedAtomList, bIsArom);
+        RbtInt nNHBD = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomHBondDonor());
+        RbtInt nMetal = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomMetal());
+        RbtInt nGuan = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomGuanidiniumCarbon());
+        RbtInt nNHBA = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomHBondAcceptor());
+
+        // Cavity volume
+        cout << endl << wsName << ",SITE_VOL," << spDockSite->GetVolume() << endl;
+        // Atom type counts
+        cout << wsName << ",SITE_NATOMS," << nAtoms << endl;
+        cout << wsName << ",SITE_NLIPOC," << nLipoC << endl;
+        cout << wsName << ",SITE_NAROMATOMS," << nArom << endl;
+        cout << wsName << ",SITE_NHBD," << nNHBD << endl;
+        cout << wsName << ",SITE_NMETAL," << nMetal << endl;
+        cout << wsName << ",SITE_NGUAN," << nGuan << endl;
+        cout << wsName << ",SITE_NHBA," << nNHBA << endl;
+        // Atom type percentages
+        cout << wsName << ",SITE_PERC_LIPOC," << 100.0 * nLipoC / nAtoms << endl;
+        cout << wsName << ",SITE_PERC_AROMATOMS," << 100.0 * nArom / nAtoms << endl;
+        cout << wsName << ",SITE_PERC_HBD," << 100.0 * nNHBD / nAtoms << endl;
+        cout << wsName << ",SITE_PERC_METAL," << 100.0 * nMetal / nAtoms << endl;
+        cout << wsName << ",SITE_PERC_GUAN," << 100.0 * nGuan / nAtoms << endl;
+        cout << wsName << ",SITE_PERC_HBA," << 100.0 * nNHBA / nAtoms << endl;
+        // Charges
+        cout << wsName << ",SITE_POS_CHG," << posChg << endl;
+        cout << wsName << ",SITE_NEG_CHG," << negChg << endl;
+        cout << wsName << ",SITE_TOT_CHG," << posChg + negChg << endl;
+    }
+}
+
+void printHeader(const char *argv[]) {
+    // Strip off the path to the executable, leaving just the file name
+    RbtString strExeName(argv[0]);
+    RbtString::size_type i = strExeName.rfind("/");
+    if (i != RbtString::npos) strExeName.erase(0, i + 1);
+
+    // Print a standard header
+    Rbt::PrintStdHeader(cout, strExeName + EXEVERSION);
+}
+
+int main(int argc, const char *argv[]) {
+    auto config = parseCommandLine(argc, argv);
+
+    printHeader(argv);
+
+    showConfig(config);
 
     cout.setf(ios_base::left, ios_base::adjustfield);
 
     try {
-        // Create a bimolecular workspace
-        RbtBiMolWorkSpacePtr spWS(new RbtBiMolWorkSpace());
-        // Set the workspace name to the root of the receptor .prm filename
-        RbtStringList componentList = Rbt::ConvertDelimitedStringToList(strReceptorPrmFile, ".");
-        RbtString wsName = componentList.front();
-        spWS->SetName(wsName);
-
-        // Read the protocol parameter file
-        RbtParameterFileSourcePtr spRecepPrmSource(
-            new RbtParameterFileSource(Rbt::GetRbtFileName("data/receptors", strReceptorPrmFile))
-        );
-
-        // Create the receptor model from the file names in the parameter file
-        spRecepPrmSource->SetSection();
-        RbtPRMFactory prmFactory(spRecepPrmSource);
-        RbtModelPtr spReceptor = prmFactory.CreateReceptor();
-
-        RbtDockingSitePtr spDockSite;
-        RbtString strASFile = wsName + ".as";
-
-        // Either read the docking site from the .as file
-        if (bReadAS) {
-            RbtString strInputFile = Rbt::GetRbtFileName("data/grids", strASFile);
-#if defined(__sgi) && !defined(__GNUC__)
-            ifstream istr(strInputFile.c_str(), ios_base::in);
-#else
-            ifstream istr(strInputFile.c_str(), ios_base::in | ios_base::binary);
-#endif
-            spDockSite = RbtDockingSitePtr(new RbtDockingSite(istr));
-            istr.close();
-        }
-        // Or map the site using the prescribed mapping algorithm
-        else {
-            RbtSiteMapperFactoryPtr spMapperFactory(new RbtSiteMapperFactory());
-            RbtSiteMapperPtr spMapper = spMapperFactory->CreateFromFile(spRecepPrmSource, "MAPPER");
-            spMapper->Register(spWS);
-            spWS->SetReceptor(spReceptor);
-            cout << *spMapper << endl;
-
-            RbtInt nRI = spReceptor->GetNumSavedCoords() - 1;
-            if (nRI == 0) {
-                spDockSite = RbtDockingSitePtr(new RbtDockingSite((*spMapper)(), border));
-            } else {
-                RbtCavityList allCavs;
-                for (RbtInt i = 1; i <= nRI; i++) {
-                    spReceptor->RevertCoords(i);
-                    RbtCavityList cavs((*spMapper)());
-                    std::copy(cavs.begin(), cavs.end(), std::back_inserter(allCavs));
-                }
-                spDockSite = RbtDockingSitePtr(new RbtDockingSite(allCavs, border));
-            }
-        }
-
-        cout << endl << "DOCKING SITE" << endl << (*spDockSite) << endl;
-
-        if (bWriteAS) {
-#if defined(__sgi) && !defined(__GNUC__)
-            ofstream ostr(strASFile.c_str(), ios_base::out | ios_base::trunc);
-#else
-            ofstream ostr(strASFile.c_str(), ios_base::out | ios_base::binary | ios_base::trunc);
-#endif
-            spDockSite->Write(ostr);
-            ostr.close();
-        }
-
-        // Write PSF/CRD files to keep the rDock Viewer happy (it doesn't read MOL2 files yet)
-        if (bViewer) {
-            RbtMolecularFileSinkPtr spRecepSink = new RbtPsfFileSink(wsName + "_for_viewer.psf", spReceptor);
-            cout << "Writing PSF file: " << spRecepSink->GetFileName() << endl;
-            spRecepSink->Render();
-            spRecepSink = new RbtCrdFileSink(wsName + "_for_viewer.crd", spReceptor);
-            cout << "Writing CRD file: " << spRecepSink->GetFileName() << endl;
-            spRecepSink->Render();
-        }
-
-        // Write an ASCII InsightII grid file for each defined cavity
-        if (bDump) {
-            RbtCavityList cavList = spDockSite->GetCavityList();
-            for (RbtInt i = 0; i < cavList.size(); i++) {
-                ostringstream filename;
-                filename << wsName << "_cav" << i + 1 << ".grd" << ends;
-                ofstream dumpFile(filename.str());
-                if (dumpFile) {
-                    cavList[i]->GetGrid()->PrintInsightGrid(dumpFile);
-                    dumpFile.close();
-                }
-            }
-        }
-        // writing active site into MOE grid
-        if (bMOEgrid) {
-            cout << "MOE grid feature not yet implemented, sorry." << endl;
-        }
-        // List all receptor atoms within given distance of any cavity
-        if (bList) {
-            RbtRealGridPtr spGrid = spDockSite->GetGrid();
-            RbtAtomList atomList = spDockSite->GetAtomList(spReceptor->GetAtomList(), 0.0, dist);
-            cout << atomList.size() << " receptor atoms within " << dist << " A of any cavity" << endl;
-            cout << endl << "DISTANCE,ATOM" << endl;
-            for (RbtAtomListConstIter iter = atomList.begin(); iter != atomList.end(); iter++) {
-                cout << spGrid->GetSmoothedValue((*iter)->GetCoords()) << "\t" << **iter << endl;
-            }
-            cout << endl;
-        }
-
-        // DM 15 Jul 2002 - print out SITE descriptors
-        // Use a crude measure of solvent accessibility - count #atoms within 4A of each atom
-        // Use an empirical threshold to determine if atom is exposed or not
-        if (bSite) {
-            RbtDouble cavDist = 4.0;  // Use a fixed definition of cavity atoms - all those within 4A of docking volume
-            RbtDouble neighbR = 4.0;  // Sphere radius for counting nearest neighbours
-            RbtDouble threshold = 15;  // Definition of solvent exposed: neighbours < threshold
-            // RbtRealGridPtr spGrid = spDockSite->GetGrid();
-            RbtAtomList recepAtomList = spReceptor->GetAtomList();
-            RbtAtomList cavAtomList = spDockSite->GetAtomList(recepAtomList, cavDist);
-            RbtAtomList exposedAtomList;  // The list of exposed cavity atoms
-            cout << endl << "SOLVENT EXPOSED CAVITY ATOMS" << endl;
-            cout << "1) Consider atoms within " << cavDist << "A of docking site" << endl;
-            cout << "2) Determine #neighbours within " << neighbR << "A of each atom" << endl;
-            cout << "3) If #neighbours < " << threshold << " => exposed" << endl;
-            cout << "4) Calculate SITE* descriptors over exposed cavity atoms only" << endl;
-            cout << endl << "ATOM NAME\t#NEIGHBOURS" << endl;
-
-            // Get the list of solvent exposed cavity atoms
-            for (RbtAtomListConstIter iter = cavAtomList.begin(); iter != cavAtomList.end(); iter++) {
-                RbtInt nNeighb =
-                    Rbt::GetNumAtoms(recepAtomList, Rbt::isAtomInsideSphere((*iter)->GetCoords(), neighbR));
-                nNeighb--;
-                if (nNeighb < threshold) {
-                    cout << (*iter)->GetFullAtomName() << "\t" << nNeighb << endl;
-                    exposedAtomList.push_back(*iter);
-                }
-            }
-
-            // Total +ve and -ve charges
-            RbtDouble posChg(0.0);
-            RbtDouble negChg(0.0);
-            for (RbtAtomListConstIter iter = exposedAtomList.begin(); iter != exposedAtomList.end(); iter++) {
-                RbtDouble chg = (*iter)->GetGroupCharge();
-                if (chg > 0.0) {
-                    posChg += chg;
-                } else if (chg < 0.0) {
-                    negChg += chg;
-                }
-            }
-
-            // Atom type counts
-            Rbt::isHybridState_eq bIsArom(RbtAtom::AROM);
-            RbtInt nAtoms = exposedAtomList.size();
-            RbtInt nLipoC = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomLipophilic());
-            RbtInt nArom = Rbt::GetNumAtoms(exposedAtomList, bIsArom);
-            RbtInt nNHBD = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomHBondDonor());
-            RbtInt nMetal = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomMetal());
-            RbtInt nGuan = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomGuanidiniumCarbon());
-            RbtInt nNHBA = Rbt::GetNumAtoms(exposedAtomList, Rbt::isAtomHBondAcceptor());
-
-            // Cavity volume
-            cout << endl << wsName << ",SITE_VOL," << spDockSite->GetVolume() << endl;
-            // Atom type counts
-            cout << wsName << ",SITE_NATOMS," << nAtoms << endl;
-            cout << wsName << ",SITE_NLIPOC," << nLipoC << endl;
-            cout << wsName << ",SITE_NAROMATOMS," << nArom << endl;
-            cout << wsName << ",SITE_NHBD," << nNHBD << endl;
-            cout << wsName << ",SITE_NMETAL," << nMetal << endl;
-            cout << wsName << ",SITE_NGUAN," << nGuan << endl;
-            cout << wsName << ",SITE_NHBA," << nNHBA << endl;
-            // Atom type percentages
-            cout << wsName << ",SITE_PERC_LIPOC," << 100.0 * nLipoC / nAtoms << endl;
-            cout << wsName << ",SITE_PERC_AROMATOMS," << 100.0 * nArom / nAtoms << endl;
-            cout << wsName << ",SITE_PERC_HBD," << 100.0 * nNHBD / nAtoms << endl;
-            cout << wsName << ",SITE_PERC_METAL," << 100.0 * nMetal / nAtoms << endl;
-            cout << wsName << ",SITE_PERC_GUAN," << 100.0 * nGuan / nAtoms << endl;
-            cout << wsName << ",SITE_PERC_HBA," << 100.0 * nNHBA / nAtoms << endl;
-            // Charges
-            cout << wsName << ",SITE_POS_CHG," << posChg << endl;
-            cout << wsName << ",SITE_NEG_CHG," << negChg << endl;
-            cout << wsName << ",SITE_TOT_CHG," << posChg + negChg << endl;
-        }
+        rbcavity(config);
     } catch (RbtError &e) {
         cout << e << endl;
     } catch (...) {
