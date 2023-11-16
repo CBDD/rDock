@@ -734,12 +734,12 @@ namespace Rbt
 
   // TODO
   // Is this atom part of the subgraph specified by the user?
-  class isAtomSubgraph : public std::unary_function<RbtAtom *, RbtBool>
+  class isAtomId : public std::unary_function<RbtAtom *, RbtBool>
   {
     RbtInt n;
 
   public:
-    explicit isAtomSubgraph(RbtInt nn) : n(nn) {}
+    explicit isAtomId(RbtInt nn) : n(nn) {}
     RbtBool operator()(const RbtAtom *pAtom) const { return pAtom->GetAtomId() == n; }
   };
 

@@ -130,16 +130,6 @@ void RbtPharmaSF::SetupLigand()
   if (GetLigand().Null())
     return;
 
-  RbtStringList strTetherAtomsL = GetLigand()->GetDataValue("SUBGRAPH_CONSTR_0");
-  // print each item on the stringlist
-  for (RbtStringListIter iter = strTetherAtomsL.begin(); iter != strTetherAtomsL.end(); iter++)
-  {
-    cout << "\n\n\natom to ANCHOR" << *iter << endl;
-  }
-
-  cout << "\n\n\nfirst and only:::" << strTetherAtomsL[0] << endl;
-
-  RbtInt myAtomId = stoi(strTetherAtomsL[0]);
   try
   {
     if (GetTrace() > 0)
@@ -148,7 +138,7 @@ void RbtPharmaSF::SetupLigand()
     }
     for (RbtConstraintListIter iter = m_constrList.begin(); iter != m_constrList.end(); iter++)
     {
-      (*iter)->AddAtomList(GetLigand(), true, myAtomId); // I would like to pass a stringlist here for one type of constraint (sub)
+      (*iter)->AddAtomList(GetLigand(), true);
     }
     if (GetTrace() > 0)
     {

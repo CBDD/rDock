@@ -189,10 +189,8 @@ void RbtMdlFileSource::Parse() throw(RbtError)
       // DM 12 May 1999 - read data records (if any)
       for (; fileIter != fileEnd; fileIter++)
       {
-        // cout << "here"; // Found a data record
         if ((*fileIter).find(">") == 0)
         {
-          // cout << "here record";                            // Found a data record
           RbtString::size_type ob = (*fileIter).find("<");  // First open bracket
           RbtString::size_type cb = (*fileIter).rfind(">"); // Last closed bracket
           if ((ob != RbtString::npos) && (cb != RbtString::npos))
@@ -203,7 +201,6 @@ void RbtMdlFileSource::Parse() throw(RbtError)
             {
               sl.push_back(*fileIter);
             }
-            // cout << "Added record";
             m_dataMap[fieldName] = RbtVariant(sl);
           }
         }
