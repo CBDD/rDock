@@ -732,6 +732,16 @@ namespace Rbt
     RbtBool operator()(const RbtAtom *pAtom) const { return (pAtom->GetGroupCharge() > 0.001); }
   };
 
+  // Does the atom have the given ID ?
+  class isAtomId : public std::unary_function<RbtAtom *, RbtBool>
+  {
+    RbtInt n;
+
+  public:
+    explicit isAtomId(RbtInt nn) : n(nn) {}
+    RbtBool operator()(const RbtAtom *pAtom) const { return pAtom->GetAtomId() == n; }
+  };
+
   // Is atom defined as an anionic interaction center ?
   // Checks if group charge is < zero
   class isAtomAnionic : public std::unary_function<RbtAtom *, RbtBool>
