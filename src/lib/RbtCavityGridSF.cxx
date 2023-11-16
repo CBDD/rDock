@@ -59,10 +59,7 @@ void RbtCavityGridSF::SetupReceptor()
   m_maxDist = m_spGrid->MaxValue();
 }
 
-void RbtCavityGridSF::SetupLigand()
-{
-  RbtStringList strTetherAtomsL = GetLigand()->GetDataValue("SYMMETRIC_BONDS");
-}
+void RbtCavityGridSF::SetupLigand() {}
 
 void RbtCavityGridSF::SetupSolvent() {}
 
