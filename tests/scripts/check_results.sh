@@ -32,7 +32,7 @@ function compare_scores {
                 printf "[FAIL] scores differ: %f vs %f\n", $1, $2
                 exit 1
             } else {
-                printf "[OK] - scores match\n"
+                printf "[OK] scores match\n"
             }
         }
     '
