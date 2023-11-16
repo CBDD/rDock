@@ -1,6 +1,6 @@
 package:
   name: rdock
-  version: "2022.0"
+  version: "2022.0+1"
 
 source:
   path: ..
