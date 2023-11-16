@@ -30,6 +30,13 @@ jobs:
           - debian-10
           - centos-stream8
           - centos-centos7
+        compiler:
+          - g++
+        include:
+          - distribution: ubuntu-22.04-clang
+            compiler: clang++
+
     uses: ./.github/workflows/build_generic.yml
     with:
       distribution: ${{ matrix.distribution }}
+      compiler: ${{ matrix.compiler }}
