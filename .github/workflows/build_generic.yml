@@ -38,7 +38,8 @@ jobs:
       run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} test
 
     - name: Set candidate name
-      run: echo "CANDIDATE_NAME=$(date +%y.%m).${{ github.event.number }}_${{ inputs.distribution }}_${{ inputs.compiler }}_${{ inputs.arch }}" >> $GITHUB_ENV
+      id: set_candidate_name
+      run: echo "CANDIDATE_NAME=$(date +%y.%m).${{ github.event.number }}_${{ inputs.distribution }}_${{ inputs.compiler }}_${{ inputs.arch }}" >> "$GITHUB_OUTPUT"
 
     - name: Create bundle
       run: |
@@ -48,5 +49,5 @@ jobs:
     - name: Upload bundle
       uses: actions/upload-artifact@v3
       with:
-        name: rdock-$CANDIDATE_NAME.tar.gz
+        name: rdock-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz
         path: rdock.tar.gz
