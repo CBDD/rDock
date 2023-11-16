@@ -77,7 +77,7 @@ endif
 
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
-LIB_DEPENDENCIES            := -lpopt -lm
+LIB_DEPENDENCIES            := -lpopt -lm -lstdc++
 LIBS                        += $(LIB_DEPENDENCIES) -lRbt
 INCLUDE                     := $(addprefix -I./, $(shell find include/ -type d )) $(addprefix -I./, $(shell find import/ -type d ))
 LIBRARY                     := ./lib
@@ -164,7 +164,7 @@ lint:
 ## Internal targets
 
 target_folders:
-	@mkdir $(PREFIX)/{bin,lib,include} -p
+	@mkdir -p $(PREFIX)/bin $(PREFIX)/lib $(PREFIX)/include
 
 build_directories:
 	@mkdir -p $(objdirs) ./lib ./bin ./log ./tests/tmp
