@@ -129,7 +129,6 @@ void RbtPharmaSF::SetupLigand()
 {
   if (GetLigand().Null())
     return;
-
   try
   {
     if (GetTrace() > 0)

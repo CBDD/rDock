@@ -190,7 +190,7 @@ void RbtMdlFileSource::Parse() throw(RbtError)
       for (; fileIter != fileEnd; fileIter++)
       {
         if ((*fileIter).find(">") == 0)
-        {
+        {                                                   // Found a data record
           RbtString::size_type ob = (*fileIter).find("<");  // First open bracket
           RbtString::size_type cb = (*fileIter).rfind(">"); // Last closed bracket
           if ((ob != RbtString::npos) && (cb != RbtString::npos))
@@ -213,16 +213,6 @@ void RbtMdlFileSource::Parse() throw(RbtError)
       {
         m_dataMap["Name"] = RbtVariant(m_titleList.front());
       }
-
-      // cout << "ALEJANDRO says HELLO WORLD " << (*iter)->GetAtomName() << " to plane of substituents=" << dist << endl;
-      // cout << "ALEJANDRO says \n\n\n HELLO WORLD  \n\n\n ";
-
-      // for (RbtStringVariantMapConstIter iter = m_dataMap.begin(); iter != m_dataMap.end(); iter++)
-      //{
-      //   cout << (*iter).first;
-      //   // cout << (*iter).second;
-      //   cout << '\n\n' << endl;
-      // }
 
       // Setup the atomic params not stored in the file (e.g. hybridisation state etc)
       SetupAtomParams();
