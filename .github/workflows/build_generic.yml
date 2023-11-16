@@ -45,5 +45,5 @@ jobs:
     - name: Upload bundle
       uses: actions/upload-artifact@v3
       with:
-        name: rdock.tar.gz
-        path: rdock-$(date +%y.%m).${{ github.event.number }}_${{ inputs.distribution }}_${{ inputs.compiler }}_${{ inputs.arch }}.tar.gz
+        name: rdock-$(date +%y.%m).${{ github.event.number }}_${{ inputs.distribution }}_${{ inputs.compiler }}_${{ inputs.arch }}.tar.gz
+        path: rdock.tar.gz
