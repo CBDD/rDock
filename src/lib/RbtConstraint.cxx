@@ -371,7 +371,10 @@ void RbtPosChargeConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw(
 
 void RbtAtomConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) throw(RbtError)
 {
-  RbtStringList atomId_str = lig->GetDataValue("ATOMID_CONSTR_" + std::to_string(idx));
+  if (!lig->isDataFieldPresent(key))
+    return;
+
+  RbtStringList atomId_str = lig->GetDataValue(key);
   RbtInt atomId = stoi(atomId_str[0]);
   m_atomList = Rbt::GetAtomList(lig->GetAtomList(), Rbt::isAtomId(atomId));
 

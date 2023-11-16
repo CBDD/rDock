@@ -147,10 +147,10 @@ public:
 class RbtAtomConstraint : public RbtConstraint
 {
 public:
-  RbtAtomConstraint(RbtCoord c, RbtDouble t, RbtInt idx_) : RbtConstraint(c, t) { idx = idx_; };
+  RbtAtomConstraint(RbtCoord c, RbtDouble t, RbtInt idx_) : RbtConstraint(c, t) { key = "ATOMID_CONSTR_" + std::to_string(idx_); };
   void AddAtomList(RbtModelPtr, RbtBool bCheck = true) throw(RbtError);
   static RbtInt counter;
-  static RbtInt idx;
+  static RbtString key;
 };
 
 class RbtRingAromaticConstraint : public RbtConstraint
