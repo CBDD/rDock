@@ -4,6 +4,10 @@ on:
       distribution:
         required: true
         type: string
+      compiler:
+        required: false
+        default: g++
+        type: string
 
 jobs:
   build:
@@ -24,7 +28,7 @@ jobs:
         load: true
 
     - name: Build rDock
-      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make -j 2
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} -j 2
     
     - name: Test rDock
-      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make test
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} test
