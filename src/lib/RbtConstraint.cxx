@@ -154,7 +154,7 @@ RbtConstraintPtr Rbt::CreateConstraint(RbtCoord &c, RbtDouble &t, RbtString &n, 
       RbtHydroAromaticConstraint::counter++;
     return new RbtHydroAromaticConstraint(c, t);
   }
-  else if (n.compare(0, 3, "AtomID_") == 0)
+  else if (n.compare(0, 7, "AtomID_") == 0)
   {
     RbtInt idx = stoi(n.substr(7));
     if (bCount)
