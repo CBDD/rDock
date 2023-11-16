@@ -100,7 +100,6 @@ RbtDouble RbtConstraint::Score() const
 
 RbtConstraintPtr Rbt::CreateConstraint(RbtCoord &c, RbtDouble &t, RbtString &n, RbtBool bCount)
 {
-  // throw RbtError(_WHERE_, "Problems reading constraint ABC " + n);
   if (n == "Any")
   {
     if (bCount)
