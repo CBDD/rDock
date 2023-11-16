@@ -732,6 +732,17 @@ namespace Rbt
     RbtBool operator()(const RbtAtom *pAtom) const { return (pAtom->GetGroupCharge() > 0.001); }
   };
 
+  // TODO
+  // Is this atom part of the subgraph specified by the user?
+  class isAtomSubgraph : public std::unary_function<RbtAtom *, RbtBool>
+  {
+    RbtInt n;
+
+  public:
+    explicit isAtomSubgraph(RbtInt nn) : n(nn) {}
+    RbtBool operator()(const RbtAtom *pAtom) const { return pAtom->GetAtomId() == n; }
+  };
+
   // Is atom defined as an anionic interaction center ?
   // Checks if group charge is < zero
   class isAtomAnionic : public std::unary_function<RbtAtom *, RbtBool>

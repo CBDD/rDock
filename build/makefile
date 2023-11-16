@@ -106,7 +106,7 @@ test:	./test/RBT_HOME/1koc.as ./test/RBT_HOME/1YET.as ./test/RBT_HOME/1YET_test.
 	@echo ""
 	@echo "Running rDock unit tests..."
 	@echo ""
-	@$(RBT_ROOT)/bin/rbdock -r1YET_test.prm -i ./test/RBT_HOME/1YET_c.sd -p dock.prm -n 1 -s 48151623 -o 1YET_test_out > 1YET_test_out.log
+	@$(RBT_ROOT)/bin/rbdock -r1YETmine.prm -i ./test/RBT_HOME/1YET_c.sd -p dock.prm -n 20 -s 48151623 -o 1YET_test_out > 1YET_test_out.log
 	@mv 1YET_test_out.log 1YET_test_out.sd ./test/RBT_HOME/
 	@python ./test/RBT_HOME/check_test.py ./test/RBT_HOME/1YET_reference_out.sd ./test/RBT_HOME/1YET_test_out.sd
 
@@ -129,8 +129,8 @@ test:	./test/RBT_HOME/1koc.as ./test/RBT_HOME/1YET.as ./test/RBT_HOME/1YET_test.
 	@echo ""
 	@echo "Cavity mapping of 1YET.prm"
 	@echo ""
-	@$(RBT_ROOT)/bin/rbcavity -r1YET.prm -was
-	@mv 1YET.as ./test/RBT_HOME/
+	@$(RBT_ROOT)/bin/rbcavity -r1YETmine.prm -was
+	@mv 1YETmine.as ./test/RBT_HOME/
 
 # Generate the .as file for 1koc
 ./test/RBT_HOME/1YET_test.as:	./test/RBT_HOME/1YET_test.prm

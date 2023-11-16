@@ -129,6 +129,17 @@ void RbtPharmaSF::SetupLigand()
 {
   if (GetLigand().Null())
     return;
+
+  RbtStringList strTetherAtomsL = GetLigand()->GetDataValue("SUBGRAPH_CONSTR_0");
+  // print each item on the stringlist
+  for (RbtStringListIter iter = strTetherAtomsL.begin(); iter != strTetherAtomsL.end(); iter++)
+  {
+    cout << "\n\n\natom to ANCHOR" << *iter << endl;
+  }
+
+  cout << "\n\n\nfirst and only:::" << strTetherAtomsL[0] << endl;
+
+  RbtInt myAtomId = stoi(strTetherAtomsL[0]);
   try
   {
     if (GetTrace() > 0)
@@ -137,7 +148,7 @@ void RbtPharmaSF::SetupLigand()
     }
     for (RbtConstraintListIter iter = m_constrList.begin(); iter != m_constrList.end(); iter++)
     {
-      (*iter)->AddAtomList(GetLigand(), true);
+      (*iter)->AddAtomList(GetLigand(), true, myAtomId); // I would like to pass a stringlist here for one type of constraint (sub)
     }
     if (GetTrace() > 0)
     {
@@ -173,6 +184,7 @@ RbtDouble RbtPharmaSF::RawScore() const
   RbtInt i = 0;
   for (RbtConstraintListConstIter iter = m_constrList.begin(); iter != m_constrList.end(); iter++, i++)
   {
+    // cout << "HERE33333" << endl;
     m_conScores[i] = (*iter)->Score();
   }
   total = std::accumulate(m_conScores.begin(), m_conScores.end(), total);
@@ -181,6 +193,7 @@ RbtDouble RbtPharmaSF::RawScore() const
   i = 0;
   for (RbtConstraintListConstIter iter = m_optList.begin(); iter != m_optList.end(); iter++, i++)
   {
+    // cout << "HERE4" << endl;
     m_optScores[i] = (*iter)->Score();
   }
   // partial_sort_copy copies the N lowest scores

@@ -189,8 +189,10 @@ void RbtMdlFileSource::Parse() throw(RbtError)
       // DM 12 May 1999 - read data records (if any)
       for (; fileIter != fileEnd; fileIter++)
       {
+        // cout << "here"; // Found a data record
         if ((*fileIter).find(">") == 0)
-        {                                                   // Found a data record
+        {
+          // cout << "here record";                            // Found a data record
           RbtString::size_type ob = (*fileIter).find("<");  // First open bracket
           RbtString::size_type cb = (*fileIter).rfind(">"); // Last closed bracket
           if ((ob != RbtString::npos) && (cb != RbtString::npos))
@@ -201,6 +203,7 @@ void RbtMdlFileSource::Parse() throw(RbtError)
             {
               sl.push_back(*fileIter);
             }
+            // cout << "Added record";
             m_dataMap[fieldName] = RbtVariant(sl);
           }
         }
@@ -213,6 +216,16 @@ void RbtMdlFileSource::Parse() throw(RbtError)
       {
         m_dataMap["Name"] = RbtVariant(m_titleList.front());
       }
+
+      // cout << "ALEJANDRO says HELLO WORLD " << (*iter)->GetAtomName() << " to plane of substituents=" << dist << endl;
+      // cout << "ALEJANDRO says \n\n\n HELLO WORLD  \n\n\n ";
+
+      // for (RbtStringVariantMapConstIter iter = m_dataMap.begin(); iter != m_dataMap.end(); iter++)
+      //{
+      //   cout << (*iter).first;
+      //   // cout << (*iter).second;
+      //   cout << '\n\n' << endl;
+      // }
 
       // Setup the atomic params not stored in the file (e.g. hybridisation state etc)
       SetupAtomParams();
@@ -553,8 +566,8 @@ void RbtMdlFileSource::SetupPosIonisableGroups()
 #ifdef _DEBUG
         cout << "Possible imidazole/amidine, found 1xN_SP2, 1xN_TRI bonded to " << (*iter)->GetAtomName() << endl;
 #endif //_DEBUG
-        // IMIDAZOLE - Check that the N_SP2 is bonded to 2 x C_SP2 and that
-        // the N_TRI is bonded to 2 x C_SP2 and 1 hydrogen
+       // IMIDAZOLE - Check that the N_SP2 is bonded to 2 x C_SP2 and that
+       // the N_TRI is bonded to 2 x C_SP2 and 1 hydrogen
         if ((Rbt::GetNumAtoms(nsp2BondedAtomList, bIsC_SP2) == 2) &&
             (Rbt::GetNumAtoms(ntriBondedAtomList, bIsC_SP2) == 2) &&
             (Rbt::GetNumAtoms(ntriBondedAtomList, Rbt::isAtomicNo_eq(1)) == 1))
@@ -562,11 +575,11 @@ void RbtMdlFileSource::SetupPosIonisableGroups()
 #ifdef _DEBUG
           cout << "Possible imidazole, bonding requirements for N_SP2 and N_TRI met" << endl;
 #endif //_DEBUG
-          // Now check if any of the atoms bonded to the N_TRI are 1-2 connected to any
-          // of the atoms bonded to the N_SP2. If so, it is a 5-membered ring
-          // DM 25 Jul 2002 - also check whether the atoms are bridgeheads or not
-          // We don't want to protonate imidazoles which are part of larger fused ring systems
-          //(can have very different pKa's)
+       // Now check if any of the atoms bonded to the N_TRI are 1-2 connected to any
+       // of the atoms bonded to the N_SP2. If so, it is a 5-membered ring
+       // DM 25 Jul 2002 - also check whether the atoms are bridgeheads or not
+       // We don't want to protonate imidazoles which are part of larger fused ring systems
+       //(can have very different pKa's)
           RbtAtomList atoms12Conn;
           for (RbtAtomListConstIter iter2 = ntriBondedAtomList.begin(); iter2 != ntriBondedAtomList.end(); iter2++)
           {
@@ -578,7 +591,7 @@ void RbtMdlFileSource::SetupPosIonisableGroups()
 #ifdef _DEBUG
             cout << "5-membered imidazole ring found" << endl;
 #endif //_DEBUG
-            // Remove bridgehead atoms (fused rings)
+       // Remove bridgehead atoms (fused rings)
             atoms12Conn = Rbt::GetAtomList(atoms12Conn, std::not1(Rbt::isAtomBridgehead()));
             if (atoms12Conn.size() == 1)
             { // Imidazole!!
