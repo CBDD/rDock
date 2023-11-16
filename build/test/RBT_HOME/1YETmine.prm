@@ -1,0 +1,37 @@
+RBT_PARAMETER_FILE_V1.00
+TITLE R_1YET
+RECEPTOR_FILE R_1YET_protein.mol2
+
+
+SECTION LIGAND
+	TRANS_MODE FREE
+	ROT_MODE FREE
+        DIHEDRAL_MODE FREE
+END_SECTION
+
+SECTION MAPPER
+        SITE_MAPPER RbtLigandSiteMapper
+        VOL_INCR 0.0
+        GRIDSTEP 0.5
+        RADIUS 9.0
+        REF_MOL 1YET_c.sd
+        SMALL_SPHERE 1.0
+        TRACE 1
+        MIN_VOLUME 100
+        MAX_CAVITIES 1
+END_SECTION
+
+SECTION CAVITY
+        SCORING_FUNCTION        RbtCavityGridSF
+        WEIGHT                  1.0
+END_SECTION
+
+#################################
+## PHARMACOPHORIC RESTRAINTS
+#################################
+SECTION PHARMA
+    SCORING_FUNCTION RbtPharmaSF
+    WEIGHT 1.0
+    CONSTRAINTS_FILE mandatory_restraints.txt
+    NOPT 1
+END_SECTION
