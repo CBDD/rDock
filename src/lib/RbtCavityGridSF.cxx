@@ -54,17 +54,14 @@ void RbtCavityGridSF::SetupReceptor()
   m_spGrid = spDS->GetGrid();
   if (m_spGrid.Null())
     return;
-  cout << 'hereee brooo 1' << endl;
+
   // RbtStringList strTetherAtomsL = GetLigand()->GetDataValue("SYMMETRIC_BONDS");
-  cout << 'hereee brooo 2' << endl;
   m_maxDist = m_spGrid->MaxValue();
 }
 
 void RbtCavityGridSF::SetupLigand()
 {
-  cout << 'hereee brooo 1' << endl;
   RbtStringList strTetherAtomsL = GetLigand()->GetDataValue("SYMMETRIC_BONDS");
-  cout << 'hereee brooo 2' << endl;
 }
 
 void RbtCavityGridSF::SetupSolvent() {}
@@ -87,7 +84,7 @@ RbtDouble RbtCavityGridSF::RawScore() const
   // Check grid is defined
   if (m_spGrid.Null())
     return score;
-  cout << '\n\n\nhereee brooo 2' << endl;
+
   // Quadratic penalty function
   if (m_bQuadratic)
   {
