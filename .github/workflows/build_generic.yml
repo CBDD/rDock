@@ -8,6 +8,10 @@ on:
         required: false
         default: g++
         type: string
+      arch:
+        required: false
+        default: x86_64
+        type: string
 
 jobs:
   build:
@@ -32,3 +36,14 @@ jobs:
     
     - name: Test rDock
       run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} test
+    
+    - name: Create bundle
+      run: |
+        tar -czvf rdock.tar.gz \
+          bin/ lib/ include/ data/ scripts/ Makefile license.txt README.md old_README.md
+
+    - name: Upload bundle
+      uses: actions/upload-artifact@v3
+      with:
+        name: rdock.tar.gz
+        path: rdock-$(date +%y.%m).${{ github.event.number }}_${{ inputs.distribution }}_${{ inputs.compiler }}_${{ inputs.arch }}.tar.gz
