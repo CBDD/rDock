@@ -732,8 +732,7 @@ namespace Rbt
     RbtBool operator()(const RbtAtom *pAtom) const { return (pAtom->GetGroupCharge() > 0.001); }
   };
 
-  // TODO
-  // Is this atom part of the subgraph specified by the user?
+  // Does the atom have the given ID ?
   class isAtomId : public std::unary_function<RbtAtom *, RbtBool>
   {
     RbtInt n;
