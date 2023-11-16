@@ -184,7 +184,6 @@ RbtDouble RbtPharmaSF::RawScore() const
   RbtInt i = 0;
   for (RbtConstraintListConstIter iter = m_constrList.begin(); iter != m_constrList.end(); iter++, i++)
   {
-    // cout << "HERE33333" << endl;
     m_conScores[i] = (*iter)->Score();
   }
   total = std::accumulate(m_conScores.begin(), m_conScores.end(), total);
@@ -193,7 +192,6 @@ RbtDouble RbtPharmaSF::RawScore() const
   i = 0;
   for (RbtConstraintListConstIter iter = m_optList.begin(); iter != m_optList.end(); iter++, i++)
   {
-    // cout << "HERE4" << endl;
     m_optScores[i] = (*iter)->Score();
   }
   // partial_sort_copy copies the N lowest scores

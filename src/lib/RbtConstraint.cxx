@@ -371,9 +371,6 @@ void RbtPosChargeConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck, RbtInt
 
 void RbtSubgraphConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck, RbtInt atomId) throw(RbtError)
 {
-
-  cout << "INSIDE ADDATOMLIST::::" << atomId << endl;
-
   m_atomList = Rbt::GetAtomList(lig->GetAtomList(), Rbt::isAtomSubgraph(atomId));
 
   if (bCheck && (m_atomList.size() < counter))
