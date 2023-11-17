@@ -58,8 +58,7 @@ jobs:
       run: echo "RELEASE_VERSION=$(date +%y.%m).${{ github.event.number }}" >> "$GITHUB_OUTPUT"
 
     - name: Create release
-      uses: actions/create-release@v1
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ steps.set_version.outputs.RELEASE_VERSION }}
-        release_name: Release ${{ steps.set_version.outputs.RELEASE_VERSION }}
+        tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}
         artifacts: artifacts/
