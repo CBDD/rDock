@@ -53,9 +53,17 @@ jobs:
       with:
         path: artifacts/
 
+    - name: Set last pr number
+      id: set_last_pr_number
+      run: |
+        echo "LAST_PR=$( \
+          git log --grep='Merge pull request \#[0-9]\+' --pretty=oneline -1 \
+          | sed -e 's/^.*Merge pull request \#\([0-9]*\).*$/\1/' \
+        )" >> "$GITHUB_OUTPUT"
+    
     - name: Set version
       id: set_version
-      run: echo "RELEASE_VERSION=$(date +%y.%m).${{ github.event.number }}" >> "$GITHUB_OUTPUT"
+      run: echo "RELEASE_VERSION=$(date +%y.%m).${{ steps.set_last_pr_number.outputs.LAST_PR }}" >> "$GITHUB_OUTPUT"
 
     - name: Create release
       uses: ncipollo/release-action@v1
