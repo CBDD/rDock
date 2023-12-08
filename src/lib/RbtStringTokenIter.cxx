@@ -29,8 +29,8 @@ RbtStringTokenIter::RbtStringTokenIter(const istreamPtr fn, RbtContextPtr co): f
 }
 
 RbtStringTokenIter::RbtStringTokenIter(const RbtStringTokenIter& ti):
-    current(ti.current),
     filep(ti.filep),
+    current(ti.current),
     strtok(ti.strtok),
     contextp(ti.contextp) {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
