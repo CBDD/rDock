@@ -27,7 +27,6 @@ RbtString RbtBaseGrid::_CT("RbtBaseGrid");
 RbtBaseGrid::RbtBaseGrid(
     const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad
 ):
-    m_step(gridStep),
     m_NX(NX),
     m_NY(NY),
     m_NZ(NZ),
@@ -35,6 +34,7 @@ RbtBaseGrid::RbtBaseGrid(
     m_SX(NY * NZ),
     m_SY(NZ),
     m_SZ(1),
+    m_step(gridStep),
     m_NPad(NPad) {
     // Set the logical (real-world) dimensions of the grid
     SetGridMin(gridMin);
