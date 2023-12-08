@@ -22,7 +22,7 @@
 class RbtFFTPeak {
  public:
     // Constructor
-    RbtFFTPeak(): index(0), coord(0.0, 0.0, 0.0), volume(0), height(0.0) {}
+    RbtFFTPeak(): index(0), coord(0.0, 0.0, 0.0), height(0.0), volume(0) {}
 
     // Data attributes - public to avoid need for accessor functions
     RbtUInt index;      // Location of peak maximum - iXYZ index into grid
