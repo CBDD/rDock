@@ -752,37 +752,37 @@ class isAtomLipophilic: public std::unary_function<RbtAtom*, RbtBool> {
 // Other constructors check atomic number, force field type and hybridisation state coordination numbers
 class isCoordinationNumber_eq: public std::unary_function<RbtAtom*, RbtBool> {
     enum { TOTAL, ATNO, FFTYPE, HYBRID } eCNType;  // Type of coordination number to check
-    RbtInt n;                                      // Coordination number value to check
+    RbtUInt n;                                      // Coordination number value to check
     RbtInt atNo;
     RbtString ffType;
     RbtAtom::eHybridState hybrid;
 
  public:
     // Total coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn):
-        n(nn),
+    explicit isCoordinationNumber_eq(RbtUInt nn):
         eCNType(TOTAL),
+        n(nn),
         atNo(0),
         ffType(""),
         hybrid(RbtAtom::UNDEFINED) {}
     // Atomic number coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn, RbtInt nAt):
-        n(nn),
+    explicit isCoordinationNumber_eq(RbtUInt nn, RbtUInt nAt):
         eCNType(ATNO),
+        n(nn),
         atNo(nAt),
         ffType(""),
         hybrid(RbtAtom::UNDEFINED) {}
     // Force field type coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn, const RbtString& strType):
-        n(nn),
+    explicit isCoordinationNumber_eq(RbtUInt nn, const RbtString& strType):
         eCNType(FFTYPE),
+        n(nn),
         atNo(0),
         ffType(strType),
         hybrid(RbtAtom::UNDEFINED) {}
     // Hybridisation state coordination number
-    explicit isCoordinationNumber_eq(RbtInt nn, RbtAtom::eHybridState eState):
-        n(nn),
+    explicit isCoordinationNumber_eq(RbtUInt nn, RbtAtom::eHybridState eState):
         eCNType(HYBRID),
+        n(nn),
         atNo(0),
         ffType(""),
         hybrid(eState) {}
