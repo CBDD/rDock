@@ -38,7 +38,7 @@ class RbtCavity {
     RbtCavity(istream& istr) { Read(istr); }
 
     // Destructor
-    ~RbtCavity(){};
+    virtual ~RbtCavity(){};
 
     ///////////////////////////////////////////////
     // Stream functions
