@@ -62,3 +62,5 @@ jobs:
       with:
         tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}
         artifacts: artifacts/*/*.tar.gz
+        draft: true
+
