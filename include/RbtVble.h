@@ -24,7 +24,7 @@ class RbtVble {
  public:
     static RbtString _CT;
     enum VbleType { CTE, LIG, SCORE, SITE };
-    RbtVble(): value(0.0), vt(CTE), name("") { _RBTOBJECTCOUNTER_CONSTR_(_CT); };  // default const.
+    RbtVble(): vt(CTE), value(0.0), name("") { _RBTOBJECTCOUNTER_CONSTR_(_CT); };  // default const.
     RbtVble(RbtString s, RbtReturnType val = 0.0): value(val), name(s) {
         if (s.find("LIG_") == 0)
             vt = LIG;
@@ -36,7 +36,7 @@ class RbtVble {
             vt = CTE;
         _RBTOBJECTCOUNTER_CONSTR_(_CT);
     }
-    RbtVble(const RbtVble& v): value(v.value), vt(v.vt), name(v.name) { _RBTOBJECTCOUNTER_COPYCONSTR_(_CT); }
+    RbtVble(const RbtVble& v): vt(v.vt), value(v.value), name(v.name) { _RBTOBJECTCOUNTER_COPYCONSTR_(_CT); }
     void SetValue(RbtReturnType val) {
         value = val;
         if (name == "") {

@@ -27,8 +27,8 @@ using std::ptr_fun;
 // Initialise 2-D attributes to suitable defaults
 // Initialise 3-D attributes to zero/null
 RbtAtom::RbtAtom():
-    m_nAtomId(0),
     m_nAtomicNo(6),
+    m_nAtomId(0),
     m_strAtomName("C"),
     m_strSubunitId("1"),
     m_strSubunitName("RES"),
@@ -36,12 +36,6 @@ RbtAtom::RbtAtom():
     m_eState(UNDEFINED),  // DM 8 Dec 1998 Changed from SP3 to UNDEFINED
     m_nHydrogens(0),
     m_nFormalCharge(0),
-    m_coord(0.0, 0.0, 0.0),
-    m_dPartialCharge(0.0),
-    m_dGroupCharge(0.0),
-    m_dAtomicMass(0.0),
-    m_dVdwRadius(0.0),
-    m_strFFType(""),
     m_pModel(NULL),
     m_bCyclic(false),
     m_bSelected(false),
@@ -49,7 +43,13 @@ RbtAtom::RbtAtom():
     m_dUser1(1.0),  // DM 27 Jul 2000 - initialise user values to 1 as they are commonly used as weightings
     m_dUser2(1.0),
     m_nPMFType(PMF_UNDEFINED),
-    m_triposType(RbtTriposAtomType::UNDEFINED) {
+    m_triposType(RbtTriposAtomType::UNDEFINED),
+    m_coord(0.0, 0.0, 0.0),
+    m_dPartialCharge(0.0),
+    m_dGroupCharge(0.0),
+    m_dAtomicMass(0.0),
+    m_dVdwRadius(0.0),
+    m_strFFType("") {
     _RBTOBJECTCOUNTER_CONSTR_("RbtAtom");
 }
 
@@ -66,8 +66,8 @@ RbtAtom::RbtAtom(
     RbtUInt nHydrogens /*= 0*/,
     RbtInt nFormalCharge /*= 0.0*/
 ):
-    m_nAtomId(nAtomId),
     m_nAtomicNo(nAtomicNo),
+    m_nAtomId(nAtomId),
     m_strAtomName(strAtomName),
     m_strSubunitId(strSubunitId),
     m_strSubunitName(strSubunitName),
@@ -75,12 +75,6 @@ RbtAtom::RbtAtom(
     m_eState(eState),
     m_nHydrogens(nHydrogens),
     m_nFormalCharge(nFormalCharge),
-    m_coord(0.0, 0.0, 0.0),
-    m_dPartialCharge(0.0),
-    m_dGroupCharge(0.0),
-    m_dAtomicMass(0.0),
-    m_dVdwRadius(0.0),
-    m_strFFType(""),
     m_pModel(NULL),
     m_bCyclic(false),
     m_bSelected(false),
@@ -88,7 +82,13 @@ RbtAtom::RbtAtom(
     m_dUser1(1.0),  // DM 27 Jul 2000 - initialise user values to 1 as they are commonly used as weightings
     m_dUser2(1.0),
     m_nPMFType(PMF_UNDEFINED),
-    m_triposType(RbtTriposAtomType::UNDEFINED) {
+    m_triposType(RbtTriposAtomType::UNDEFINED),
+    m_coord(0.0, 0.0, 0.0),
+    m_dPartialCharge(0.0),
+    m_dGroupCharge(0.0),
+    m_dAtomicMass(0.0),
+    m_dVdwRadius(0.0),
+    m_strFFType("") {
     _RBTOBJECTCOUNTER_CONSTR_("RbtAtom");
 }
 
@@ -97,8 +97,8 @@ RbtAtom::~RbtAtom() { _RBTOBJECTCOUNTER_DESTR_("RbtAtom"); }
 
 // Copy constructor
 RbtAtom::RbtAtom(const RbtAtom& atom) {
-    m_nAtomId = atom.m_nAtomId;
     m_nAtomicNo = atom.m_nAtomicNo;
+    m_nAtomId = atom.m_nAtomId;
     m_strAtomName = atom.m_strAtomName;
     m_strSubunitId = atom.m_strSubunitId;
     m_strSubunitName = atom.m_strSubunitName;

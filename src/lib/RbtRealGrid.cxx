@@ -28,9 +28,9 @@ RbtRealGrid::RbtRealGrid(
     const RbtCoord& gridMin, const RbtCoord& gridStep, RbtUInt NX, RbtUInt NY, RbtUInt NZ, RbtUInt NPad
 ):
     RbtBaseGrid(gridMin, gridStep, NX, NY, NZ, NPad),
-    m_tol(0.001),
     m_grid(NULL),
-    m_data(NULL) {
+    m_data(NULL),
+    m_tol(0.001) {
     CreateArrays();
     // Initialise the grid to zero
     SetAllValues(0.0);

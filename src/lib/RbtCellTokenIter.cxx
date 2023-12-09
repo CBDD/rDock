@@ -36,7 +36,7 @@ RbtCellTokenIter::RbtCellTokenIter(const RbtGPChromosomePtr c, RbtContextPtr con
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
-RbtCellTokenIter::RbtCellTokenIter(const RbtCellTokenIter& ti): chrom(ti.chrom), cells(ti.cells), current(ti.current) {
+RbtCellTokenIter::RbtCellTokenIter(const RbtCellTokenIter& ti): chrom(ti.chrom), current(ti.current), cells(ti.cells) {
     _RBTOBJECTCOUNTER_COPYCONSTR_(_CT);
 }
 

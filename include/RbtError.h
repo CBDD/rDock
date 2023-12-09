@@ -63,15 +63,15 @@ class RbtError {
     // Default constructor
     // Use to create an "error" with status=OK, no line, no file, no message
     // All other constructors set the OK flag to false
-    RbtError(): m_strName(IDS_OK), m_strFile(""), m_nLine(0), m_strMessage(""), m_bOK(true) {}
+    RbtError(): m_strName(IDS_OK), m_strFile(""), m_strMessage(""), m_nLine(0), m_bOK(true) {}
 
     // Parameterised constructor
     // Use to create unspecified Rbt Errors
     RbtError(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
         m_strName(IDS_ERROR),
         m_strFile(strFile),
-        m_nLine(nLine),
         m_strMessage(strMessage),
+        m_nLine(nLine),
         m_bOK(false) {}
 
     // Default destructor
@@ -102,8 +102,8 @@ class RbtError {
     RbtError(const RbtString& strName, const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
         m_strName(strName),
         m_strFile(strFile),
-        m_nLine(nLine),
         m_strMessage(strMessage),
+        m_nLine(nLine),
         m_bOK(false) {}
 
     ///////////////////////
