@@ -243,7 +243,7 @@ int main(int argc, const char *argv[]) {
         // Write an ASCII InsightII grid file for each defined cavity
         if (bDump) {
             RbtCavityList cavList = spDockSite->GetCavityList();
-            for (RbtInt i = 0; i < cavList.size(); i++) {
+            for (RbtUInt i = 0; i < cavList.size(); i++) {
                 ostringstream filename;
                 filename << wsName << "_cav" << i + 1 << ".grd" << ends;
                 ofstream dumpFile(filename.str());
