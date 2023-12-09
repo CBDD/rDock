@@ -19,7 +19,7 @@
 
 RbtString RbtPopulation::_CT("RbtPopulation");
 
-RbtPopulation::RbtPopulation(RbtChromElement* pChr, RbtInt size, RbtBaseSF* pSF):
+RbtPopulation::RbtPopulation(RbtChromElement* pChr, RbtUInt size, RbtBaseSF* pSF):
     m_size(size),
     m_c(2.0),
     m_pSF(pSF),
@@ -33,7 +33,7 @@ RbtPopulation::RbtPopulation(RbtChromElement* pChr, RbtInt size, RbtBaseSF* pSF)
     }
     // Create a random population
     m_pop.reserve(m_size);
-    for (RbtInt i = 0; i < m_size; ++i) {
+    for (RbtUInt i = 0; i < m_size; ++i) {
         // The RbtGenome constructor clones the chromosome to create an independent copy
         RbtGenomePtr genome = new RbtGenome(pChr);
         genome->GetChrom()->Randomise();

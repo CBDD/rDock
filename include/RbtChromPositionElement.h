@@ -40,8 +40,8 @@ class RbtChromPositionElement: public RbtChromElement {
     virtual void SyncFromModel();
     virtual void SyncToModel();
     virtual RbtChromElement* clone() const;
-    virtual RbtInt GetLength() const { return m_spRefData->GetLength(); }
-    virtual RbtInt GetXOverLength() const { return m_spRefData->GetXOverLength(); }
+    virtual RbtUInt GetLength() const { return m_spRefData->GetLength(); }
+    virtual RbtUInt GetXOverLength() const { return m_spRefData->GetXOverLength(); }
     virtual void GetVector(RbtDoubleList& v) const;
     virtual void GetVector(RbtXOverList& v) const;
     virtual void SetVector(const RbtDoubleList& v, RbtInt& i);

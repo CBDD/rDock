@@ -60,14 +60,14 @@ void RbtChromElement::Add(RbtChromElement* pChromElement) {
     throw RbtInvalidRequest(_WHERE_, "Add(RbtChromElement*) invalid for non-aggregate chromosome element");
 }
 
-RbtBool RbtChromElement::VectorOK(const RbtDoubleList& v, RbtInt i) const {
-    RbtInt length = GetLength();
+RbtBool RbtChromElement::VectorOK(const RbtDoubleList& v, RbtUInt i) const {
+    RbtUInt length = GetLength();
     // if the element is empty then any vector is valid
     return (length == 0) || ((i >= 0) && (i < v.size()) && (length <= (v.size() - i)));
 }
 
-RbtBool RbtChromElement::VectorOK(const RbtXOverList& v, RbtInt i) const {
-    RbtInt length = GetXOverLength();
+RbtBool RbtChromElement::VectorOK(const RbtXOverList& v, RbtUInt i) const {
+    RbtUInt length = GetXOverLength();
     // if the element is empty then any vector is valid
     return (length == 0) || ((i >= 0) && (i < v.size()) && (length <= (v.size() - i)));
 }
@@ -120,7 +120,7 @@ ostream& operator<<(ostream& s, const RbtChromElement& c) {
 
 void Rbt::Crossover(RbtChromElement* pChr1, RbtChromElement* pChr2, RbtChromElement* pChr3, RbtChromElement* pChr4) {
     // Check all chromosomes have the same crossover length
-    RbtInt length1 = pChr1->GetXOverLength();
+    RbtUInt length1 = pChr1->GetXOverLength();
     if ((length1 != pChr2->GetXOverLength()) || (length1 != pChr3->GetXOverLength())
         || (length1 != pChr4->GetXOverLength())) {
         throw RbtBadArgument(_WHERE_, "Crossover: mismatch in chromosome lengths");

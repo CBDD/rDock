@@ -28,7 +28,7 @@ RbtDouble RbtDihedral::operator()() const {
     // cout.setf(ios_base::right,ios_base::adjustfield);
     RbtDouble dih = Rbt::BondDihedral(m_pAtom1, m_pAtom2, m_pAtom3, m_pAtom4);
     RbtDouble score(0.0);
-    for (RbtInt i = 0; i != m_prms.size(); ++i) {
+    for (RbtUInt i = 0; i != m_prms.size(); ++i) {
         // Subtract the implicit hydrogen offset from the actual dihedral angle
         RbtDouble dih1 = dih - m_prms[i].offset;
         score += m_prms[i].k * (1.0 + m_prms[i].sign * cos(m_prms[i].s * dih1 * M_PI / 180.0));
@@ -93,7 +93,7 @@ RbtDihedralList RbtDihedralSF::CreateDihedralList(const RbtBondList& bondList) {
                     // Add all the ghost dihedral combinations for implicit Hs on pAtom2
                     // but only for the first time through the outer loop
                     if (iter1 == bondedAtoms2.begin()) {
-                        for (RbtInt i1 = 0; i1 != offset2.size(); i1++) {
+                        for (RbtUInt i1 = 0; i1 != offset2.size(); i1++) {
                             dihprms = FindDihedralParams(RbtTriposAtomType::H, t2, t3, t4);
                             dihprms.offset = offset2[i1];
                             if (iTrace > 1) {
@@ -105,7 +105,7 @@ RbtDihedralList RbtDihedralSF::CreateDihedralList(const RbtBondList& bondList) {
                             // Add all the ghost dihedral combinations for implicit Hs on pAtom2 AND on pAtom3
                             // but only for the first time through the outer loop AND inner loop
                             if (iter4 == bondedAtoms3.begin()) {
-                                for (RbtInt i4 = 0; i4 != offset3.size(); i4++) {
+                                for (RbtUInt i4 = 0; i4 != offset3.size(); i4++) {
                                     dihprms = FindDihedralParams(RbtTriposAtomType::H, t2, t3, RbtTriposAtomType::H);
                                     // Combined offset should be offset2 - offset3
                                     // but offset3 was determined looking the other way along the bond
@@ -126,7 +126,7 @@ RbtDihedralList RbtDihedralSF::CreateDihedralList(const RbtBondList& bondList) {
                     // Add all the ghost dihedral combinations for implicit Hs on pAtom3
                     // but only for the first time through the inner loop
                     if (iter4 == bondedAtoms3.begin()) {
-                        for (RbtInt i4 = 0; i4 != offset3.size(); i4++) {
+                        for (RbtUInt i4 = 0; i4 != offset3.size(); i4++) {
                             dihprms = FindDihedralParams(t1, t2, t3, RbtTriposAtomType::H);
                             // Offset should be -offset3
                             // Remember offset3 was determined looking the other way along the bond

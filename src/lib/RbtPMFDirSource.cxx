@@ -95,7 +95,7 @@ void RbtPMFDirSource::ReadFiles(
 void RbtPMFDirSource::ParseLines(vector<RbtString> anStrVect, vector<RbtPMFValue> *aValueVect) {
     RbtPMFValue theActualValue;
 
-    for (int i = 0; i < anStrVect.size(); i++) {
+    for (RbtUInt i = 0; i < anStrVect.size(); i++) {
         theActualValue.distance = (float)atof(anStrVect[i].data());
         i++;  // get next number
         theActualValue.density = (float)atof(anStrVect[i].data());

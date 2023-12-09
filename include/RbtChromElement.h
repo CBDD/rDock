@@ -67,12 +67,12 @@ class RbtChromElement {
     virtual RbtChromElement* clone() const = 0;
     // Gets the number of double values needed to represent this
     // chromosome element
-    virtual RbtInt GetLength() const = 0;
+    virtual RbtUInt GetLength() const = 0;
     // Gets the number of vectors of double values needed to represent this
     // chromosome element for crossover purposes
     // e.g. an orientation vector consists of 3 doubles, but should be crossed over
     // as a single intact entity
-    virtual RbtInt GetXOverLength() const = 0;
+    virtual RbtUInt GetXOverLength() const = 0;
     // Converts chromosome element to a vector of double values,
     // Number of double values appended should match GetLength().
     // v = vector of doubles to append to.
@@ -140,11 +140,11 @@ class RbtChromElement {
     // Helper method to check that index i is in range [0,v.size()}
     // and that v has sufficient elements remaining to satisfy
     // GetLength()
-    RbtBool VectorOK(const RbtDoubleList& v, RbtInt i) const;
+    RbtBool VectorOK(const RbtDoubleList& v, RbtUInt i) const;
     // Helper method to check that index i is in range [0,v.size()}
     // and that v has sufficient elements remaining to satisfy
     // GetXOverLength()
-    RbtBool VectorOK(const RbtXOverList& v, RbtInt i) const;
+    RbtBool VectorOK(const RbtXOverList& v, RbtUInt i) const;
 
  private:
     RbtRand& m_rand;  // Reference to singleton random number generator

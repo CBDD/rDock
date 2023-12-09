@@ -40,16 +40,16 @@ class RbtChromPositionRefData {
     );  // radians
     virtual ~RbtChromPositionRefData();
 
-    RbtInt GetNumStartCoords() const { return m_startCoords.size(); }
+    RbtUInt GetNumStartCoords() const { return m_startCoords.size(); }
     const RbtCoord& GetStartCoord(RbtInt iCoord) const { return m_startCoords[iCoord]; }
     RbtDouble GetTransStepSize() const { return m_transStepSize; }
     RbtDouble GetRotStepSize() const { return m_rotStepSize; }
     RbtChromElement::eMode GetTransMode() const { return m_transMode; }
     RbtChromElement::eMode GetRotMode() const { return m_rotMode; }
     // Chromosome length, excluding FIXED modes (0, 3 or 6)
-    RbtInt GetLength() const { return m_length; }
+    RbtUInt GetLength() const { return m_length; }
     // Chromosome length for crossover, excluding FIXED modes (0, 1 or 2)
-    RbtInt GetXOverLength() const { return m_xOverLength; }
+    RbtUInt GetXOverLength() const { return m_xOverLength; }
     RbtBool IsTransFixed() const { return m_transMode == RbtChromElement::FIXED; }
     RbtBool IsRotFixed() const { return m_rotMode == RbtChromElement::FIXED; }
     RbtDouble GetMaxTrans() const { return m_maxTrans; }
@@ -72,8 +72,8 @@ class RbtChromPositionRefData {
     RbtQuat m_initialQuat;
     RbtChromElement::eMode m_transMode;
     RbtChromElement::eMode m_rotMode;
-    RbtInt m_length;
-    RbtInt m_xOverLength;
+    RbtUInt m_length;
+    RbtUInt m_xOverLength;
     // Max distance allowed from starting coord
     // Only used if m_transMode == TETHERED
     RbtDouble m_maxTrans;

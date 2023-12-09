@@ -156,7 +156,7 @@ void RbtModelMutator::Setup() {
         for (RbtAtomRListConstIter sIter = sList.begin(); sIter != sList.end(); sIter++) {
             RbtInt id = (*sIter)->GetAtomId() - 1;
             // Assertion - check id is within range
-            Assert<RbtAssert>(!MUT_CHECK || (id >= 0 && id < m_flexIntns.size()));
+            Assert<RbtAssert>(!MUT_CHECK || (id >= 0 && (RbtUInt)id < m_flexIntns.size()));
             RbtAtomRListListIter lIter = m_flexIntns.begin() + id;
             std::copy(uList.begin(), uList.end(), std::back_inserter(*lIter));
         }
@@ -165,7 +165,7 @@ void RbtModelMutator::Setup() {
         for (RbtAtomRListConstIter uIter = uList.begin(); uIter != uList.end(); uIter++) {
             RbtInt id = (*uIter)->GetAtomId() - 1;
             // Assertion - check id is within range
-            Assert<RbtAssert>(!MUT_CHECK || (id >= 0 && id < m_flexIntns.size()));
+            Assert<RbtAssert>(!MUT_CHECK || (id >= 0 && (RbtUInt)id < m_flexIntns.size()));
             RbtAtomRListListIter lIter = m_flexIntns.begin() + id;
             std::copy(sList.begin(), sList.end(), std::back_inserter(*lIter));
         }

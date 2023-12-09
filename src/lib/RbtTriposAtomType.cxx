@@ -35,7 +35,7 @@ RbtTriposAtomType::eType RbtTriposAtomType::operator()(RbtAtom* pAtom, RbtBool u
     RbtBondMap bondMap;
     Rbt::isBondAmide bIsAmide;
     Rbt::isAtomHBondDonor bIsDonor;
-    Rbt::isAtomGuanidiniumCarbon bIsGuan;
+    Rbt::isAtomGuanidiniumCarbon bIsGuan{};
 
     switch (nAtomicNo) {
         case 1:  // H

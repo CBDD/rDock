@@ -23,7 +23,7 @@ using std::stringstream;
 RbtString RbtMOL2FileSource::_CT("RbtMOL2FileSource");
 // record delimiter strings
 RbtString RbtMOL2FileSource::_TRIPOS_DELIM("@<TRIPOS>");
-RbtInt RbtMOL2FileSource::_TRIPOS_DELIM_SIZE(RbtMOL2FileSource::_TRIPOS_DELIM.size());
+RbtUInt RbtMOL2FileSource::_TRIPOS_DELIM_SIZE(RbtMOL2FileSource::_TRIPOS_DELIM.size());
 RbtString RbtMOL2FileSource::_IDS_MOL2_RECDELIM("@<TRIPOS>MOLECULE");
 
 // straightforward ctor
@@ -290,9 +290,9 @@ void RbtMOL2FileSource::ParseRecordBOND(const RbtString& aLine) {
     if (tokens.size() < 4) throw RbtFileParseError(_WHERE_, "Corrupted MOL2 file: not enough fields in BOND");
 
     // Compulsory fields
-    RbtInt bond_id = atoi(tokens[0].c_str());
-    RbtInt origin_bond_id = atoi(tokens[1].c_str());
-    RbtInt target_bond_id = atoi(tokens[2].c_str());
+    RbtUInt bond_id = atoi(tokens[0].c_str());
+    RbtUInt origin_bond_id = atoi(tokens[1].c_str());
+    RbtUInt target_bond_id = atoi(tokens[2].c_str());
     RbtString bond_type = tokens[3];
 
     // In rDock we only have integer bond order
@@ -300,7 +300,7 @@ void RbtMOL2FileSource::ParseRecordBOND(const RbtString& aLine) {
     // Can't do much here so define everything as single, double or triple
     // We have the hybridisation state of each atoms already (from the Tripos type)
     // so are not so dependent on bond orders to deduce hybridisation
-    RbtInt bond_order = (bond_type == "3") ? 3 : (bond_type == "2") ? 2 : 1;
+    RbtUInt bond_order = (bond_type == "3") ? 3 : (bond_type == "2") ? 2 : 1;
     // Check that atom IDs are in range
     // This assumes that the Bond records are read after the Atom records (should be always the case)
     if ((origin_bond_id < 1) || (origin_bond_id > m_atomList.size()) || (target_bond_id < 1)
