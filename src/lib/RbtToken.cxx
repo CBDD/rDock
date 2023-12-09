@@ -24,7 +24,7 @@ RbtString RbtToken::_CT("RbtToken");
 ///////////////////
 // Constructors
 ///////////////////
-RbtToken::RbtToken(const RbtVble& v): comm(-1), vble(v), isvble(true)  { _RBTOBJECTCOUNTER_CONSTR_(_CT); }
+RbtToken::RbtToken(const RbtVble& v): comm(-1), vble(v), isvble(true) { _RBTOBJECTCOUNTER_CONSTR_(_CT); }
 
 RbtToken::RbtToken(RbtCommands c): comm(c), vble(RBT::defaultConstRbtVble), isvble(false) {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);

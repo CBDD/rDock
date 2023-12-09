@@ -752,7 +752,7 @@ class isAtomLipophilic: public std::unary_function<RbtAtom*, RbtBool> {
 // Other constructors check atomic number, force field type and hybridisation state coordination numbers
 class isCoordinationNumber_eq: public std::unary_function<RbtAtom*, RbtBool> {
     enum { TOTAL, ATNO, FFTYPE, HYBRID } eCNType;  // Type of coordination number to check
-    RbtUInt n;                                      // Coordination number value to check
+    RbtUInt n;                                     // Coordination number value to check
     RbtInt atNo;
     RbtString ffType;
     RbtAtom::eHybridState hybrid;
