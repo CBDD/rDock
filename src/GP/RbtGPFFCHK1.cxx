@@ -84,10 +84,9 @@ RbtDouble RbtGPFFCHK1::CalculateFitness(
     RbtFilterExpressionPtr fe(parse.Parse(tokenIter, contextp));
     RbtDouble actualOutput, predictedOutput;
     RbtDouble hitlimit = 0.0;
-    for (RbtInt i = 0; i < it.size(); i++) {
+    for (RbtUInt i = 0; i < it.size(); i++) {
         RbtReturnTypeList inputs(it[i]);
-        RbtReturnType pred;
-        for (RbtInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
+        for (RbtUInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];
         actualOutput = *(SFValues[SFValues.size() - 1]);
         EvaluateVisitor visitor(contextp);
@@ -132,10 +131,9 @@ RbtDouble RbtGPFFCHK1::CalculateFitness(
     RbtCellTokenIterPtr tokenIter(new RbtCellTokenIter(c, contextp));
     RbtFilterExpressionPtr fe(parse.Parse(tokenIter, contextp));
     RbtDouble actualOutput, predictedOutput;
-    for (RbtInt i = 0; i < it.size(); i++) {
+    for (RbtUInt i = 0; i < it.size(); i++) {
         RbtReturnTypeList inputs(it[i]);
-        RbtReturnType pred;
-        for (RbtInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
+        for (RbtUInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];
         actualOutput = *(SFValues[SFValues.size() - 1]);
         EvaluateVisitor visitor(contextp);
