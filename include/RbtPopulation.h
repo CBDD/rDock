@@ -84,7 +84,7 @@ class RbtPopulation {
     RbtPopulation& operator=(const RbtPopulation&);  // Disable
 
     RbtGenomeList m_pop;        // The population of genomes
-    RbtUInt m_size;              // The maximum size of the population
+    RbtUInt m_size;             // The maximum size of the population
     RbtDouble m_c;              // Sigma Truncation Multiplier
     RbtBaseSF* m_pSF;           // The scoring function
     RbtRand& m_rand;            // reference to the singleton random number generator

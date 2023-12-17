@@ -95,7 +95,7 @@ void RbtPsfFileSource::Parse() {
             fileIter++;
             m_atomList.reserve(nAtomRec);  // Allocate enough memory for the vector
 
-            RbtUInt nAtomId;            // original atom number in PSF file
+            RbtUInt nAtomId;           // original atom number in PSF file
             RbtString strSegmentName;  // segment name in PSF file
             RbtString strSubunitId;    // subunit(residue) ID in PSF file
             RbtString strSubunitName;  // subunit(residue) name in PSF file
