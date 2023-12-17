@@ -287,7 +287,7 @@ void RbtVdwSF::Setup() {
         RbtBool hasIPi = m_spVdwSource->isParameterPresent(_IP);
         RbtBool isHBDi = m_spVdwSource->isParameterPresent(_ISHBD);
         RbtBool isHBAi = m_spVdwSource->isParameterPresent(_ISHBA);
-        RbtDouble Ii, alphai;
+        RbtDouble Ii = 1, alphai = 0;
         if (hasIPi) {
             Ii = m_spVdwSource->GetParameterValue(_IP);       // Ionisation potential, I
             alphai = m_spVdwSource->GetParameterValue(_POL);  // Polarisability, alpha
@@ -302,7 +302,7 @@ void RbtVdwSF::Setup() {
             RbtBool hasIPj = m_spVdwSource->isParameterPresent(_IP);
             RbtBool isHBDj = m_spVdwSource->isParameterPresent(_ISHBD);
             RbtBool isHBAj = m_spVdwSource->isParameterPresent(_ISHBA);
-            RbtDouble Ij, alphaj;
+            RbtDouble Ij = 1, alphaj = 0;
             if (hasIPj) {
                 Ij = m_spVdwSource->GetParameterValue(_IP);       // Ionisation potential, I
                 alphaj = m_spVdwSource->GetParameterValue(_POL);  // Polarisability, alpha
