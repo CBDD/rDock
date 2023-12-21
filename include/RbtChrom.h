@@ -39,8 +39,8 @@ class RbtChrom: public RbtChromElement {
     virtual void SyncFromModel();
     virtual void SyncToModel();
     virtual RbtChromElement* clone() const;
-    virtual RbtInt GetLength() const;
-    virtual RbtInt GetXOverLength() const;
+    virtual RbtUInt GetLength() const;
+    virtual RbtUInt GetXOverLength() const;
     virtual void GetVector(RbtDoubleList& v) const;
     virtual void GetVector(RbtXOverList& v) const;
     virtual void SetVector(const RbtDoubleList& v, RbtInt& i);

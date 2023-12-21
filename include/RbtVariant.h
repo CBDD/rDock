@@ -37,6 +37,7 @@ class RbtVariant {
     // Constructors/destructors
     RbtVariant(): m_d(0.0) {}
     RbtVariant(RbtInt i) { SetDouble(i); }
+    RbtVariant(RbtUInt i) { SetDouble(i); }
     RbtVariant(RbtDouble d) { SetDouble(d); }
     RbtVariant(const RbtString& s) { SetString(s); }
     RbtVariant(const char* c) { SetString(RbtString(c)); }
@@ -113,6 +114,7 @@ class RbtVariant {
     operator RbtStringList() const { return StringList(); }
     operator RbtBool() const { return Bool(); }
     operator RbtCoord() const { return Coord(); }
+    operator RbtUInt() const { return RbtUInt(Double()); }
 
     ////////////////////////////////////////
     // Public methods

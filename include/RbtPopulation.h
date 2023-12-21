@@ -35,13 +35,13 @@ class RbtPopulation {
     // 4) Roulette wheel fitness values are calculated.
     // 5) Model coords are updated to match the fittest chromosome
     // An RbtBadArgument error is thrown if size is <=0, or if pChr or pSF is null.
-    RbtPopulation(RbtChromElement* pChr, RbtInt size, RbtBaseSF* pSF);
+    RbtPopulation(RbtChromElement* pChr, RbtUInt size, RbtBaseSF* pSF);
     virtual ~RbtPopulation();
 
     // Gets the maximum size of the population as defined in the constructor.
-    RbtInt GetMaxSize() const { return m_size; }
+    RbtUInt GetMaxSize() const { return m_size; }
     // Gets the actual size of the population (may be < GetMaxSize())
-    RbtInt GetActualSize() const { return m_pop.size(); }
+    RbtUInt GetActualSize() const { return m_pop.size(); }
     // Gets the best genome in the sorted population (element zero).
     RbtGenomePtr Best() const;
     // Gets the average raw score across entire population
@@ -84,7 +84,7 @@ class RbtPopulation {
     RbtPopulation& operator=(const RbtPopulation&);  // Disable
 
     RbtGenomeList m_pop;        // The population of genomes
-    RbtInt m_size;              // The maximum size of the population
+    RbtUInt m_size;             // The maximum size of the population
     RbtDouble m_c;              // Sigma Truncation Multiplier
     RbtBaseSF* m_pSF;           // The scoring function
     RbtRand& m_rand;            // reference to the singleton random number generator

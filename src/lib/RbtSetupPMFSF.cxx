@@ -151,7 +151,7 @@ RbtPMFType RbtSetupPMFSF::GetPMFfor_rS(RbtAtomPtr anAtom) {
 
 void RbtSetupPMFSF::SetupReceptorPMFTypes(void) {
     // cout << _CT << " receptor size " << theReceptorList.size() << endl;
-    for (long i = 0; i < theReceptorList.size(); i++) {
+    for (RbtUInt i = 0; i < theReceptorList.size(); i++) {
         switch (theReceptorList[i]->GetAtomicNo()) {
             case 1:
                 theReceptorList[i]->SetPMFType(HH);
@@ -365,7 +365,7 @@ RbtPMFType RbtSetupPMFSF::GetPMFfor_lS(RbtAtomPtr anAtom) {
 }
 
 void RbtSetupPMFSF::SetupLigandPMFTypes(void) {
-    for (int i = 0; i < theLigandList.size(); i++) {
+    for (RbtUInt i = 0; i < theLigandList.size(); i++) {
         switch (theLigandList[i]->GetAtomicNo()) {
             case 1:
                 theLigandList[i]->SetPMFType(HL);

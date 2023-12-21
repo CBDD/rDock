@@ -228,7 +228,7 @@ void RbtPolarSF::BuildIntraMap(
         // but the angular dependence may not be
         RbtAtom* pAtom = (*iter)->GetAtom1Ptr();
         RbtInt id = pAtom->GetAtomId() - 1;
-        Assert<RbtAssert>(id >= 0 && id < intns.size());
+        Assert<RbtAssert>(id >= 0 && (RbtUInt)id < intns.size());
         // 2. Deselect all atoms in the same model as the current atom
         pAtom->GetModelPtr()->SetAtomSelectionFlags(false);
         // 3. Set the selection flags for all atoms in the model whose distance can vary to *any* of the

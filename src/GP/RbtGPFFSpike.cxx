@@ -80,8 +80,6 @@ RbtDouble RbtGPFFSpike::CalculateFitness(
     //                RbtGPGenome::GetNN(), RbtGPGenome::GetNO());
     RbtReturnTypeList o;
     o.push_back(new RbtReturnType(1.1));
-    RbtReturnType oldo;
-    RbtDouble tot = 0.0;
     RbtDouble good = 0.0;
     RbtDouble bad = 0.0;
     RbtDouble hitlimit = 0.0;
@@ -90,9 +88,9 @@ RbtDouble RbtGPFFSpike::CalculateFitness(
     RbtCellTokenIterPtr ti(new RbtCellTokenIter(c, contextp));
     RbtFilterExpressionPtr fe(p2.Parse(ti, contextp));
     //    RbtCellTokenIterPtr ti(new RbtCellTokenIter(c, contextp));
-    for (RbtInt i = 0; i < it.size(); i++) {
+    for (RbtUInt i = 0; i < it.size(); i++) {
         RbtReturnTypeList inputs(it[i]);
-        for (RbtInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
+        for (RbtUInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];
         RbtDouble hit = *(SFValues[SFValues.size() - 1]);
         //        RbtParser p2;
@@ -132,7 +130,6 @@ RbtDouble RbtGPFFSpike::CalculateFitness(
     //    RbtGPParser p(g->GetNIP(), g->GetNIF(), g->GetNN(), g->GetNO());
     RbtReturnTypeList o;
     o.push_back(new RbtReturnType(1.1));
-    RbtReturnType oldo;
     RbtDouble truehits = 0.0;
     RbtDouble falsehits = 0.0;
     RbtDouble truemisses = 0.0;
@@ -141,9 +138,9 @@ RbtDouble RbtGPFFSpike::CalculateFitness(
     RbtParser p2;
     RbtTokenIterPtr ti(new RbtCellTokenIter(c, contextp));
     RbtFilterExpressionPtr fe(p2.Parse(ti, contextp));
-    for (RbtInt i = 0; i < it.size(); i++) {
+    for (RbtUInt i = 0; i < it.size(); i++) {
         RbtReturnTypeList inputs = it[i];
-        for (RbtInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
+        for (RbtUInt j = 0; j < inputs.size(); j++) contextp->Assign(j, *(inputs[j]));
         RbtReturnTypeList SFValues = sft[i];
         RbtDouble hit = *(SFValues[SFValues.size() - 1]);
         //        o = p.Parse(c, inputs);

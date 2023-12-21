@@ -76,7 +76,13 @@ RbtReturnType RbtGPParser::Parse1Output(RbtGPChromosomePtr chrom, RbtInt output)
     // can get the arguments from another cell
     for (RbtInt i = 0; i < nargs; i++) args[i] = Eval(chrom, (*chrom)[startCell + i]);
     for (RbtInt i = 0; i < nargs; i++) commands[ncomm]->SetArg(i, args[i]);
-    RbtReturnType f2 = commands[ncomm]->Execute();
+    // TODO(ggutierrez-sunbright):
+    // originally like this
+    // RbtReturnType f2 = commands[ncomm]->Execute();
+    // f2 was not being used as a variable, and I would need to investigate if this function is
+    // 1) bein used at all
+    // 2) idempotent, so we can remove the next line completely
+    commands[ncomm]->Execute();
     return (commands[ncomm]->Execute());
 }
 

@@ -36,10 +36,14 @@ RbtBond::RbtBond(RbtInt nBondId, RbtAtomPtr& spAtom1, RbtAtomPtr& spAtom2, RbtIn
     m_dPartialBondOrder(nFormalBondOrder),
     m_bCyclic(false),
     m_bSelected(false) {
+#ifndef _DEBUG
     // DM 04 Dec 1998  Register the bond back with the constituent atoms
+    m_spAtom1->AddBond(this);
+    m_spAtom2->AddBond(this);
+#else
+    // same as above, but check return values
     RbtBool bOK1 = m_spAtom1->AddBond(this);
     RbtBool bOK2 = m_spAtom2->AddBond(this);
-#ifdef _DEBUG
     if (!bOK1) cout << "FAILED to add bond " << m_nBondId << " to atom " << m_spAtom1->GetAtomId() << endl;
     if (!bOK2) cout << "FAILED to add bond " << m_nBondId << " to atom " << m_spAtom2->GetAtomId() << endl;
 #endif  //_DEBUG
@@ -49,10 +53,14 @@ RbtBond::RbtBond(RbtInt nBondId, RbtAtomPtr& spAtom1, RbtAtomPtr& spAtom2, RbtIn
 
 // Default destructor
 RbtBond::~RbtBond() {
+#ifndef _DEBUG
     // DM 04 Dec 1998  Unregister the bond with the constituent atoms
+    m_spAtom1->RemoveBond(this);
+    m_spAtom2->RemoveBond(this);
+#else
+    // same as above, but check return values
     RbtBool bOK1 = m_spAtom1->RemoveBond(this);
     RbtBool bOK2 = m_spAtom2->RemoveBond(this);
-#ifdef _DEBUG
     if (!bOK1) cout << "FAILED to remove bond " << m_nBondId << " from atom " << m_spAtom1->GetAtomId() << endl;
     if (!bOK2) cout << "FAILED to remove bond " << m_nBondId << " from atom " << m_spAtom2->GetAtomId() << endl;
 #endif  //_DEBUG

@@ -101,8 +101,6 @@ RbtDouble RbtStringContext::Get(RbtModelPtr lig, RbtString name) {
     if (name == "LIG_MW") return lig->GetTotalAtomicMass();
     if (name == "LIG_NATOMS") return lig->GetNumAtoms();
     RbtInt nAtoms = lig->GetNumAtoms();
-    RbtInt nBonds = lig->GetNumBonds();
-    RbtInt nSegs = lig->GetNumSegments();
     RbtAtomList atomList = lig->GetAtomList();
     RbtBondList bondList = lig->GetBondList();
     if (name == "LIG_NLIPOC") return Rbt::GetNumAtoms(atomList, Rbt::isAtomLipophilic());

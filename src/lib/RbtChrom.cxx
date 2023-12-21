@@ -81,7 +81,7 @@ void RbtChrom::Add(RbtChromElement* pChromElement) {
     }
 }
 
-RbtInt RbtChrom::GetLength() const {
+RbtUInt RbtChrom::GetLength() const {
     RbtInt retVal(0);
     for (RbtChromElementListConstIter iter = m_elementList.begin(); iter != m_elementList.end(); ++iter) {
         retVal += (*iter)->GetLength();
@@ -89,7 +89,7 @@ RbtInt RbtChrom::GetLength() const {
     return retVal;
 }
 
-RbtInt RbtChrom::GetXOverLength() const {
+RbtUInt RbtChrom::GetXOverLength() const {
     RbtInt retVal(0);
     for (RbtChromElementListConstIter iter = m_elementList.begin(); iter != m_elementList.end(); ++iter) {
         retVal += (*iter)->GetXOverLength();

@@ -98,7 +98,6 @@ void RbtGPGenome::SetStructure(
 }
 
 void RbtGPGenome::Initialise() {
-    RbtInt s = chrom->size();
     RbtInt g = 0, max, min;
     for (RbtInt i = 0; i < nc; i++) {
         for (RbtInt j = 0; j < nr; j++) {
@@ -189,7 +188,6 @@ void RbtGPGenome::UniformCrossover(const RbtGPGenome& mom, const RbtGPGenome& da
 void RbtGPGenome::Crossover(RbtGPGenome&) {}
 
 ostream& RbtGPGenome::Print(ostream& s) const {
-    RbtInt g = 0;
     // Print structure
     s << npi << " " << nfi << " " << nsfi << " " << no << " " << nf << " " << nr << " " << nc << " " << l << endl;
     s << *chrom << endl;

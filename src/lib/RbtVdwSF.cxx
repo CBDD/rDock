@@ -287,7 +287,7 @@ void RbtVdwSF::Setup() {
         RbtBool hasIPi = m_spVdwSource->isParameterPresent(_IP);
         RbtBool isHBDi = m_spVdwSource->isParameterPresent(_ISHBD);
         RbtBool isHBAi = m_spVdwSource->isParameterPresent(_ISHBA);
-        RbtDouble Ii, alphai;
+        RbtDouble Ii = 1, alphai = 0;
         if (hasIPi) {
             Ii = m_spVdwSource->GetParameterValue(_IP);       // Ionisation potential, I
             alphai = m_spVdwSource->GetParameterValue(_POL);  // Polarisability, alpha
@@ -302,7 +302,7 @@ void RbtVdwSF::Setup() {
             RbtBool hasIPj = m_spVdwSource->isParameterPresent(_IP);
             RbtBool isHBDj = m_spVdwSource->isParameterPresent(_ISHBD);
             RbtBool isHBAj = m_spVdwSource->isParameterPresent(_ISHBA);
-            RbtDouble Ij, alphaj;
+            RbtDouble Ij = 1, alphaj = 0;
             if (hasIPj) {
                 Ij = m_spVdwSource->GetParameterValue(_IP);       // Ionisation potential, I
                 alphaj = m_spVdwSource->GetParameterValue(_POL);  // Polarisability, alpha
@@ -393,7 +393,7 @@ void RbtVdwSF::BuildIntraMap(const RbtAtomRList& atomList1, const RbtAtomRList& 
         std::for_each(atomList1.begin(), atomList1.end(), selectAtom);
         RbtAtom* pAtom = (*iter);
         RbtInt id = pAtom->GetAtomId() - 1;
-        Assert<RbtAssert>(id >= 0 && id < intns.size());
+        Assert<RbtAssert>(id >= 0 && (RbtUInt)id < intns.size());
         RbtModel* pModel = pAtom->GetModelPtr();
         // 2. Now deselect all atoms in the same model as the current atom
         pModel->SetAtomSelectionFlags(false);
