@@ -41,22 +41,26 @@ jobs:
     needs: build-dev
     runs-on: ubuntu-latest
     container: ghcr.io/rdock-utils:dev
-    working-directory: ./rdock-utils
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Run flake8
+        working-directory: ./rdock-utils
         run: flake8 rdock-utils
 
       - name: Run black
+        working-directory: ./rdock-utils
         run: black --check rdock-utils
 
       - name: Run isort
+        working-directory: ./rdock-utils
         run: isort --check rdock-utils
 
       - name: Run mypy
+        working-directory: ./rdock-utils
         run: mypy rdock-utils
 
       - name: Run pytest
+        working-directory: ./rdock-utils
         run: pytest -v .
