@@ -43,6 +43,7 @@ jobs:
     container:
       image: ghcr.io/rdock-utils:dev
       credentials:
+        registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
