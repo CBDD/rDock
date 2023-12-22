@@ -2,5 +2,5 @@
 # Remove me when you have something in place
 
 
-def test_all_ok():
+def test_all_ok() -> None:
     assert True
