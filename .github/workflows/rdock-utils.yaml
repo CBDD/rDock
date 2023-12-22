@@ -1,9 +1,5 @@
 name: "[rdock-utils] Lint and Test"
 
-defaults:
-  run:
-    working-directory: ./rdock-utils
-
 on:
   pull_request:
     branches:
@@ -33,9 +29,9 @@ jobs:
     - name: Build rdock-utils dev image
       uses: docker/build-push-action@v4
       with:
-        context: .
+        context: ./rdock-utils
         tags: ghcr.io/rdock-utils:dev
-        file: ./Dockerfile
+        file: ./rdock-utils/Dockerfile
         target: development
         cache-from: type=gha
         cache-to: type=gha,mode=max
@@ -45,21 +41,22 @@ jobs:
     needs: build-dev
     runs-on: ubuntu-latest
     container: ghcr.io/rdock-utils:dev
+    working-directory: ./rdock-utils
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Run flake8
-        run: flake8 .
+        run: flake8 rdock-utils
 
       - name: Run black
-        run: black --check .
+        run: black --check rdock-utils
 
       - name: Run isort
-        run: isort --check .
+        run: isort --check rdock-utils
 
       - name: Run mypy
-        run: mypy .
+        run: mypy rdock-utils
 
       - name: Run pytest
         run: pytest -v .
