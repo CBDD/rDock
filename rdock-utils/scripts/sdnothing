@@ -5,6 +5,7 @@
 # for example,
 # from rdock_utils.sdsort import main
 
+# From apps
 from rdock_utils.sdnothing import main
 
 if __name__ == "__main__":
