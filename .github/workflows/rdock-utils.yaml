@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ./rdock-utils
-        tags: ghcr.io/rdock-utils:dev
+        tags: ghcr.io/cbdd/rdock-utils:dev
         file: ./rdock-utils/Dockerfile
         target: development
         cache-from: type=gha,scope=rdock-utils
@@ -41,9 +41,8 @@ jobs:
     needs: build-dev
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/rdock-utils:dev
+      image: ghcr.io/cbdd/rdock-utils:dev
       credentials:
-        registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.github_token }}
     steps:
