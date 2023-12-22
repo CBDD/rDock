@@ -1,8 +1,14 @@
 on:
   push:
     branches: [ main ]
+    paths:
+      - !rdock-utils/**
+      - !.github/workflows/rdock-utils.yaml
   pull_request:
     branches: [ main ]
+    paths:
+      - !rdock-utils/**
+      - !.github/workflows/rdock-utils.yaml
   schedule:
     - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
 
