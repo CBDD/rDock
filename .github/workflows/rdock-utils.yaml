@@ -8,15 +8,10 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - rdock-utils/**
 
   push:
     branches:
       - main
-    paths:
-      - rdock-utils/**
-
 
 jobs:
   build-dev:
