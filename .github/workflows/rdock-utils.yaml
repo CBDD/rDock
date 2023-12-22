@@ -1,4 +1,4 @@
-name: [rdock-utils] Lint and Test
+name: "[rdock-utils] Lint and Test"
 
 defaults:
   run:
