@@ -1,20 +1,12 @@
 #!/usr/bin/env python
 
 # Dependencies
-from setuptools import setup
-
-raise Exception("Please make sure you have modified all necessary attributes before pip installing the package")
+from setuptools import setup, find_packages
 
 setup(
     name="rdock-utils",
     version="0.01",
-    description="",
-    author="",
-    author_email="",
-    url="",
-    packages=[],
-    # inlcude_package_data=True,
-    # package_data={'package.module':[folder/with/data/*]}
-    # scripts=[],
+    url="https://github.com/CBDD/rDock.git",
+    packages=find_packages(include=["rdock_utils"]),
     install_requires=[],
 )
