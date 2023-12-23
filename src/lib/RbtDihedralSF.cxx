@@ -10,8 +10,9 @@
  * http://rdock.sourceforge.net/
  ***********************************************************************/
 
-#include "RbtDihedralSF.h"
 #include <cmath>
+
+#include "RbtDihedralSF.h"
 
 RbtDihedral::RbtDihedral(RbtAtom* pAtom1, RbtAtom* pAtom2, RbtAtom* pAtom3, RbtAtom* pAtom4, const prms& dihprms):
     m_pAtom1(pAtom1),
