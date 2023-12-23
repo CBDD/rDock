@@ -62,11 +62,13 @@ std::istream& operator>>(std::istream &s, Fortran_Array3D<T> &A)
 
 	Fortran_Array3D<T> B(M,N,K);
 
-    for (int i=1; i<=M; i++)
-        for (int j=1; j<=N; j++)
-			for (int k=1; k<=K; k++)
-            	s >>  B(i,j,k);
-
+    for (int i=1; i<=M; i++) {
+        for (int j=1; j<=N; j++) {
+            for (int k=1; k<=K; k++) {
+                s >>  B(i,j,k);
+            }
+        }
+    }
 	A = B;
     return s;
 }

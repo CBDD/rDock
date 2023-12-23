@@ -1,0 +1,66 @@
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
+
+jobs:
+  check-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: setup-lint
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends clang-format make
+    - name: check-lint
+      run: make lint-check
+      
+  build:
+    needs: check-lint
+    strategy:
+      fail-fast: false  # we want all the flows to run, to success or failure
+      matrix:
+        distribution:
+          - ubuntu-22.04
+          - ubuntu-20.04
+          - debian-11
+          - debian-10
+          - centos-stream8
+          - centos-centos7
+        compiler:
+          - g++
+        include:
+          - distribution: ubuntu-22.04-clang
+            compiler: clang++
+
+    uses: ./.github/workflows/build_generic.yml
+    with:
+      distribution: ${{ matrix.distribution }}
+      compiler: ${{ matrix.compiler }}
+  
+  release:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3  # probably not needed, but just in case
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: artifacts/
+
+    - name: Set version
+      id: set_version
+      run: echo "RELEASE_VERSION=$(date +%y.%m).${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}
+        artifacts: artifacts/*/*.tar.gz
+        draft: true
+

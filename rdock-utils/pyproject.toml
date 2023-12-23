@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 119
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 119
+combine_as_imports = true
+
+import_heading_stdlib = "Standard Library"
+import_heading_thirdparty = "Dependencies"
+import_heading_firstparty = "From apps"
+import_heading_localfolder = "Local imports"

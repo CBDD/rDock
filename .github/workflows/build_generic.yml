@@ -1,0 +1,52 @@
+on:
+  workflow_call:
+    inputs:
+      distribution:
+        required: true
+        type: string
+      compiler:
+        required: false
+        default: g++
+        type: string
+      arch:
+        required: false
+        default: x86_64
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Build base image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        tags: rdock-${{ inputs.distribution }}:base
+        file: .github/docker/Dockerfile.${{ inputs.distribution }}
+        target: base
+        cache-from: type=gha,scope=${{ inputs.distribution }}
+        cache-to: type=gha,mode=max,scope=${{ inputs.distribution }}
+        load: true
+
+    - name: Build rDock
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} -j 2
+
+    - name: Test rDock
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} test
+
+    - name: Set candidate name
+      id: set_candidate_name
+      run: echo "CANDIDATE_NAME=$(date +%y.%m).${{ github.run_number }}_${{ inputs.distribution }}_${{ inputs.compiler }}_${{ inputs.arch }}" >> "$GITHUB_OUTPUT"
+
+    - name: Create bundle
+      run: |
+        tar -czvf rdock-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz \
+          bin/ lib/ include/ data/ scripts/ Makefile license.txt README.md old_README.md
+
+    - name: Upload bundle
+      uses: actions/upload-artifact@v3
+      with:
+        path: rdock-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz
