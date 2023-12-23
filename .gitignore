@@ -15,3 +15,18 @@ build/linux-g++-64
 # test files
 *.as
 tests/results
+
+# rdock original files
+rdock-utils/scripts copy/make_grid.csh
+rdock-utils/scripts copy/rbhtfinder
+rdock-utils/scripts copy/run_rbdock.pl
+rdock-utils/scripts copy/run_rbscreen.pl
+rdock-utils/scripts copy/sdfield
+rdock-utils/scripts copy/sdfilter
+rdock-utils/scripts copy/sdmodify
+rdock-utils/scripts copy/sdreport
+rdock-utils/scripts copy/sdrmsd
+rdock-utils/scripts copy/sdsort
+rdock-utils/scripts copy/sdsplit
+rdock-utils/scripts copy/sdtether
+rdock-utils/scripts copy/to_unix
