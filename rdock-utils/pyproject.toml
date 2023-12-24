@@ -1,3 +1,15 @@
+[project]
+name = "rdock-utils"
+version = "0.1.0"
+description = "Utilities for working with RDock and operating on SD files"
+requires-python = ">=3.10.0"
+
+[project.scripts]
+sdfield = "rdock_utils.sdfield:main"
+
+[project.urls]
+Repository = "https://github.com/CBDD/rDock.git"
+
 [tool.black]
 line-length = 119
 target-version = ['py312']
