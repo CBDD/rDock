@@ -15,9 +15,10 @@ class FastSDMol:
     def read(cls, source: TextIO) -> "FastSDMol | None":
         lines: list[str] = []
         data: dict[str, str] = {}
-
+        terminator_found = False
         for line in source:
             if line.startswith("$$$$"):
+                terminator_found = True
                 break
             if not line.startswith(">"):
                 lines.append(line)
@@ -27,6 +28,7 @@ class FastSDMol:
             field_name = cls.parse_field_name(line)
             field_value = source.readline()
             if field_value.startswith("$$$$"):
+                terminator_found = True
                 logger.warning(
                     f"found end of molecule {lines[0]} while looking for field {field_name} value."
                     " defaulting to empty string."
@@ -36,10 +38,18 @@ class FastSDMol:
             data[field_name] = field_value.strip("\n")
             discard_line = source.readline()
             if discard_line.startswith("$$$$"):
+                terminator_found = True
                 logger.warning(f"found end of molecule {lines[0]} while expecting empty line after field {field_name}")
                 break
 
-        return cls(lines, data) if len(lines) >= 4 else None
+        if not terminator_found and all(line.strip() == "" for line in lines):
+            return None
+
+        if len(lines) >= 4:
+            return cls(lines, data)
+
+        # if we've reached this point, we have an invalid molecule
+        raise ValueError(f"invalid molecule: {lines}")
 
     @staticmethod
     def parse_field_name(field_line: str) -> str:

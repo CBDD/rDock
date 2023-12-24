@@ -30,16 +30,15 @@ def inputs_generator(inputs: list[str]) -> Iterable[TextIO]:
             yield open(infile, "r")
 
 
-def get_output(outfile: str | None) -> TextIO:
-    if outfile:
-        return open(outfile, "w")
-    else:
-        return sys.stdout
-
-
 def read_molecules(file: TextIO) -> Iterable[FastSDMol]:
-    while mol := FastSDMol.read(file):
-        yield mol
+    while True:
+        try:
+            mol = FastSDMol.read(file)
+            if mol is None:
+                break
+            yield mol
+        except ValueError as e:
+            logger.warning(f"error reading molecule: {e}")
 
 
 def main(argv: list[str] | None = None) -> None:
