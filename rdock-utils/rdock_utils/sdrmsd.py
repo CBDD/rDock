@@ -1,4 +1,5 @@
 import math
+import optparse
 import sys
 
 import numpy
@@ -108,3 +109,43 @@ def map_to_crystal(xtal: pybel.Molecule, pose: pybel.Molecule) -> pybel.ob.vvpai
     mappingpose = pybel.ob.vvpairUIntUInt()
     exit = mapper.MapUnique(pose.OBMol, mappingpose)  # noqa
     return mappingpose[0]
+
+
+def parseArguments() -> tuple[optparse.Values, list[str]]:
+    optparse.OptionParser.format_epilog = lambda self, formatter: self.epilog
+    epilog = """Args:
+	reference.sdf		SDF file with the reference molecule.
+	input.sdf		SDF file with the molecules to be compared to reference.\n"""
+    parser = optparse.OptionParser("usage: %prog [options] reference.sdf input.sdf", epilog=epilog)
+    parser.add_option(
+        "-f",
+        "--fit",
+        dest="fit",
+        action="store_true",
+        default=False,
+        help="Superpose molecules before RMSD calculation",
+    )
+    parser.add_option(
+        "--threshold",
+        "-t",
+        dest="threshold",
+        action="store",
+        nargs=1,
+        help="Discard poses with RMSD < THRESHOLD with respect previous poses which where not rejected based on same principle. A Population SDField will be added to output SD with the population number.",
+        type=float,
+    )
+    parser.add_option(
+        "-o",
+        "--out",
+        dest="outfilename",
+        metavar="FILE",
+        default=False,
+        help="If declared, write an output SDF file with the input molecules with a new sdfield <RMSD>. If molecule was fitted, the fitted molecule coordinates will be saved.",
+    )
+    (options, args) = parser.parse_args()
+
+    # Check we have two arguments
+    if len(args) < 2:
+        parser.error("Incorrect number of arguments. Use -h or --help options to print help.")
+
+    return options, args
