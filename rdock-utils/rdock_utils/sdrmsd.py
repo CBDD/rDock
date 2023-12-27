@@ -155,3 +155,45 @@ def update_coordinates(obmol: pybel.Molecule, new_coordinates: ArrayLike[float])
     "Update OBMol coordinates. new_coordinates is a numpy array"
     for i, atom in enumerate(obmol):
         atom.OBAtom.SetVector(*new_coordinates[i])
+
+
+def get_automorphism_RMSD(
+    target: pybel.Molecule, molec: pybel.Molecule, fit: bool = False
+) -> float | tuple[float, ArrayLike[float]]:
+    """
+    Use Automorphism to reorder target coordinates to match ref coordinates atom order
+    for correct RMSD comparison. Only the lowest RMSD will be returned.
+
+    Returns:
+      If fit=False: 	bestRMSD	(float)					RMSD of the best matching mapping.
+      If fit=True:	(bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.
+    """
+    mappings = pybel.ob.vvpairUIntUInt()
+    bitvec = pybel.ob.OBBitVec()
+    lookup = []
+    for i, atom in enumerate(target):
+        lookup.append(i)
+    success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
+    targetcoords = [atom.coords for atom in target]
+    mappose = numpy.array(map_to_crystal(target, molec))
+    mappose = mappose[numpy.argsort(mappose[:, 0])][:, 1]
+    posecoords = numpy.array([atom.coords for atom in molec])[mappose]
+    resultrmsd = 999999999999
+    for mapping in mappings:
+        automorph_coords = [None] * len(targetcoords)
+        for x, y in mapping:
+            automorph_coords[lookup.index(x)] = targetcoords[lookup.index(y)]
+        mapping_rmsd = rmsd(posecoords, automorph_coords)
+        if mapping_rmsd < resultrmsd:
+            resultrmsd = mapping_rmsd
+            fitted_result = False
+        if fit:
+            fitted_pose, fitted_rmsd = superpose_3D(numpy.array(automorph_coords), numpy.array(posecoords))
+            if fitted_rmsd < resultrmsd:
+                resultrmsd = fitted_rmsd
+                fitted_result = fitted_pose
+
+    if fit:
+        return (resultrmsd, fitted_pose)
+    else:
+        return resultrmsd
