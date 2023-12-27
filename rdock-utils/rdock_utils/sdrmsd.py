@@ -1,6 +1,7 @@
 import math
 import optparse
 import sys
+from typing import TextIO
 
 import numpy
 from numpy.typing import ArrayLike
@@ -197,3 +198,17 @@ def get_automorphism_RMSD(
         return (resultrmsd, fitted_pose)
     else:
         return resultrmsd
+
+
+def save_molecule_with_RMSD(outsdf: TextIO, molec: pybel.Molecule, rmsd: float, population: bool = False) -> None:
+    newData = pybel.ob.OBPairData()
+    newData.SetAttribute("RMSD")
+    newData.SetValue("%.3f" % rmsd)
+
+    if population:
+        popData = pybel.ob.OBPairData()
+        popData.SetAttribute("Population")
+        popData.SetValue("%i" % population)
+        molec.OBMol.CloneData(popData)
+    molec.OBMol.CloneData(newData)  # Add new data
+    outsdf.write(molec)
