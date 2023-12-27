@@ -1,12 +1,11 @@
 import math
-import optparse
 import sys
 
 import numpy
 from numpy.typing import ArrayLike
 from openbabel import pybel
 
-Coordinate = tuple[int, int, int]
+Coordinate = tuple[float, float, float]
 
 
 def superpose3D(
@@ -87,13 +86,25 @@ def superpose3D(
     return new_coords, rmsd
 
 
-def squared_distance(coordsA: Coordinate, coordsB: Coordinate):
+def squared_distance(coordsA: Coordinate, coordsB: Coordinate) -> float:
     """Find the squared distance between two 3-tuples"""
     sqrdist = sum((a - b) ** 2 for a, b in zip(coordsA, coordsB))
     return sqrdist
 
 
-def rmsd(allcoordsA: list[Coordinate], allcoordsB: list[Coordinate]):
+def rmsd(allcoordsA: list[Coordinate], allcoordsB: list[Coordinate]) -> float:
     """Find the RMSD between two lists of 3-tuples"""
     deviation = sum(squared_distance(atomA, atomB) for (atomA, atomB) in zip(allcoordsA, allcoordsB))
     return math.sqrt(deviation / float(len(allcoordsA)))
+
+
+def map_to_crystal(xtal: pybel.Molecule, pose: pybel.Molecule) -> pybel.ob.vvpairUIntUInt:
+    """
+    Some docking programs might alter the order of the atoms in the output (like Autodock Vina does...)
+    this will mess up the rmsd calculation with OpenBabel
+    """
+    query = pybel.ob.CompileMoleculeQuery(xtal.OBMol)
+    mapper: pybel.ob.OBIsomorphismMapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
+    mappingpose = pybel.ob.vvpairUIntUInt()
+    exit = mapper.MapUnique(pose.OBMol, mappingpose)  # noqa
+    return mappingpose[0]
