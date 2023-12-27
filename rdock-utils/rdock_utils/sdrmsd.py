@@ -9,7 +9,7 @@ from openbabel import pybel
 Coordinate = tuple[float, float, float]
 
 
-def superpose3D(
+def superpose_3D(
     ref: ArrayLike[float],
     target: ArrayLike[float],
     weights: ArrayLike[float] | None = None,
@@ -111,7 +111,7 @@ def map_to_crystal(xtal: pybel.Molecule, pose: pybel.Molecule) -> pybel.ob.vvpai
     return mappingpose[0]
 
 
-def parseArguments() -> tuple[optparse.Values, list[str]]:
+def parse_arguments() -> tuple[optparse.Values, list[str]]:
     optparse.OptionParser.format_epilog = lambda self, formatter: self.epilog
     epilog = """Args:
 	reference.sdf		SDF file with the reference molecule.
@@ -149,3 +149,9 @@ def parseArguments() -> tuple[optparse.Values, list[str]]:
         parser.error("Incorrect number of arguments. Use -h or --help options to print help.")
 
     return options, args
+
+
+def update_coordinates(obmol: pybel.Molecule, new_coordinates: ArrayLike[float]) -> None:
+    "Update OBMol coordinates. new_coordinates is a numpy array"
+    for i, atom in enumerate(obmol):
+        atom.OBAtom.SetVector(*new_coordinates[i])
