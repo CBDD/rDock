@@ -1,27 +1,32 @@
 import argparse
+import logging
 import math
 import os
 import sys
 from typing import TextIO
 
 import numpy
+from numpy.linalg import LinAlgError
 from numpy.typing import ArrayLike
 from openbabel import pybel
 
+logger = logging.getLogger("sdrmsd")
+
 Coordinate = tuple[float, float, float]
+SingularValueDecomposition = tuple[ArrayLike[float], ArrayLike[float], ArrayLike[float]]
 
 
 def superpose_3D(
-    ref: ArrayLike[float],
+    reference: ArrayLike[float],
     target: ArrayLike[float],
     weights: ArrayLike[float] | None = None,
-    refmask: ArrayLike[bool] | None = None,
-    targetmask: ArrayLike[bool] | None = None,
-    returnRotMat: bool = False,
+    reference_mask: ArrayLike[bool] | None = None,
+    target_mask: ArrayLike[bool] | None = None,
+    return_rotation_matrix: bool = False,
 ) -> tuple[ArrayLike[float], float, ArrayLike[float]] | tuple[ArrayLike[float], float]:
     """superpose3D performs 3d superposition using a weighted Kabsch algorithm : http://dx.doi.org/10.1107%2FS0567739476001873 & doi: 10.1529/biophysj.105.066654
-    definition : superpose3D(ref, target, weights,refmask,targetmask)
-    @parameter 1 :  ref - xyz coordinates of the reference structure (the ligand for instance)
+    definition : superpose3D(reference, target, weights,refmask,target_mask)
+    @parameter 1 :  reference - xyz coordinates of the reference structure (the ligand for instance)
     @type 1 :       float64 numpy array (nx3)
     ---
     @parameter 2 :  target - theoretical target positions to which we should move (does not need to be physically relevant.
@@ -30,63 +35,85 @@ def superpose_3D(
     @parameter 3:   weights - numpy array of atom weights (usuallly between 0 and 1)
     @type 3 :       float 64 numpy array (n)
     @parameter 4:   mask - a numpy boolean mask for designating atoms to include
-    Note ref and target positions must have the same dimensions -> n*3 numpy arrays where n is the number of points (or atoms)
-    Returns a set of new coordinates, aligned to the target state as well as the rmsd
+    Note reference and target positions must have the same dimensions -> n*3 numpy arrays where n is the number of points (or atoms)
+    returns:
+    - Tuple containing new coordinates and RMSD (default behavior).
+      OR
+    - Tuple containing new coordinates, RMSD, and rotation matrix (if return_rotation_matrix is True).
     """
-    if weights is None:
-        weights = 1.0
-    if refmask is None:
-        refmask = numpy.ones(len(ref), "bool")
-    if targetmask is None:
-        targetmask = numpy.ones(len(target), "bool")
-    # first get the centroid of both states
-    ref_centroid = numpy.mean(ref[refmask] * weights, axis=0)
-    # print ref_centroid
-    refCenteredCoords = ref - ref_centroid
-    # print refCenteredCoords
-    target_centroid = numpy.mean(target[targetmask] * weights, axis=0)
-    targetCenteredCoords = target - target_centroid
-    # print targetCenteredCoords
-    # the following steps come from : http://www.pymolwiki.org/index.php/OptAlign#The_Code and http://en.wikipedia.org/wiki/Kabsch_algorithm
+    weights = weights or 1.0
+    reference_mask = reference_mask or numpy.ones(len(reference), "bool")
+    target_mask = target_mask or numpy.ones(len(target), "bool")
+    # First get the centroid of both states
+    reference_centroid = numpy.mean(reference[reference_mask] * weights, axis=0)
+    # Print reference_centroid
+    reference_centered_coords = reference - reference_centroid
+    # Print reference_centered_coords
+    target_centroid = numpy.mean(target[target_mask] * weights, axis=0)
+    target_centered_coords = target - target_centroid
+    # Print target_centered_coords
+    # The following steps come from : http://www.pymolwiki.org/index.php/OptAlign#The_Code and http://en.wikipedia.org/wiki/Kabsch_algorithm
     # Initial residual, see Kabsch.
     E0 = numpy.sum(
-        numpy.sum(refCenteredCoords[refmask] * refCenteredCoords[refmask] * weights, axis=0), axis=0
+        numpy.sum(
+            reference_centered_coords[reference_mask] * reference_centered_coords[reference_mask] * weights, axis=0
+        ),
+        axis=0,
     ) + numpy.sum(
-        numpy.sum(targetCenteredCoords[targetmask] * targetCenteredCoords[targetmask] * weights, axis=0), axis=0
+        numpy.sum(target_centered_coords[target_mask] * target_centered_coords[target_mask] * weights, axis=0), axis=0
     )
-    reftmp = numpy.copy(refCenteredCoords[refmask])
-    targettmp = numpy.copy(targetCenteredCoords[targetmask])
-    # print refCenteredCoords[refmask]
+    reference_tmp = numpy.copy(reference_centered_coords[reference_mask])
+    target_tmp = numpy.copy(target_centered_coords[target_mask])
+    # print reference_centered_coords[reference_mask]
     # single value decomposition of the dotProduct of both position vectors
     try:
-        dotProd = numpy.dot(numpy.transpose(reftmp), targettmp * weights)
-        V, S, Wt = numpy.linalg.svd(dotProd)
-    except Exception:
-        try:
-            dotProd = numpy.dot(numpy.transpose(reftmp), targettmp)
-            V, S, Wt = numpy.linalg.svd(dotProd)
-        except Exception:
-            print("Couldn't perform the Single Value Decomposition, skipping alignment", file=sys.stderr)
-        return ref, 0
+        V, S, Wt = perform_svd(reference_tmp, target_tmp, weights)
+    except LinAlgError:
+        warning_msg = "Couldn't perform the Single Value Decomposition, skipping alignment"
+        logger.warning(warning_msg)
+        print(warning_msg, file=sys.stderr)
+        return reference, 0
     # we already have our solution, in the results from SVD.
     # we just need to check for reflections and then produce
     # the rotation.  V and Wt are orthonormal, so their det's
     # are +/-1.
-    reflect = float(str(float(numpy.linalg.det(V) * numpy.linalg.det(Wt))))
+    reflect = float(numpy.linalg.det(V) * numpy.linalg.det(Wt))
     if reflect == -1.0:
         S[-1] = -S[-1]
         V[:, -1] = -V[:, -1]
     rmsd = E0 - (2.0 * sum(S))
-    rmsd = numpy.sqrt(abs(rmsd / len(ref[refmask])))  # get the rmsd
+    rmsd = numpy.sqrt(abs(rmsd / len(reference[reference_mask])))  # get the rmsd
     # U is simply V*Wt
     U = numpy.dot(V, Wt)  # get the rotation matrix
     # rotate and translate the molecule
-    new_coords = numpy.dot((refCenteredCoords), U) + target_centroid  # translate & rotate
-    # new_coords=(refCenteredCoords + target_centroid)
+    new_coords = numpy.dot((reference_centered_coords), U) + target_centroid  # translate & rotate
+    # new_coords=(reference_centered_coords + target_centroid)
     # print U
-    if returnRotMat:
-        return new_coords, rmsd, U
-    return new_coords, rmsd
+    if not return_rotation_matrix:
+        return new_coords, rmsd
+    return new_coords, rmsd, U
+
+
+def perform_svd(
+    reference_tmp: ArrayLike[float], target_tmp: ArrayLike[float], weights: ArrayLike[float] | int
+) -> SingularValueDecomposition | None:
+    try:
+        dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp * weights)
+        svd_result = numpy.linalg.svd(dot_product)
+    except LinAlgError:
+        svd_result = _handle_svd_linalg_error(reference_tmp, target_tmp)
+    return svd_result
+
+
+def _handle_svd_linalg_error(
+    reference_tmp: ArrayLike[float], target_tmp: ArrayLike[float]
+) -> SingularValueDecomposition | None:
+    try:
+        dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp)
+        svd_result = numpy.linalg.svd(dot_product)
+        return svd_result
+    except LinAlgError:
+        raise
 
 
 def squared_distance(coordsA: Coordinate, coordsB: Coordinate) -> float:
@@ -113,7 +140,7 @@ def map_to_crystal(xtal: pybel.Molecule, pose: pybel.Molecule) -> list[tuple[int
     return mappingpose[0]
 
 
-def parse_arguments() -> argparse.Namespace:
+def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="SDRMSD",
         usage="%(prog)s [options] reference.sdf input.sdf",
@@ -124,21 +151,22 @@ def parse_arguments() -> argparse.Namespace:
             "   input.sdf       SDF file with the molecules to be compared to reference.\n"
         ),
     )
-    #TODO: add the two required arguments: reference.sdf and input.sdf
+    parser.add_argument("reference", type=str, help="Path to the SDF file with the reference molecule.")
+    parser.add_argument("input", type=str, help="Path to the SDF file with the molecules to be compared to reference.")
     parser.add_argument(
         "-f",
         "--fit",
-        dest="fit",
         action="store_true",
         default=False,
+        dest="fit",
         help="Superpose molecules before RMSD calculation",
     )
     parser.add_argument(
         "-t",
         "--threshold",
-        dest="threshold",
         action="store",
         type=float,
+        dest="threshold",
         help=(
             "Discard poses with RMSD < THRESHOLD with respect previous poses "
             "which were not rejected based on the same principle. A Population "
@@ -148,20 +176,16 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "-o",
         "--out",
-        dest="outfilename",
-        metavar="FILE",
+        action="store_true",
         default=False,
+        metavar="FILE",
+        dest="outfilename",
         help=(
             "If declared, write an output SDF file with the input molecules with "
             "a new sdfield <RMSD>. If the molecule was fitted, the fitted molecule coordinates will be saved."
         ),
     )
-
-    # Check we have two positional arguments
-    if len(sys.argv) < 3:
-        parser.error("Incorrect number of positional arguments. Use -h or --help options to print help.")
-
-    return parser.parse_args()
+    return parser
 
 
 def update_coordinates(obmol: pybel.Molecule, new_coordinates: ArrayLike[float]) -> None:
@@ -174,7 +198,7 @@ def get_automorphism_RMSD(
     target: pybel.Molecule, molec: pybel.Molecule, fit: bool = False
 ) -> float | tuple[float, ArrayLike[float]]:
     """
-    Use Automorphism to reorder target coordinates to match ref coordinates atom order
+    Use Automorphism to reorder target coordinates to match reference coordinates atom order
     for correct RMSD comparison. Only the lowest RMSD will be returned.
 
     Returns:
@@ -228,17 +252,16 @@ def save_molecule_with_RMSD(outsdf: TextIO, molec: pybel.Molecule, rmsd: float, 
 
 if __name__ == "__main__":
 
-    def main() -> None:
-        args = parse_arguments()
-        xtal = sys.argv[1]
-        poses = sys.argv[2]
+    def main(argv: list[str] | None = None) -> None:
+        parser = get_parser()
+        args = parser.parse_args(argv)
+        reference_sdf = args.reference
+        input_sdf = args.input
+        fit = args.fit
+        outfilename = args.outfilename
+        threshold = args.threshold
 
-        if not os.path.exists(xtal) or not os.path.exists(poses):
-            sys.exit("Input files not found. Please check the path given is correct.")
-        
-        
-
-    (opts, args) = parse_arguments()
+    (opts, args) = get_parser()
 
     xtal = args[0]
     poses = args[1]
