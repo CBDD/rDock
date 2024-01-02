@@ -116,16 +116,15 @@ def _handle_svd_linalg_error(
         raise
 
 
-def squared_distance(coordsA: Coordinate, coordsB: Coordinate) -> float:
+def squared_distance(coordinates_A: Coordinate, coordinates_B: Coordinate) -> float:
     """Find the squared distance between two 3-tuples"""
-    sqrdist = sum((a - b) ** 2 for a, b in zip(coordsA, coordsB))
-    return sqrdist
+    return sum((a - b) ** 2 for a, b in zip(coordinates_A, coordinates_B))
 
 
-def rmsd(allcoordsA: list[Coordinate], allcoordsB: list[Coordinate]) -> float:
+def rmsd(all_coordinates_A: list[Coordinate], all_coordinates_B: list[Coordinate]) -> float:
     """Find the RMSD between two lists of 3-tuples"""
-    deviation = sum(squared_distance(atomA, atomB) for (atomA, atomB) in zip(allcoordsA, allcoordsB))
-    return math.sqrt(deviation / float(len(allcoordsA)))
+    deviation = sum(squared_distance(atom_A, atom_B) for atom_A, atom_B in zip(all_coordinates_A, all_coordinates_B))
+    return math.sqrt(deviation / len(all_coordinates_A))
 
 
 def map_to_crystal(xtal: pybel.Molecule, pose: pybel.Molecule) -> list[tuple[int, int]]:
