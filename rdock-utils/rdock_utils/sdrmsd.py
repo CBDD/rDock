@@ -127,16 +127,16 @@ def rmsd(all_coordinates_A: list[Coordinate], all_coordinates_B: list[Coordinate
     return math.sqrt(deviation / len(all_coordinates_A))
 
 
-def map_to_crystal(xtal: pybel.Molecule, pose: pybel.Molecule) -> list[tuple[int, int]]:
+def map_to_crystal(xtal: pybel.Molecule, pose: pybel.Molecule) -> tuple[int, int]:
     """
     Some docking programs might alter the order of the atoms in the output (like Autodock Vina does...)
     this will mess up the rmsd calculation with OpenBabel
     """
     query = pybel.ob.CompileMoleculeQuery(xtal.OBMol)
     mapper: pybel.ob.OBIsomorphismMapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
-    mappingpose = pybel.ob.vvpairUIntUInt()
-    exit = mapper.MapUnique(pose.OBMol, mappingpose)
-    return mappingpose[0]
+    mapping_pose = pybel.ob.vvpairUIntUInt()
+    exit = mapper.MapUnique(pose.OBMol, mapping_pose)
+    return mapping_pose[0]
 
 
 def get_parser() -> argparse.ArgumentParser:
