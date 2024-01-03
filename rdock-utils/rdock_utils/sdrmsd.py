@@ -89,9 +89,7 @@ def superpose_3D(
     new_coords = numpy.dot((reference_centered_coords), U) + target_centroid  # translate & rotate
     # new_coords=(reference_centered_coords + target_centroid)
     # print U
-    if not return_rotation_matrix:
-        return new_coords, rmsd
-    return new_coords, rmsd, U
+    return new_coords, rmsd if not return_rotation_matrix else new_coords, rmsd, U
 
 
 def perform_svd(
@@ -193,49 +191,53 @@ def update_coordinates(obmol: pybel.Molecule, new_coordinates: ArrayLike[float])
         atom.OBAtom.SetVector(*new_coordinates[i])
 
 
-def get_automorphism_RMSD(
-    target: pybel.Molecule, molec: pybel.Molecule, fit: bool = False
+def get_automorphism_rmsd(
+    target: pybel.Molecule, molecule: pybel.Molecule, fit: bool = False
 ) -> float | tuple[float, ArrayLike[float]]:
     """
     Use Automorphism to reorder target coordinates to match reference coordinates atom order
     for correct RMSD comparison. Only the lowest RMSD will be returned.
 
     Returns:
-      If fit=False: 	bestRMSD	(float)					RMSD of the best matching mapping.
-      If fit=True:	(bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.
+      If fit=False: bestRMSD	(float)					RMSD of the best matching mapping.
+      If fit=True:  (bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.
     """
     mappings = pybel.ob.vvpairUIntUInt()
-    bitvec = pybel.ob.OBBitVec()
-    lookup = []
-    for i, atom in enumerate(target):
-        lookup.append(i)
+    bit_vector = pybel.ob.OBBitVec()
     success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
-    targetcoords = [atom.coords for atom in target]
-    mappose = numpy.array(map_to_crystal(target, molec))
-    mappose = mappose[numpy.argsort(mappose[:, 0])][:, 1]
-    posecoords = numpy.array([atom.coords for atom in molec])[mappose]
-    resultrmsd = 999999999999
+    lookup_indexes = list(range(len(target)))
+    target_coordinates = [atom.coords for atom in target]
+    index_to_target_coordinates = dict(zip(lookup_indexes, target_coordinates))
+    mappose = numpy.array(map_to_crystal(target, molecule))
+    sorted_indices = numpy.argsort(mappose[:, 0])
+    mappose_result = mappose[sorted_indices][:, 1]
+    molecule_coordinates = [atom.coords for atom in molecule]
+    pose_coordinates = numpy.array(molecule_coordinates)[mappose_result]
+    result_rmsd = 999999999999
+
+    # Loop through automorphisms
     for mapping in mappings:
-        automorph_coords = [None] * len(targetcoords)
-        for x, y in mapping:
-            automorph_coords[lookup.index(x)] = targetcoords[lookup.index(y)]
-        mapping_rmsd = rmsd(posecoords, automorph_coords)
-        if mapping_rmsd < resultrmsd:
-            resultrmsd = mapping_rmsd
+        automorph_coords = [index_to_target_coordinates[i] for i in mapping]
+        mapping_rmsd = rmsd(pose_coordinates, automorph_coords)
+
+        # Update result if the current mapping has a lower RMSD
+        if mapping_rmsd < result_rmsd:
+            result_rmsd = mapping_rmsd
             fitted_result = False
+
+        # Additional fitting if fit=True
         if fit:
-            fitted_pose, fitted_rmsd = superpose_3D(numpy.array(automorph_coords), numpy.array(posecoords))
-            if fitted_rmsd < resultrmsd:
-                resultrmsd = fitted_rmsd
+            fitted_pose, fitted_rmsd = superpose_3D(numpy.array(automorph_coords), numpy.array(pose_coordinates))
+
+            # Update result if the fitted RMSD is lower
+            if fitted_rmsd < result_rmsd:
+                result_rmsd = fitted_rmsd
                 fitted_result = fitted_pose
 
-    if fit:
-        return (resultrmsd, fitted_pose)
-    else:
-        return resultrmsd
+    return (result_rmsd, fitted_pose) if fit else result_rmsd
 
 
-def save_molecule_with_RMSD(outsdf: TextIO, molec: pybel.Molecule, rmsd: float, population: bool = False) -> None:
+def save_molecule_with_RMSD(outsdf: TextIO, molecule: pybel.Molecule, rmsd: float, population: bool = False) -> None:
     newData = pybel.ob.OBPairData()
     newData.SetAttribute("RMSD")
     newData.SetValue("%.3f" % rmsd)
@@ -244,9 +246,9 @@ def save_molecule_with_RMSD(outsdf: TextIO, molec: pybel.Molecule, rmsd: float, 
         popData = pybel.ob.OBPairData()
         popData.SetAttribute("Population")
         popData.SetValue("%i" % population)
-        molec.OBMol.CloneData(popData)
-    molec.OBMol.CloneData(newData)  # Add new data
-    outsdf.write(molec)
+        molecule.OBMol.CloneData(popData)
+    molecule.OBMol.CloneData(newData)  # Add new data
+    outsdf.write(molecule)
 
 
 if __name__ == "__main__":
@@ -299,10 +301,10 @@ if __name__ == "__main__":
             skipped.append(docki + 1)
             continue
         if fit:
-            resultrmsd, fitted_result = get_automorphism_RMSD(crystal, dockedpose, fit=True)
+            resultrmsd, fitted_result = get_automorphism_rmsd(crystal, dockedpose, fit=True)
             update_coordinates(dockedpose, fitted_result)
         else:
-            resultrmsd = get_automorphism_RMSD(crystal, dockedpose, fit=False)
+            resultrmsd = get_automorphism_rmsd(crystal, dockedpose, fit=False)
 
         if threshold:
             # Calculate RMSD between all previous poses
@@ -311,7 +313,7 @@ if __name__ == "__main__":
                 match = None
                 bestmatchrmsd = 999999
                 for did, prevmol in moleclist.items():
-                    tmprmsd = get_automorphism_RMSD(prevmol, dockedpose)
+                    tmprmsd = get_automorphism_rmsd(prevmol, dockedpose)
                     if tmprmsd < threshold:
                         if tmprmsd < bestmatchrmsd:
                             bestmatchrmsd = tmprmsd
