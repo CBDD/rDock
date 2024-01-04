@@ -72,7 +72,7 @@ def superpose_3D(
         warning_msg = "Couldn't perform the Single Value Decomposition, skipping alignment"
         logger.warning(warning_msg)
         print(warning_msg, file=sys.stderr)
-        return reference, 0
+        return (reference, 0)
     # we already have our solution, in the results from SVD.
     # we just need to check for reflections and then produce
     # the rotation.  V and Wt are orthonormal, so their det's
@@ -89,7 +89,7 @@ def superpose_3D(
     new_coords = numpy.dot((reference_centered_coords), U) + target_centroid  # translate & rotate
     # new_coords=(reference_centered_coords + target_centroid)
     # print U
-    return new_coords, rmsd if not return_rotation_matrix else new_coords, rmsd, U
+    return (new_coords, rmsd, U) if return_rotation_matrix else (new_coords, rmsd)
 
 
 def perform_svd(
@@ -205,15 +205,14 @@ def get_automorphism_rmsd(
     mappings = pybel.ob.vvpairUIntUInt()
     bit_vector = pybel.ob.OBBitVec()
     success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
-    lookup_indexes = list(range(len(target)))
     target_coordinates = [atom.coords for atom in target]
-    index_to_target_coordinates = dict(zip(lookup_indexes, target_coordinates))
+    index_to_target_coordinates = dict(enumerate(target_coordinates))
     mappose = numpy.array(map_to_crystal(target, molecule))
     sorted_indices = numpy.argsort(mappose[:, 0])
     mappose_result = mappose[sorted_indices][:, 1]
     molecule_coordinates = [atom.coords for atom in molecule]
     pose_coordinates = numpy.array(molecule_coordinates)[mappose_result]
-    result_rmsd = 999999999999
+    result_rmsd = math.inf
 
     # Loop through automorphisms
     for mapping in mappings:
