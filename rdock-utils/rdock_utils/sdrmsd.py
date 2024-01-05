@@ -154,7 +154,6 @@ def get_parser() -> argparse.ArgumentParser:
         "--fit",
         action="store_true",
         default=False,
-        dest="fit",
         help="Superpose molecules before RMSD calculation",
     )
     parser.add_argument(
@@ -162,7 +161,6 @@ def get_parser() -> argparse.ArgumentParser:
         "--threshold",
         action="store",
         type=float,
-        dest="threshold",
         help=(
             "Discard poses with RMSD < THRESHOLD with respect previous poses "
             "which were not rejected based on the same principle. A Population "
@@ -175,7 +173,7 @@ def get_parser() -> argparse.ArgumentParser:
         action="store_true",
         default=False,
         metavar="FILE",
-        dest="outfilename",
+        dest="output_sdf",
         help=(
             "If declared, write an output SDF file with the input molecules with "
             "a new sdfield <RMSD>. If the molecule was fitted, the fitted molecule coordinates will be saved."
@@ -260,8 +258,8 @@ if __name__ == "__main__":
         reference_sdf = args.reference
         input_sdf = args.input
         fit = args.fit
-        outfilename = args.outfilename
         threshold = args.threshold
+        output_sdf = args.output_sdf
 
     (opts, args) = get_parser()
 
