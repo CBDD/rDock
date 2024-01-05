@@ -147,8 +147,16 @@ def get_parser() -> argparse.ArgumentParser:
             "   input.sdf       SDF file with the molecules to be compared to reference.\n"
         ),
     )
-    parser.add_argument("reference", type=str, help="Path to the SDF file with the reference molecule.")
-    parser.add_argument("input", type=str, help="Path to the SDF file with the molecules to be compared to reference.")
+    parser.add_argument(
+        "reference",
+        type=argparse.FileType("r"),
+        help="Path to the SDF file with the reference molecule.",
+    )
+    parser.add_argument(
+        "input",
+        type=argparse.FileType("r"),
+        help="Path to the SDF file with the molecules to be compared to reference.",
+    )
     parser.add_argument(
         "-f",
         "--fit",
@@ -173,7 +181,7 @@ def get_parser() -> argparse.ArgumentParser:
         action="store_true",
         default=False,
         metavar="FILE",
-        dest="output_sdf",
+        dest="output_file",
         help=(
             "If declared, write an output SDF file with the input molecules with "
             "a new sdfield <RMSD>. If the molecule was fitted, the fitted molecule coordinates will be saved."
@@ -259,7 +267,12 @@ if __name__ == "__main__":
         input_sdf = args.input
         fit = args.fit
         threshold = args.threshold
-        output_sdf = args.output_sdf
+        output_sdf = args.output_file
+
+        # Read crystal pose
+        crystal = next(pybel.readfile("sdf", reference_sdf))
+        crystal.removeh()
+        crystal_num_atoms = len(crystal.atoms)
 
     (opts, args) = get_parser()
 
