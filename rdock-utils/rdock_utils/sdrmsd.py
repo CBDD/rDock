@@ -3,7 +3,6 @@ import logging
 import math
 import os
 import sys
-from typing import TextIO
 
 import numpy
 from numpy.linalg import LinAlgError
@@ -120,7 +119,7 @@ def squared_distance(coordinates_A: Coordinate, coordinates_B: Coordinate) -> fl
 
 
 def rmsd(all_coordinates_A: list[Coordinate], all_coordinates_B: list[Coordinate]) -> float:
-    """Find the RMSD between two lists of 3-tuples"""
+    """Find the root mean square deviation between two lists of 3-tuples"""
     deviation = sum(squared_distance(atom_A, atom_B) for atom_A, atom_B in zip(all_coordinates_A, all_coordinates_B))
     return math.sqrt(deviation / len(all_coordinates_A))
 
@@ -236,18 +235,21 @@ def get_automorphism_rmsd(
     return (result_rmsd, fitted_pose) if fit else result_rmsd
 
 
-def save_molecule_with_RMSD(outsdf: TextIO, molecule: pybel.Molecule, rmsd: float, population: bool = False) -> None:
-    newData = pybel.ob.OBPairData()
-    newData.SetAttribute("RMSD")
-    newData.SetValue("%.3f" % rmsd)
+def save_molecule_with_rmsd(
+    output_sdf: pybel.Outputfile, molecule: pybel.Molecule, rmsd: float, population: bool = False
+) -> None:
+    new_data = pybel.ob.OBPairData()
+    new_data.SetAttribute("RMSD")
+    new_data.SetValue(f"{rmsd:.3f}")
 
     if population:
-        popData = pybel.ob.OBPairData()
-        popData.SetAttribute("Population")
-        popData.SetValue("%i" % population)
-        molecule.OBMol.CloneData(popData)
-    molecule.OBMol.CloneData(newData)  # Add new data
-    outsdf.write(molecule)
+        pop_data = pybel.ob.OBPairData()
+        pop_data.SetAttribute("Population")
+        pop_data.SetValue(f"{population}")
+        molecule.OBMol.CloneData(pop_data)
+
+    molecule.OBMol.CloneData(new_data)  # Add new data
+    output_sdf.write(molecule)
 
 
 if __name__ == "__main__":
@@ -280,7 +282,7 @@ if __name__ == "__main__":
 
     # If outfname is defined, prepare an output SDF sink to write molecules
     if outfname:
-        outsdf = pybel.Outputfile("sdf", outfname, overwrite=True)
+        output_sdf = pybel.Outputfile("sdf", outfname, overwrite=True)
 
     # Find the RMSD between the crystal pose and each docked pose
     dockedposes = pybel.readfile("sdf", poses)
@@ -324,7 +326,7 @@ if __name__ == "__main__":
                     print(f"Pose {docki + 1} matches pose {match + 1} with {bestmatchrmsd:.3f} RMSD", file=sys.stderr)
                     population[match] += 1
                 else:
-                    # There's no match. Print info for this one and write to outsdf if needed
+                    # There's no match. Print info for this one and write to output_sdf if needed
                     # Save this one!
                     if outfname:
                         outlist[docki] = (dockedpose, resultrmsd)
@@ -338,9 +340,9 @@ if __name__ == "__main__":
                 if outfname:
                     outlist[docki] = (dockedpose, resultrmsd)
         else:
-            # Just write the best rmsd found and the molecule to outsdf if demanded
+            # Just write the best rmsd found and the molecule to output_sdf if demanded
             if outfname:
-                save_molecule_with_RMSD(outsdf, dockedpose, resultrmsd)
+                save_molecule_with_rmsd(output_sdf, dockedpose, resultrmsd)
             print(f"{docki + 1}\t{resultrmsd:.2f}")
 
     if outlist:
@@ -352,7 +354,7 @@ if __name__ == "__main__":
             if not pop:
                 pop = 1
             # Save molecule
-            save_molecule_with_RMSD(outsdf, molrmsd[0], molrmsd[1], pop)
+            save_molecule_with_rmsd(output_sdf, molrmsd[0], molrmsd[1], pop)
 
     if skipped:
         print(f"SKIPPED input molecules due to the number of atom mismatch: {skipped}", file=sys.stderr)
