@@ -302,7 +302,7 @@ if __name__ == "__main__":
         return rmsd_result
 
     def handle_pose_matching(
-        output: bool,
+        out: bool,
         pose_index: int,
         docked_pose: pybel.Molecule,
         result_rmsd: RMSDResult,
@@ -312,16 +312,16 @@ if __name__ == "__main__":
         out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
     ) -> None:
         """
-        Function to handle pose matching and filtering
+        Function to handle pose matching and filtering based on 'threshold' parser argument.
         """
         if threshold:
             match, best_match_value = get_best_matching_pose(docked_pose, threshold, molecules_dict)
             if match is not None:
                 print_matching_info(pose_index, match, population, best_match_value)
             else:
-                save_or_print_info(output, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
+                save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
         else:
-            save_or_print_info(pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
+            save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
 
     # TODO: Review names and best match rmsd
     def get_best_matching_pose(
@@ -340,11 +340,11 @@ if __name__ == "__main__":
         return (match, best_match_value)
 
     def print_matching_info(index: int, match: float, population: dict[float, int], best_match_value: float) -> None:
-        print(f"Pose {index} matches pose {match + 1} with {best_match_value:.3f} RMSD", file=sys.stderr)
+        print(f"Pose {index} matches pose {match} with {best_match_value:.3f} RMSD", file=sys.stderr)
         population[match] += 1
 
     def save_or_print_info(
-        output: bool,
+        out: bool,
         pose_index: int,
         docked_pose: pybel.Molecule,
         result_rmsd: RMSDResult,
@@ -353,9 +353,9 @@ if __name__ == "__main__":
         out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
     ) -> None:
         """
-        Function to save or print information based on threshold and output file
+        Function to save and print information based on 'out' parser argument.
         """
-        if output:
+        if out:
             out_dict[pose_index] = (docked_pose, result_rmsd)
         print(f"{pose_index}\t{result_rmsd:.2f}")
         molecules_dict[pose_index] = docked_pose
