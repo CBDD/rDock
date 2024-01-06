@@ -245,249 +245,185 @@ def get_automorphism_rmsd(target: pybel.Molecule, molecule: pybel.Molecule, fit:
 
 
 def save_molecule_with_rmsd(
-    output_sdf: pybel.Outputfile, molecule: pybel.Molecule, rmsd: float, population: bool = False
+    output_sdf: pybel.Outputfile, molecule: pybel.Molecule, rmsd: float, population_value: int
 ) -> None:
     new_data = pybel.ob.OBPairData()
     new_data.SetAttribute("RMSD")
     new_data.SetValue(f"{rmsd:.3f}")
 
-    if population:
-        pop_data = pybel.ob.OBPairData()
-        pop_data.SetAttribute("Population")
-        pop_data.SetValue(f"{population}")
-        molecule.OBMol.CloneData(pop_data)
+    pop_data = pybel.ob.OBPairData()
+    pop_data.SetAttribute("Population")
+    pop_data.SetValue(f"{population_value}")
+    molecule.OBMol.CloneData(pop_data)
 
     molecule.OBMol.CloneData(new_data)  # Add new data
     output_sdf.write(molecule)
 
 
-if __name__ == "__main__":
+# ------------------------- MANDANGA AFTER NAME == MAIN STARTS HERE -------------------------
 
-    def get_output_sdf(out: bool) -> pybel.Outputfile | None:
-        if out:
-            output_sdf = pybel.Outputfile("sdf", out, overwrite=True)  # TODO: Check the second argument
-            return output_sdf
 
-    def print_fit_message(fit: bool) -> None:
-        if fit:
-            print("POSE\tRMSD_FIT")
-        else:
-            print("POSE\tRMSD_NOFIT")
-
-    def get_crystal_pose(reference_sdf: argparse.FileType) -> pybel.Molecule:
-        """
-        Read crystal pose file and remove hydrogen atoms. Returns crystal pose molecule.
-        """
-        crystal_pose = next(pybel.readfile("sdf", reference_sdf))
-        crystal_pose.removeh()
-        return crystal_pose
-
-    def process_docked_pose(docked_pose: pybel.Molecule) -> int:
-        """
-        Remove hydrogen atoms and return the number of atoms in docked pose molecule.
-        """
-        docked_pose.removeh()
-        return len(dockedpose.atoms)
-
-    def calculate_rmsd(crystal: pybel.Molecule, docked_pose: pybel.Molecule, fit: bool = False) -> RMSDResult:
-        """
-        Perform RMSD calculations and update coordinates if required.
-        """
-        if fit:
-            rmsd_result, fitted_result = get_automorphism_rmsd(crystal, docked_pose, fit=True)
-            update_coordinates(docked_pose, fitted_result)
-        else:
-            rmsd_result = get_automorphism_rmsd(crystal, docked_pose, fit=False)
-
-        return rmsd_result
-
-    def handle_pose_matching(
-        out: bool,
-        pose_index: int,
-        docked_pose: pybel.Molecule,
-        result_rmsd: RMSDResult,
-        threshold: float | None,
-        molecules_dict: dict[int, pybel.Molecule],
-        population: dict[int, int],
-        out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
-    ) -> None:
-        """
-        Function to handle pose matching and filtering based on 'threshold' parser argument.
-        """
-        if threshold:
-            match, best_match_value = get_best_matching_pose(docked_pose, threshold, molecules_dict)
-            if match is not None:
-                print_matching_info(pose_index, match, population, best_match_value)
-            else:
-                save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
-        else:
-            save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
-
-    # TODO: Review names and best match rmsd
-    def get_best_matching_pose(
-        docked_pose: pybel.Molecule, threshold: float, molecules_dict: dict[int, pybel.Molecule]
-    ) -> tuple[float | None, float]:
-        match = None
-        best_match_value = 999999.0
-
-        for did, prevmol in molecules_dict.items():
-            tmprmsd = get_automorphism_rmsd(prevmol, docked_pose)
-
-            if tmprmsd < threshold and tmprmsd < best_match_value:
-                best_match_value = tmprmsd
-                match = did
-
-        return (match, best_match_value)
-
-    def print_matching_info(index: int, match: float, population: dict[float, int], best_match_value: float) -> None:
-        print(f"Pose {index} matches pose {match} with {best_match_value:.3f} RMSD", file=sys.stderr)
-        population[match] += 1
-
-    def save_or_print_info(
-        out: bool,
-        pose_index: int,
-        docked_pose: pybel.Molecule,
-        result_rmsd: RMSDResult,
-        molecules_dict: dict[int, pybel.Molecule],
-        population: dict[int, int],
-        out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
-    ) -> None:
-        """
-        Function to save and print information based on 'out' parser argument.
-        """
-        if out:
-            out_dict[pose_index] = (docked_pose, result_rmsd)
-        print(f"{pose_index}\t{result_rmsd:.2f}")
-        molecules_dict[pose_index] = docked_pose
-        population[pose_index] = 1
-
-    def main(argv: list[str] | None = None) -> None:
-        parser = get_parser()
-        args = parser.parse_args(argv)
-        reference_sdf = args.reference
-        input_sdf = args.input
-        fit = args.fit
-        threshold = args.threshold
-        out = args.out
-
-        # Read crystal pose
-        crystal_pose = get_crystal_pose(reference_sdf)
-        crystal_atoms = len(crystal_pose.atoms)
-
-        # If outfname is defined, prepare an output SDF sink to write molecules
-        output_sdf = get_output_sdf(out)
-
-        # Find the RMSD between the crystal pose and each docked pose
-        docked_poses = pybel.readfile("sdf", input_sdf)
-
-        print_fit_message(fit)
-
-        skipped = []
-        molecules_dict = {}  # Save all poses with their dockid
-        population = {}  # Poses to be written
-        out_dict = {}
-        for i, docked_pose in enumerate(docked_poses, start=1):
-            atoms_number = process_docked_pose(docked_pose)
-
-            if atoms_number != crystal_atoms:
-                skipped.append(i)
-                continue
-
-            rmsd_result = calculate_rmsd(crystal, docked_pose, fit)
-            handle_pose_matching(out, i, docked_pose, rmsd_result, threshold, molecules_dict, population, out_dict)
-
-    (opts, args) = get_parser()
-
-    xtal = args[0]  # reference_sdf
-    poses = args[1]  # input_sdf
-
-    if not os.path.exists(xtal) or not os.path.exists(poses):
-        sys.exit("Input files not found. Please check the path given is correct.")
-
-    fit = opts.fit
-    outfname = opts.outfilename
-    threshold = opts.threshold
+def main(argv: list[str] | None = None) -> None:
+    parser = get_parser()
+    args = parser.parse_args(argv)
+    reference_sdf = args.reference
+    input_sdf = args.input
+    fit = args.fit
+    threshold = args.threshold
+    out = args.out
 
     # Read crystal pose
-    crystal = next(pybel.readfile("sdf", xtal))
-    crystal.removeh()
-    crystal_atoms = len(crystal.atoms)
+    crystal_pose = get_crystal_pose(reference_sdf)
+    crystal_atoms = len(crystal_pose.atoms)
 
     # If outfname is defined, prepare an output SDF sink to write molecules
-    if outfname:
-        output_sdf = pybel.Outputfile("sdf", outfname, overwrite=True)
+    output_sdf = get_output_sdf(out)
 
     # Find the RMSD between the crystal pose and each docked pose
-    docked_poses = pybel.readfile("sdf", poses)
+    docked_poses = pybel.readfile("sdf", input_sdf)
+
+    print_fit_message(fit)
+
+    skipped = []
+    molecules_dict = {}  # Save all poses with their dockid
+    population = {}  # Poses to be written
+    out_dict = {}
+
+    for i, docked_pose in enumerate(docked_poses, start=1):
+        atoms_number = process_docked_pose(docked_pose)
+
+        if atoms_number != crystal_atoms:
+            skipped.append(i)
+            continue
+
+        rmsd_result = calculate_rmsd(crystal_pose, docked_pose, fit)
+        handle_pose_matching(out, i, docked_pose, rmsd_result, threshold, molecules_dict, population, out_dict)
+
+    if out:
+        process_and_save_selected_molecules(output_sdf, out_dict, population)
+
+    if skipped:
+        print(f"SKIPPED input molecules due to the number of atom mismatch: {skipped}", file=sys.stderr)
+
+
+def get_output_sdf(out: bool) -> pybel.Outputfile | None:
+    if out:
+        output_sdf = pybel.Outputfile("sdf", out, overwrite=True)  # TODO: Check the second argument
+        return output_sdf
+
+
+def print_fit_message(fit: bool) -> None:
     if fit:
         print("POSE\tRMSD_FIT")
     else:
         print("POSE\tRMSD_NOFIT")
 
-    skipped = []
-    moleclist = {}  # Save all poses with their dockid
-    population = {}  # Poses to be written
-    outlist = {}
-    for docki, dockedpose in enumerate(docked_poses):
-        dockedpose.removeh()
-        natoms = len(dockedpose.atoms)
-        if natoms != crystal_atoms:
-            skipped.append(docki + 1)
-            continue
-        if fit:
-            resultrmsd, fitted_result = get_automorphism_rmsd(crystal, dockedpose, fit=True)
-            update_coordinates(dockedpose, fitted_result)
+
+def get_crystal_pose(reference_sdf: argparse.FileType) -> pybel.Molecule:
+    """
+    Read crystal pose file and remove hydrogen atoms. Returns crystal pose molecule.
+    """
+    crystal_pose = next(pybel.readfile("sdf", reference_sdf))
+    crystal_pose.removeh()
+    return crystal_pose
+
+
+def process_docked_pose(docked_pose: pybel.Molecule) -> int:
+    """
+    Remove hydrogen atoms and return the number of atoms in docked pose molecule.
+    """
+    docked_pose.removeh()
+    return len(docked_pose.atoms)
+
+
+def calculate_rmsd(crystal: pybel.Molecule, docked_pose: pybel.Molecule, fit: bool = False) -> RMSDResult:
+    """
+    Perform RMSD calculations and update coordinates if required.
+    """
+    if fit:
+        rmsd_result, fitted_result = get_automorphism_rmsd(crystal, docked_pose, fit=True)
+        update_coordinates(docked_pose, fitted_result)
+    else:
+        rmsd_result = get_automorphism_rmsd(crystal, docked_pose, fit=False)
+
+    return rmsd_result
+
+
+def handle_pose_matching(
+    out: bool,
+    pose_index: int,
+    docked_pose: pybel.Molecule,
+    result_rmsd: RMSDResult,
+    threshold: float | None,
+    molecules_dict: dict[int, pybel.Molecule],
+    population: dict[int, int],
+    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
+) -> None:
+    """
+    Function to handle pose matching and filtering based on 'threshold' parser argument.
+    """
+    if threshold:
+        match, best_match_value = get_best_matching_pose(docked_pose, threshold, molecules_dict)
+        if match is not None:
+            print_matching_info(pose_index, match, population, best_match_value)
         else:
-            resultrmsd = get_automorphism_rmsd(crystal, dockedpose, fit=False)
+            save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
+    else:
+        save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
 
-        if threshold:
-            # Calculate RMSD between all previous poses
-            # Discard if rmsd < FILTER threshold
-            if moleclist:
-                match = None
-                bestmatchrmsd = 999999
-                for did, prevmol in moleclist.items():
-                    tmprmsd = get_automorphism_rmsd(prevmol, dockedpose)
-                    if tmprmsd < threshold:
-                        if tmprmsd < bestmatchrmsd:
-                            bestmatchrmsd = tmprmsd
-                            match = did
 
-                if match is not None:
-                    # Do not write this one
-                    # sum one up to the matching previous molecule id
-                    print(f"Pose {docki + 1} matches pose {match + 1} with {bestmatchrmsd:.3f} RMSD", file=sys.stderr)
-                    population[match] += 1
-                else:
-                    # There's no match. Print info for this one and write to output_sdf if needed
-                    # Save this one!
-                    if outfname:
-                        outlist[docki] = (dockedpose, resultrmsd)
-                    print(f"{docki + 1}\t{resultrmsd:.2f}")
-                    moleclist[docki] = dockedpose
-                    population[docki] = 1
-            else:
-                # First molecule in list. Append for sure
-                moleclist[docki] = dockedpose
-                population[docki] = 1
-                if outfname:
-                    outlist[docki] = (dockedpose, resultrmsd)
-        else:
-            # Just write the best rmsd found and the molecule to output_sdf if demanded
-            if outfname:
-                save_molecule_with_rmsd(output_sdf, dockedpose, resultrmsd)
-            print(f"{docki + 1}\t{resultrmsd:.2f}")
+# TODO: Review names and best match rmsd
+def get_best_matching_pose(
+    docked_pose: pybel.Molecule, threshold: float, molecules_dict: dict[int, pybel.Molecule]
+) -> tuple[float | None, float]:
+    match = None
+    best_match_value = 999999.0
 
-    if outlist:
-        # Threshold applied and outlist needs to be written
-        for docki in sorted(outlist.keys()):
-            molrmsd = outlist[docki]
-            # Get the number of matches in the thresholding operation
-            pop = population.get(docki)
-            if not pop:
-                pop = 1
-            # Save molecule
-            save_molecule_with_rmsd(output_sdf, molrmsd[0], molrmsd[1], pop)
+    for did, prevmol in molecules_dict.items():
+        tmprmsd = get_automorphism_rmsd(prevmol, docked_pose)
 
-    if skipped:
-        print(f"SKIPPED input molecules due to the number of atom mismatch: {skipped}", file=sys.stderr)
+        if tmprmsd < threshold and tmprmsd < best_match_value:
+            best_match_value = tmprmsd
+            match = did
+
+    return (match, best_match_value)
+
+
+def print_matching_info(index: int, match: float, population: dict[float, int], best_match_value: float) -> None:
+    print(f"Pose {index} matches pose {match} with {best_match_value:.3f} RMSD", file=sys.stderr)
+    population[match] += 1
+
+
+def save_or_print_info(
+    out: bool,
+    pose_index: int,
+    docked_pose: pybel.Molecule,
+    result_rmsd: RMSDResult,
+    molecules_dict: dict[int, pybel.Molecule],
+    population: dict[int, int],
+    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
+) -> None:
+    """
+    Function to save and print information based on 'out' parser argument.
+    """
+    if out:
+        out_dict[pose_index] = (docked_pose, result_rmsd)
+    print(f"{pose_index}\t{result_rmsd:.2f}")
+    molecules_dict[pose_index] = docked_pose
+    population[pose_index] = 1
+
+
+def process_and_save_selected_molecules(
+    output_sdf: pybel.Outputfile,
+    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
+    population: dict[int, int],
+):
+    for i in sorted(out_dict.keys()):
+        molecule, rmsd_result = out_dict[i]
+        # Get the number of matches in the thresholding operation
+        population_value = population.get(i) or 1
+        save_molecule_with_rmsd(output_sdf, molecule, rmsd_result, population_value)
+
+
+if __name__ == "__main__":
+    main()
