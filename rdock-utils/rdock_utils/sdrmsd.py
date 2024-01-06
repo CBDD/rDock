@@ -275,7 +275,9 @@ if __name__ == "__main__":
             print("POSE\tRMSD_NOFIT")
 
     def get_crystal_pose(reference_sdf: argparse.FileType) -> pybel.Molecule:
-        # Read crystal pose
+        """
+        Read crystal pose file and remove hydrogen atoms. Returns crystal pose molecule.
+        """
         crystal_pose = next(pybel.readfile("sdf", reference_sdf))
         crystal_pose.removeh()
         return crystal_pose
@@ -299,6 +301,66 @@ if __name__ == "__main__":
 
         return rmsd_result
 
+    def handle_pose_matching(
+        output: bool,
+        pose_index: int,
+        docked_pose: pybel.Molecule,
+        result_rmsd: RMSDResult,
+        threshold: float | None,
+        molecules_dict: dict[int, pybel.Molecule],
+        population: dict[int, int],
+        out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
+    ) -> None:
+        """
+        Function to handle pose matching and filtering
+        """
+        if threshold:
+            match, best_match_value = get_best_matching_pose(docked_pose, threshold, molecules_dict)
+            if match is not None:
+                print_matching_info(pose_index, match, population, best_match_value)
+            else:
+                save_or_print_info(output, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
+        else:
+            save_or_print_info(pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
+
+    # TODO: Review names and best match rmsd
+    def get_best_matching_pose(
+        docked_pose: pybel.Molecule, threshold: float, molecules_dict: dict[int, pybel.Molecule]
+    ) -> tuple[float | None, float]:
+        match = None
+        best_match_value = 999999.0
+
+        for did, prevmol in molecules_dict.items():
+            tmprmsd = get_automorphism_rmsd(prevmol, docked_pose)
+
+            if tmprmsd < threshold and tmprmsd < best_match_value:
+                best_match_value = tmprmsd
+                match = did
+
+        return (match, best_match_value)
+
+    def print_matching_info(index: int, match: float, population: dict[float, int], best_match_value: float) -> None:
+        print(f"Pose {index} matches pose {match + 1} with {best_match_value:.3f} RMSD", file=sys.stderr)
+        population[match] += 1
+
+    def save_or_print_info(
+        output: bool,
+        pose_index: int,
+        docked_pose: pybel.Molecule,
+        result_rmsd: RMSDResult,
+        molecules_dict: dict[int, pybel.Molecule],
+        population: dict[int, int],
+        out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
+    ) -> None:
+        """
+        Function to save or print information based on threshold and output file
+        """
+        if output:
+            out_dict[pose_index] = (docked_pose, result_rmsd)
+        print(f"{pose_index}\t{result_rmsd:.2f}")
+        molecules_dict[pose_index] = docked_pose
+        population[pose_index] = 1
+
     def main(argv: list[str] | None = None) -> None:
         parser = get_parser()
         args = parser.parse_args(argv)
@@ -321,60 +383,18 @@ if __name__ == "__main__":
         print_fit_message(fit)
 
         skipped = []
-        moleclist = {}  # Save all poses with their dockid
+        molecules_dict = {}  # Save all poses with their dockid
         population = {}  # Poses to be written
-        outlist = {}
+        out_dict = {}
         for i, docked_pose in enumerate(docked_poses, start=1):
             atoms_number = process_docked_pose(docked_pose)
 
             if atoms_number != crystal_atoms:
                 skipped.append(i)
                 continue
-            if fit:
-                resultrmsd, fitted_result = get_automorphism_rmsd(crystal, dockedpose, fit=True)
-                update_coordinates(dockedpose, fitted_result)
-            else:
-                resultrmsd = get_automorphism_rmsd(crystal, dockedpose, fit=False)
 
-            if threshold:
-                # Calculate RMSD between all previous poses
-                # Discard if rmsd < FILTER threshold
-                if moleclist:
-                    match = None
-                    bestmatchrmsd = 999999
-                    for did, prevmol in moleclist.items():
-                        tmprmsd = get_automorphism_rmsd(prevmol, dockedpose)
-                        if tmprmsd < threshold:
-                            if tmprmsd < bestmatchrmsd:
-                                bestmatchrmsd = tmprmsd
-                                match = did
-
-                    if match is not None:
-                        # Do not write this one
-                        # sum one up to the matching previous molecule id
-                        print(
-                            f"Pose {docki + 1} matches pose {match + 1} with {bestmatchrmsd:.3f} RMSD", file=sys.stderr
-                        )
-                        population[match] += 1
-                    else:
-                        # There's no match. Print info for this one and write to output_sdf if needed
-                        # Save this one!
-                        if outfname:
-                            outlist[docki] = (dockedpose, resultrmsd)
-                        print(f"{docki + 1}\t{resultrmsd:.2f}")
-                        moleclist[docki] = dockedpose
-                        population[docki] = 1
-                else:
-                    # First molecule in list. Append for sure
-                    moleclist[docki] = dockedpose
-                    population[docki] = 1
-                    if outfname:
-                        outlist[docki] = (dockedpose, resultrmsd)
-            else:
-                # Just write the best rmsd found and the molecule to output_sdf if demanded
-                if outfname:
-                    save_molecule_with_rmsd(output_sdf, dockedpose, resultrmsd)
-                print(f"{docki + 1}\t{resultrmsd:.2f}")
+            rmsd_result = calculate_rmsd(crystal, docked_pose, fit)
+            handle_pose_matching(out, i, docked_pose, rmsd_result, threshold, molecules_dict, population, out_dict)
 
     (opts, args) = get_parser()
 
