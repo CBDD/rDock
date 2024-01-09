@@ -12,6 +12,8 @@
 
 #include "RbtDihedralSF.h"
 
+#include <cmath>
+
 RbtDihedral::RbtDihedral(RbtAtom* pAtom1, RbtAtom* pAtom2, RbtAtom* pAtom3, RbtAtom* pAtom4, const prms& dihprms):
     m_pAtom1(pAtom1),
     m_pAtom2(pAtom2),
@@ -31,7 +33,7 @@ RbtDouble RbtDihedral::operator()() const {
     for (RbtUInt i = 0; i != m_prms.size(); ++i) {
         // Subtract the implicit hydrogen offset from the actual dihedral angle
         RbtDouble dih1 = dih - m_prms[i].offset;
-        score += m_prms[i].k * (1.0 + m_prms[i].sign * cos(m_prms[i].s * dih1 * M_PI / 180.0));
+        score += m_prms[i].k * (1.0 + m_prms[i].sign * std::cos(m_prms[i].s * dih1 * M_PI / 180.0));
         // cout << m_pAtom1->GetAtomName() << "," << m_pAtom2->GetAtomName() << "," << m_pAtom3->GetAtomName() << ","
         //	 << m_pAtom4->GetAtomName() << "\t" << m_prms[i].sign << "\t" << m_prms[i].s << "\t" << m_prms[i].k << "\t"
         //	 << dih << "\t" << dih1 << "\t" << score << endl;
