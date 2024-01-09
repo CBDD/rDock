@@ -15,6 +15,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    
+    - name: lint
+      uses: chartboost/ruff-action@v1
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -36,15 +39,9 @@ jobs:
         cache-from: type=gha,scope=rdock-utils
         cache-to: type=gha,mode=max,scope=rdock-utils
         load: true
-
-    - name: flake8
-      run: docker run --rm -v $PWD/rdock-utils:/rdock-utils -w /rdock-utils ghcr.io/cbdd/rdock-utils:dev flake8 .
-
-    - name: black
-      run: docker run --rm -v $PWD/rdock-utils:/rdock-utils -w /rdock-utils ghcr.io/cbdd/rdock-utils:dev black --check .
-
-    - name: isort
-      run: docker run --rm -v $PWD/rdock-utils:/rdock-utils -w /rdock-utils ghcr.io/cbdd/rdock-utils:dev isort --check .
     
     - name: mypy
       run: docker run --rm -v $PWD/rdock-utils:/rdock-utils -w /rdock-utils ghcr.io/cbdd/rdock-utils:dev mypy .
+    
+    - name: run tests
+      run: docker run --rm -v $PWD/rdock-utils:/rdock-utils -w /rdock-utils ghcr.io/cbdd/rdock-utils:dev pytest -v .
