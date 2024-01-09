@@ -9,29 +9,17 @@
 		"vscode": {
 			"settings": {
 				"python.languageServer": "Pylance",
-				"python.linting.enabled": true,
-				"python.linting.flake8Enabled": true,
-				"python.formatting.provider": "black",
-				"python.linting.mypyEnabled": false,
-				"isort.check": true,
 				"python.testing.pytestEnabled": true,
 				"python.testing.pytestArgs": [
 					"tests"
 				],
-				"python.formatting.blackArgs": [
-					"--line-length",
-					"119"
-				],
-				"isort.args": [
-					"--profile",
-					"black"
-				],
 				"[python]": {
+					"editor.formatOnSave": true,
 					"editor.codeActionsOnSave": {
 						"source.organizeImports": true
-					}
+					},
+					"editor.defaultFormatter": "charliermarsh.ruff"
 				},
-				"editor.formatOnSave": true,
 				"files.autoSave": "afterDelay",
 				"files.autoSaveDelay": 1000
 			},
@@ -40,7 +28,8 @@
 				"littlefoxteam.vscode-python-test-adapter",
 				"ms-vsliveshare.vsliveshare",
 				"mhutchie.git-graph",
-				"ms-toolsai.jupyter"
+				"ms-toolsai.jupyter",
+				"charliermarsh.ruff"
 			]
 		}
 	}
