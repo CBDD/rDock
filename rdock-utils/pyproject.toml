@@ -24,3 +24,34 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+[tool.mypy]
+python_version = "3.12"
+pretty = true
+show_error_context = true
+show_error_codes = true
+
+follow_imports = "silent"
+ignore_missing_imports = true
+
+disallow_incomplete_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = false
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_untyped_decorators = true
+
+warn_unused_configs = true
+warn_unreachable = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+
+check_untyped_defs = true
+
+no_implicit_optional = true
+no_implicit_reexport = false
+
+strict_equality = true
+
+exclude = ['^setup\.py$']
