@@ -294,7 +294,7 @@ def main(argv: list[str] | None = None) -> None:
         handle_pose_matching(out, i, docked_pose, rmsd_result, threshold, molecules_dict, population, out_dict)
 
     if out:
-        output_sdf = output_sdf = pybel.Outputfile("sdf", out, overwrite=True)  # TODO: Check the second argument
+        output_sdf = pybel.Outputfile("sdf", out, overwrite=True)  # TODO: Check the second argument
         process_and_save_selected_molecules(output_sdf, out_dict, population)
 
     if skipped:
