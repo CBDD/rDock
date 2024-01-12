@@ -219,7 +219,7 @@ def get_automorphism_rmsd(target: pybel.Molecule, molecule: pybel.Molecule, fit:
     mappose_result = mappose[sorted_indices][:, 1]
     molecule_coordinates = [atom.coords for atom in molecule]
     pose_coordinates = numpy.array(molecule_coordinates)[mappose_result]
-    result_rmsd = math.inf
+    rmsd_result = math.inf
 
     # Loop through automorphisms
     for mapping in mappings:
@@ -227,18 +227,18 @@ def get_automorphism_rmsd(target: pybel.Molecule, molecule: pybel.Molecule, fit:
         mapping_rmsd = rmsd(pose_coordinates, automorph_coords)
 
         # Update result if the current mapping has a lower RMSD
-        if mapping_rmsd < result_rmsd:
-            result_rmsd = mapping_rmsd
+        if mapping_rmsd < rmsd_result:
+            rmsd_result = mapping_rmsd
 
         # Additional fitting if fit=True
         if fit:
             fitted_pose, fitted_rmsd = superpose_3D(numpy.array(automorph_coords), numpy.array(pose_coordinates))
 
             # Update result if the fitted RMSD is lower
-            if fitted_rmsd < result_rmsd:
-                result_rmsd = fitted_rmsd
+            if fitted_rmsd < rmsd_result:
+                rmsd_result = fitted_rmsd
 
-    return (result_rmsd, fitted_pose) if fit else result_rmsd
+    return (rmsd_result, fitted_pose) if fit else rmsd_result
 
 
 def save_molecule_with_rmsd(
@@ -340,7 +340,7 @@ def handle_pose_matching(
     out: bool,
     pose_index: int,
     docked_pose: pybel.Molecule,
-    result_rmsd: RMSDResult,
+    rmsd_result: RMSDResult,
     threshold: float | None,
     molecules_dict: dict[int, pybel.Molecule],
     population: dict[int, int],
@@ -354,9 +354,9 @@ def handle_pose_matching(
         if match_pose is not None:
             print_matching_info(pose_index, match_pose, population, best_match_value)
         else:
-            save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
+            save_or_print_info(out, pose_index, docked_pose, rmsd_result, molecules_dict, population, out_dict)
     else:
-        save_or_print_info(out, pose_index, docked_pose, result_rmsd, molecules_dict, population, out_dict)
+        save_or_print_info(out, pose_index, docked_pose, rmsd_result, molecules_dict, population, out_dict)
 
 
 # TODO: Review names and best match rmsd
@@ -385,7 +385,7 @@ def save_or_print_info(
     out: bool,
     pose_index: int,
     docked_pose: pybel.Molecule,
-    result_rmsd: RMSDResult,
+    rmsd_result: RMSDResult,
     molecules_dict: dict[int, pybel.Molecule],
     population: dict[int, int],
     out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]],
@@ -394,8 +394,8 @@ def save_or_print_info(
     Function to save and print information based on 'out' parser argument.
     """
     if out:
-        out_dict[pose_index] = (docked_pose, result_rmsd)
-    print(f"{pose_index}\t{result_rmsd:.2f}")
+        out_dict[pose_index] = (docked_pose, rmsd_result)
+    print(f"{pose_index}\t{rmsd_result:.2f}")
     molecules_dict[pose_index] = docked_pose
     population[pose_index] = 1
 
