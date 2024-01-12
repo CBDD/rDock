@@ -2,6 +2,7 @@ import argparse
 import logging
 import math
 import sys
+from dataclasses import dataclass
 
 import numpy
 from numpy.linalg import LinAlgError
@@ -159,3 +160,18 @@ class Helper:
         """
         for i, atom in enumerate(obmol):
             atom.OBAtom.SetVector(*new_coordinates[i])
+
+
+@dataclass
+class HelperData:
+    skipped: list[int] = []
+    molecules_dict: dict[int, pybel.Molecule] = {}  # Save all poses with their dockid
+    population: dict[int, int] = {}  # Poses to be written
+    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]] = {}
+
+
+@dataclass
+class PoseMatchData:
+    pose_index: int
+    docked_pose: pybel.Molecule
+    helper_data: HelperData
