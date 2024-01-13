@@ -4,7 +4,6 @@ import math
 import sys
 
 import numpy
-from numpy.typing import ArrayLike
 from openbabel import pybel
 
 from rdock_utils.helper import Helper, HelperData, PoseMatchData
@@ -12,8 +11,8 @@ from rdock_utils.helper import Helper, HelperData, PoseMatchData
 logger = logging.getLogger("sdrmsd")
 
 Coordinate = tuple[float, float, float]
-SingularValueDecomposition = tuple[ArrayLike[float], ArrayLike[float], ArrayLike[float]]
-RMSDResult = float | tuple[float, ArrayLike[float]]
+SingularValueDecomposition = tuple[numpy.ndarray[float], numpy.ndarray[float], numpy.ndarray[float]]
+RMSDResult = float | tuple[float, numpy.ndarray[float]]
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -64,12 +63,12 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "reference",
-        type=argparse.FileType("r"),
+        type=str,
         help="Path to the SDF file with the reference molecule.",
     )
     parser.add_argument(
         "input",
-        type=argparse.FileType("r"),
+        type=str,
         help="Path to the SDF file with the molecules to be compared to reference.",
     )
     parser.add_argument(
@@ -103,7 +102,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def get_crystal_pose(reference_sdf: argparse.FileType) -> pybel.Molecule:
+def get_crystal_pose(reference_sdf: str) -> pybel.Molecule:
     """
     Read crystal pose file and remove hydrogen atoms. Returns crystal pose molecule.
     """
