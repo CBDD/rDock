@@ -1,26 +1,24 @@
-import argparse
 import logging
 import math
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy
 from numpy.linalg import LinAlgError
-from numpy.typing import ArrayLike
 from openbabel import pybel
 
 logger = logging.getLogger("sdrmsd")
 
 Coordinate = tuple[float, float, float]
-SingularValueDecomposition = tuple[ArrayLike[float], ArrayLike[float], ArrayLike[float]]
-RMSDResult = float | tuple[float, ArrayLike[float]]
+SingularValueDecomposition = tuple[numpy.ndarray[float], numpy.ndarray[float], numpy.ndarray[float]]
+RMSDResult = float | tuple[float, numpy.ndarray[float]]
 
 
 class Helper:
     def __init__(
         self,
-        reference_sdf: argparse.FileType,
-        input_sdf: argparse.FileType,
+        reference_sdf: str,
+        input_sdf: str,
         fit: bool,
         threshold: float,
         out: bool,
@@ -33,13 +31,13 @@ class Helper:
 
     def superpose_3D(
         self,
-        reference: ArrayLike[float],
-        target: ArrayLike[float],
-        weights: ArrayLike[float] | None = None,
-        reference_mask: ArrayLike[bool] | None = None,
-        target_mask: ArrayLike[bool] | None = None,
+        reference: numpy.ndarray[float],
+        target: numpy.ndarray[float],
+        weights: numpy.ndarray[float] | None = None,
+        reference_mask: numpy.ndarray[bool] | None = None,
+        target_mask: numpy.ndarray[bool] | None = None,
         return_rotation_matrix: bool = False,
-    ) -> tuple[ArrayLike[float], float, ArrayLike[float]] | tuple[ArrayLike[float], float]:
+    ) -> tuple[numpy.ndarray[float], float, numpy.ndarray[float]] | tuple[numpy.ndarray[float], float]:
         """superpose_3D performs 3d superposition using a weighted Kabsch algorithm : http://dx.doi.org/10.1107%2FS0567739476001873 & doi: 10.1529/biophysj.105.066654
         definition : superpose3D(reference, target, weights,refmask,target_mask)
         @parameter 1 :  reference - xyz coordinates of the reference structure (the ligand for instance)
@@ -109,7 +107,10 @@ class Helper:
         return (new_coords, rmsd, U) if return_rotation_matrix else (new_coords, rmsd)
 
     def perform_svd(
-        self, reference_tmp: ArrayLike[float], target_tmp: ArrayLike[float], weights: ArrayLike[float] | int
+        self,
+        reference_tmp: numpy.ndarray[float],
+        target_tmp: numpy.ndarray[float],
+        weights: numpy.ndarray[float] | int,
     ) -> SingularValueDecomposition | None:
         try:
             dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp * weights)
@@ -119,7 +120,7 @@ class Helper:
         return svd_result
 
     def _handle_svd_linalg_error(
-        self, reference_tmp: ArrayLike[float], target_tmp: ArrayLike[float]
+        self, reference_tmp: numpy.ndarray[float], target_tmp: numpy.ndarray[float]
     ) -> SingularValueDecomposition | None:
         try:
             dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp)
@@ -154,7 +155,7 @@ class Helper:
         exit = mapper.MapUnique(pose.OBMol, mapping_pose)
         return mapping_pose[0]
 
-    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: ArrayLike[float]) -> None:
+    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: numpy.ndarray[float]) -> None:
         """
         Update OBMol coordinates. new_coordinates is a numpy array.
         """
@@ -164,10 +165,10 @@ class Helper:
 
 @dataclass
 class HelperData:
-    skipped: list[int] = []
-    molecules_dict: dict[int, pybel.Molecule] = {}  # Save all poses with their dockid
-    population: dict[int, int] = {}  # Poses to be written
-    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]] = {}
+    skipped: list[int] = field(default_factory=list)
+    molecules_dict: dict[int, pybel.Molecule] = field(default_factory=dict)  # Save all poses with their dockid
+    population: dict[int, int] = field(default_factory=dict)  # Poses to be written
+    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]] = field(default_factory=dict)
 
 
 @dataclass
