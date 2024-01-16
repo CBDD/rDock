@@ -2,7 +2,7 @@ from tempfile import NamedTemporaryFile
 
 import pytest
 
-from rdock_utils.sdrmsd3 import main as sdrmsd3_main
+from rdock_utils.sdrmsd_original import main as sdrmsd3_main
 from rdock_utils.sdrmsd_OOP import main as sdrmsd_main
 from tests.sdrmsd.conftest import INPUT_FILE, REF_FILE
 
@@ -10,7 +10,7 @@ parametrize_main = pytest.mark.parametrize(
     "main",
     [
         pytest.param(sdrmsd_main, id="Improved version (Python 3.12)"),
-        pytest.param(sdrmsd3_main, id="Original version (Python 2)"),
+        pytest.param(sdrmsd3_main, id="Original version (Python 3)"),
     ],
 )
 
