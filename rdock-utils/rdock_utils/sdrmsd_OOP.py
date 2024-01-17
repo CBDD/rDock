@@ -40,7 +40,7 @@ def main(argv: list[str] | None = None) -> None:
 
         rmsd_result = calculate_rmsd(crystal_pose, docked_pose, helper)
         pose_match_data = PoseMatchData(i, docked_pose, data)
-        handle_pose_matching(rmsd_result, pose_match_data, helper.out)
+        handle_pose_matching(rmsd_result, pose_match_data, helper)
 
     if helper.out:
         output_sdf = pybel.Outputfile("sdf", helper.out, overwrite=True)
@@ -216,19 +216,23 @@ def get_automorphism_rmsd(target: pybel.Molecule, molecule: pybel.Molecule, help
     fit = helper.fit
     mappings = pybel.ob.vvpairUIntUInt()
     bit_vector = pybel.ob.OBBitVec()
+    lookup = [i for i, _ in enumerate(target)]
     success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
-    target_coordinates = [atom.coords for atom in target]
-    index_to_target_coordinates = dict(enumerate(target_coordinates))
+    target_coordinates = [atom.coords for atom in target]  # TODO: ADAPTED TO ORIGINAL
+    # index_to_target_coordinates = dict(enumerate(target_coordinates))
     mappose = numpy.array(helper.map_to_crystal(target, molecule))
     sorted_indices = numpy.argsort(mappose[:, 0])
     mappose_result = mappose[sorted_indices][:, 1]
     molecule_coordinates = [atom.coords for atom in molecule]
     pose_coordinates = numpy.array(molecule_coordinates)[mappose_result]
-    rmsd_result = math.inf
+    rmsd_result = 999999999999  # TODO: ADAPTED TO ORIGINAL
 
     # Loop through automorphisms
     for mapping in mappings:
-        automorph_coords = [index_to_target_coordinates[i] for i in mapping]
+        automorph_coords = [None] * len(target_coordinates)  # TODO: ADAPTED TO ORIGINAL
+        for x, y in mapping:  # TODO: ADAPTED TO ORIGINAL
+            automorph_coords[lookup.index(x)] = target_coordinates[lookup.index(y)]  # TODO: ADAPTED TO ORIGINAL
+
         mapping_rmsd = helper.rmsd(pose_coordinates, automorph_coords)
 
         # Update result if the current mapping has a lower RMSD
