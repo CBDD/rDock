@@ -2,8 +2,8 @@ from tempfile import NamedTemporaryFile
 
 import pytest
 
-from rdock_utils.sdrmsd_original import main as sdrmsd3_main
 from rdock_utils.sdrmsd_OOP import main as sdrmsd_main
+from rdock_utils.sdrmsd_original import main as sdrmsd3_main
 from tests.sdrmsd.conftest import INPUT_FILE, REF_FILE
 
 parametrize_main = pytest.mark.parametrize(
@@ -45,4 +45,3 @@ def test_fit_resulsts(main, aligned_fit_molecules_raw_data: bytes):
         with open(tmp.name, "rb") as f:
             output = f.read()
         assert output == aligned_fit_molecules_raw_data
-
