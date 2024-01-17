@@ -1,10 +1,10 @@
 #! /usr/bin/env python
 #
-# Calculate SMART RMSD with or without molecular superposition (FIT or NOFIT) 
+# Calculate SMART RMSD with or without molecular superposition (FIT or NOFIT)
 # Script distributed under GNU LGPL 3.0 along rDock software.
-# 
+#
 # This algorithm takes into account molecular automorphism. That is, it identifies
-# molecules which are the same but might have atom orders changed and still be able to 
+# molecules which are the same but might have atom orders changed and still be able to
 # match the pairs and correctly calculate the RMSD.
 #
 # Author: Daniel Alvarez-Garcia
@@ -19,7 +19,9 @@ import numpy as npy
 from openbabel import pybel
 
 
-def superpose3D(ref, target:float, weights:list[float]|None=None, refmask=None, targetmask=None, returnRotMat=False):
+def superpose3D(
+    ref, target: float, weights: list[float] | None = None, refmask=None, targetmask=None, returnRotMat=False
+):
     """superpose3D performs 3d superposition using a weighted Kabsch algorithm : http://dx.doi.org/10.1107%2FS0567739476001873 & doi: 10.1529/biophysj.105.066654
     definition : superpose3D(ref, target, weights,refmask,targetmask)
     @parameter 1 :  ref - xyz coordinates of the reference structure (the ligand for instance)
@@ -98,49 +100,72 @@ def rmsd(allcoordsA, allcoordsB):
     """Find the RMSD between two lists of 3-tuples"""
     deviation = sum(squared_distance(atomA, atomB) for (atomA, atomB) in zip(allcoordsA, allcoordsB))
     return math.sqrt(deviation / float(len(allcoordsA)))
-    
+
+
 def mapToCrystal(xtal, pose):
     """Some docking programs might alter the order of the atoms in the output (like Autodock Vina does...)
-     this will mess up the rmsd calculation with OpenBabel"""
-    query = pybel.ob.CompileMoleculeQuery(xtal.OBMol) 
-    mapper=pybel.ob.OBIsomorphismMapper.GetInstance(query)
+    this will mess up the rmsd calculation with OpenBabel"""
+    query = pybel.ob.CompileMoleculeQuery(xtal.OBMol)
+    mapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
     mappingpose = pybel.ob.vvpairUIntUInt()
-    exit=mapper.MapUnique(pose.OBMol,mappingpose)
+    exit = mapper.MapUnique(pose.OBMol, mappingpose)
     return mappingpose[0]
 
-def parseArguments(argv: list[str] | None=None):
+
+def parseArguments(argv: list[str] | None = None):
     optparse.OptionParser.format_epilog = lambda self, formatter: self.epilog
     epilog = """Args:
     reference.sdf   SDF file with the reference molecule.
     input.sdf       SDF file with the molecules to be compared to reference.\n"""
     parser = optparse.OptionParser("usage: %prog [options] reference.sdf input.sdf", epilog=epilog)
-    parser.add_option("-f", "--fit",dest="fit", action="store_true", default=False,
-                  help="Superpose molecules before RMSD calculation")
-    parser.add_option("--threshold","-t",dest="threshold", action="store", nargs=1, 
-                  help="Discard poses with RMSD < THRESHOLD with respect previous poses which where not rejected based on same principle. A Population SDField will be added to output SD with the population number.", type=float)
-    parser.add_option("-o","--out", dest="outfilename", metavar="FILE", default=False,
-                  help="If declared, write an output SDF file with the input molecules with a new sdfield <RMSD>. If molecule was fitted, the fitted molecule coordinates will be saved.")
-    (options, args) =  parser.parse_args(argv)
-    
-    #Check we have two arguments
+    parser.add_option(
+        "-f",
+        "--fit",
+        dest="fit",
+        action="store_true",
+        default=False,
+        help="Superpose molecules before RMSD calculation",
+    )
+    parser.add_option(
+        "--threshold",
+        "-t",
+        dest="threshold",
+        action="store",
+        nargs=1,
+        help="Discard poses with RMSD < THRESHOLD with respect previous poses which where not rejected based on same principle. A Population SDField will be added to output SD with the population number.",
+        type=float,
+    )
+    parser.add_option(
+        "-o",
+        "--out",
+        dest="outfilename",
+        metavar="FILE",
+        default=False,
+        help="If declared, write an output SDF file with the input molecules with a new sdfield <RMSD>. If molecule was fitted, the fitted molecule coordinates will be saved.",
+    )
+    (options, args) = parser.parse_args(argv)
+
+    # Check we have two arguments
     if len(args) < 2:
         parser.error("Incorrect number of arguments. Use -h or --help options to print help.")
 
     return options, args
 
+
 def updateCoords(obmol, newcoords):
     "Update OBMol coordinates. newcoords is a numpy array"
-    for i,atom in enumerate(obmol):
+    for i, atom in enumerate(obmol):
         atom.OBAtom.SetVector(*newcoords[i])
+
 
 def getAutomorphRMSD(target, molec, fit=False):
     """
     Use Automorphism to reorder target coordinates to match ref coordinates atom order
     for correct RMSD comparison. Only the lowest RMSD will be returned.
-    
+
     Returns:
       If fit=False:     bestRMSD    (float)                    RMSD of the best matching mapping.
-      If fit=True:    (bestRMSD, molecCoordinates)    (float, npy.array)    RMSD of best match and its molecule fitted coordinates.	
+      If fit=True:    (bestRMSD, molecCoordinates)    (float, npy.array)    RMSD of best match and its molecule fitted coordinates.
     """
     mappings = pybel.ob.vvpairUIntUInt()
     bitvec = pybel.ob.OBBitVec()
@@ -150,7 +175,7 @@ def getAutomorphRMSD(target, molec, fit=False):
     success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
     targetcoords = [atom.coords for atom in target]
     mappose = npy.array(mapToCrystal(target, molec))
-    mappose = mappose[npy.argsort(mappose[:,0])][:,1]
+    mappose = mappose[npy.argsort(mappose[:, 0])][:, 1]
     posecoords = npy.array([atom.coords for atom in molec])[mappose]
     resultrmsd = 999999999999
     for mapping in mappings:
@@ -161,41 +186,42 @@ def getAutomorphRMSD(target, molec, fit=False):
         if mapping_rmsd < resultrmsd:
             resultrmsd = mapping_rmsd
             fitted_result = False
-        if fit: 
+        if fit:
             fitted_pose, fitted_rmsd = superpose3D(npy.array(automorph_coords), npy.array(posecoords))
             if fitted_rmsd < resultrmsd:
                 resultrmsd = fitted_rmsd
                 fitted_result = fitted_pose
-    
+
     if fit:
-      return (resultrmsd, fitted_pose)
+        return (resultrmsd, fitted_pose)
     else:
-      return resultrmsd
+        return resultrmsd
+
 
 def saveMolecWithRMSD(outsdf, molec, rmsd, population=False):
-    newData = pybel.ob.OBPairData()	
+    newData = pybel.ob.OBPairData()
     newData.SetAttribute("RMSD")
-    newData.SetValue('%.3f'%rmsd)
-    
+    newData.SetValue("%.3f" % rmsd)
+
     if population:
         popData = pybel.ob.OBPairData()
         popData.SetAttribute("Population")
-        popData.SetValue('%i'%population)
+        popData.SetValue("%i" % population)
         molec.OBMol.CloneData(popData)
-    
-    molec.OBMol.CloneData(newData)           # Add new data
+
+    molec.OBMol.CloneData(newData)  # Add new data
     outsdf.write(molec)
 
 
 def main(argv: list[str] | None = None):
-    (opts, args) = parseArguments(argv) 
-    
+    (opts, args) = parseArguments(argv)
+
     xtal = args[0]
     poses = args[1]
 
     if not os.path.exists(xtal) or not os.path.exists(poses):
         sys.exit("Input files not found. Please check the path given is correct.")
-    
+
     fit = opts.fit
     outfname = opts.outfilename
     threshold = opts.threshold
@@ -205,9 +231,9 @@ def main(argv: list[str] | None = None):
     crystal.removeh()
     crystalnumatoms = len(crystal.atoms)
 
-    #If outfname is defined, prepare an output SDF sink to write molecules
+    # If outfname is defined, prepare an output SDF sink to write molecules
     if outfname:
-        outsdf = pybel.Outputfile('sdf', outfname, overwrite=True)
+        outsdf = pybel.Outputfile("sdf", outfname, overwrite=True)
 
     # Find the RMSD between the crystal pose and each docked pose
     dockedposes = pybel.readfile("sdf", poses)
@@ -216,55 +242,61 @@ def main(argv: list[str] | None = None):
     else:
         print("POSE\tRMSD_NOFIT")
     skipped = []
-    moleclist = {}    # Save all poses with their dockid
-    population = {}    # Poses to be written
+    moleclist = {}  # Save all poses with their dockid
+    population = {}  # Poses to be written
     outlist = {}
     for docki, dockedpose in enumerate(dockedposes):
         dockedpose.removeh()
         natoms = len(dockedpose.atoms)
-        if natoms != crystalnumatoms: 
-            skipped.append(docki+1)
+        if natoms != crystalnumatoms:
+            skipped.append(docki + 1)
             continue
-        if fit: 
+        if fit:
             resultrmsd, fitted_result = getAutomorphRMSD(crystal, dockedpose, fit=True)
             updateCoords(dockedpose, fitted_result)
         else:
             resultrmsd = getAutomorphRMSD(crystal, dockedpose, fit=False)
-        
+
         if threshold:
             # Calculate RMSD between all previous poses
             # Discard if rmsd < FILTER threshold
             if moleclist:
                 match = None
                 bestmatchrmsd = 999999
-                for did,prevmol in moleclist.iteritems():
+                for did, prevmol in moleclist.iteritems():
                     tmprmsd = getAutomorphRMSD(prevmol, dockedpose)
                     if tmprmsd < threshold:
                         if tmprmsd < bestmatchrmsd:
                             bestmatchrmsd = tmprmsd
                             match = did
-    
+
                 if match != None:
                     # Do not write this one
                     # sum one up to the matching previous molecule id
-                    print("Pose %i matches pose %i with %.3f RMSD"%(docki+1, match+1, bestmatchrmsd), file=sys.stderr)
+                    print(
+                        "Pose %i matches pose %i with %.3f RMSD" % (docki + 1, match + 1, bestmatchrmsd),
+                        file=sys.stderr,
+                    )
                     population[match] += 1
                 else:
                     # There's no match. Print info for this one and write to outsdf if needed
                     # Save this one!
-                    if outfname: outlist[docki] = (dockedpose, resultrmsd)
-                    print("%d\t%.2f"%((docki+1),resultrmsd))
+                    if outfname:
+                        outlist[docki] = (dockedpose, resultrmsd)
+                    print("%d\t%.2f" % ((docki + 1), resultrmsd))
                     moleclist[docki] = dockedpose
                     population[docki] = 1
             else:
                 # First molecule in list. Append for sure
                 moleclist[docki] = dockedpose
                 population[docki] = 1
-                if outfname: outlist[docki] = (dockedpose, resultrmsd)
+                if outfname:
+                    outlist[docki] = (dockedpose, resultrmsd)
         else:
             # Just write best rmsd found and the molecule to outsdf if demanded
-            if outfname: saveMolecWithRMSD(outsdf, dockedpose, resultrmsd)
-            print("%d\t%.2f"%((docki+1),resultrmsd))
+            if outfname:
+                saveMolecWithRMSD(outsdf, dockedpose, resultrmsd)
+            print("%d\t%.2f" % ((docki + 1), resultrmsd))
 
     if outlist:
         # Threshold applied and outlist need to be written
@@ -272,12 +304,14 @@ def main(argv: list[str] | None = None):
             molrmsd = outlist[docki]
             # Get number of matchs in thresholding operation
             pop = population.get(docki)
-            if not pop: pop = 1
+            if not pop:
+                pop = 1
             # Save molecule
             saveMolecWithRMSD(outsdf, molrmsd[0], molrmsd[1], pop)
-        
+
     if skipped:
-        print("SKIPPED input molecules due to number of atom missmatch: %s"%skipped, file=sys.stderr)
+        print("SKIPPED input molecules due to number of atom missmatch: %s" % skipped, file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
