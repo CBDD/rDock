@@ -1,3 +1,4 @@
+import functools
 import logging
 import math
 import sys
@@ -12,6 +13,21 @@ logger = logging.getLogger("sdrmsd")
 Coordinate = tuple[float, float, float]
 SingularValueDecomposition = tuple[numpy.ndarray[float], numpy.ndarray[float], numpy.ndarray[float]]
 RMSDResult = float | tuple[float, numpy.ndarray[float]]
+
+
+@dataclass
+class HelperData:
+    skipped: list[int] = field(default_factory=list)
+    molecules_dict: dict[int, pybel.Molecule] = field(default_factory=dict)  # Save all poses with their dockid
+    population: dict[int, int] = field(default_factory=dict)  # Poses to be written
+    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]] = field(default_factory=dict)
+
+
+@dataclass
+class PoseMatchData:
+    pose_index: int
+    docked_pose: pybel.Molecule
+    helper_data: HelperData
 
 
 class Helper:
@@ -106,6 +122,53 @@ class Helper:
         # print U
         return (new_coords, rmsd, U) if return_rotation_matrix else (new_coords, rmsd)
 
+    def get_automorphism_rmsd(self, target: pybel.Molecule, molecule: pybel.Molecule) -> RMSDResult:
+        """
+        Use Automorphism to reorder target coordinates to match reference coordinates atom order
+        for correct RMSD comparison. Only the lowest RMSD will be returned.
+
+        Returns:
+        If fit=False: bestRMSD	(float)					RMSD of the best matching mapping.
+        If fit=True:  (bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.
+        """
+        fit = self.fit
+        mappings = pybel.ob.vvpairUIntUInt()
+        lookup = [i for i, _ in enumerate(target)]
+        success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
+
+        target_coordinates = [atom.coords for atom in target]  # TODO: ADAPTED TO ORIGINAL
+        # index_to_target_coordinates = dict(enumerate(target_coordinates))
+        mappose = numpy.array(self.map_to_crystal(target, molecule))
+        sorted_indices = numpy.argsort(mappose[:, 0])
+        mappose_result = mappose[sorted_indices][:, 1]
+        molecule_coordinates = [atom.coords for atom in molecule]
+        pose_coordinates = numpy.array(molecule_coordinates)[mappose_result]
+        rmsd_result = math.inf
+
+        # Loop through automorphisms
+        for mapping in mappings:
+            automorph_coords = [None] * len(target_coordinates)  # TODO: ADAPTED TO ORIGINAL
+            for x, y in mapping:  # TODO: ADAPTED TO ORIGINAL
+                automorph_coords[lookup.index(x)] = target_coordinates[lookup.index(y)]  # TODO: ADAPTED TO ORIGINAL
+
+            mapping_rmsd = self.rmsd(pose_coordinates, automorph_coords)
+
+            # Update result if the current mapping has a lower RMSD
+            if mapping_rmsd < rmsd_result:
+                rmsd_result = mapping_rmsd
+
+            # Additional fitting if fit=True
+            if fit:
+                fitted_pose, fitted_rmsd = self.superpose_3D(
+                    numpy.array(automorph_coords), numpy.array(pose_coordinates)
+                )
+
+                # Update result if the fitted RMSD is lower
+                if fitted_rmsd < rmsd_result:
+                    rmsd_result = fitted_rmsd
+
+        return (rmsd_result, fitted_pose) if fit else rmsd_result
+
     def perform_svd(
         self,
         reference_tmp: numpy.ndarray[float],
@@ -129,20 +192,20 @@ class Helper:
         except LinAlgError:
             raise
 
-    def rmsd(self, all_coordinates_A: list[Coordinate], all_coordinates_B: list[Coordinate]) -> float:
+    def rmsd(self, all_coordinates_1: list[Coordinate], all_coordinates_2: list[Coordinate]) -> float:
         """
         Find the root mean square deviation between two lists of 3-tuples.
         """
         deviation = sum(
-            self.squared_distance(atom_A, atom_B) for atom_A, atom_B in zip(all_coordinates_A, all_coordinates_B)
+            self.squared_distance(atom_1, atom_2) for atom_1, atom_2 in zip(all_coordinates_1, all_coordinates_2)
         )
-        return math.sqrt(deviation / len(all_coordinates_A))
+        return math.sqrt(deviation / len(all_coordinates_1))
 
-    def squared_distance(self, coordinates_A: Coordinate, coordinates_B: Coordinate) -> float:
+    def squared_distance(self, coordinates_1: Coordinate, coordinates_2: Coordinate) -> float:
         """
         Find the squared distance between two 3-tuples.
         """
-        return sum((a - b) ** 2 for a, b in zip(coordinates_A, coordinates_B))
+        return sum((a - b) ** 2 for a, b in zip(coordinates_1, coordinates_2))
 
     def map_to_crystal(self, xtal: pybel.Molecule, pose: pybel.Molecule) -> tuple[int, int]:
         """
@@ -150,7 +213,7 @@ class Helper:
         this will mess up the rmsd calculation with OpenBabel.
         """
         query = pybel.ob.CompileMoleculeQuery(xtal.OBMol)
-        mapper: pybel.ob.OBIsomorphismMapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
+        mapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
         mapping_pose = pybel.ob.vvpairUIntUInt()
         exit = mapper.MapUnique(pose.OBMol, mapping_pose)
         return mapping_pose[0]
@@ -162,17 +225,12 @@ class Helper:
         for i, atom in enumerate(obmol):
             atom.OBAtom.SetVector(*new_coordinates[i])
 
+    def get_best_matching_pose(self, pose_match_data: PoseMatchData, threshold: float) -> tuple[int | None, float]:
+        docked_pose = pose_match_data.docked_pose
+        molecules_dict = pose_match_data.helper_data.molecules_dict
+        get_rmsd = functools.partial(self.get_automorphism_rmsd, target=docked_pose)
 
-@dataclass
-class HelperData:
-    skipped: list[int] = field(default_factory=list)
-    molecules_dict: dict[int, pybel.Molecule] = field(default_factory=dict)  # Save all poses with their dockid
-    population: dict[int, int] = field(default_factory=dict)  # Poses to be written
-    out_dict: dict[int, tuple[pybel.Molecule, RMSDResult]] = field(default_factory=dict)
+        poses_rmsd = ((index, get_rmsd(molecule)) for index, molecule in molecules_dict.items())
+        filtered_by_threshold = (t for t in poses_rmsd if t[1] < threshold)
 
-
-@dataclass
-class PoseMatchData:
-    pose_index: int
-    docked_pose: pybel.Molecule
-    helper_data: HelperData
+        return min(filtered_by_threshold, key=lambda t: t[1], default=(None, math.inf))
