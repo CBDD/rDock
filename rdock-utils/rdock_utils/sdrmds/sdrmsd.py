@@ -5,7 +5,6 @@ import sys
 from dataclasses import dataclass, field
 
 import numpy
-from numpy.linalg import LinAlgError
 from openbabel import pybel
 
 logger = logging.getLogger("sdrmsd")
@@ -16,7 +15,7 @@ RMSDResult = float | tuple[float, numpy.ndarray[float]]
 
 
 @dataclass
-class HelperData:
+class SDRMSDData:
     skipped: list[int] = field(default_factory=list)
     molecules_dict: dict[int, pybel.Molecule] = field(default_factory=dict)  # Save all poses with their dockid
     population: dict[int, int] = field(default_factory=dict)  # Poses to be written
@@ -27,10 +26,10 @@ class HelperData:
 class PoseMatchData:
     pose_index: int
     docked_pose: pybel.Molecule
-    helper_data: HelperData
+    sdrmsd_data: SDRMSDData
 
 
-class Helper:
+class SDRMSD:
     def __init__(
         self,
         reference_sdf: str,
@@ -99,7 +98,7 @@ class Helper:
         # single value decomposition of the dotProduct of both position vectors
         try:
             V, S, Wt = self.perform_svd(reference_tmp, target_tmp, weights)
-        except LinAlgError:
+        except numpy.linalg.LinAlgError:
             warning_msg = "Couldn't perform the Single Value Decomposition, skipping alignment"
             logger.warning(warning_msg)
             print(warning_msg, file=sys.stderr)
@@ -178,7 +177,7 @@ class Helper:
         try:
             dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp * weights)
             svd_result = numpy.linalg.svd(dot_product)
-        except LinAlgError:
+        except numpy.linalg.LinAlgError:
             svd_result = self._handle_svd_linalg_error(reference_tmp, target_tmp)
         return svd_result
 
@@ -189,7 +188,7 @@ class Helper:
             dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp)
             svd_result = numpy.linalg.svd(dot_product)
             return svd_result
-        except LinAlgError:
+        except numpy.linalg.LinAlgError:
             raise
 
     def rmsd(self, all_coordinates_1: list[Coordinate], all_coordinates_2: list[Coordinate]) -> float:
@@ -227,7 +226,7 @@ class Helper:
 
     def get_best_matching_pose(self, pose_match_data: PoseMatchData, threshold: float) -> tuple[int | None, float]:
         docked_pose = pose_match_data.docked_pose
-        molecules_dict = pose_match_data.helper_data.molecules_dict
+        molecules_dict = pose_match_data.sdrmsd_data.molecules_dict
         get_rmsd = functools.partial(self.get_automorphism_rmsd, target=docked_pose)
 
         poses_rmsd = ((index, get_rmsd(molecule)) for index, molecule in molecules_dict.items())
