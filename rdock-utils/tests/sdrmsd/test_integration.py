@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 import pytest
 from openbabel import pybel
 
-from rdock_utils.sdrmsd_OOP import main as sdrmsd_main
+from rdock_utils.sdrmsd.main import main as sdrmsd_main
 from rdock_utils.sdrmsd_original import main as sdrmsd3_main
 from tests.sdrmsd.conftest import INPUT_FILE, REF_FILE
 
