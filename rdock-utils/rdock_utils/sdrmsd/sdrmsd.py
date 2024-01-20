@@ -1,33 +1,14 @@
 import functools
 import logging
 import math
-import sys
-from dataclasses import dataclass, field
 
 import numpy
 from openbabel import pybel
 
-logger = logging.getLogger("sdrmsd")
+from .superpose3d import Superpose3D
+from .types import AutomorphismRMSD, Coordinate, FloatArray, PoseMatchData, SDRMSDData
 
-Coordinate = tuple[float, float, float]
-SingularValueDecomposition = tuple[numpy.ndarray[float], numpy.ndarray[float], numpy.ndarray[float]]
-AutomorphismRMSD = float | tuple[float, numpy.ndarray[float]]
-Superpose3D = tuple[numpy.ndarray[float], float, numpy.ndarray[float]] | tuple[numpy.ndarray[float], float]
-
-
-@dataclass
-class SDRMSDData:
-    skipped: list[int] = field(default_factory=list)
-    molecules_dict: dict[int, pybel.Molecule] = field(default_factory=dict)  # Save all poses with their dockid
-    population: dict[int, int] = field(default_factory=dict)  # Poses to be written
-    out_dict: dict[int, tuple[pybel.Molecule, AutomorphismRMSD]] = field(default_factory=dict)
-
-
-@dataclass
-class PoseMatchData:
-    pose_index: int
-    docked_pose: pybel.Molecule
-    sdrmsd_data: SDRMSDData
+logger = logging.getLogger("SDRMSD")
 
 
 class SDRMSD:
@@ -45,82 +26,32 @@ class SDRMSD:
         self.threshold = threshold
         self.out = out
 
-    def superpose_3D(
-        self,
-        reference: numpy.ndarray[float],
-        target: numpy.ndarray[float],
-        weights: numpy.ndarray[float] | None = None,
-        reference_mask: numpy.ndarray[bool] | None = None,
-        target_mask: numpy.ndarray[bool] | None = None,
-        return_rotation_matrix: bool = False,
-    ) -> Superpose3D:
-        """superpose_3D performs 3d superposition using a weighted Kabsch algorithm : http://dx.doi.org/10.1107%2FS0567739476001873 & doi: 10.1529/biophysj.105.066654
-        definition : superpose3D(reference, target, weights,refmask,target_mask)
-        @parameter 1 :  reference - xyz coordinates of the reference structure (the ligand for instance)
-        @type 1 :       float64 numpy array (nx3)
-        ---
-        @parameter 2 :  target - theoretical target positions to which we should move (does not need to be physically relevant.
-        @type 2 :       float 64 numpy array (nx3)
-        ---
-        @parameter 3:   weights - numpy array of atom weights (usuallly between 0 and 1)
-        @type 3 :       float 64 numpy array (n)
-        @parameter 4:   mask - a numpy boolean mask for designating atoms to include
-        Note reference and target positions must have the same dimensions -> n*3 numpy arrays where n is the number of points (or atoms)
-        returns:
-        - Tuple containing new coordinates and RMSD (default behavior).
-        OR
-        - Tuple containing new coordinates, RMSD, and rotation matrix (if return_rotation_matrix is True).
-        """
-        weights = weights or 1.0
-        reference_mask = reference_mask or numpy.ones(len(reference), "bool")
-        target_mask = target_mask or numpy.ones(len(target), "bool")
-        # First get the centroid of both states
-        reference_centroid = numpy.mean(reference[reference_mask] * weights, axis=0)
-        # Print reference_centroid
-        reference_centered_coords = reference - reference_centroid
-        # Print reference_centered_coords
-        target_centroid = numpy.mean(target[target_mask] * weights, axis=0)
-        target_centered_coords = target - target_centroid
-        # Print target_centered_coords
-        # The following steps come from : http://www.pymolwiki.org/index.php/OptAlign#The_Code and http://en.wikipedia.org/wiki/Kabsch_algorithm
-        # Initial residual, see Kabsch.
-        E0 = numpy.sum(
-            numpy.sum(
-                reference_centered_coords[reference_mask] * reference_centered_coords[reference_mask] * weights, axis=0
-            ),
-            axis=0,
-        ) + numpy.sum(
-            numpy.sum(target_centered_coords[target_mask] * target_centered_coords[target_mask] * weights, axis=0),
-            axis=0,
-        )
-        reference_tmp = numpy.copy(reference_centered_coords[reference_mask])
-        target_tmp = numpy.copy(target_centered_coords[target_mask])
-        # print reference_centered_coords[reference_mask]
-        # single value decomposition of the dotProduct of both position vectors
-        try:
-            V, S, Wt = self.perform_svd(reference_tmp, target_tmp, weights)
-        except numpy.linalg.LinAlgError:
-            warning_msg = "Couldn't perform the Single Value Decomposition, skipping alignment"
-            logger.warning(warning_msg)
-            print(warning_msg, file=sys.stderr)
-            return (reference, 0)
-        # we already have our solution, in the results from SVD.
-        # we just need to check for reflections and then produce
-        # the rotation.  V and Wt are orthonormal, so their det's
-        # are +/-1.
-        reflect = float(numpy.linalg.det(V) * numpy.linalg.det(Wt))
-        if reflect == -1.0:
-            S[-1] = -S[-1]
-            V[:, -1] = -V[:, -1]
-        rmsd = E0 - (2.0 * sum(S))
-        rmsd = numpy.sqrt(abs(rmsd / len(reference[reference_mask])))  # get the rmsd
-        # U is simply V*Wt
-        U = numpy.dot(V, Wt)  # get the rotation matrix
-        # rotate and translate the molecule
-        new_coords = numpy.dot((reference_centered_coords), U) + target_centroid  # translate & rotate
-        # new_coords=(reference_centered_coords + target_centroid)
-        # print U
-        return (new_coords, rmsd, U) if return_rotation_matrix else (new_coords, rmsd)
+    def run(self) -> None:
+        # Find the RMSD between the crystal pose and each docked pose
+        docked_poses = pybel.readfile("sdf", self.input_sdf)
+        self.display_fit_message()
+        data = SDRMSDData()
+
+        # Read crystal pose
+        crystal_pose = self.get_crystal_pose()
+        crystal_atoms = len(crystal_pose.atoms)
+        for i, docked_pose in enumerate(docked_poses, start=1):
+            atoms_number = self.process_docked_pose(docked_pose)
+
+            if atoms_number != crystal_atoms:
+                data.skipped.append(i)
+                continue
+
+            rmsd_result = self.calculate_rmsd(crystal_pose, docked_pose)
+            pose_match_data = PoseMatchData(i, docked_pose, data)
+            self.handle_pose_matching(rmsd_result, pose_match_data)
+
+        if self.out:
+            output_sdf = pybel.Outputfile("sdf", self.out, overwrite=True)
+            self.process_and_save_selected_molecules(output_sdf, data)
+
+        if data.skipped:
+            logger.warning(f"SKIPPED input molecules due to the number of atom mismatch: {data.skipped}")
 
     def get_automorphism_rmsd(self, target: pybel.Molecule, molecule: pybel.Molecule) -> AutomorphismRMSD:
         """
@@ -131,17 +62,19 @@ class SDRMSD:
         If fit=False: bestRMSD	(float)					RMSD of the best matching mapping.
         If fit=True:  (bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.
         """
-        fit = self.fit
         mappings = pybel.ob.vvpairUIntUInt()
         lookup = [i for i, _ in enumerate(target)]
         success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
 
+        molecule_coordinates = [atom.coords for atom in molecule]
         target_coordinates = [atom.coords for atom in target]  # TODO: ADAPTED TO ORIGINAL
+        raw_mappose = self.map_to_crystal(target, molecule)
         # index_to_target_coordinates = dict(enumerate(target_coordinates))
-        mappose = numpy.array(self.map_to_crystal(target, molecule))
+
+        # take to superpose3d v v v
+        mappose = numpy.array(raw_mappose)
         sorted_indices = numpy.argsort(mappose[:, 0])
         mappose_result = mappose[sorted_indices][:, 1]
-        molecule_coordinates = [atom.coords for atom in molecule]
         pose_coordinates = numpy.array(molecule_coordinates)[mappose_result]
         rmsd_result = math.inf
 
@@ -158,40 +91,17 @@ class SDRMSD:
                 rmsd_result = mapping_rmsd
 
             # Additional fitting if fit=True
-            if fit:
-                fitted_pose, fitted_rmsd = self.superpose_3D(
-                    numpy.array(automorph_coords), numpy.array(pose_coordinates)
-                )
+            if self.fit:
+                superposer = Superpose3D(numpy.array(automorph_coords))
+                superpose_result = superposer.superpose_3D(numpy.array(pose_coordinates))
+                fitted_pose, fitted_rmsd, _ = superpose_result
 
                 # Update result if the fitted RMSD is lower
                 if fitted_rmsd < rmsd_result:
                     rmsd_result = fitted_rmsd
 
-        return (rmsd_result, fitted_pose) if fit else rmsd_result
-
-    def perform_svd(
-        self,
-        reference_tmp: numpy.ndarray[float],
-        target_tmp: numpy.ndarray[float],
-        weights: numpy.ndarray[float] | int,
-    ) -> SingularValueDecomposition | None:
-        try:
-            dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp * weights)
-            svd_result = numpy.linalg.svd(dot_product)
-        except numpy.linalg.LinAlgError:
-            svd_result = self._handle_svd_linalg_error(reference_tmp, target_tmp)
-        return svd_result
-
-    @staticmethod
-    def _handle_svd_linalg_error(
-        reference_tmp: numpy.ndarray[float], target_tmp: numpy.ndarray[float]
-    ) -> SingularValueDecomposition | None:
-        try:
-            dot_product = numpy.dot(numpy.transpose(reference_tmp), target_tmp)
-            svd_result = numpy.linalg.svd(dot_product)
-            return svd_result
-        except numpy.linalg.LinAlgError:
-            raise
+        # ^ ^ ^
+        return (rmsd_result, fitted_pose) if self.fit else rmsd_result
 
     def rmsd(self, all_coordinates_1: list[Coordinate], all_coordinates_2: list[Coordinate]) -> float:
         """
@@ -208,6 +118,27 @@ class SDRMSD:
         """
         return sum((a - b) ** 2 for a, b in zip(coordinates_1, coordinates_2))
 
+    def get_automorphism_rmsd_2(self, target: pybel.Molecule, molecule: pybel.Molecule) -> AutomorphismRMSD:
+        """
+        Use Automorphism to reorder target coordinates to match reference coordinates atom order
+        for correct RMSD comparison. Only the lowest RMSD will be returned.
+
+        Returns:
+        If fit=False: bestRMSD	(float)					RMSD of the best matching mapping.
+        If fit=True:  (bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.
+        """
+        mappings = pybel.ob.vvpairUIntUInt()
+        lookup = [i for i, _ in enumerate(target)]
+        success = pybel.ob.FindAutomorphisms(target.OBMol, mappings)
+
+        molecule_coordinates = [atom.coords for atom in molecule]
+        target_coordinates = [atom.coords for atom in target]  # TODO: ADAPTED TO ORIGINAL
+        raw_mappose = self.map_to_crystal(target, molecule)
+        # index_to_target_coordinates = dict(enumerate(target_coordinates))
+
+        # take to superpose3d v v v
+        superposer = Superpose3D()
+
     def map_to_crystal(self, xtal: pybel.Molecule, pose: pybel.Molecule) -> tuple[int, int]:
         """
         Some docking programs might alter the order of the atoms in the output (like Autodock Vina does...)
@@ -219,7 +150,7 @@ class SDRMSD:
         exit = mapper.MapUnique(pose.OBMol, mapping_pose)
         return mapping_pose[0]
 
-    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: numpy.ndarray[float]) -> None:
+    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: FloatArray) -> None:
         """
         Update OBMol coordinates. new_coordinates is a numpy array.
         """
@@ -282,6 +213,7 @@ class SDRMSD:
         """
         Perform RMSD calculations and update coordinates if required.
         """
+
         if self.fit:
             rmsd_result, fitted_result = self.get_automorphism_rmsd(crystal, docked_pose)
             self.update_coordinates(docked_pose, fitted_result)
