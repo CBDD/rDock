@@ -4,9 +4,11 @@ import numpy
 from openbabel import pybel
 
 Coordinate = tuple[float, float, float]
-FloatArray = numpy.ndarray[float]
+FloatArray = numpy.ndarray[(float, 1), float]
 SingularValueDecomposition = tuple[FloatArray, FloatArray, FloatArray]
-AutomorphismRMSD = float | tuple[float, FloatArray]
+AutomorphismRMSD = tuple[float, FloatArray | None]
+BoolArray = numpy.ndarray[bool]
+CoordsArray = numpy.ndarray[(float, 3), float]
 
 
 @dataclass

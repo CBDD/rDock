@@ -119,6 +119,7 @@ class Superpose3D:
 
         # Loop through automorphisms
         target_coords = self.target.coords()
+        fitted_pose = None
         for mapping in mappings:
             indices = ((lookup.index(x), lookup.index(y)) for x, y in mapping)
             automorph_coords = [target_coords[j] for _, j in sorted(indices)]
@@ -134,7 +135,7 @@ class Superpose3D:
                 if fitted_rmsd < rmsd_result:
                     rmsd_result = fitted_rmsd
 
-        return (rmsd_result, fitted_pose) if fit else (rmsd_result, None)
+        return (rmsd_result, fitted_pose)
 
     def rmsd(self, all_coordinates_1: list[Coordinate], all_coordinates_2: list[Coordinate]) -> float:
         """
