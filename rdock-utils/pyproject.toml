@@ -4,11 +4,17 @@ version = "0.1.0"
 description = "Utilities for working with RDock and operating on SD files"
 requires-python = ">=3.10.0"
 
+
 [project.scripts]
 sdfield = "rdock_utils.sdfield:main"
+sdrmsd = "rdock_utils.sdrmsd.main:main"
 
 [project.urls]
 Repository = "https://github.com/CBDD/rDock.git"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rdock_utils*"]
 
 [tool.ruff]
 line-length = 119
