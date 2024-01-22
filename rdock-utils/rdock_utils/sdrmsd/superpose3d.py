@@ -1,3 +1,4 @@
+import functools
 import logging
 import math
 from dataclasses import dataclass
@@ -20,23 +21,26 @@ class MolAlignmentData:
     mask: BoolArray | None = None
     weights: FloatArray | float = 1.0
 
-    # @functools.lru_cache(1)
+    @functools.lru_cache(1)
     def get_mask(self) -> BoolArray:
         return self.mask if self.mask is not None else numpy.ones(len(self.coords()), "bool")
 
-    # @functools.lru_cache(2)
+    @functools.lru_cache(2)
     def coords(self, use_mask: bool = False):
         if not use_mask:
             return numpy.array([atom.coords for atom in self.molecule])
         return self.coords()[self.get_mask()]
 
-    # @functools.lru_cache(2)
+    @functools.lru_cache(2)
     def centroid(self, use_mask: bool = False):
         return numpy.mean(self.coords(use_mask) * self.weights, axis=0)
 
-    # @functools.lru_cache(2)
+    @functools.lru_cache(2)
     def centered_coords(self, use_mask: bool = False, mask_centroid: bool = False):
         return self.coords(use_mask) - self.centroid(mask_centroid)
+
+    def __hash__(self) -> int:
+        return self.molecule.__hash__()
 
 
 class Superpose3D:
@@ -48,11 +52,10 @@ class Superpose3D:
         # The following steps come from:
         #   - http://www.pymolwiki.org/index.php/OptAlign#The_Code
         #   - http://en.wikipedia.org/wiki/Kabsch_algorithm
-
         centered_target = self.target.centered_coords(mask_centroid=True)
         centered_source = self.source.centered_coords(mask_centroid=True)
-
         result = self.perform_svd(centered_source, centered_target)
+
         if result is None:
             logger.warning("Couldn't perform the Single Value Decomposition, skipping alignment")
             return (self.source.coords(), 0, None)
@@ -61,6 +64,7 @@ class Superpose3D:
         # V and Wt are orthonormal, so their det's are +/-1.
         V, S, Wt = result
         reflect = numpy.linalg.det(V) * numpy.linalg.det(Wt)
+
         if reflect == -1.0:
             S[-1] = -S[-1]
             V[:, -1] = -V[:, -1]
