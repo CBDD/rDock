@@ -1,9 +1,13 @@
 [project]
+dynamic = ["dependencies", "optional-dependencies"]
 name = "rdock-utils"
 version = "0.1.0"
 description = "Utilities for working with RDock and operating on SD files"
 requires-python = ">=3.10.0"
 
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = { dev = {file = ["requirements-dev.txt"]} }
 
 [project.scripts]
 sdfield = "rdock_utils.sdfield:main"
