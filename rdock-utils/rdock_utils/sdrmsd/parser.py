@@ -43,7 +43,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-o",
         "--out",
-        default=False,
+        default=None,
         metavar="FILE",
         help=(
             "If declared, write an output SDF file with the input molecules with "
