@@ -17,13 +17,13 @@ class SDRMSD:
         input_sdf: str,
         fit: bool,
         threshold: float,
-        out: bool,
+        output_filename: str,
     ) -> None:
         self.reference_sdf = reference_sdf
         self.input_sdf = input_sdf
         self.fit = fit
         self.threshold = threshold
-        self.out = out
+        self.output_filename = output_filename
 
     def run(self) -> None:
         # Find the RMSD between the crystal pose and each docked pose
@@ -34,6 +34,7 @@ class SDRMSD:
         # Read crystal pose
         crystal_pose = self.get_crystal_pose()
         crystal_atoms = len(crystal_pose.atoms)
+
         for i, docked_pose in enumerate(docked_poses, start=1):
             atoms_number = self.process_docked_pose(docked_pose)
 
@@ -45,9 +46,8 @@ class SDRMSD:
             pose_match_data = PoseMatchData(i, docked_pose, data)
             self.handle_pose_matching(rmsd_result, pose_match_data)
 
-        if self.out:
-            output_sdf = pybel.Outputfile("sdf", self.out, overwrite=True)
-            self.process_and_save_selected_molecules(output_sdf, data)
+        if self.output_filename:
+            self.process_and_save_selected_molecules(data)
 
         if data.skipped:
             logger.warning(f"SKIPPED input molecules due to the number of atom mismatch: {data.skipped}")
@@ -84,12 +84,13 @@ class SDRMSD:
 
         return min(filtered_by_threshold, key=lambda t: t[1], default=(None, math.inf))
 
-    def process_and_save_selected_molecules(self, output_sdf: pybel.Outputfile, data: SDRMSDData):
-        for i in sorted(data.out_dict.keys()):
-            molecule, rmsd_result = data.out_dict[i]
-            # Get the number of matches in the thresholding operation
-            population_value = data.population.get(i, 1)
-            self.save_molecule_with_rmsd(output_sdf, molecule, rmsd_result, population_value)
+    def process_and_save_selected_molecules(self, data: SDRMSDData):
+        with pybel.Outputfile("sdf", self.output_filename, overwrite=True) as output_sdf:
+            for i in sorted(data.out_dict.keys()):
+                molecule, rmsd_result = data.out_dict[i]
+                # Get the number of matches in the thresholding operation
+                population_value = data.population.get(i, 1)
+                self.save_molecule_with_rmsd(output_sdf, molecule, rmsd_result, population_value)
 
     def save_molecule_with_rmsd(
         self, output_sdf: pybel.Outputfile, molecule: pybel.Molecule, rmsd: float, population_value: int
@@ -166,7 +167,7 @@ class SDRMSD:
         molecules_dict = pose_match_data.sdrmsd_data.molecules_dict
         population = pose_match_data.sdrmsd_data.population
 
-        if self.out:
+        if self.output_filename:
             out_dict[index] = (docked_pose, rmsd)
         print(f"{index}\t{rmsd:.2f}")
         molecules_dict[index] = docked_pose
