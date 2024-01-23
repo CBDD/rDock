@@ -8,9 +8,7 @@ from numpy.linalg import LinAlgError
 from numpy.linalg.linalg import SVDResult
 from openbabel import pybel
 
-from .types import AutomorphismRMSD, BoolArray, Coordinate, FloatArray
-
-Superpose3DResult = tuple[FloatArray, float, FloatArray | None]
+from .types import AutomorphismRMSD, BoolArray, Coordinate, CoordsArray, FloatArray, Superpose3DResult
 
 logger = logging.getLogger("Superpose3D")
 
@@ -26,7 +24,7 @@ class MolAlignmentData:
         return self.mask if self.mask is not None else numpy.ones(len(self.coords()), "bool")
 
     @functools.lru_cache(2)
-    def coords(self, use_mask: bool = False):
+    def coords(self, use_mask: bool = False) -> CoordsArray:
         if not use_mask:
             return numpy.array([atom.coords for atom in self.molecule])
         return self.coords()[self.get_mask()]
@@ -36,7 +34,7 @@ class MolAlignmentData:
         return numpy.mean(self.coords(use_mask) * self.weights, axis=0)
 
     @functools.lru_cache(2)
-    def centered_coords(self, use_mask: bool = False, mask_centroid: bool = False):
+    def centered_coords(self, use_mask: bool = False, mask_centroid: bool = False) -> CoordsArray:
         return self.coords(use_mask) - self.centroid(mask_centroid)
 
     def __hash__(self) -> int:
@@ -84,7 +82,7 @@ class Superpose3D:
 
         return (new_coords, rmsd, rotation_matrix)
 
-    def perform_svd(self, centered_source: FloatArray, centered_target: FloatArray) -> SVDResult | None:
+    def perform_svd(self, centered_source: FloatArray, centered_target: CoordsArray) -> SVDResult | None:
         weights_values = [self.target.weights, 1.0]
 
         for weight in weights_values:
@@ -106,42 +104,40 @@ class Superpose3D:
         query = pybel.ob.CompileMoleculeQuery(self.target.molecule.OBMol)
         mapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
         mapping_pose = pybel.ob.vvpairUIntUInt()
-        exit = mapper.MapUnique(self.source.molecule.OBMol, mapping_pose)
+        mapper.MapUnique(self.source.molecule.OBMol, mapping_pose)
         result: tuple[tuple[int, int], ...] = mapping_pose[0]
         return result
+
+    def get_pose_rmsd(
+        self, fit: bool, pose_coordinates: CoordsArray, mapping: tuple[tuple[int, int], ...]
+    ) -> AutomorphismRMSD:
+        target_coords = self.target.coords()
+        automorph_coords = [target_coords[j] for _, j in sorted(mapping)]
+        rmsd = self.rmsd(pose_coordinates, automorph_coords)
+        fitted_pose = None
+
+        if fit:
+            superpose_result = self.superpose_3D()
+            fitted_pose, fitted_rmsd, _ = superpose_result
+            rmsd = min(fitted_rmsd, rmsd)
+
+        return (rmsd, fitted_pose)
 
     def automorphism_rmsd(self, fit: bool) -> AutomorphismRMSD:
         mappings = pybel.ob.vvpairUIntUInt()
         raw_mappose = self.map_to_crystal()
-        success = pybel.ob.FindAutomorphisms(self.target.molecule.OBMol, mappings)
+        pybel.ob.FindAutomorphisms(self.target.molecule.OBMol, mappings)
         mappose = numpy.array(raw_mappose)
         sorted_indices = numpy.argsort(mappose[:, 0])
         mappose_result = mappose[sorted_indices][:, 1]
         pose_coordinates = numpy.array(self.source.coords())[mappose_result]
-        lookup = [i for i, _ in enumerate(self.source.coords())]
-        rmsd_result = math.inf
+        return min(
+            (self.get_pose_rmsd(fit, pose_coordinates, mapping) for mapping in mappings),
+            key=lambda t: t[0],
+            default=(math.inf, None),
+        )
 
-        # Loop through automorphisms
-        target_coords = self.target.coords()
-        fitted_pose = None
-        for mapping in mappings:
-            indices = ((lookup.index(x), lookup.index(y)) for x, y in mapping)
-            automorph_coords = [target_coords[j] for _, j in sorted(indices)]
-            mapping_rmsd = self.rmsd(pose_coordinates, automorph_coords)
-
-            if mapping_rmsd < rmsd_result:
-                rmsd_result = mapping_rmsd
-
-            if fit:
-                superpose_result = self.superpose_3D()
-                fitted_pose, fitted_rmsd, _ = superpose_result
-
-                if fitted_rmsd < rmsd_result:
-                    rmsd_result = fitted_rmsd
-
-        return (rmsd_result, fitted_pose)
-
-    def rmsd(self, all_coordinates_1: list[Coordinate], all_coordinates_2: list[Coordinate]) -> float:
+    def rmsd(self, all_coordinates_1: CoordsArray, all_coordinates_2: list[Coordinate]) -> float:
         """
         Find the root mean square deviation between two lists of 3-tuples.
         """
