@@ -9,6 +9,7 @@ SingularValueDecomposition = tuple[FloatArray, FloatArray, FloatArray]
 AutomorphismRMSD = tuple[float, FloatArray | None]
 BoolArray = numpy.ndarray[bool]
 CoordsArray = numpy.ndarray[(float, 3), float]
+Superpose3DResult = tuple[FloatArray, float, FloatArray | None]
 
 
 @dataclass
