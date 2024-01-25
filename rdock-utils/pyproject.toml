@@ -61,16 +61,3 @@ no_implicit_reexport = false
 strict_equality = true
 
 exclude = ['^setup\.py$']
-warn_unreachable = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_return_any = true
-
-check_untyped_defs = true
-
-no_implicit_optional = true
-no_implicit_reexport = false
-
-strict_equality = true
-
-exclude = ['^setup\.py$']
