@@ -60,4 +60,4 @@ no_implicit_reexport = false
 
 strict_equality = true
 
-exclude = ['^setup\.py$']
+exclude = ["rdock_utils/sdrmsd_original.py", "tests/"]
