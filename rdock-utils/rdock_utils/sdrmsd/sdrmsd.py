@@ -13,21 +13,21 @@ logger = logging.getLogger("SDRMSD")
 class SDRMSD:
     def __init__(
         self,
-        reference_sdf: str,
-        input_sdf: str,
-        fit: bool,
-        threshold: float,
+        reference_filename: str,
+        input_filename: str,
         output_filename: str,
+        fit: bool = False,
+        threshold: float | None = None,
     ) -> None:
-        self.reference_sdf = reference_sdf
-        self.input_sdf = input_sdf
+        self.reference_filename = reference_filename
+        self.input_filename = input_filename
         self.fit = fit
-        self.threshold = threshold
         self.output_filename = output_filename
+        self.threshold = threshold
 
     def run(self) -> None:
         # Find the RMSD between the crystal pose and each docked pose
-        docked_poses = pybel.readfile("sdf", self.input_sdf)
+        docked_poses = pybel.readfile("sdf", self.input_filename)
         self.display_fit_message()
         data = SDRMSDData()
 
@@ -53,31 +53,21 @@ class SDRMSD:
             logger.warning(f"SKIPPED input molecules due to the number of atom mismatch: {data.skipped}")
 
     def get_automorphism_rmsd(self, target: pybel.Molecule, molecule: pybel.Molecule) -> AutomorphismRMSD:
-        """
-        Use Automorphism to reorder target coordinates to match reference coordinates atom order
-        for correct RMSD comparison. Only the lowest RMSD will be returned.
-
-        Returns:
-        If fit=False: bestRMSD	(float)					RMSD of the best matching mapping.
-        If fit=True:  (bestRMSD, molecCoordinates)	(float, npy.array)	RMSD of best match and its molecule fitted coordinates.
-        """
         superposer = Superpose3D(MolAlignmentData(molecule), MolAlignmentData(target))
         result = superposer.automorphism_rmsd(self.fit)
         return result
 
     def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: CoordsArray) -> None:
-        """
-        Update OBMol coordinates. new_coordinates is a numpy array.
-        """
         for i, atom in enumerate(obmol):
             atom.OBAtom.SetVector(*new_coordinates[i])
 
     def get_best_matching_pose(self, pose_match_data: PoseMatchData) -> tuple[int | None, float]:
+        threshold = self.threshold or math.inf
         docked_pose = pose_match_data.docked_pose
         molecules_dict = pose_match_data.sdrmsd_data.molecules_dict
         get_rmsd = functools.partial(self.get_automorphism_rmsd, target=docked_pose)
         poses_rmsd = ((index, get_rmsd(molecule)[0]) for index, molecule in molecules_dict.items())
-        filtered_by_threshold = (t for t in poses_rmsd if t[1] < self.threshold)
+        filtered_by_threshold = (t for t in poses_rmsd if t[1] < threshold)
         return min(filtered_by_threshold, key=lambda t: t[1], default=(None, math.inf))
 
     def process_and_save_selected_molecules(self, data: SDRMSDData) -> None:
@@ -105,10 +95,7 @@ class SDRMSD:
         output_sdf.write(molecule)
 
     def get_crystal_pose(self) -> pybel.Molecule:
-        """
-        Read crystal pose file and remove hydrogen atoms. Returns crystal pose molecule.
-        """
-        crystal_pose = next(pybel.readfile("sdf", self.reference_sdf))
+        crystal_pose = next(pybel.readfile("sdf", self.reference_filename))
         crystal_pose.removeh()
         return crystal_pose
 
@@ -117,16 +104,10 @@ class SDRMSD:
         print(f"POSE\tRMSD_{message}")
 
     def process_docked_pose(self, docked_pose: pybel.Molecule) -> int:
-        """
-        Remove hydrogen atoms and return the number of atoms in docked pose molecule.
-        """
         docked_pose.removeh()
         return len(docked_pose.atoms)
 
     def calculate_rmsd(self, crystal: pybel.Molecule, docked_pose: pybel.Molecule) -> float:
-        """
-        Perform RMSD calculations and update coordinates if required.
-        """
         rmsd, fitted_coords = self.get_automorphism_rmsd(crystal, docked_pose)
 
         if self.fit:
@@ -138,9 +119,6 @@ class SDRMSD:
         return rmsd
 
     def handle_pose_matching(self, rmsd: float, pose_match_data: PoseMatchData) -> None:
-        """
-        Function to handle pose matching and filtering based on 'threshold' parser argument.
-        """
         if self.threshold:
             match_pose, best_match_value = self.get_best_matching_pose(pose_match_data)
             if match_pose is not None:
@@ -157,9 +135,6 @@ class SDRMSD:
         population[match_pose] += 1
 
     def save_and_print_info(self, rmsd: float, pose_match_data: PoseMatchData) -> None:
-        """
-        Function to save and print information based on 'out' parser argument.
-        """
         index = pose_match_data.pose_index
         docked_pose = pose_match_data.docked_pose
         out_dict = pose_match_data.sdrmsd_data.out_dict

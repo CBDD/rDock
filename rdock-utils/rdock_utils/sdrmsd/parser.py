@@ -33,6 +33,7 @@ def get_parser() -> argparse.ArgumentParser:
         "-t",
         "--threshold",
         action="store",
+        default=None,
         type=float,
         help=(
             "Discard poses with RMSD < THRESHOLD with respect previous poses "
