@@ -13,6 +13,7 @@ optional-dependencies = { dev = {file = ["requirements-dev.txt"]} }
 sdfield = "rdock_utils.sdfield:main"
 sdrmsd_old = "rdock_utils.sdrmsd_original:main"
 sdrmsd = "rdock_utils.sdrmsd.main:main"
+sdtether = "rdock_utils.sdtether_original:main"
 
 [project.urls]
 Repository = "https://github.com/CBDD/rDock.git"
@@ -20,7 +21,7 @@ Repository = "https://github.com/CBDD/rDock.git"
 [tool.ruff]
 line-length = 119
 target-version = "py312"
-exclude = [".git", "__pycache__", "rdock_utils/sdrmsd_original.py"]
+exclude = [".git", "__pycache__", "rdock_utils/sdrmsd_original.py", "rdock_utils/sdtether_original.py"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]
@@ -61,4 +62,4 @@ no_implicit_reexport = false
 
 strict_equality = true
 
-exclude = ["rdock_utils/sdrmsd_original.py", "tests/"]
+exclude = ["rdock_utils/sdrmsd_original.py", "tests/", "rdock_utils/sdtether_original.py"]
