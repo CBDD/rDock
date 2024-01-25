@@ -5,7 +5,7 @@ import math
 from openbabel import pybel
 
 from .superpose3d import MolAlignmentData, Superpose3D
-from .types import AutomorphismRMSD, FloatArray, PoseMatchData, SDRMSDData
+from .types import AutomorphismRMSD, CoordsArray, PoseMatchData, SDRMSDData
 
 logger = logging.getLogger("SDRMSD")
 
@@ -53,8 +53,6 @@ class SDRMSD:
             logger.warning(f"SKIPPED input molecules due to the number of atom mismatch: {data.skipped}")
 
     def get_automorphism_rmsd(self, target: pybel.Molecule, molecule: pybel.Molecule) -> AutomorphismRMSD:
-        # TODO: change name here
-        # TODO: modify behavior to have a unique signature of tuple [float, optional array]
         """
         Use Automorphism to reorder target coordinates to match reference coordinates atom order
         for correct RMSD comparison. Only the lowest RMSD will be returned.
@@ -67,7 +65,7 @@ class SDRMSD:
         result = superposer.automorphism_rmsd(self.fit)
         return result
 
-    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: FloatArray) -> None:
+    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: CoordsArray) -> None:
         """
         Update OBMol coordinates. new_coordinates is a numpy array.
         """
@@ -78,13 +76,11 @@ class SDRMSD:
         docked_pose = pose_match_data.docked_pose
         molecules_dict = pose_match_data.sdrmsd_data.molecules_dict
         get_rmsd = functools.partial(self.get_automorphism_rmsd, target=docked_pose)
-
-        poses_rmsd = ((index, get_rmsd(molecule)) for index, molecule in molecules_dict.items())
+        poses_rmsd = ((index, get_rmsd(molecule)[0]) for index, molecule in molecules_dict.items())
         filtered_by_threshold = (t for t in poses_rmsd if t[1] < self.threshold)
-
         return min(filtered_by_threshold, key=lambda t: t[1], default=(None, math.inf))
 
-    def process_and_save_selected_molecules(self, data: SDRMSDData):
+    def process_and_save_selected_molecules(self, data: SDRMSDData) -> None:
         with pybel.Outputfile("sdf", self.output_filename, overwrite=True) as output_sdf:
             for i in sorted(data.out_dict.keys()):
                 molecule, rmsd_result = data.out_dict[i]
@@ -134,7 +130,10 @@ class SDRMSD:
         rmsd, fitted_coords = self.get_automorphism_rmsd(crystal, docked_pose)
 
         if self.fit:
-            self.update_coordinates(docked_pose, fitted_coords)
+            if fitted_coords is not None:
+                self.update_coordinates(docked_pose, fitted_coords)
+            else:
+                logger.warning("Automorphism failed. skipping alignment")
 
         return rmsd
 

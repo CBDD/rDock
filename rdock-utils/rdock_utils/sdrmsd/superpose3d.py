@@ -8,7 +8,7 @@ from numpy.linalg import LinAlgError
 from numpy.linalg.linalg import SVDResult
 from openbabel import pybel
 
-from .types import AutomorphismRMSD, BoolArray, Coordinate, CoordsArray, FloatArray, Superpose3DResult
+from .types import AutomorphismRMSD, BoolArray, Coordinate, CoordsArray, FloatArray, Superpose3DResult, Vector3D
 
 logger = logging.getLogger("Superpose3D")
 
@@ -30,15 +30,15 @@ class MolAlignmentData:
         return self.coords()[self.get_mask()]
 
     @functools.lru_cache(2)
-    def centroid(self, use_mask: bool = False):
-        return numpy.mean(self.coords(use_mask) * self.weights, axis=0)
+    def centroid(self, use_mask: bool = False) -> Vector3D:
+        return numpy.mean(self.coords(use_mask) * self.weights, axis=0)  # type: ignore
 
     @functools.lru_cache(2)
     def centered_coords(self, use_mask: bool = False, mask_centroid: bool = False) -> CoordsArray:
         return self.coords(use_mask) - self.centroid(mask_centroid)
 
     def __hash__(self) -> int:
-        return self.molecule.__hash__()
+        return self.molecule.__hash__()  # type: ignore
 
 
 class Superpose3D:
@@ -46,7 +46,7 @@ class Superpose3D:
         self.target = target
         self.source = source
 
-    def superpose_3D(self, return_rotation_matrix: bool = False) -> Superpose3DResult:
+    def superpose_3D(self) -> Superpose3DResult:
         # The following steps come from:
         #   - http://www.pymolwiki.org/index.php/OptAlign#The_Code
         #   - http://en.wikipedia.org/wiki/Kabsch_algorithm
@@ -56,7 +56,7 @@ class Superpose3D:
 
         if result is None:
             logger.warning("Couldn't perform the Single Value Decomposition, skipping alignment")
-            return (self.source.coords(), 0, None)
+            return (self.source.coords(), 0, numpy.identity(3))
 
         # check for reflections and then produce the rotation.
         # V and Wt are orthonormal, so their det's are +/-1.
@@ -75,20 +75,17 @@ class Superpose3D:
 
         # rotate and translate the molecule
         rotation_matrix = numpy.dot(V, Wt)
+
         new_coords = numpy.dot((self.source.centered_coords()), rotation_matrix) + self.target.centroid()
-
-        if not return_rotation_matrix:
-            rotation_matrix = None
-
         return (new_coords, rmsd, rotation_matrix)
 
-    def perform_svd(self, centered_source: FloatArray, centered_target: CoordsArray) -> SVDResult | None:
+    def perform_svd(self, centered_source: CoordsArray, centered_target: CoordsArray) -> SVDResult | None:
         weights_values = [self.target.weights, 1.0]
 
         for weight in weights_values:
             try:
                 dot_product = numpy.dot(numpy.transpose(centered_source), centered_target * weight)
-                svd_result = numpy.linalg.svd(dot_product)
+                svd_result: SVDResult | None = numpy.linalg.svd(dot_product)
                 return svd_result
 
             except LinAlgError as e:
