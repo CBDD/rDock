@@ -1,11 +1,18 @@
 [project]
+dynamic = ["dependencies", "optional-dependencies"]
 name = "rdock-utils"
 version = "0.1.0"
 description = "Utilities for working with RDock and operating on SD files"
 requires-python = ">=3.10.0"
 
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+optional-dependencies = { dev = {file = ["requirements-dev.txt"]} }
+
 [project.scripts]
 sdfield = "rdock_utils.sdfield:main"
+sdrmsd_old = "rdock_utils.sdrmsd_original:main"
+sdrmsd = "rdock_utils.sdrmsd.main:main"
 
 [project.urls]
 Repository = "https://github.com/CBDD/rDock.git"
@@ -13,7 +20,7 @@ Repository = "https://github.com/CBDD/rDock.git"
 [tool.ruff]
 line-length = 119
 target-version = "py312"
-exclude = [".git","__pycache__"]
+exclude = [".git", "__pycache__", "rdock_utils/sdrmsd_original.py"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]
@@ -54,4 +61,4 @@ no_implicit_reexport = false
 
 strict_equality = true
 
-exclude = ['^setup\.py$']
+exclude = ["rdock_utils/sdrmsd_original.py", "tests/"]
