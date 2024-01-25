@@ -1,9 +1,6 @@
-from dataclasses import dataclass, field
 from typing import Any
 
-# from typing import Literal
 import numpy
-from openbabel import pybel
 
 Coordinate = tuple[float, float, float]
 FloatArray = numpy.ndarray[Any, numpy.dtype[numpy.float64]]
@@ -26,18 +23,3 @@ Superpose3DResult = tuple[CoordsArray, float, Matrix3x3]
 # Matrix3x3 = numpy.ndarray[Literal[3, 3], numpy.dtype[float]]
 # SingularValueDecomposition = tuple[Matrix3x3, Vector3D, Matrix3x3]
 # Superpose3DResult = tuple[CoordsArray, float, Matrix3x3]
-
-
-@dataclass
-class SDRMSDData:
-    skipped: list[int] = field(default_factory=list)
-    molecules_dict: dict[int, pybel.Molecule] = field(default_factory=dict)  # Save all poses with their dockid
-    population: dict[int, int] = field(default_factory=dict)  # Poses to be written
-    out_dict: dict[int, tuple[pybel.Molecule, float]] = field(default_factory=dict)
-
-
-@dataclass
-class PoseMatchData:
-    pose_index: int
-    docked_pose: pybel.Molecule
-    sdrmsd_data: SDRMSDData
