@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 
 from openbabel import pybel
 
-from rdock_utils.common import AutomorphismRMSD, CoordsArray, MolAlignmentData, Superpose3D
+from rdock_utils.common import AutomorphismRMSD, MolAlignmentData, Superpose3D, update_coordinates
 
 logger = logging.getLogger("SDRMSD")
 
@@ -72,10 +72,6 @@ class SDRMSD:
         result = superposer.automorphism_rmsd(self.fit)
         return result
 
-    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: CoordsArray) -> None:
-        for i, atom in enumerate(obmol):
-            atom.OBAtom.SetVector(*new_coordinates[i])
-
     def get_best_matching_pose(self, pose_match_data: PoseMatchData) -> tuple[int | None, float]:
         threshold = self.threshold or math.inf
         docked_pose = pose_match_data.docked_pose
@@ -127,7 +123,7 @@ class SDRMSD:
 
         if self.fit:
             if fitted_coords is not None:
-                self.update_coordinates(docked_pose, fitted_coords)
+                update_coordinates(docked_pose, fitted_coords)
             else:
                 logger.warning("Automorphism failed. skipping alignment")
 
