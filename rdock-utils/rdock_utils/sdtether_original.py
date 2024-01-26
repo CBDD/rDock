@@ -123,14 +123,19 @@ def prepareAtomString(idlist):
     return s
 
 
-def main():
-    if len(sys.argv) != 5:
-        sys.exit("USAGE: %s reference.sdf input.sdf output.sdf 'SMARTS'" % sys.argv[0])
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+    else:
+        argv = ["sdtether"] + argv
+    argv = argv or sys.argv
+    if len(argv) != 5:
+        sys.exit("USAGE: %s reference.sdf input.sdf output.sdf 'SMARTS'" % argv[0])
 
-    refsdf = sys.argv[1]
-    molsdf = sys.argv[2]
-    outsdf = sys.argv[3]
-    smarts = pybel.Smarts(sys.argv[4])
+    refsdf = argv[1]
+    molsdf = argv[2]
+    outsdf = argv[3]
+    smarts = pybel.Smarts(argv[4])
 
     # Read reference pose and get atom list matching smarts query
     # if more than 1 match, take the first one
@@ -155,7 +160,7 @@ def main():
     # Do the same for molecule in molsdf
     out = pybel.Outputfile("sdf", outsdf, overwrite=True)
     molSupp = pybel.readfile("sdf", molsdf)
-    ff = pybel.ob.OBForceField_FindForceField("MMFF94")
+    # ff = pybel.ob.OBForceField_FindForceField("MMFF94")
     for i, mol in enumerate(molSupp):
         print(f"## Molecule {i+1}")
         mol.OBMol.DeleteNonPolarHydrogens()
@@ -258,8 +263,6 @@ def main():
     out.close()
 
     print("DONE")
-    sys.stdout.close()
-    sys.stderr.close()
 
 
 if __name__ == "__main__":
