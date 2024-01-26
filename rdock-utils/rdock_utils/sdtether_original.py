@@ -238,22 +238,22 @@ def main():
                         bestRMSPerMatch[ir][imatch] = rmsd
                         bestCoordPerMatch[ir][imatch] = newcoords
 
-        # Finally update molecule coordinates with the best matching coordinates found
-        # change molecule coordinates, set TETHERED ATOMS property and save
-        for imatch in range(numMatchs):
-            for irefmatch in range(numRefMatchs):
-                bestCoord = bestCoordPerMatch[irefmatch][imatch]
-                bestRMS = bestRMSPerMatch[irefmatch][imatch]
-                print("\tBest RMSD reached (match %d, refmatch %d): %s" % (imatch, irefmatch, bestRMS))
-                molMatchID = molMatchAllIds[imatch]
-                updateCoords(mol, bestCoord)
-                newData = pybel.ob.OBPairData()
-                newData.SetAttribute("TETHERED ATOMS")
-                newData.SetValue(prepareAtomString(molMatchID))
-
-                mol.OBMol.DeleteData("TETHERED ATOMS")  # Remove Previous DATA
-                mol.OBMol.CloneData(newData)  # Add new data
-                out.write(mol)
+            # Finally update molecule coordinates with the best matching coordinates found
+            # change molecule coordinates, set TETHERED ATOMS property and save
+            for imatch in range(numMatchs):
+                for irefmatch in range(numRefMatchs):
+                    bestCoord = bestCoordPerMatch[irefmatch][imatch]
+                    bestRMS = bestRMSPerMatch[irefmatch][imatch]
+                    print("\tBest RMSD reached (match %d, refmatch %d): %s" % (imatch, irefmatch, bestRMS))
+                    molMatchID = molMatchAllIds[imatch]
+                    updateCoords(mol, bestCoord)
+                    newData = pybel.ob.OBPairData()
+                    newData.SetAttribute("TETHERED ATOMS")
+                    newData.SetValue(prepareAtomString(molMatchID))
+    
+                    mol.OBMol.DeleteData("TETHERED ATOMS")  # Remove Previous DATA
+                    mol.OBMol.CloneData(newData)  # Add new data
+                    out.write(mol)
 
     out.close()
 
