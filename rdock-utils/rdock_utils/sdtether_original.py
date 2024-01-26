@@ -226,17 +226,17 @@ def main():
                 molMatchIndx = numpy.array(molMatchIds) - 1
                 molMatchCoords = numpy.take(molCoords, molMatchIndx, axis=0)
 
-            # Loop over the reference matches
-            # Align: Get rotation matrix between the two sets of coords
-            # Apply rotation to the whole target molecule
-            for ir, refMatchCoord in enumerate(refMatchCoords):
-                rotMat, targetCentroid, refCentroid, rmsd = superpose3D(
-                    molMatchCoords, refMatchCoord, returnRotMat=True
-                )
-                if rmsd < bestRMSPerMatch[ir][imatch]:
-                    newcoords = numpy.dot((molCoords - targetCentroid), rotMat) + refCentroid
-                    bestRMSPerMatch[ir][imatch] = rmsd
-                    bestCoordPerMatch[ir][imatch] = newcoords
+                # Loop over the reference matches
+                # Align: Get rotation matrix between the two sets of coords
+                # Apply rotation to the whole target molecule
+                for ir, refMatchCoord in enumerate(refMatchCoords):
+                    rotMat, targetCentroid, refCentroid, rmsd = superpose3D(
+                        molMatchCoords, refMatchCoord, returnRotMat=True
+                    )
+                    if rmsd < bestRMSPerMatch[ir][imatch]:
+                        newcoords = numpy.dot((molCoords - targetCentroid), rotMat) + refCentroid
+                        bestRMSPerMatch[ir][imatch] = rmsd
+                        bestCoordPerMatch[ir][imatch] = newcoords
 
         # Finally update molecule coordinates with the best matching coordinates found
         # change molecule coordinates, set TETHERED ATOMS property and save
