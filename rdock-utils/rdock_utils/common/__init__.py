@@ -3,7 +3,6 @@ from .superpose3d import MolAlignmentData, Superpose3D
 from .types import (
     AutomorphismRMSD,
     BoolArray,
-    Coordinate,
     CoordsArray,
     FloatArray,
     Matrix3x3,
@@ -21,7 +20,6 @@ __all__ = [
     # -- types --
     "AutomorphismRMSD",
     "BoolArray",
-    "Coordinate",
     "CoordsArray",
     "FloatArray",
     "Matrix3x3",

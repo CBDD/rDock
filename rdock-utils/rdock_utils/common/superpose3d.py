@@ -8,7 +8,7 @@ from numpy.linalg import LinAlgError
 from numpy.linalg.linalg import SVDResult
 from openbabel import pybel
 
-from .types import AutomorphismRMSD, BoolArray, Coordinate, CoordsArray, FloatArray, Superpose3DResult, Vector3D
+from .types import AutomorphismRMSD, BoolArray, CoordsArray, FloatArray, Superpose3DResult, Vector3D
 
 logger = logging.getLogger("Superpose3D")
 
@@ -109,7 +109,8 @@ class Superpose3D:
         self, fit: bool, pose_coordinates: CoordsArray, mapping: tuple[tuple[int, int], ...]
     ) -> AutomorphismRMSD:
         target_coords = self.target.coords()
-        automorph_coords = [target_coords[j] for _, j in sorted(mapping)]
+        coords_mask = [j for _, j in sorted(mapping)]
+        automorph_coords = target_coords[coords_mask]
         rmsd = self.rmsd(pose_coordinates, automorph_coords)
         fitted_pose = None
 
@@ -134,17 +135,7 @@ class Superpose3D:
             default=(math.inf, None),
         )
 
-    def rmsd(self, all_coordinates_1: CoordsArray, all_coordinates_2: list[Coordinate]) -> float:
-        """
-        Find the root mean square deviation between two lists of 3-tuples.
-        """
-        deviation = sum(
-            self.squared_distance(atom_1, atom_2) for atom_1, atom_2 in zip(all_coordinates_1, all_coordinates_2)
-        )
+    def rmsd(self, all_coordinates_1: CoordsArray, all_coordinates_2: CoordsArray) -> float:
+        differences = all_coordinates_2 - all_coordinates_1
+        deviation = sum(delta.dot(delta) for delta in differences)
         return math.sqrt(deviation / len(all_coordinates_1))
-
-    def squared_distance(self, coordinates_1: Coordinate, coordinates_2: Coordinate) -> float:
-        """
-        Find the squared distance between two 3-tuples.
-        """
-        return sum((a - b) ** 2 for a, b in zip(coordinates_1, coordinates_2))
