@@ -1,16 +1,32 @@
-import functools
 import logging
 import math
 from dataclasses import dataclass
+from typing import Iterable
 
 import numpy
 from numpy.linalg import LinAlgError
 from numpy.linalg.linalg import SVDResult
 from openbabel import pybel
 
-from .types import AutomorphismRMSD, BoolArray, CoordsArray, FloatArray, Superpose3DResult, Vector3D
+from .types import (
+    AutomorphismRMSD,
+    BoolArray,
+    CoordsArray,
+    FloatArray,
+    MatchIds,
+    Matrix3x3,
+    Superpose3DResult,
+    Vector3D,
+)
 
 logger = logging.getLogger("Superpose3D")
+
+
+def update_coordinates(molecule: pybel.Molecule, new_coordinates: CoordsArray) -> pybel.Molecule:
+    for i, atom in enumerate(molecule):
+        atom.OBAtom.SetVector(*new_coordinates[i])
+
+    return molecule
 
 
 @dataclass
@@ -19,26 +35,22 @@ class MolAlignmentData:
     mask: BoolArray | None = None
     weights: FloatArray | float = 1.0
 
-    @functools.lru_cache(1)
     def get_mask(self) -> BoolArray:
         return self.mask if self.mask is not None else numpy.ones(len(self.coords()), "bool")
 
-    @functools.lru_cache(2)
     def coords(self, use_mask: bool = False) -> CoordsArray:
-        if not use_mask:
-            return numpy.array([atom.coords for atom in self.molecule])
-        return self.coords()[self.get_mask()]
+        mask = self.get_mask() if use_mask else None
+        return self._masked_coords(mask)
 
-    @functools.lru_cache(2)
+    def _masked_coords(self, mask: Iterable[int] | None) -> CoordsArray:
+        coords = numpy.array([atom.coords for atom in self.molecule])
+        return coords[mask] if mask is not None else coords
+
     def centroid(self, use_mask: bool = False) -> Vector3D:
         return numpy.mean(self.coords(use_mask) * self.weights, axis=0)  # type: ignore
 
-    @functools.lru_cache(2)
     def centered_coords(self, use_mask: bool = False, mask_centroid: bool = False) -> CoordsArray:
         return self.coords(use_mask) - self.centroid(mask_centroid)
-
-    def __hash__(self) -> int:
-        return self.molecule.__hash__()  # type: ignore
 
 
 class Superpose3D:
@@ -46,29 +58,57 @@ class Superpose3D:
         self.target = target
         self.source = source
 
-    def superpose_3D(self) -> Superpose3DResult:
+    def align(self, ref_mask: BoolArray | None = None, target_mask: BoolArray | None = None) -> Superpose3DResult:
+        ref_use_mask = ref_mask is not None
+        target_use_mask = target_mask is not None
+        ref = self.source if not ref_use_mask else MolAlignmentData(self.source.molecule, ref_mask)
+        target = self.target if not target_use_mask else MolAlignmentData(self.target.molecule, target_mask)
+        try:
+            # Get rotation matrix
+            ref_align_selection = ref.centered_coords(use_mask=ref_use_mask, mask_centroid=True)
+            target_align_selection = target.centered_coords(use_mask=target_use_mask, mask_centroid=True)
+            rmsd, rotation_matrix = self.get_rotation_matrix(ref_align_selection, target_align_selection)
+
+            # Apply transformation
+            all_coords = ref.centered_coords(use_mask=False, mask_centroid=True)
+            translation_vector = target.centroid(target_use_mask)
+            new_coords = self.apply_transformation(all_coords, rotation_matrix, translation_vector)
+
+            if ref_use_mask:
+                target_coordinates = target.coords(use_mask=False)
+                rmsd = self.rmsd(new_coords, target_coordinates)
+
+            return (new_coords, rmsd, rotation_matrix)
+
+        except ValueError:
+            logger.warning("Couldn't perform the Single Value Decomposition, skipping alignment")
+            return (ref.coords(), 0, numpy.identity(3))
+
+    def apply_transformation(
+        self, coords: CoordsArray, rotation_matrix: Matrix3x3, translation_vector: Vector3D
+    ) -> CoordsArray:
+        return numpy.dot(coords, rotation_matrix) + translation_vector
+
+    def get_rotation_matrix(self, source: CoordsArray, target: CoordsArray) -> tuple[float, Matrix3x3]:
         # The following steps come from:
         #   - http://www.pymolwiki.org/index.php/OptAlign#The_Code
         #   - http://en.wikipedia.org/wiki/Kabsch_algorithm
-        centered_target = self.target.centered_coords(mask_centroid=True)
-        centered_source = self.source.centered_coords(mask_centroid=True)
-        result = self.perform_svd(centered_source, centered_target)
+        svd = self.perform_svd(source, target)
 
-        if result is None:
-            logger.warning("Couldn't perform the Single Value Decomposition, skipping alignment")
-            return (self.source.coords(), 0, numpy.identity(3))
+        if svd is None:
+            raise ValueError
 
         # check for reflections and then produce the rotation.
         # V and Wt are orthonormal, so their det's are +/-1.
-        V, S, Wt = result
+        V, S, Wt = svd
         reflect = numpy.linalg.det(V) * numpy.linalg.det(Wt)
 
         if reflect == -1.0:
             S[-1] = -S[-1]
             V[:, -1] = -V[:, -1]
 
-        source_residual = numpy.sum(numpy.sum(centered_source * centered_source * self.source.weights, axis=0), axis=0)
-        target_residual = numpy.sum(numpy.sum(centered_target * centered_target * self.target.weights, axis=0), axis=0)
+        source_residual = numpy.sum(numpy.sum(source * source * self.source.weights, axis=0), axis=0)
+        target_residual = numpy.sum(numpy.sum(target * target * self.target.weights, axis=0), axis=0)
         E0 = source_residual + target_residual
         aux_rmsd = E0 - (2.0 * sum(S))
         rmsd = numpy.sqrt(abs(aux_rmsd / len(self.source.coords(use_mask=True))))
@@ -76,8 +116,7 @@ class Superpose3D:
         # rotate and translate the molecule
         rotation_matrix = numpy.dot(V, Wt)
 
-        new_coords = numpy.dot((self.source.centered_coords()), rotation_matrix) + self.target.centroid()
-        return (new_coords, rmsd, rotation_matrix)
+        return (rmsd, rotation_matrix)
 
     def perform_svd(self, centered_source: CoordsArray, centered_target: CoordsArray) -> SVDResult | None:
         weights_values = [self.target.weights, 1.0]
@@ -93,21 +132,15 @@ class Superpose3D:
 
         return None
 
-    def map_to_crystal(self) -> tuple[tuple[int, int], ...]:
-        """
-        Some docking programs might alter the order of the atoms in the output (like Autodock Vina does...)
-        this will mess up the rmsd calculation with OpenBabel.
-        """
+    def map_to_crystal(self) -> MatchIds:
         query = pybel.ob.CompileMoleculeQuery(self.target.molecule.OBMol)
         mapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
         mapping_pose = pybel.ob.vvpairUIntUInt()
         mapper.MapUnique(self.source.molecule.OBMol, mapping_pose)
-        result: tuple[tuple[int, int], ...] = mapping_pose[0]
+        result: MatchIds = mapping_pose[0]
         return result
 
-    def get_pose_rmsd(
-        self, fit: bool, pose_coordinates: CoordsArray, mapping: tuple[tuple[int, int], ...]
-    ) -> AutomorphismRMSD:
+    def get_pose_rmsd(self, fit: bool, pose_coordinates: CoordsArray, mapping: MatchIds) -> AutomorphismRMSD:
         target_coords = self.target.coords()
         coords_mask = [j for _, j in sorted(mapping)]
         automorph_coords = target_coords[coords_mask]
@@ -115,7 +148,7 @@ class Superpose3D:
         fitted_pose = None
 
         if fit:
-            superpose_result = self.superpose_3D()
+            superpose_result = self.align()
             fitted_pose, fitted_rmsd, _ = superpose_result
             rmsd = min(fitted_rmsd, rmsd)
 
