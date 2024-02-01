@@ -1,7 +1,6 @@
 import logging
 import math
 from dataclasses import dataclass
-from typing import Iterable
 
 import numpy
 from numpy.linalg import LinAlgError
@@ -9,11 +8,10 @@ from numpy.linalg.linalg import SVDResult
 from openbabel import pybel
 
 from .types import (
+    AtomsMapping,
     AutomorphismRMSD,
-    BoolArray,
     CoordsArray,
     FloatArray,
-    MatchIds,
     Matrix3x3,
     Superpose3DResult,
     Vector3D,
@@ -32,19 +30,20 @@ def update_coordinates(molecule: pybel.Molecule, new_coordinates: CoordsArray) -
 @dataclass
 class MolAlignmentData:
     molecule: pybel.Molecule
-    mask: BoolArray | None = None
+    mask: list[int] | None = None
     weights: FloatArray | float = 1.0
 
-    def get_mask(self) -> BoolArray:
-        return self.mask if self.mask is not None else numpy.ones(len(self.coords()), "bool")
+    def get_mask(self) -> list[int]:
+        return self.mask if self.mask is not None else [i for i, _ in enumerate(self.molecule.atoms)]
 
     def coords(self, use_mask: bool = False) -> CoordsArray:
         mask = self.get_mask() if use_mask else None
         return self._masked_coords(mask)
 
-    def _masked_coords(self, mask: Iterable[int] | None) -> CoordsArray:
+    def _masked_coords(self, mask: list[int] | None) -> CoordsArray:
         coords = numpy.array([atom.coords for atom in self.molecule])
-        return coords[mask] if mask is not None else coords
+        masked_coords: CoordsArray = coords[mask] if mask is not None else coords
+        return masked_coords
 
     def centroid(self, use_mask: bool = False) -> Vector3D:
         return numpy.mean(self.coords(use_mask) * self.weights, axis=0)  # type: ignore
@@ -58,7 +57,7 @@ class Superpose3D:
         self.target = target
         self.source = source
 
-    def align(self, ref_mask: BoolArray | None = None, target_mask: BoolArray | None = None) -> Superpose3DResult:
+    def align(self, ref_mask: list[int] | None = None, target_mask: list[int] | None = None) -> Superpose3DResult:
         ref_use_mask = ref_mask is not None
         target_use_mask = target_mask is not None
         ref = self.source if not ref_use_mask else MolAlignmentData(self.source.molecule, ref_mask)
@@ -87,7 +86,8 @@ class Superpose3D:
     def apply_transformation(
         self, coords: CoordsArray, rotation_matrix: Matrix3x3, translation_vector: Vector3D
     ) -> CoordsArray:
-        return numpy.dot(coords, rotation_matrix) + translation_vector
+        transformed_coords: CoordsArray = numpy.dot(coords, rotation_matrix) + translation_vector
+        return transformed_coords
 
     def get_rotation_matrix(self, source: CoordsArray, target: CoordsArray) -> tuple[float, Matrix3x3]:
         # The following steps come from:
@@ -132,15 +132,15 @@ class Superpose3D:
 
         return None
 
-    def map_to_crystal(self) -> MatchIds:
+    def map_to_crystal(self) -> AtomsMapping:
         query = pybel.ob.CompileMoleculeQuery(self.target.molecule.OBMol)
         mapper = pybel.ob.OBIsomorphismMapper.GetInstance(query)
         mapping_pose = pybel.ob.vvpairUIntUInt()
         mapper.MapUnique(self.source.molecule.OBMol, mapping_pose)
-        result: MatchIds = mapping_pose[0]
+        result: AtomsMapping = mapping_pose[0]
         return result
 
-    def get_pose_rmsd(self, fit: bool, pose_coordinates: CoordsArray, mapping: MatchIds) -> AutomorphismRMSD:
+    def get_pose_rmsd(self, fit: bool, pose_coordinates: CoordsArray, mapping: AtomsMapping) -> AutomorphismRMSD:
         target_coords = self.target.coords()
         coords_mask = [j for _, j in sorted(mapping)]
         automorph_coords = target_coords[coords_mask]

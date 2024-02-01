@@ -1,7 +1,7 @@
 from .superpose3d import MolAlignmentData, Superpose3D, update_coordinates
 from .types import (
+    AtomsMapping,
     AutomorphismRMSD,
-    BoolArray,
     CoordsArray,
     FloatArray,
     Matrix3x3,
@@ -17,10 +17,9 @@ __all__ = [
     "Superpose3D",
     # -- types --
     "AutomorphismRMSD",
-    "BoolArray",
     "CoordsArray",
     "FloatArray",
-    "MatchIds",
+    "AtomsMapping",
     "Matrix3x3",
     "SingularValueDecomposition",
     "Superpose3DResult",

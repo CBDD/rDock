@@ -29,8 +29,8 @@ class SDTether:
         self.ref_matches = self.get_matches(self.ref_mol)
         self.ref_align_data = MolAlignmentData(self.ref_mol)
 
-    def run(self):
-        self.show_matches_info()
+    def run(self) -> None:
+        self.show_ref_matches_info()
 
         with pybel.Outputfile("sdf", self.outsdf, overwrite=True) as out:
             molSupp = pybel.readfile("sdf", self.molsdf)
@@ -41,16 +41,13 @@ class SDTether:
 
         print("DONE")
 
-    def show_matches_info(self):
+    def show_ref_matches_info(self) -> None:
         num_matches = len(self.ref_matches)
 
         if num_matches == 0:
             print("No match")
             message = "No match found in the reference structure and the SMARTS string given. Please check it."
             raise RuntimeError(message)
-
-        elif num_matches == 1:
-            print("Match")
 
         elif num_matches > 1:
             print(
@@ -61,12 +58,19 @@ class SDTether:
     def process_molecule(self, mol: pybel.Molecule, out: pybel.Outputfile) -> None:
         mol_align_data = MolAlignmentData(mol)
         mol_matches = self.get_matches(mol)
+        num_matches = len(mol_matches)
+        self.show_mol_matches_info(num_matches)
+
+        if num_matches == 0:
+            logger.info(f"Molecule '{mol.title}' skipped due to no matches")
+            return None
+
         superposer = Superpose3D(mol_align_data, self.ref_align_data)
 
         for mol_match_index, mol_match in enumerate(mol_matches):
-            mol_mask = numpy.array(mol_match) - 1
+            mol_mask = list(numpy.array(mol_match) - 1)
             for ref_match_index, ref_match in enumerate(self.ref_matches):
-                ref_mask = numpy.array(ref_match) - 1
+                ref_mask = list(numpy.array(ref_match) - 1)
                 new_coords, _, _ = superposer.align(mol_mask, ref_mask)
                 selection_rmsd = superposer.rmsd(new_coords[mol_mask], self.ref_align_data.coords()[ref_mask])
                 self.write_aligned_molecule(mol, mol_match, new_coords, out)
@@ -75,13 +79,21 @@ class SDTether:
                 )
 
     def get_matches(self, molecule: pybel.Molecule) -> list[tuple[int, ...]]:
-        match_ids = self.smarts.findall(molecule)
+        match_ids: list[tuple[int, ...]] = self.smarts.findall(molecule)
         return match_ids
+
+    def show_mol_matches_info(self, num_matches: int) -> None:
+        if num_matches == 0:
+            print("No_Match")
+        elif num_matches == 1:
+            print("Match")
+        elif num_matches > 1:
+            print(f"Multiple_Match SMART Matches for this molecule ({num_matches})")
 
     def write_aligned_molecule(
         self,
         mol: pybel.Molecule,
-        match_ids: list[tuple[int, ...]],
+        match_ids: tuple[int, ...],
         new_coords: CoordsArray,
         out: pybel.Outputfile,
     ) -> None:
