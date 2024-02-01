@@ -28,12 +28,10 @@ def superpose3D(ref, target, weights=None, refmask=None, targetmask=None, return
         targetmask = numpy.ones(len(target), "bool")
     # first get the centroid of both states
     ref_centroid = numpy.mean(ref[refmask] * weights, axis=0)
-    # print ref_centroid
     refCenteredCoords = ref - ref_centroid
-    # print refCenteredCoords
     target_centroid = numpy.mean(target[targetmask] * weights, axis=0)
     targetCenteredCoords = target - target_centroid
-    # print targetCenteredCoords
+    
     # the following steps come from : http://www.pymolwiki.org/index.php/OptAlign#The_Code and http://en.wikipedia.org/wiki/Kabsch_algorithm
     # Initial residual, see Kabsch.
     E0 = numpy.sum(
@@ -43,7 +41,6 @@ def superpose3D(ref, target, weights=None, refmask=None, targetmask=None, return
     )
     reftmp = numpy.copy(refCenteredCoords[refmask])
     targettmp = numpy.copy(targetCenteredCoords[targetmask])
-    # print refCenteredCoords[refmask]
     # single value decomposition of the dotProduct of both position vectors
     try:
         dotProd = numpy.dot(numpy.transpose(reftmp), targettmp * weights)
@@ -69,8 +66,6 @@ def superpose3D(ref, target, weights=None, refmask=None, targetmask=None, return
     U = numpy.dot(V, Wt)  # get the rotation matrix
     # rotate and translate the molecule
     new_coords = numpy.dot((refCenteredCoords), U) + target_centroid  # translate & rotate
-    # new_coords=(refCenteredCoords + target_centroid)
-    # print U
     if returnRotMat:
         return U, ref_centroid, target_centroid, rmsd
     return new_coords, rmsd
@@ -123,14 +118,19 @@ def prepareAtomString(idlist):
     return s
 
 
-def main():
-    if len(sys.argv) != 5:
-        sys.exit("USAGE: %s reference.sdf input.sdf output.sdf 'SMARTS'" % sys.argv[0])
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+    else:
+        argv = ["sdtether"] + argv
+    argv = argv or sys.argv
+    if len(argv) != 5:
+        sys.exit("USAGE: %s reference.sdf input.sdf output.sdf 'SMARTS'" % argv[0])
 
-    refsdf = sys.argv[1]
-    molsdf = sys.argv[2]
-    outsdf = sys.argv[3]
-    smarts = pybel.Smarts(sys.argv[4])
+    refsdf = argv[1]
+    molsdf = argv[2]
+    outsdf = argv[3]
+    smarts = pybel.Smarts(argv[4])
 
     # Read reference pose and get atom list matching smarts query
     # if more than 1 match, take the first one
@@ -155,7 +155,7 @@ def main():
     # Do the same for molecule in molsdf
     out = pybel.Outputfile("sdf", outsdf, overwrite=True)
     molSupp = pybel.readfile("sdf", molsdf)
-    ff = pybel.ob.OBForceField_FindForceField("MMFF94")
+    # ff = pybel.ob.OBForceField.FindForceField("MMFF94")
     for i, mol in enumerate(molSupp):
         print(f"## Molecule {i+1}")
         mol.OBMol.DeleteNonPolarHydrogens()
@@ -244,7 +244,8 @@ def main():
                 for irefmatch in range(numRefMatchs):
                     bestCoord = bestCoordPerMatch[irefmatch][imatch]
                     bestRMS = bestRMSPerMatch[irefmatch][imatch]
-                    print("\tBest RMSD reached (match %d, refmatch %d): %s" % (imatch, irefmatch, bestRMS))
+                    print(f"\tBest RMSD reached (match {imatch}, refmatch {irefmatch}): {bestRMS:.4f}")
+
                     molMatchID = molMatchAllIds[imatch]
                     updateCoords(mol, bestCoord)
                     newData = pybel.ob.OBPairData()
@@ -258,8 +259,6 @@ def main():
     out.close()
 
     print("DONE")
-    sys.stdout.close()
-    sys.stderr.close()
 
 
 if __name__ == "__main__":

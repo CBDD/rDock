@@ -1,13 +1,28 @@
 import functools
 import logging
 import math
+from dataclasses import dataclass, field
 
 from openbabel import pybel
 
-from .superpose3d import MolAlignmentData, Superpose3D
-from .types import AutomorphismRMSD, CoordsArray, PoseMatchData, SDRMSDData
+from rdock_utils.common import AutomorphismRMSD, MolAlignmentData, Superpose3D, update_coordinates
 
 logger = logging.getLogger("SDRMSD")
+
+
+@dataclass
+class SDRMSDData:
+    skipped: list[int] = field(default_factory=list)
+    molecules_dict: dict[int, pybel.Molecule] = field(default_factory=dict)  # Save all poses with their dockid
+    population: dict[int, int] = field(default_factory=dict)  # Poses to be written
+    out_dict: dict[int, tuple[pybel.Molecule, float]] = field(default_factory=dict)
+
+
+@dataclass
+class PoseMatchData:
+    pose_index: int
+    docked_pose: pybel.Molecule
+    sdrmsd_data: SDRMSDData
 
 
 class SDRMSD:
@@ -56,10 +71,6 @@ class SDRMSD:
         superposer = Superpose3D(MolAlignmentData(molecule), MolAlignmentData(target))
         result = superposer.automorphism_rmsd(self.fit)
         return result
-
-    def update_coordinates(self, obmol: pybel.Molecule, new_coordinates: CoordsArray) -> None:
-        for i, atom in enumerate(obmol):
-            atom.OBAtom.SetVector(*new_coordinates[i])
 
     def get_best_matching_pose(self, pose_match_data: PoseMatchData) -> tuple[int | None, float]:
         threshold = self.threshold or math.inf
@@ -112,7 +123,7 @@ class SDRMSD:
 
         if self.fit:
             if fitted_coords is not None:
-                self.update_coordinates(docked_pose, fitted_coords)
+                update_coordinates(docked_pose, fitted_coords)
             else:
                 logger.warning("Automorphism failed. skipping alignment")
 
