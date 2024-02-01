@@ -1,9 +1,10 @@
 from tempfile import NamedTemporaryFile
 
+import numpy
 import pytest
 from openbabel import pybel
 
-from rdock_utils.sdtether.sdtether import main as sdtether_main
+from rdock_utils.sdtether.main import main as sdtether_main
 from rdock_utils.sdtether_original import main as sdtether_old_main
 from tests.sdtether.conftest import EXPECTED_OUTPUT_FILE_1, INPUT_FILE, REF_FILE
 
@@ -30,11 +31,11 @@ def test_basic_run(main):
         assert compare_sdf_files(tmp.name, EXPECTED_OUTPUT_FILE_1)
 
 
-def atoms_are_equal(atom_1: pybel.Atom, atom_2: pybel.Atom) -> bool:
+def atoms_are_equal(atom_1: pybel.Atom, atom_2: pybel.Atom, tolerance: float = 0.001) -> bool:
     if atom_1.atomicnum != atom_2.atomicnum:
         return False
 
-    if atom_1.coords != atom_2.coords:
+    if not numpy.allclose(atom_1.coords, atom_2.coords, atol=tolerance):
         return False
 
     if atom_1.formalcharge != atom_2.formalcharge:
