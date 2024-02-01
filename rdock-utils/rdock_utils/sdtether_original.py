@@ -245,6 +245,7 @@ def main(argv=None):
                     bestCoord = bestCoordPerMatch[irefmatch][imatch]
                     bestRMS = bestRMSPerMatch[irefmatch][imatch]
                     print(f"\tBest RMSD reached (match {imatch}, refmatch {irefmatch}): {bestRMS:.4f}")
+
                     molMatchID = molMatchAllIds[imatch]
                     updateCoords(mol, bestCoord)
                     newData = pybel.ob.OBPairData()
