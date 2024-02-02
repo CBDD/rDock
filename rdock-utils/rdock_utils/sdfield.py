@@ -3,7 +3,7 @@ import argparse
 from logging import getLogger
 
 # Local imports
-from .common import inputs_generator, read_molecules
+from .common import inputs_generator, read_molecules_from_all_inputs
 
 logger = getLogger("sdfield")
 
@@ -24,10 +24,9 @@ def main(argv: list[str] | None = None) -> None:
     parser = get_parser()
     args = parser.parse_args(argv)
     inputs = inputs_generator(args.infile)
-    for source in inputs:
-        for molecule in read_molecules(source):
-            molecule.data[args.fieldname] = args.value
-            print(repr(molecule))
+    for molecule in read_molecules_from_all_inputs(inputs):
+        molecule.data[args.fieldname] = args.value
+        print(repr(molecule))
 
 
 if __name__ == "__main__":
