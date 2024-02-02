@@ -1,11 +1,9 @@
 # Standard Library
 import argparse
-import sys
 from logging import getLogger
-from typing import Iterable, TextIO
 
 # Local imports
-from .parser import FastSDMol
+from .common import inputs_generator, read_molecules
 
 logger = getLogger("sdfield")
 
@@ -20,25 +18,6 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("-o", "--outfile", default=None, type=str, help=outfile_help)
 
     return parser
-
-
-def inputs_generator(inputs: list[str]) -> Iterable[TextIO]:
-    if not inputs:
-        yield sys.stdin
-    else:
-        for infile in inputs:
-            yield open(infile, "r")
-
-
-def read_molecules(file: TextIO) -> Iterable[FastSDMol]:
-    while True:
-        try:
-            mol = FastSDMol.read(file)
-            if mol is None:
-                break
-            yield mol
-        except ValueError as e:
-            logger.warning(f"error reading molecule: {e}")
 
 
 def main(argv: list[str] | None = None) -> None:
