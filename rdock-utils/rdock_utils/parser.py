@@ -74,3 +74,11 @@ class FastSDMol:
         for field_name, field_value in self.data.items():
             dest.write(self.str_field(field_name, field_value))
         dest.write("$$$$")
+
+    def get_field(self, field_name: str) -> str | None:
+        if field_name.startswith("_TITLE"):
+            line_number = int(field_name[-1]) - 1
+            if 0 <= line_number < min(len(self.lines), 3):
+                return self.lines[line_number].strip()
+            return None
+        return self.data.get(field_name, None)
