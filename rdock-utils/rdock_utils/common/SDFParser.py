@@ -1,7 +1,8 @@
 # Standard Library
+import itertools
 import logging
 from io import StringIO
-from typing import Any, TextIO
+from typing import Any, Generator, Iterable, TextIO
 
 logger = logging.getLogger("SDParser")
 
@@ -74,3 +75,30 @@ class FastSDMol:
         for field_name, field_value in self.data.items():
             dest.write(self.str_field(field_name, field_value))
         dest.write("$$$$")
+
+    def get_field(self, field_name: str) -> str | None:
+        if field_name.startswith("_TITLE"):
+            line_number = int(field_name[-1]) - 1
+            if 0 <= line_number < min(len(self.lines), 3):
+                return self.lines[line_number].strip()
+            return None
+        return self.data.get(field_name, None)
+
+    @property
+    def title(self) -> str:
+        return self.lines[0].strip()
+
+
+def read_molecules(file: TextIO) -> Generator[FastSDMol, None, None]:
+    while True:
+        try:
+            mol = FastSDMol.read(file)
+            if mol is None:
+                break
+            yield mol
+        except ValueError as e:
+            logger.warning(f"error reading molecule: {e}")
+
+
+def read_molecules_from_all_inputs(inputs: Iterable[TextIO]) -> Iterable[FastSDMol]:
+    return itertools.chain.from_iterable(read_molecules(source) for source in inputs)
