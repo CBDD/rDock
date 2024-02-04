@@ -1,3 +1,5 @@
+import sys
+
 from rdock_utils.common import inputs_generator, read_molecules_from_all_inputs
 
 from .filter import ExpressionContext, create_filters, molecules_with_context
@@ -12,7 +14,7 @@ def main(argv: list[str] | None = None) -> None:
     molecules = molecules_with_context(read_molecules_from_all_inputs(inputs), context)
     for molecule in molecules:
         if any(filter.evaluate(molecule) for filter in filters):
-            print(repr(molecule))
+            molecule.write(sys.stdout)
 
 
 if __name__ == "__main__":
