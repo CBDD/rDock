@@ -13,9 +13,20 @@ on:
         default: x86_64
         type: string
 
+name: "[rdock] Build rDock - ${{ inputs.distribution }} - ${{ inputs.compiler }} - ${{ inputs.arch }}"
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    if:
+      paths:
+        - 'github_workflows/docker/Dockerfile.${{ inputs.distribution }}'
+        - 'Makefile'
+        - 'src/**'
+        - 'include/**'
+        - 'data/**'
+        - 'import/**'
+        - 'tests/**'
     steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Buildx
@@ -25,7 +36,7 @@ jobs:
       with:
         context: .
         tags: rdock-${{ inputs.distribution }}:base
-        file: .github/docker/Dockerfile.${{ inputs.distribution }}
+        file: github_workflows/docker/Dockerfile.${{ inputs.distribution }}
         target: base
         cache-from: type=gha,scope=${{ inputs.distribution }}
         cache-to: type=gha,mode=max,scope=${{ inputs.distribution }}

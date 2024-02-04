@@ -21,3 +21,9 @@ FROM base AS development
 
 COPY requirements-dev.txt requirements-dev.txt
 RUN python -m pip install -r requirements-dev.txt
+
+FROM base AS production
+
+COPY . /rdock-utils
+WORKDIR /rdock-utils
+RUN python -m pip install .

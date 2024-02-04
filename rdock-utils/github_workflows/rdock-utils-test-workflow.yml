@@ -1,0 +1,54 @@
+name: "[rdock-utils]"
+on:
+  workflow_call:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+    uses: actions/checkout@v3
+  
+    - name: lint
+      uses: chartboost/ruff-action@v1
+      if:
+        paths:
+        - 'rdock-utils/rdock_utils/**'
+        - 'rdock-utils/tests/**'
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: build-dev
+      uses: docker/build-push-action@v5
+      if:
+        paths:
+        - 'rdock-utils/Dockerfile'
+        - 'rdock-utils/requirements.txt'
+        - 'rdock-utils/requirements-dev.txt'
+      with:
+        context: ./rdock-utils
+        tags: ghcr.io/${{ github.repository_owner }}/rdock-utils-dev:latest
+        file: ./rdock-utils/Dockerfile
+        target: development
+    
+    - name: mypy
+      if:
+        paths:
+        - 'rdock-utils/rdock_utils/**'
+      run: docker run --rm -v $PWD/rdock-utils:/rdock-utils -w /rdock-utils ghcr.io/${{ github.repository_owner }}/rdock-utils-dev:latest mypy .
+
+    - name: run tests
+      if:
+        paths:
+        - 'rdock-utils/rdock_utils/**'
+        - 'rdock-utils/tests/**'
+      run: docker run --rm -v $PWD/rdock-utils:/rdock-utils -w /rdock-utils ghcr.io/${{ github.repository_owner }}/rdock-utils-dev:latest pytest -v .

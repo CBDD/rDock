@@ -1,10 +1,6 @@
+name: "[rdock-workflow]"
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
+  workflow_call:
 
 jobs:
   check-lint:
@@ -36,7 +32,7 @@ jobs:
           - distribution: ubuntu-22.04-clang
             compiler: clang++
 
-    uses: ./.github/workflows/build_generic.yml
+    uses: ./github_workflows/rdock-build-generic.yml
     with:
       distribution: ${{ matrix.distribution }}
       compiler: ${{ matrix.compiler }}

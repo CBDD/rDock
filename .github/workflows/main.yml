@@ -1,0 +1,20 @@
+name: "[main workflow]"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
+
+jobs:
+  rdock-workflow:
+    runs-on: ubuntu-latest
+    steps:
+    - name: rdock-workflow
+      uses: ./github_workflows/rdock-workflow.yml
+  
+  rdock-utils-test-workflow:
