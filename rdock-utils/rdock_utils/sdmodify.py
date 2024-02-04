@@ -1,8 +1,11 @@
 import argparse
+import logging
 import sys
 from dataclasses import dataclass
 
 from rdock_utils.common import inputs_generator, read_molecules_from_all_inputs
+
+logger = logging.getLogger("sdmodify")
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -32,5 +35,8 @@ def main(argv: list[str] | None = None) -> None:
     inputs = inputs_generator(config.infiles)
     for index, mol in enumerate(read_molecules_from_all_inputs(inputs), start=1):
         value = mol.get_field(config.field) if config.field != "_REC" else str(index)
-        mol.set_title(value)
+        if value is None:
+            logger.warning(f"field {config.field} not found in molecule {mol.title}, skipping...")
+        else:
+            mol.set_title(value)
         mol.write(sys.stdout)
