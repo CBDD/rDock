@@ -4,7 +4,7 @@
     "name": "rDock - dev",
     "build": {
         "context": "..",
-        "dockerfile": "../.github/docker/Dockerfile.ubuntu-22.04"
+        "dockerfile": "../Dockerfile"
     },
     "customizations": {
         "vscode": {
