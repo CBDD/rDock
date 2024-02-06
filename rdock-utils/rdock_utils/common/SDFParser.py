@@ -74,7 +74,7 @@ class FastSDMol:
         dest.writelines(self.lines)
         for field_name, field_value in self.data.items():
             dest.write(self.str_field(field_name, field_value))
-        dest.write("$$$$")
+        dest.write("$$$$\n")
 
     def get_field(self, field_name: str) -> str | None:
         if field_name.startswith("_TITLE"):
@@ -83,6 +83,11 @@ class FastSDMol:
                 return self.lines[line_number].strip()
             return None
         return self.data.get(field_name, None)
+
+    def set_title(self, title: str, line_index: int = 0) -> None:
+        if line_index > 2:
+            raise ValueError("line index must be 0, 1, or 2")
+        self.lines[line_index] = title + ("" if title.endswith("\n") else "\n")
 
     @property
     def title(self) -> str:
