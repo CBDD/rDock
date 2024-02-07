@@ -31,15 +31,19 @@ jobs:
         cache-to: type=gha,mode=max,scope=${{ inputs.distribution }}
         load: true
 
-    - name: Build rDock
-      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} -j 2
-
-    - name: Test rDock
-      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} test
+    - name: Set version
+      id: set_version
+      run: echo "RBT_VERSION=$(date +%y.%m).${{ github.run_number }}" >> "$GITHUB_ENV"
 
     - name: Set candidate name
       id: set_candidate_name
       run: echo "CANDIDATE_NAME=$(date +%y.%m).${{ github.run_number }}_${{ inputs.distribution }}_${{ inputs.compiler }}_${{ inputs.arch }}" >> "$GITHUB_OUTPUT"
+
+    - name: Build rDock
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} RBT_VERSION=v${{ steps.set_version.outputs.RBT_VERSION }} -j 2
+
+    - name: Test rDock
+      run: docker run --rm -v $PWD:/rdock -w /rdock rdock-${{ inputs.distribution }}:base make CXX=${{ inputs.compiler }} test
 
     - name: Create bundle
       run: |
