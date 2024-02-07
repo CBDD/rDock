@@ -33,7 +33,7 @@ jobs:
 
     - name: Set version
       id: set_version
-      run: echo "RBT_VERSION=$(date +%y.%m).${{ github.run_number }}" >> "$GITHUB_ENV"
+      run: echo "RBT_VERSION=$(date +%y.%m).${{ github.run_number }}" >> "$GITHUB_OUTPUT"
 
     - name: Set candidate name
       id: set_candidate_name
