@@ -17,7 +17,6 @@ using std::setw;
 #include <errno.h>
 #include <popt.h>  // for command-line parsing
 
-#include "RbtVersion.h"
 #include "RbtBiMolWorkSpace.h"
 #include "RbtCrdFileSink.h"
 #include "RbtDockingError.h"
@@ -33,6 +32,7 @@ using std::setw;
 #include "RbtSFFactory.h"
 #include "RbtSFRequest.h"
 #include "RbtTransformFactory.h"
+#include "RbtVersion.h"
 
 const RbtString EXEVERSION = RBT_VERSION;
 // Section name in docking prm file containing scoring function definition

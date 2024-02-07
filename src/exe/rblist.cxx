@@ -16,9 +16,9 @@
 #include <iomanip>
 using namespace std;
 
-#include "RbtVersion.h"
 #include "RbtMdlFileSink.h"
 #include "RbtMdlFileSource.h"
+#include "RbtVersion.h"
 
 const RbtString EXEVERSION = RBT_VERSION;
 

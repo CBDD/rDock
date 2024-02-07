@@ -19,7 +19,6 @@ using std::setw;
 
 #include <algorithm>
 
-#include "RbtVersion.h"
 #include "RbtBiMolWorkSpace.h"
 #include "RbtCrdFileSink.h"
 #include "RbtDockingSite.h"
@@ -27,6 +26,7 @@ using std::setw;
 #include "RbtParameterFileSource.h"
 #include "RbtPsfFileSink.h"
 #include "RbtSiteMapperFactory.h"
+#include "RbtVersion.h"
 
 const RbtString EXEVERSION = RBT_VERSION;
 

@@ -14,7 +14,6 @@
 #include <fstream>
 #include <iomanip>
 
-#include "RbtVersion.h"
 #include "RbtBiMolWorkSpace.h"
 #include "RbtMOEGrid.h"
 #include "RbtPRMFactory.h"
@@ -22,6 +21,7 @@
 #include "RbtRealGrid.h"
 #include "RbtSFFactory.h"
 #include "RbtTriposAtomType.h"
+#include "RbtVersion.h"
 
 const RbtString EXEVERSION = RBT_VERSION;
 const RbtString _ROOT_SF = "SCORE";
