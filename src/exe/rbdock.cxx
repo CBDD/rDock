@@ -32,8 +32,9 @@ using std::setw;
 #include "RbtSFFactory.h"
 #include "RbtSFRequest.h"
 #include "RbtTransformFactory.h"
+#include "RbtVersion.h"
 
-const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rbdock.cxx#4 $)";
+const RbtString EXEVERSION = RBT_VERSION;
 // Section name in docking prm file containing scoring function definition
 const RbtString _ROOT_SF = "SCORE";
 const RbtString _RESTRAINT_SF = "RESTR";
@@ -72,7 +73,7 @@ int main(int argc, const char *argv[]) {
     if (i != RbtString::npos) strExeName.erase(0, i + 1);
 
     // Print a standard header
-    Rbt::PrintStdHeader(cout, strExeName + EXEVERSION);
+    Rbt::PrintStdHeader(cout, strExeName + " - " + EXEVERSION);
 
     // Command line arguments and default values
     RbtString strLigandMdlFile;
@@ -344,7 +345,7 @@ int main(int argc, const char *argv[]) {
         // Variants describing the library version, exe version, parameter file, and current directory
         // Will be stored in the ligand SD files
         RbtVariant vLib(Rbt::GetProduct() + " (" + Rbt::GetVersion() + ", Build" + Rbt::GetBuild() + ")");
-        RbtVariant vExe(strExeName + EXEVERSION);
+        RbtVariant vExe(strExeName + " - " + EXEVERSION);
         RbtVariant vRecep(spRecepPrmSource->GetFileName());
         RbtVariant vPrm(spParamSource->GetFileName());
         RbtVariant vDir(Rbt::GetCurrentDirectory());

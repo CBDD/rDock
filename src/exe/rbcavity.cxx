@@ -26,8 +26,9 @@ using std::setw;
 #include "RbtParameterFileSource.h"
 #include "RbtPsfFileSink.h"
 #include "RbtSiteMapperFactory.h"
+#include "RbtVersion.h"
 
-const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rbcavity.cxx#3 $)";
+const RbtString EXEVERSION = RBT_VERSION;
 
 void PrintUsage(void) {
     cout << "rbcavity - calculate docking cavities" << endl;
@@ -85,7 +86,7 @@ int main(int argc, const char *argv[]) {
     if (i != RbtString::npos) strExeName.erase(0, i + 1);
 
     // Print a standard header
-    Rbt::PrintStdHeader(cout, strExeName + EXEVERSION);
+    Rbt::PrintStdHeader(cout, strExeName + " - " + EXEVERSION);
 
     // Command line arguments and default values
     RbtString strReceptorPrmFile;

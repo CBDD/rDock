@@ -15,10 +15,12 @@
 #include <algorithm>  //for min,max
 #include <iomanip>
 using namespace std;
+
 #include "RbtMdlFileSink.h"
 #include "RbtMdlFileSource.h"
+#include "RbtVersion.h"
 
-const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rblist.cxx#4 $)";
+const RbtString EXEVERSION = RBT_VERSION;
 
 namespace Rbt {
 class isAtomNitroN: public std::unary_function<RbtAtomPtr, RbtBool> {
@@ -113,7 +115,7 @@ int main(int argc, char* argv[]) {
     if (i != RbtString::npos) strExeName.erase(0, i + 1);
 
     // Print a standard header
-    Rbt::PrintStdHeader(cout, strExeName + EXEVERSION);
+    Rbt::PrintStdHeader(cout, strExeName + " - " + EXEVERSION);
 
     // Default values for optional arguments
     RbtString strInputSDFile;

@@ -56,10 +56,13 @@ RbtString Rbt::GetRbtHome() {
 
 // Rbt::GetCopyright - returns legalese statement
 RbtString Rbt::GetCopyright() { return IDS_COPYRIGHT; }
+// current version format is 'v<year>.<month>.<build_number>' so we can extract the version number
+// by taking the substring from the second character to the 5th character
 // Rbt::GetVersion - returns current library version
-RbtString Rbt::GetVersion() { return IDS_VERSION; }
+RbtString Rbt::GetVersion() { return std::string(RBT_VERSION).substr(1, 5); }
+// same as above for the build number, but we take the substring from the 7th character to the end
 // GetBuildNum - returns current library build number
-RbtString Rbt::GetBuild() { return IDS_BUILDNUM; }
+RbtString Rbt::GetBuild() { return std::string(RBT_VERSION).substr(7); }
 // GetProduct - returns library product name
 RbtString Rbt::GetProduct() { return IDS_PRODUCT; }
 // GetTime - returns current time as an RbtString

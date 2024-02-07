@@ -47,6 +47,7 @@
 
 PREFIX                      ?= /usr
 CONFIG                      ?= RELEASE
+RBT_VERSION                 ?= v$(shell date +%y.%m-alpha)
 CXX                         ?= g++
 
 LEGACY_BUILD                ?= NO
@@ -75,6 +76,7 @@ else
 	DEFINES                 += $(RELEASE_DEFINES)
 endif
 
+DEFINES                     += -DRBT_VERSION=\"$(RBT_VERSION)\"
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
 LIB_DEPENDENCIES            := -lpopt -lm -lstdc++
