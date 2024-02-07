@@ -16,6 +16,7 @@
 #include <fstream>
 #include <iomanip>
 
+#include "RbtVersion.h"
 #include "RbtBiMolWorkSpace.h"
 #include "RbtPRMFactory.h"
 #include "RbtParameterFileSource.h"
@@ -23,7 +24,7 @@
 #include "RbtSFFactory.h"
 #include "RbtTriposAtomType.h"
 
-const RbtString EXEVERSION = " ($Id: //depot/dev/client3/rdock/2021.1/src/exe/rbcalcgrid.cxx#3 $)";
+const RbtString EXEVERSION = RBT_VERSION;
 const RbtString _ROOT_SF = "SCORE";
 
 // Creates list of probe models
@@ -90,7 +91,7 @@ int main(int argc, char* argv[]) {
     if (i != RbtString::npos) strExeName.erase(0, i + 1);
 
     // Print a standard header
-    Rbt::PrintStdHeader(cout, strExeName + EXEVERSION);
+    Rbt::PrintStdHeader(cout, strExeName + " - " + EXEVERSION);
 
     // Command line arguments and default values
     RbtString strSuffix(".grd");
