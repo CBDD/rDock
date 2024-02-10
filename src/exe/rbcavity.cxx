@@ -131,7 +131,7 @@ RBCavityConfig parse_args(int argc, const char *argv[]) {
     exit(1);
 }
 
-void RBCavity(const RBCavityConfig & config) {
+void RBCavity(const RBCavityConfig &config) {
     // Create a bimolecular workspace
     RbtBiMolWorkSpacePtr spWS(new RbtBiMolWorkSpace());
     // Set the workspace name to the root of the receptor .prm filename
@@ -232,8 +232,8 @@ void RBCavity(const RBCavityConfig & config) {
     // Use a crude measure of solvent accessibility - count #atoms within 4A of each atom
     // Use an empirical threshold to determine if atom is exposed or not
     if (config.bSite) {
-        RbtDouble cavDist = 4.0;  // Use a fixed definition of cavity atoms - all those within 4A of docking volume
-        RbtDouble neighbR = 4.0;  // Sphere radius for counting nearest neighbours
+        RbtDouble cavDist = 4.0;   // Use a fixed definition of cavity atoms - all those within 4A of docking volume
+        RbtDouble neighbR = 4.0;   // Sphere radius for counting nearest neighbours
         RbtDouble threshold = 15;  // Definition of solvent exposed: neighbours < threshold
         // RbtRealGridPtr spGrid = spDockSite->GetGrid();
         RbtAtomList recepAtomList = spReceptor->GetAtomList();
@@ -248,8 +248,7 @@ void RBCavity(const RBCavityConfig & config) {
 
         // Get the list of solvent exposed cavity atoms
         for (RbtAtomListConstIter iter = cavAtomList.begin(); iter != cavAtomList.end(); iter++) {
-            RbtInt nNeighb =
-                Rbt::GetNumAtoms(recepAtomList, Rbt::isAtomInsideSphere((*iter)->GetCoords(), neighbR));
+            RbtInt nNeighb = Rbt::GetNumAtoms(recepAtomList, Rbt::isAtomInsideSphere((*iter)->GetCoords(), neighbR));
             nNeighb--;
             if (nNeighb < threshold) {
                 cout << (*iter)->GetFullAtomName() << "\t" << nNeighb << endl;
