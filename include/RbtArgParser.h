@@ -51,7 +51,7 @@ std::vector<const char *> preprocessArgs(int argc, const char *argv[], const Arg
 }
 
 class ValidationError: public std::runtime_error {
-public:
+ public:
     using std::runtime_error::runtime_error;
 };
 
