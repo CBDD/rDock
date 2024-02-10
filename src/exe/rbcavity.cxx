@@ -12,61 +12,38 @@
 
 // Standalone executable for generating docking site .as files for rbdock
 
+#include <algorithm>
 #include <cxxopts.hpp>
 #include <iomanip>
 
-#include <algorithm>
-
+#include "RbtArgParser.h"
 #include "RbtBiMolWorkSpace.h"
 #include "RbtCrdFileSink.h"
 #include "RbtDockingSite.h"
 #include "RbtPRMFactory.h"
 #include "RbtParameterFileSource.h"
+#include "RbtPlatformCompatibility.h"
 #include "RbtPsfFileSink.h"
 #include "RbtSiteMapperFactory.h"
 #include "RbtVersion.h"
 
 const RbtString EXEVERSION = RBT_VERSION;
 
-
 cxxopts::options get_options_parser() {
+    using RbtArgParser::add_flag;
+    using RbtArgParser::add_float;
+    using RbtArgParser::add_string;
+
     cxxopts::options options("rbcavity", "calculate docking cavities");
-    options.add_options() (
-            "r,receptor",
-            "receptor param file (contains active site params)",
-            cxxopts::value<std::string>()
-        ) (
-            "W,was",
-            "write docking cavities (plus distance grid) to .as file",
-            cxxopts::value<bool>()->default_value("false")
-        ) (
-            "R,ras",
-            "read docking cavities (plus distance grid) from .as file",
-            cxxopts::value<bool>()->default_value("false")
-        ) (
-            "d,dump-insight",
-            "dump InsightII/PyMOL grids for each cavity for visualisation",
-            cxxopts::value<bool>()->default_value("false")
-        ) (
-            "v,viewer",
-            "dump target PSF/CRD files for rDock Viewer",
-            cxxopts::value<bool>()->default_value("false")
-        ) (
-            "l,list",
-            "list receptor atoms within a distance in angstrom of any cavity",
-            cxxopts::value<float>()->default_value("0.f")
-        ) (
-            "s,site",
-            "print SITE descriptors (counts of exposed atoms)",
-            cxxopts::value<bool>()->default_value("false")
-        ) (
-            "b,border",
-            "set the border (in angstrom) around the cavities for the distance grid",
-            cxxopts::value<float>()->default_value("0.f")
-        ) (
-            "m",
-            "write active site into a MOE grid",
-            cxxopts::value<bool>()->default_value("false"));
+    add_string(options, "r,receptor", "receptor param file (contains active site params)");
+    add_float(options, "l,list", "list receptor atoms within a distance in angstrom of any cavity", "5.0f");
+    add_float(options, "b,border", "set the border (in angstrom) around the cavities for the distance grid", "8.0f");
+    add_flag(options, "W,was", "write docking cavities (plus distance grid) to .as file");
+    add_flag(options, "R,ras", "read docking cavities (plus distance grid) from .as file");
+    add_flag(options, "d,dump-insight", "dump InsightII/PyMOL grids for each cavity for visualisation");
+    add_flag(options, "v,viewer", "dump target PSF/CRD files for rDock Viewer");
+    add_flag(options, "s,site", "print SITE descriptors (counts of exposed atoms)");
+    add_flag(options, "m", "write active site into a MOE grid");
     return options;
 }
 
@@ -81,14 +58,39 @@ struct RBCavityConfig {
     RbtBool bSite = false;     // If true, print out "SITE" descriptors  (counts of exposed atoms)
     RbtBool bMOEgrid = false;  // If true, create a MOE grid file for AS visualisation
     RbtDouble border = 8.0;    // Border to allow around cavities for distance grid
-    RbtDouble dist = 5.0;
+    RbtDouble dist = 5.0;      // Distance to cavity for atom listing
+
+    class ValidationError: public std::runtime_error {
+     public:
+        using std::runtime_error::runtime_error;
+    };
+
+    friend std::ostream &operator<<(std::ostream &os, const RBCavityConfig &config);
+
+    void validate() const {
+        if (strReceptorPrmFile.empty()) throw ValidationError("Missing receptor parameter file name");
+        if (bList && dist <= 0) throw ValidationError("Invalid distance to cavity. must be a positive number");
+        if (bBorder && border <= 0) throw ValidationError("Invalid border distance. must be a positive number");
+    }
 };
+
+std::ostream &operator<<(std::ostream &os, const RBCavityConfig &config) {
+    os << "Command line arguments:" << endl;
+    os << "-r " << config.strReceptorPrmFile << endl;
+    if (config.bList) os << "-l " << config.dist << endl;
+    if (config.bBorder) os << "-b " << config.border << endl;
+    if (config.bWriteAS) os << "-was" << endl;
+    if (config.bReadAS) os << "-ras" << endl;
+    if (config.bMOEgrid) os << "-m" << endl;
+    if (config.bDump) os << "-d" << endl;
+    if (config.bSite) os << "-s" << endl;
+    if (config.bViewer) os << "-v" << endl;
+    return os;
+}
 
 // all this is just for retrocompatibility with the original rbcavity
 // we need to replace the arguments with the long version
-typedef std::vector<std::pair<std::string, const char *>> ArgsSubstitutions;
-
-const ArgsSubstitutions ARGS_SUBSTITUTIONS = {
+const RbtArgParser::ArgsSubstitutions ARGS_SUBSTITUTIONS = {
     {"-was", "--was"},
     {"-ras", "--ras"},
     {"-receptor", "--receptor"},
@@ -99,97 +101,49 @@ const ArgsSubstitutions ARGS_SUBSTITUTIONS = {
     {"-border", "--border"},
 };
 
-
-const char * replace_value(const char * arg, ArgsSubstitutions substitutions = ARGS_SUBSTITUTIONS){
-    for (auto &substitution : ARGS_SUBSTITUTIONS) {
-        if (std::string(arg) == substitution.first) {
-            return substitution.second;
-        }
-    }
-    return arg;
-}
-
-std::vector<const char *> preprocessArgs(int argc, const char *argv[]) {
-    
-    std::vector<const char *> args;
-    for (int i = 0; i < argc; i++) {
-        args.push_back(replace_value(argv[i]));
-    }
-    return args;
-}
-
-// retrocompatibility code ends here
-
 RBCavityConfig parse_args(int argc, const char *argv[]) {
     auto options = get_options_parser();
-    auto args = preprocessArgs(argc, argv);
-    auto result = options.parse(argc, args.data());
-    RBCavityConfig config;
-    config.strReceptorPrmFile = result["receptor"].as<std::string>();
-    config.bReadAS = result["ras"].as<bool>();
-    config.bWriteAS = result["was"].as<bool>();
-    config.bDump = result["dump-insight"].as<bool>();
-    config.bViewer = result["viewer"].as<bool>();
-    config.bBorder = result["border"].as<float>() > 0;
-    if (config.bBorder) {
-        config.border = result["border"].as<float>();
-    }
-    config.bList = result["list"].as<float>() > 0;
-    if (config.bList) {
-        config.dist = result["list"].as<float>();
-    }
-    config.bSite = result["site"].as<bool>();
-    config.bMOEgrid = result["m"].as<bool>();
-    
-    return config;
-}
+    auto args = RbtArgParser::preprocessArgs(argc, argv, ARGS_SUBSTITUTIONS);
+    try {
+        auto result = options.parse(argc, args.data());
+        RBCavityConfig config;
+        config.strReceptorPrmFile = result["receptor"].as<std::string>();
+        config.bReadAS = result["ras"].as<bool>();
+        config.bWriteAS = result["was"].as<bool>();
+        config.bDump = result["dump-insight"].as<bool>();
+        config.bViewer = result["viewer"].as<bool>();
+        config.bMOEgrid = result["m"].as<bool>();
+        config.bBorder = result.count("border") > 0;
+        if (config.bBorder) config.border = result["border"].as<float>();
+        config.bList = result.count("list") > 0;
+        if (config.bList) config.dist = result["list"].as<float>();
+        config.bSite = result["site"].as<bool>();
 
-void PrintUsage(void) {
-    cout << "rbcavity - calculate docking cavities" << endl;
-    cout << "Usage:\trbcavity -r<ReceptorPrmFile> [-was -ras -d -l<dist> -b<border>" << endl;
-    cout << "Options:" << endl;
-    cout << "\t\t-r<PrmFile> - receptor param file (contains active site params)" << endl;
-    cout << "\t\t-was [-W]   - write docking cavities (plus distance grid) to .as file" << endl;
-    cout << "\t\t-ras [-R]   - read docking cavities (plus distance grid) from .as file" << endl;
-    cout << "\t\t-d          - dump InsightII grids for each cavity for visualisation" << endl;
-    cout << "\t\t-v          - dump target PSF/CRD files for rDock Viewer" << endl;
-    cout << "\t\t-l<dist>    - list receptor atoms with <dist> A of any cavity" << endl;
-    cout << "\t\t-s          - print SITE descriptors (counts of exposed atoms)" << endl;
-    cout << "\t\t-b<border>  - set the border around the cavities for the distance grid (default=8A)" << endl;
-    cout << "\t\t-m          - write active site into a MOE grid" << endl;
+        config.validate();
+        return config;
+    } catch (cxxopts::parse_error &e) {
+        std::cerr << "Error parsing options: " << e.what() << std::endl;
+    } catch (RBCavityConfig::ValidationError &e) {
+        std::cerr << "Invalid configuration: " << e.what() << std::endl;
+    }
+    // if we reach this point, something went wrong. Print the help and exit
+    std::cerr << options.help() << std::endl;
+    exit(1);
 }
 
 /////////////////////////////////////////////////////////////////////
 // MAIN PROGRAM STARTS HERE
 /////////////////////////////////////////////////////////////////////
 
-void showArguments(RBCavityConfig config) {
-    cout << "Command line arguments:" << endl;
-    cout << "-r " << config.strReceptorPrmFile << endl;
-    if (config.bList) cout << "-l " << config.dist << endl;
-    if (config.bBorder) cout << "-b " << config.border << endl;
-    if (config.bWriteAS) cout << "-was" << endl;
-    if (config.bReadAS) cout << "-ras" << endl;
-    if (config.bMOEgrid) cout << "-m" << endl;
-    if (config.bDump) cout << "-d" << endl;
-    if (config.bSite) cout << "-s" << endl;
-    if (config.bViewer) cout << "-v" << endl;
-}
-
 int main(int argc, const char *argv[]) {
-    RBCavityConfig config = parse_args(argc, argv);
-    if (config.strReceptorPrmFile.empty()) {
-        cerr << "Missing receptor parameter file name" << endl;
-        PrintUsage();
-        return 1;
-    }
     // Strip off the path to the executable, leaving just the file name
     RbtString exeFullPath(argv[0]);
     RbtString strExeName = exeFullPath.substr(exeFullPath.find_last_of("/\\") + 1);
     Rbt::PrintStdHeader(cout, strExeName + " - " + EXEVERSION);
 
+    RBCavityConfig config = parse_args(argc, argv);
     // writing command line arguments
-    showArguments(config);
+    std::cout << config << std::endl;
 
     cout.setf(ios_base::left, ios_base::adjustfield);
 
@@ -217,11 +171,7 @@ int main(int argc, const char *argv[]) {
         // Either read the docking site from the .as file
         if (config.bReadAS) {
             RbtString strInputFile = Rbt::GetRbtFileName("data/grids", strASFile);
-#if defined(__sgi) && !defined(__GNUC__)
-            ifstream istr(strInputFile.c_str(), ios_base::in);
-#else
-            ifstream istr(strInputFile.c_str(), ios_base::in | ios_base::binary);
-#endif
+            ifstream istr(strInputFile.c_str(), Rbt::inputMode);
             spDockSite = RbtDockingSitePtr(new RbtDockingSite(istr));
             istr.close();
         }
@@ -250,11 +200,7 @@ int main(int argc, const char *argv[]) {
         cout << endl << "DOCKING SITE" << endl << (*spDockSite) << endl;
 
         if (config.bWriteAS) {
-#if defined(__sgi) && !defined(__GNUC__)
-            ofstream ostr(strASFile.c_str(), ios_base::out | ios_base::trunc);
-#else
-            ofstream ostr(strASFile.c_str(), ios_base::out | ios_base::binary | ios_base::trunc);
-#endif
+            ofstream ostr(strASFile.c_str(), Rbt::outputMode);
             spDockSite->Write(ostr);
             ostr.close();
         }
