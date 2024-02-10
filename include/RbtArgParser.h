@@ -50,5 +50,10 @@ std::vector<const char *> preprocessArgs(int argc, const char *argv[], const Arg
     return args;
 }
 
+class ValidationError: public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+
 }  // namespace RbtArgParser
 #endif  //_RBTARGPARSER_H_

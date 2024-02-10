@@ -60,14 +60,10 @@ struct RBCavityConfig {
     RbtDouble border = 8.0;    // Border to allow around cavities for distance grid
     RbtDouble dist = 5.0;      // Distance to cavity for atom listing
 
-    class ValidationError: public std::runtime_error {
-     public:
-        using std::runtime_error::runtime_error;
-    };
-
     friend std::ostream &operator<<(std::ostream &os, const RBCavityConfig &config);
 
     void validate() const {
+        using RbtArgParser::ValidationError;
         if (strReceptorPrmFile.empty()) throw ValidationError("Missing receptor parameter file name");
         if (bList && dist <= 0) throw ValidationError("Invalid distance to cavity. must be a positive number");
         if (bBorder && border <= 0) throw ValidationError("Invalid border distance. must be a positive number");
@@ -123,7 +119,7 @@ RBCavityConfig parse_args(int argc, const char *argv[]) {
         return config;
     } catch (cxxopts::parse_error &e) {
         std::cerr << "Error parsing options: " << e.what() << std::endl;
-    } catch (RBCavityConfig::ValidationError &e) {
+    } catch (RbtArgParser::ValidationError &e) {
         std::cerr << "Invalid configuration: " << e.what() << std::endl;
     }
     // if we reach this point, something went wrong. Print the help and exit
