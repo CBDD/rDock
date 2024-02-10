@@ -30,14 +30,14 @@
 const RbtString EXEVERSION = RBT_VERSION;
 
 cxxopts::options get_options_parser() {
+    using RbtArgParser::add;
     using RbtArgParser::add_flag;
-    using RbtArgParser::add_float;
-    using RbtArgParser::add_string;
+    using std::string;
 
     cxxopts::options options("rbcavity", "calculate docking cavities");
-    add_string(options, "r,receptor", "receptor param file (contains active site params)");
-    add_float(options, "l,list", "list receptor atoms within a distance in angstrom of any cavity", "5.0f");
-    add_float(options, "b,border", "set the border (in angstrom) around the cavities for the distance grid", "8.0f");
+    add<string>(options, "r,receptor", "receptor param file (contains active site params)");
+    add<float>(options, "l,list", "list receptor atoms within a distance in angstrom of any cavity", "5.0f");
+    add<float>(options, "b,border", "set the border (in angstrom) around the cavities for the distance grid", "8.0f");
     add_flag(options, "W,was", "write docking cavities (plus distance grid) to .as file");
     add_flag(options, "R,ras", "read docking cavities (plus distance grid) from .as file");
     add_flag(options, "d,dump-insight", "dump InsightII/PyMOL grids for each cavity for visualisation");

@@ -18,23 +18,14 @@ void add_flag(
     options.add_options()(opts, dest, cxxopts::value<bool>()->default_value(default_value));
 }
 
-void add_string(
+template <typename T>
+void add(
     cxxopts::options &options, const std::string &opts, const std::string &dest, const char *default_value = nullptr
 ) {
     if (default_value == nullptr) {
-        options.add_options()(opts, dest, cxxopts::value<std::string>());
+        options.add_options()(opts, dest, cxxopts::value<T>());
     } else {
-        options.add_options()(opts, dest, cxxopts::value<std::string>()->default_value(default_value));
-    }
-}
-
-void add_float(
-    cxxopts::options &options, const std::string &opts, const std::string &dest, const char *default_value = nullptr
-) {
-    if (default_value == nullptr) {
-        options.add_options()(opts, dest, cxxopts::value<float>());
-    } else {
-        options.add_options()(opts, dest, cxxopts::value<float>()->default_value(default_value));
+        options.add_options()(opts, dest, cxxopts::value<T>()->default_value(default_value));
     }
 }
 
