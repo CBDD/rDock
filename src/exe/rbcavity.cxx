@@ -29,22 +29,20 @@
 
 const RbtString EXEVERSION = RBT_VERSION;
 
-cxxopts::options get_options_parser() {
-    using RbtArgParser::add;
-    using RbtArgParser::add_flag;
+RbtArgParser::RbtArgParser get_options_parser() {
     using std::string;
 
-    cxxopts::options options("rbcavity", "calculate docking cavities");
-    add<string>(options, "r,receptor", "receptor param file (contains active site params)");
-    add<float>(options, "l,list", "list receptor atoms within a distance in angstrom of any cavity", "5.0f");
-    add<float>(options, "b,border", "set the border (in angstrom) around the cavities for the distance grid", "8.0f");
-    add_flag(options, "W,was", "write docking cavities (plus distance grid) to .as file");
-    add_flag(options, "R,ras", "read docking cavities (plus distance grid) from .as file");
-    add_flag(options, "d,dump-insight", "dump InsightII/PyMOL grids for each cavity for visualisation");
-    add_flag(options, "v,viewer", "dump target PSF/CRD files for rDock Viewer");
-    add_flag(options, "s,site", "print SITE descriptors (counts of exposed atoms)");
-    add_flag(options, "m", "write active site into a MOE grid");
-    return options;
+    RbtArgParser::RbtArgParser parser("rbcavity", "calculate docking cavities");
+    parser.add<string>("r,receptor", "receptor param file (contains active site params)");
+    parser.add<float>("l,list", "list receptor atoms within a distance in angstrom of any cavity", "5.0f");
+    parser.add<float>("b,border", "set the border (in angstrom) around the cavities for the distance grid", "8.0f");
+    parser.add_flag("W,was", "write docking cavities (plus distance grid) to .as file");
+    parser.add_flag("R,ras", "read docking cavities (plus distance grid) from .as file");
+    parser.add_flag("d,dump-insight", "dump InsightII/PyMOL grids for each cavity for visualisation");
+    parser.add_flag("v,viewer", "dump target PSF/CRD files for rDock Viewer");
+    parser.add_flag("s,site", "print SITE descriptors (counts of exposed atoms)");
+    parser.add_flag("m", "write active site into a MOE grid");
+    return parser;
 }
 
 struct RBCavityConfig {
@@ -84,24 +82,10 @@ std::ostream &operator<<(std::ostream &os, const RBCavityConfig &config) {
     return os;
 }
 
-// all this is just for retrocompatibility with the original rbcavity
-// we need to replace the arguments with the long version
-const RbtArgParser::ArgsSubstitutions ARGS_SUBSTITUTIONS = {
-    {"-was", "--was"},
-    {"-ras", "--ras"},
-    {"-receptor", "--receptor"},
-    {"-dump-insight", "--dump-insight"},
-    {"-viewer", "--viewer"},
-    {"-list", "--list"},
-    {"-site", "--site"},
-    {"-border", "--border"},
-};
-
 RBCavityConfig parse_args(int argc, const char *argv[]) {
-    auto options = get_options_parser();
-    auto args = RbtArgParser::preprocessArgs(argc, argv, ARGS_SUBSTITUTIONS);
+    auto parser = get_options_parser();
     try {
-        auto result = options.parse(argc, args.data());
+        auto result = parser.parse(argc, argv);
         RBCavityConfig config;
         config.strReceptorPrmFile = result["receptor"].as<std::string>();
         config.bReadAS = result["ras"].as<bool>();
@@ -123,7 +107,7 @@ RBCavityConfig parse_args(int argc, const char *argv[]) {
         std::cerr << "Invalid configuration: " << e.what() << std::endl;
     }
     // if we reach this point, something went wrong. Print the help and exit
-    std::cerr << options.help() << std::endl;
+    std::cerr << parser.help() << std::endl;
     exit(1);
 }
 

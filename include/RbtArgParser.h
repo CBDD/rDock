@@ -8,47 +8,43 @@
 
 namespace RbtArgParser {
 
-typedef std::vector<std::pair<std::string, const char *>> ArgsSubstitutions;
+typedef std::vector<std::string> ArgsSubstitutions;
 
-// convenience function to add a boolean flag to the options
-// greatly improves readability
-void add_flag(
-    cxxopts::options &options, const std::string &opts, const std::string &dest, const char *default_value = "false"
-) {
-    options.add_options()(opts, dest, cxxopts::value<bool>()->default_value(default_value));
-}
+class RbtArgParser {
+ public:
+    ArgsSubstitutions substitutions;
+    cxxopts::options parser;
 
-template <typename T>
-void add(
-    cxxopts::options &options, const std::string &opts, const std::string &dest, const char *default_value = nullptr
-) {
-    if (default_value == nullptr) {
-        options.add_options()(opts, dest, cxxopts::value<T>());
-    } else {
-        options.add_options()(opts, dest, cxxopts::value<T>()->default_value(default_value));
-    }
-}
+ public:
+    RbtArgParser(const std::string &program, const std::string &description = "");
 
-// retrocompatibility function to replace single dash long arguments with double dash long arguments
-const char *replace_value(const char *arg, ArgsSubstitutions substitutions) {
-    for (auto &substitution: substitutions) {
-        if (std::string(arg) == substitution.first) {
-            std::cerr << "WARNING: Single dash long argument detected: '" << arg << "'."
-                      << " This is a deprecated feature and will be removed in the future."
-                      << " Please use double dash long arguments instead." << std::endl;
-            return substitution.second;
+    cxxopts::parse_result parse(int argc, const char *argv[]);
+    inline std::string help() const { return parser.help(); }
+
+    // convenience functions to improve readability when adding options
+    // add a boolean flag to the options
+    void add_flag(const std::string &opts, const std::string &dest, const char *default_value = "false");
+
+    // add whatever type of option
+    template <typename T>
+    void add(const std::string &opts, const std::string &dest, const char *default_value = nullptr) {
+        set_substitution(opts);
+        if (default_value == nullptr) {
+            parser.add_options()(opts, dest, cxxopts::value<T>());
+        } else {
+            parser.add_options()(opts, dest, cxxopts::value<T>()->default_value(default_value));
         }
     }
-    return arg;
-}
 
-std::vector<const char *> preprocessArgs(int argc, const char *argv[], const ArgsSubstitutions &substitutions) {
-    std::vector<const char *> args;
-    for (int i = 0; i < argc; i++) {
-        args.push_back(replace_value(argv[i], substitutions));
-    }
-    return args;
-}
+    // all the functions below are a retrocompatibility layer to replace single dash long
+    // arguments with double dash long arguments.
+    // This is a deprecated feature and will be removed in the future, and so are these functions.
+    std::string fix_value(const char *arg);
+    void warn_deprecated_argument(const char *arg);
+    std::vector<std::string> preprocess_args(int argc, const char *argv[]);
+    std::vector<const char *> cast_args(const std::vector<std::string> &args) const;
+    void set_substitution(const std::string &opts);
+};
 
 class ValidationError: public std::runtime_error {
  public:
