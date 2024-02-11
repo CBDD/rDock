@@ -11,10 +11,6 @@ RbtArgParser::RbtArgParser(const std::string &program, const std::string &descri
     parser(program, description),
     substitutions({}) {}
 
-void RbtArgParser::add_flag(const std::string &opts, const std::string &dest, const char *default_value) {
-    add<bool>(opts, dest, default_value);
-}
-
 cxxopts::parse_result RbtArgParser::parse(int argc, const char *argv[]) {
     auto fixed_args = preprocess_args(argc, argv);
     auto fixed_char_ptr_args = cast_args(fixed_args);
@@ -60,7 +56,7 @@ std::vector<const char *> RbtArgParser::cast_args(const std::vector<std::string>
 
 // populate the substitution table for single dash long arguments automatically
 // whenever a long option is added
-void RbtArgParser::set_substitution(const std::string &opts) {
+void RbtArgParser::add_substitution(const std::string &opts) {
     auto comma_position = opts.find(",");
     std::string long_option_name;
     if (comma_position != std::string::npos) {

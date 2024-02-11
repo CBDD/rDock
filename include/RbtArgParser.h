@@ -23,12 +23,14 @@ class RbtArgParser {
 
     // convenience functions to improve readability when adding options
     // add a boolean flag to the options
-    void add_flag(const std::string &opts, const std::string &dest, const char *default_value = "false");
+    inline void add_flag(const std::string &opts, const std::string &dest, const char *default_value = "false"){
+        add<bool>(opts, dest, default_value);
+    }
 
     // add whatever type of option
     template <typename T>
     void add(const std::string &opts, const std::string &dest, const char *default_value = nullptr) {
-        set_substitution(opts);
+        add_substitution(opts);
         if (default_value == nullptr) {
             parser.add_options()(opts, dest, cxxopts::value<T>());
         } else {
@@ -43,7 +45,7 @@ class RbtArgParser {
     void warn_deprecated_argument(const char *arg);
     std::vector<std::string> preprocess_args(int argc, const char *argv[]);
     std::vector<const char *> cast_args(const std::vector<std::string> &args) const;
-    void set_substitution(const std::string &opts);
+    void add_substitution(const std::string &opts);
 };
 
 class ValidationError: public std::runtime_error {
