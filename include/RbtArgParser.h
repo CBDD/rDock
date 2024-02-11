@@ -23,7 +23,7 @@ class RbtArgParser {
 
     // convenience functions to improve readability when adding options
     // add a boolean flag to the options
-    inline void add_flag(const std::string &opts, const std::string &dest, const char *default_value = "false"){
+    inline void add_flag(const std::string &opts, const std::string &dest, const char *default_value = "false") {
         add<bool>(opts, dest, default_value);
     }
 
