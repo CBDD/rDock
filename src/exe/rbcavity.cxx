@@ -73,8 +73,8 @@ std::ostream &operator<<(std::ostream &os, const RBCavityConfig &config) {
     os << "-r " << config.strReceptorPrmFile << endl;
     if (config.bList) os << "-l " << config.dist << endl;
     if (config.bBorder) os << "-b " << config.border << endl;
-    if (config.bWriteAS) os << "-was" << endl;
-    if (config.bReadAS) os << "-ras" << endl;
+    if (config.bWriteAS) os << "--was" << endl;
+    if (config.bReadAS) os << "--ras" << endl;
     if (config.bMOEgrid) os << "-m" << endl;
     if (config.bDump) os << "-d" << endl;
     if (config.bSite) os << "-s" << endl;
@@ -301,12 +301,13 @@ int main(int argc, const char *argv[]) {
     try {
         RBCavity(config);
     } catch (RbtError &e) {
-        cout << e << endl;
-    } catch (...) {
-        cout << "Unknown exception" << endl;
+        cerr << e << endl;
+        return 1;
+    } catch (std::exception &e) {
+        cerr << "Unknown exception" << endl;
+        cerr << e.what() << endl;
+        return 1;
     }
-
     _RBTOBJECTCOUNTER_DUMP_(cout)
-
     return 0;
 }
