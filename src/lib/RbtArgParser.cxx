@@ -16,11 +16,8 @@ void RbtArgParser::add_flag(const std::string &opts, const std::string &dest, co
 }
 
 cxxopts::parse_result RbtArgParser::parse(int argc, const char *argv[]) {
-    std::cerr << "preprocess_args" << std::endl;
     auto fixed_args = preprocess_args(argc, argv);
-    std::cerr << "cast_args" << std::endl;
     auto fixed_char_ptr_args = cast_args(fixed_args);
-    std::cerr << "parse" << std::endl;
     return parser.parse(fixed_char_ptr_args.size(), fixed_char_ptr_args.data());
 }
 

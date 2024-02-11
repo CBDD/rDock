@@ -12,8 +12,8 @@ typedef std::vector<std::string> ArgsSubstitutions;
 
 class RbtArgParser {
  public:
-    ArgsSubstitutions substitutions;
     cxxopts::options parser;
+    ArgsSubstitutions substitutions;
 
  public:
     RbtArgParser(const std::string &program, const std::string &description = "");
