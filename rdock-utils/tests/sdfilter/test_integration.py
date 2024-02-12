@@ -36,7 +36,7 @@ def test_do_nothing():
 def test_basic_run(args: list[str], expected_titles: list[str], capsys: pytest.CaptureFixture):
     main(args)
     captured = capsys.readouterr()
-    input = StringIO(captured.out)
-    molecules = read_molecules(input)
+    output = StringIO(captured.out)
+    molecules = read_molecules(output)
     titles = [m.title for m in molecules]
     assert titles == expected_titles
