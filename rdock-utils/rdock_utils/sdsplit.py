@@ -15,7 +15,6 @@ def main(argv: list[str] | None = None) -> None:
     logging.basicConfig(level=logging.WARNING)
     config = get_config(argv)
     logging.root.setLevel(config.log_level)
-    logger.info(config)
     inputs = inputs_generator(config.infiles)
     batched_molecules = itertools.batched(read_molecules_from_all_inputs(inputs), config.record_size)
     outputs = outputs_generator(config.output_root)
