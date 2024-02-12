@@ -1,0 +1,4 @@
+from ..conftest import FIXTURES_FOLDER
+
+SDSPLIT_FIXTURES_FOLDER = FIXTURES_FOLDER / "sdsplit"
+INPUT_FILE = str(SDSPLIT_FIXTURES_FOLDER / "input.sdf")
