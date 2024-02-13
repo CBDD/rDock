@@ -12,13 +12,13 @@ typedef std::vector<std::string> ArgsSubstitutions;
 
 class RbtArgParser {
  public:
-    cxxopts::options parser;
+    cxxopts::Options parser;
     ArgsSubstitutions substitutions;
 
  public:
     RbtArgParser(const std::string &program, const std::string &description = "");
 
-    cxxopts::parse_result parse(int argc, const char *argv[]);
+    cxxopts::ParseResult parse(int argc, const char *argv[]);
     inline std::string help() const { return parser.help(); }
 
     // convenience functions to improve readability when adding options

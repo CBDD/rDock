@@ -11,7 +11,7 @@ RbtArgParser::RbtArgParser(const std::string &program, const std::string &descri
     parser(program, description),
     substitutions({}) {}
 
-cxxopts::parse_result RbtArgParser::parse(int argc, const char *argv[]) {
+cxxopts::ParseResult RbtArgParser::parse(int argc, const char *argv[]) {
     auto fixed_args = preprocess_args(argc, argv);
     auto fixed_char_ptr_args = cast_args(fixed_args);
     return parser.parse(fixed_char_ptr_args.size(), fixed_char_ptr_args.data());

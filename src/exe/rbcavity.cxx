@@ -101,7 +101,7 @@ RBCavityConfig parse_args(int argc, const char *argv[]) {
 
         config.validate();
         return config;
-    } catch (cxxopts::parse_error &e) {
+    } catch (cxxopts::exceptions::parsing &e) {
         std::cerr << "Error parsing options: " << e.what() << std::endl;
     } catch (RbtArgParser::ValidationError &e) {
         std::cerr << "Invalid configuration: " << e.what() << std::endl;
