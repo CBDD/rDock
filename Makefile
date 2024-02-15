@@ -54,9 +54,12 @@ LEGACY_BUILD                ?= NO
 ifeq ($(LEGACY_BUILD),YES)
 	CXX_STD                 ?= c++11
 	CXX_BASE_FLAGS          += -Wno-deprecated -fpermissive
+	EXE_FOLDER				= src/exe_legacy
+	LIB_DEPENDENCIES        += -lpopt
 else
 	CXX_BASE_FLAGS          += -Wall
 	CXX_STD                 ?= c++14
+	EXE_FOLDER				= src/exe
 endif
 
 CXX_EXTRA_FLAGS             ?=
@@ -79,7 +82,7 @@ endif
 DEFINES                     += -DRBT_VERSION=\"$(RBT_VERSION)\"
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
-LIB_DEPENDENCIES            := -lpopt -lm -lstdc++
+LIB_DEPENDENCIES            += -lm
 LIBS                        += $(LIB_DEPENDENCIES) -lRbt
 INCLUDE                     := $(addprefix -I./, $(shell find include/ -type d )) $(addprefix -I./, $(shell find import/ -type d ))
 LIBRARY                     := ./lib
@@ -101,7 +104,6 @@ $(shell mkdir -p $(objdirs) ./lib ./bin)
 
 bin_names   = rbdock rbcavity rbmoegrid rblist rbcalcgrid
 bins        = $(addprefix bin/, $(bin_names))
-bin_sources = $(addprefix src/exe/, $(addsuffix .cxx $(bins)))
 
 
 .PHONY:	\
@@ -192,8 +194,22 @@ lib: lib/libRbt.so
 lib/libRbt.so: $(objects)
 	$(CXX) $(CXX_FLAGS) -shared -L$(LIBRARY) $^ -o lib/libRbt.so $(LIB_DEPENDENCIES)
 
+## conditional compilation of legacy binaries
+ifeq ($(LEGACY_BUILD),YES)
+bin/%: src/exe_legacy/%.cxx lib/libRbt.so
+	@echo
+	@echo "----------------------------------------------------------------------------"
+	@echo "WARNING! Legacy build is deprecated and will be removed in future releases."
+	@echo "Please update your environment to use modern c++ standards."
+	@echo "----------------------------------------------------------------------------"
+	@echo
+	$(CXX) $(CXX_FLAGS) $(INCLUDE) -L$(LIBRARY) -o $@ $< $(LIBS)
+
+else
 bin/%: src/exe/%.cxx lib/libRbt.so
 	$(CXX) $(CXX_FLAGS) $(INCLUDE) -L$(LIBRARY) -o $@ $< $(LIBS)
+
+endif
 
 tests/data/%.as: tests/data/%.prm bin/rbcavity
 	cd tests/data ; RBT_ROOT=../.. LD_LIBRARY_PATH=../../lib:$(LD_LIBRARY_PATH) ../../bin/rbcavity -r$(notdir $<) -was
