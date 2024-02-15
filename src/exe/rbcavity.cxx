@@ -13,7 +13,6 @@
 // Standalone executable for generating docking site .as files for rbdock
 
 #include <algorithm>
-#include <cxxopts.hpp>
 #include <iomanip>
 
 #include "RbtArgParser.h"
@@ -101,7 +100,7 @@ RBCavityConfig parse_args(int argc, const char *argv[]) {
 
         config.validate();
         return config;
-    } catch (cxxopts::exceptions::parsing &e) {
+    } catch (RbtArgParser::parsing_error &e) {
         std::cerr << "Error parsing options: " << e.what() << std::endl;
     } catch (RbtArgParser::ValidationError &e) {
         std::cerr << "Invalid configuration: " << e.what() << std::endl;

@@ -2,12 +2,12 @@
 #define _RBTARGPARSER_H_
 
 #include <cxxopts.hpp>
-#include <iostream>
 #include <string>
 #include <vector>
 
 namespace RbtArgParser {
 
+using parsing_error = cxxopts::exceptions::parsing;
 typedef std::vector<std::string> ArgsSubstitutions;
 
 class RbtArgParser {
