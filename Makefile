@@ -82,7 +82,7 @@ endif
 DEFINES                     += -DRBT_VERSION=\"$(RBT_VERSION)\"
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
-LIB_DEPENDENCIES            += -lm
+LIB_DEPENDENCIES            += -lm -lpopt
 LIBS                        += $(LIB_DEPENDENCIES) -lRbt
 INCLUDE                     := $(addprefix -I./, $(shell find include/ -type d )) $(addprefix -I./, $(shell find import/ -type d ))
 LIBRARY                     := ./lib
