@@ -1,8 +1,9 @@
+name: "rDock-legacy build matrix"
 on:
   push:
-    branches: [ main ]
+    branches: [ rdock-legacy ]
   pull_request:
-    branches: [ main ]
+    branches: [ rdock-legacy ]
   schedule:
     - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
 
