@@ -1,4 +1,0 @@
-from ..conftest import FIXTURES_FOLDER
-
-SDFILTER_FIXTURES_FOLDER = FIXTURES_FOLDER / "sdfilter"
-INPUT_FILE = str(SDFILTER_FIXTURES_FOLDER / "input.sdf")
