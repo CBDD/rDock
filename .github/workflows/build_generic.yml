@@ -33,7 +33,7 @@ jobs:
 
     - name: Set version
       id: set_version
-      run: echo "RBT_VERSION=$(date +%y.%m).${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+      run: echo "RBT_VERSION=$(date +%y.%m).${{ github.run_number }}-legacy" >> "$GITHUB_OUTPUT"
 
     - name: Set candidate name
       id: set_candidate_name
@@ -47,10 +47,10 @@ jobs:
 
     - name: Create bundle
       run: |
-        tar -czvf rdock-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz \
+        tar -czvf rdock-legacy-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz \
           bin/ lib/ include/ data/ scripts/ Makefile license.txt README.md old_README.md
 
     - name: Upload bundle
       uses: actions/upload-artifact@v3
       with:
-        path: rdock-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz
+        path: rdock-legacy-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz
