@@ -11,7 +11,7 @@ jobs:
   check-lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: setup-lint
       run: |
         sudo apt-get update
@@ -44,11 +44,11 @@ jobs:
   
   release:
     needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name != 'schedule'
+    if: github.ref == 'refs/heads/rdock-legacy' && github.event_name != 'schedule'
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3  # probably not needed, but just in case
+    - uses: actions/checkout@v4  # probably not needed, but just in case
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
