@@ -1,8 +1,9 @@
+name: "rDock-legacy build matrix"
 on:
   push:
-    branches: [ main ]
+    branches: [ rdock-legacy ]
   pull_request:
-    branches: [ main ]
+    branches: [ rdock-legacy ]
   schedule:
     - cron: '0 12 * * 1' # every Monday at 11:00 UTC - 12:00 CET
 
@@ -60,7 +61,7 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}
+        tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}-legacy
         artifacts: artifacts/*/*.tar.gz
         draft: true
 
