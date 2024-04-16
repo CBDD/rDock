@@ -74,12 +74,4 @@ you may want to add these lines to your profile/configuration files like ~/.bash
 
 ## Old build system (deprecated):
 
-all the information about how to use the old build system is available in the [old readme file](https://github.com/CBDD/rDock/blob/main/old_README.md) file.  
-if you really need to use it, set the environment variable USE_OLD_BUILD_SYSTEM to 1 before running make
-
-```
-cd build
-USE_OLD_BUILD_SYSTEM=1 make linux-g++-64 -j 4
-```
-
-this build system is deprecated and will be removed in the future.
+this build system has been removed. if you _really_ need to use it, you can find it in [the frozen legacy branch here](https://github.com/CBDD/rDock/releases/tag/v24.04.204-legacy)
