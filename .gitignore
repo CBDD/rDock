@@ -9,9 +9,6 @@ bin/
 obj/
 lib/libRbt.so
 
-# build folders
-build/linux-g++-64
-
 # test files
 *.as
 tests/results

@@ -112,9 +112,9 @@ void RbtMdlFileSource::Parse() {
 
                 // Compose the atom name from element+atomID (i.e. C1, N2, C3 etc)
                 nAtomId++;
-                ostringstream ostr(szAtomName);
+                ostringstream ostr;
                 ostr << strElementName << nAtomId << ends;
-                RbtString strAtomName(szAtomName);
+                RbtString strAtomName(ostr.str());
 
                 // Construct a new atom (constructor only accepts the 2D params)
                 RbtAtomPtr spAtom(new RbtAtom(
