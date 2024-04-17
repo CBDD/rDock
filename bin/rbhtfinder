@@ -47,11 +47,11 @@ def prepare_array(sdreport_array, name_column):
     number_of_poses = modal_shape[0][
         0
     ]  # find modal number of poses per molecule in the array
-    if number_of_poses * modal_shape[1] < sdreport_array.shape[0] * 0.99:
-        # raise error if less than 99% of molecules have this number_of_poses
-        raise IOError("The number of poses provided per molecule is too inconsistent.")
-    # remove molecules with too few/many poses
-    split_array_clean = [n for n in split_array if n.shape[0] == number_of_poses]
+
+    split_array_clean = sum([np.array_split(n, n.shape[0] / number_of_poses) for n in split_array if not n.shape[0] % number_of_poses and n.shape[0]], [])
+
+    if len(split_array_clean) * number_of_poses < sdreport_array.shape[0] * 0.99:
+        print(f"WARNING: the number of poses provided per molecule is inconsistent. Only {len(split_array_clean)} of {int(sdreport_array.shape[0] / number_of_poses)} moleules have {number_of_poses} poses.")
 
     molecule_array = np.array(split_array_clean)
     # overwrite the name column (should be the only one with dtype=str) so we can force everything to float
