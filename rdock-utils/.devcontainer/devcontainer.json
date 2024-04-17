@@ -1,0 +1,36 @@
+{
+	"name": "rdock-utils",
+	"build": {
+		"dockerfile": "../Dockerfile",
+		"context": "..",
+		"target": "development"
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"python.languageServer": "Pylance",
+				"python.testing.pytestEnabled": true,
+				"python.testing.pytestArgs": [
+					"tests"
+				],
+				"[python]": {
+					"editor.formatOnSave": true,
+					"editor.codeActionsOnSave": {
+						"source.organizeImports": true
+					},
+					"editor.defaultFormatter": "charliermarsh.ruff"
+				},
+				"files.autoSave": "afterDelay",
+				"files.autoSaveDelay": 1000
+			},
+			"extensions": [
+				"ms-python.python",
+				"littlefoxteam.vscode-python-test-adapter",
+				"ms-vsliveshare.vsliveshare",
+				"mhutchie.git-graph",
+				"ms-toolsai.jupyter",
+				"charliermarsh.ruff"
+			]
+		}
+	}
+}
