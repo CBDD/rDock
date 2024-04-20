@@ -19,11 +19,11 @@ class RbtArgParser {
     RbtArgParser(const std::string &program, const std::string &description = "");
 
     cxxopts::ParseResult parse(int argc, const char *argv[]);
-    inline std::string help() const { return parser.help(); }
+    std::string help() const { return parser.help(); }
 
     // convenience functions to improve readability when adding options
     // add a boolean flag to the options
-    inline void add_flag(const std::string &opts, const std::string &dest, const char *default_value = "false") {
+    void add_flag(const std::string &opts, const std::string &dest, const char *default_value = "false") {
         add<bool>(opts, dest, default_value);
     }
 
