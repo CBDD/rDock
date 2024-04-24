@@ -7,14 +7,14 @@ try:
 except ImportError:
     pd = None
 
+import argparse
+import itertools
+import multiprocessing
 import os
 import sys
 from collections import Counter
-import argparse
-from pathlib import Path
-import itertools
-import multiprocessing
 from functools import partial
+from pathlib import Path
 
 
 def apply_threshold(scored_poses, column, steps, threshold):
@@ -48,10 +48,19 @@ def prepare_array(sdreport_array, name_column):
         0
     ]  # find modal number of poses per molecule in the array
 
-    split_array_clean = sum([np.array_split(n, n.shape[0] / number_of_poses) for n in split_array if not n.shape[0] % number_of_poses and n.shape[0]], [])
+    split_array_clean = sum(
+        [
+            np.array_split(n, n.shape[0] / number_of_poses)
+            for n in split_array
+            if not n.shape[0] % number_of_poses and n.shape[0]
+        ],
+        [],
+    )
 
     if len(split_array_clean) * number_of_poses < sdreport_array.shape[0] * 0.99:
-        print(f"WARNING: the number of poses provided per molecule is inconsistent. Only {len(split_array_clean)} of {int(sdreport_array.shape[0] / number_of_poses)} moleules have {number_of_poses} poses.")
+        print(
+            f"WARNING: the number of poses provided per molecule is inconsistent. Only {len(split_array_clean)} of {int(sdreport_array.shape[0] / number_of_poses)} moleules have {number_of_poses} poses."
+        )
 
     molecule_array = np.array(split_array_clean)
     # overwrite the name column (should be the only one with dtype=str) so we can force everything to float
