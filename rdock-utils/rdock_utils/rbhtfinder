@@ -142,11 +142,10 @@ def write_output(
 def select_best_filter_combination(results, max_time, min_perc):
     """
     Very debatable how to do this...
-    Here we exclude all combinations with TIME > -0.1 and calculate an "enrichment factor"
+    Here we exclude all combinations with TIME < max_time and calculate an "enrichment factor"
     (= percentage of validation compounds / percentage of all compounds); we select the
     threshold with the highest enrichment factor
     """
-    print(results)
     min_max_values = {}
     for col in results[0]["perc_val"].keys():
         vals = [result["perc_val"][col] for result in results]
@@ -173,7 +172,6 @@ def select_best_filter_combination(results, max_time, min_perc):
         else 0
         for result in results
     ]
-    print(combination_scores)
     return np.argmax(combination_scores)
 
 
