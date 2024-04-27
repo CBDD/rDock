@@ -1,5 +1,7 @@
 FROM centos:centos7 as base
 
 # Install dependencies
-RUN yum install -y popt-devel gcc-c++ make
-ENV LEGACY_BUILD=YES
+RUN yum install -y centos-release-scl && yum install -y devtoolset-11-gcc devtoolset-11-gcc-c++ devtoolset-11-make devtoolset-11-binutils
+RUN yum install -y popt-devel
+
+ENTRYPOINT [ "scl", "enable", "devtoolset-11", "bash" ]
