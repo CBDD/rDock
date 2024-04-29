@@ -1,4 +1,4 @@
 from ..conftest import FIXTURES_FOLDER
 
 SDSORT_FIXTURES_FOLDER = FIXTURES_FOLDER / "sdsort"
-INPUT_FILE = str(SDSORT_FIXTURES_FOLDER / "input.sdf")
+BASIC_INPUT_FILE = str(SDSORT_FIXTURES_FOLDER / "basic_input.sdf")
