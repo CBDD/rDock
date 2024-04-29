@@ -1,5 +1,6 @@
 import itertools
 import logging
+import math
 import sys
 from typing import Iterable, TextIO
 
@@ -34,6 +35,15 @@ class SDSort:
 
     def get_sorting_value(self, molecule: FastSDMol) -> float | str:
         if self.config.numeric_sort:
-            return float(molecule.get_field(self.config.sorting_field) or 0)
+            try:
+                value = float(molecule.get_field(self.config.sorting_field))
+                return value
+            except ValueError:
+                logger_msg = (
+                    f"Molecule {molecule.title} has no field '{self.config.sorting_field}'. "
+                    "Defaulted to to infinity. Consider using sdfilter to remove invalid results"
+                )
+                logger.warning(logger_msg)
+                return math.inf
 
         return molecule.get_field(self.config.sorting_field) or ""
