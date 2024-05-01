@@ -1,85 +1,102 @@
+import itertools
 from io import StringIO
+from typing import Iterable
 
 import pytest
 
+from rdock_utils.common import read_molecules
 from rdock_utils.sdsort.parser import get_config
 from rdock_utils.sdsort.sdsort import SDSort
 
-from .conftest import (
-    BASIC_INPUT_DATA,
-    BASIC_INPUT_DATA_DIFFERENT_FIELD,
-    BASIC_INPUT_FILE,
-    FAST_MODE_INPUT_DATA,
-    FAST_MODE_INPUT_DATA_DIFFERENT_FIELD,
-    FAST_MODE_INPUT_FILE,
-)
-from .helper import generate_result
+from .conftest import BASIC_INPUT_FILE, FAST_MODE_INPUT_FILE, FAST_MODE_INPUT_WITH_ID_FILE
 
 
+def get_data(path: str, key_field: str = "_TITLE1", value_field: str = "SCORE") -> list[tuple[str, str]]:
+    with open(path, "r") as f:
+        molecules = read_molecules(f)
+        return [(m.get_field(key_field), m.get_field(value_field)) for m in molecules]
+
+
+def sorted_grouped_values(
+    values: Iterable[str],
+    reverse: bool = False,
+    numeric: bool = False,
+) -> list[tuple[str, str]]:
+    convert = float if numeric else str
+    return list(
+        itertools.chain.from_iterable(
+            sorted(values, key=lambda x: convert(x[1]), reverse=reverse)
+            for _, values in itertools.groupby(values, key=lambda x: x[0])
+        )
+    )
+
+
+@pytest.mark.parametrize("numeric", [pytest.param(False, id="lexicographic"), pytest.param(True, id="numeric")])
+@pytest.mark.parametrize("reverse", [pytest.param(False, id="ascending"), pytest.param(True, id="descending")])
 @pytest.mark.parametrize(
-    "args, expected_result",
-    [
-        pytest.param(
-            [BASIC_INPUT_FILE],
-            generate_result([1, 2, 6, 5, 4, 3], BASIC_INPUT_DATA),
-            id="Default sort (Lexicographic by '-f' argument)",
-        ),
-        pytest.param(
-            ["-f", "test_field", BASIC_INPUT_FILE],
-            generate_result([6, 1, 3, 4, 5, 2], BASIC_INPUT_DATA_DIFFERENT_FIELD),
-            id="Default sort different field",
-        ),
-        pytest.param(
-            ["-r", BASIC_INPUT_FILE],
-            generate_result([3, 4, 5, 6, 2, 1], BASIC_INPUT_DATA),
-            id="Reverse sort",
-        ),
-        pytest.param(
-            ["-n", BASIC_INPUT_FILE],
-            generate_result([2, 1, 6, 4, 3, 5], BASIC_INPUT_DATA),
-            id="Numeric sort",
-        ),
-        pytest.param(
-            ["-n", "-r", BASIC_INPUT_FILE],
-            generate_result([5, 3, 4, 6, 1, 2], BASIC_INPUT_DATA),
-            id="Reverse numeric sort",
-        ),
-        pytest.param(
-            ["-s", FAST_MODE_INPUT_FILE],
-            generate_result([2, 1, 4, 3, 5, 6, 8, 9, 7, 10], FAST_MODE_INPUT_DATA, True),
-            id="Default fast mode",
-        ),
-        pytest.param(
-            ["-s", FAST_MODE_INPUT_FILE],
-            generate_result([2, 1, 4, 3, 5, 6, 8, 9, 7, 10], FAST_MODE_INPUT_DATA, True),
-            id="Default fast mode",
-        ),
-        pytest.param(
-            ["-s", "-f", "test_field", FAST_MODE_INPUT_FILE],
-            generate_result([2, 1, 3, 4, 5, 6, 7, 8, 9, 10], FAST_MODE_INPUT_DATA_DIFFERENT_FIELD, True),
-            id="Default fast mode sort different field",
-        ),
-        pytest.param(
-            ["-s", "--group-key", "id", FAST_MODE_INPUT_FILE],
-            generate_result([2, 4, 3, 8, 1, 9, 7, 5, 6, 10], FAST_MODE_INPUT_DATA, True),
-            id="Default fast mode sort different group key",
-        ),
-    ],
+    "sorting_field",
+    [pytest.param(["-f", "test_field"], id="custom field"), pytest.param([], id="default field")],
 )
-def test_basic_run(args: list[str], expected_result: list[str]):
+def test_sdsort_basic(numeric: bool, reverse: bool, sorting_field: list[str]):
+    args = sorting_field + (["-n"] if numeric else []) + (["-r"] if reverse else []) + [BASIC_INPUT_FILE]
     config = get_config(args)
     output = StringIO()
     sdsort = SDSort(config, output)
+    data = get_data(BASIC_INPUT_FILE, value_field=config.sorting_field)
+    convert = float if numeric else str
+    expected_result = sorted(data, key=lambda x: convert(x[1]), reverse=reverse)
 
     sdsort.run()
+
     output.seek(0)
-    output_lines = output.getvalue().strip().splitlines()
-    titles = [line for line in output_lines if line.startswith("MOL")]
-    field_values = [
-        output_lines[i + 1].strip()
-        for i, line in enumerate(output_lines)
-        if line.startswith(f">  <{config.sorting_field}>")
-    ]
-    result = list(zip(titles, field_values))
+    molecules = read_molecules(output)
+    result = [(m.get_field(config.group_key), m.get_field(config.sorting_field)) for m in molecules]
+
+    assert result == expected_result
+
+
+@pytest.mark.parametrize("numeric", [pytest.param(False, id="lexicographic"), pytest.param(True, id="numeric")])
+@pytest.mark.parametrize("reverse", [pytest.param(False, id="ascending"), pytest.param(True, id="descending")])
+@pytest.mark.parametrize(
+    "sorting_field",
+    [pytest.param(["-f", "test_field"], id="custom field"), pytest.param([], id="default field")],
+)
+def test_sdsort_fast_mode(numeric: bool, reverse: bool, sorting_field: list[str]):
+    args = ["-s"] + sorting_field + (["-n"] if numeric else []) + (["-r"] if reverse else []) + [FAST_MODE_INPUT_FILE]
+    config = get_config(args)
+    output = StringIO()
+    sdsort = SDSort(config, output)
+    data = get_data(FAST_MODE_INPUT_FILE, value_field=config.sorting_field)
+    expected_result = sorted_grouped_values(data, reverse=reverse, numeric=numeric)
+
+    sdsort.run()
+
+    output.seek(0)
+    molecules = read_molecules(output)
+    result = [(m.get_field(config.group_key), m.get_field(config.sorting_field)) for m in molecules]
+
+    assert result == expected_result
+
+
+@pytest.mark.parametrize("numeric", [pytest.param(False, id="lexicographic"), pytest.param(True, id="numeric")])
+@pytest.mark.parametrize("reverse", [pytest.param(False, id="ascending"), pytest.param(True, id="descending")])
+@pytest.mark.parametrize(
+    "group_key",
+    [pytest.param(["--group-key", "_TITLE2"], id="custom group field"), pytest.param([], id="default group field")],
+)
+def test_sdsort_by_group_key(numeric: bool, reverse: bool, group_key: list[str]):
+    filename = FAST_MODE_INPUT_WITH_ID_FILE
+    args = ["-s"] + group_key + (["-n"] if numeric else []) + (["-r"] if reverse else []) + [filename]
+    config = get_config(args)
+    output = StringIO()
+    sdsort = SDSort(config, output)
+    data = get_data(filename, key_field=config.group_key, value_field=config.sorting_field)
+    expected_result = sorted_grouped_values(data, reverse=reverse, numeric=numeric)
+
+    sdsort.run()
+
+    output.seek(0)
+    molecules = read_molecules(output)
+    result = [(m.get_field(config.group_key), m.get_field(config.sorting_field)) for m in molecules]
 
     assert result == expected_result

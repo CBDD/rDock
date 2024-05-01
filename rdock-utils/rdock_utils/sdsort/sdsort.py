@@ -4,7 +4,8 @@ import math
 import sys
 from typing import Iterable, TextIO
 
-from ..common import FastSDMol, inputs_generator, molecules_with_progress_log, read_molecules_from_all_inputs
+from rdock_utils.common import FastSDMol, inputs_generator, molecules_with_progress_log, read_molecules_from_all_inputs
+
 from .parser import SDSortConfig
 
 logger = logging.getLogger("sdsort")
@@ -36,19 +37,17 @@ class SDSort:
     def get_sorting_value(self, molecule: FastSDMol) -> float | str:
         field = molecule.get_field(self.config.sorting_field)
 
-        if self.config.numeric_sort:
-            try:
-                if field is None:
-                    raise ValueError
-                else:
-                    return float(field)
+        if not self.config.numeric_sort:
+            return field or ""
 
-            except ValueError:
-                logger_msg = (
-                    f"Molecule {molecule.title} has no field '{self.config.sorting_field}'. "
-                    "Defaulted to to infinity. Consider using sdfilter to remove invalid results"
-                )
-                logger.warning(logger_msg)
-                return math.inf
+        try:
+            if field is None:
+                raise ValueError("Field is missing")
+            return float(field)
 
-        return field or ""
+        except ValueError as e:
+            logger.warning(
+                f"Field '{self.config.sorting_field}' for molecule {molecule.title}: {e} "
+                "Defaulted to to infinity. Consider using sdfilter to remove invalid results"
+            )
+            return math.inf
