@@ -18,6 +18,7 @@ sdtether = "rdock_utils.sdtether.main:main"
 sdtether_old = "rdock_utils.sdtether_original:main"
 sdfilter = "rdock_utils.sdfilter.main:main"
 sdmodify = "rdock_utils.sdmodify:main"
+sdsort = "rdock_utils.sdsort:main"
 
 [project.urls]
 Repository = "https://github.com/CBDD/rDock.git"
