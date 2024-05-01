@@ -34,10 +34,15 @@ class SDSort:
         return itertools.chain.from_iterable(sorted_groups)
 
     def get_sorting_value(self, molecule: FastSDMol) -> float | str:
+        field = molecule.get_field(self.config.sorting_field)
+
         if self.config.numeric_sort:
             try:
-                value = float(molecule.get_field(self.config.sorting_field))
-                return value
+                if field is None:
+                    raise ValueError
+                else:
+                    return float(field)
+
             except ValueError:
                 logger_msg = (
                     f"Molecule {molecule.title} has no field '{self.config.sorting_field}'. "
@@ -46,4 +51,4 @@ class SDSort:
                 logger.warning(logger_msg)
                 return math.inf
 
-        return molecule.get_field(self.config.sorting_field) or ""
+        return field or ""
