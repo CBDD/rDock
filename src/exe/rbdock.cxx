@@ -12,7 +12,6 @@
 
 // Main docking application
 #include <errno.h>
-#include <popt.h>  // for command-line parsing
 
 //#include <cxxopts.hpp>
 #include <iomanip>
