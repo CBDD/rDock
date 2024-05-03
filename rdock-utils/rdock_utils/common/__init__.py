@@ -1,5 +1,5 @@
 from .files import inputs_generator
-from .SDFParser import FastSDMol, read_molecules, read_molecules_from_all_inputs
+from .SDFParser import FastSDMol, molecules_with_progress_log, read_molecules, read_molecules_from_all_inputs
 from .superpose3d import MolAlignmentData, Superpose3D, update_coordinates
 from .types import (
     AtomsMapping,
@@ -19,6 +19,7 @@ __all__ = [
     "FastSDMol",
     "read_molecules",
     "read_molecules_from_all_inputs",
+    "molecules_with_progress_log",
     # -- superpose3d --
     "update_coordinates",
     "MolAlignmentData",

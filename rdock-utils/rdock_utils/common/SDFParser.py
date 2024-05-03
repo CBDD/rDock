@@ -107,3 +107,11 @@ def read_molecules(file: TextIO) -> Generator[FastSDMol, None, None]:
 
 def read_molecules_from_all_inputs(inputs: Iterable[TextIO]) -> Iterable[FastSDMol]:
     return itertools.chain.from_iterable(read_molecules(source) for source in inputs)
+
+
+def molecules_with_progress_log(molecules: Iterable[FastSDMol], count: int = 1000) -> Iterable[FastSDMol]:
+    for i, molecule in enumerate(molecules):
+        if i % count == 0:
+            logger.info(f"read {i} molecules")
+
+        yield molecule
