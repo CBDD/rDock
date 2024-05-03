@@ -84,30 +84,30 @@ std::ostream &operator<<(std::ostream &os, const RBCavityConfig &config) {
 RBCavityConfig parse_args(int argc, const char *argv[]) {
     auto parser = get_options_parser();
     try {
-        auto result = parser.parse(argc, argv);
-        RBCavityConfig config;
-        config.strReceptorPrmFile = result["receptor"].as<std::string>();
-        config.bReadAS = result["ras"].as<bool>();
-        config.bWriteAS = result["was"].as<bool>();
-        config.bDump = result["dump-insight"].as<bool>();
-        config.bViewer = result["viewer"].as<bool>();
-        config.bMOEgrid = result["m"].as<bool>();
-        config.bBorder = result.count("border") > 0;
-        if (config.bBorder) config.border = result["border"].as<float>();
-        config.bList = result.count("list") > 0;
-        if (config.bList) config.dist = result["list"].as<float>();
-        config.bSite = result["site"].as<bool>();
+        auto arguments = RbtArgParser::RbtParseResult(parser.parse(argc, argv));
+        RBCavityConfig config{};
+        arguments["receptor"] >> config.strReceptorPrmFile;
+        arguments["ras"] >> config.bReadAS;
+        arguments["was"] >> config.bWriteAS;
+        arguments["dump-insight"] >> config.bDump;
+        arguments["viewer"] >> config.bViewer;
+        arguments["m"] >> config.bMOEgrid;
+        config.bBorder = arguments["border"].is_present();
+        if (config.bBorder) arguments["border"] >> config.border;
+        config.bList = arguments["list"].is_present();
+        if (config.bList) arguments["list"] >> config.dist;
+        arguments["site"] >> config.bSite;
 
         config.validate();
         return config;
-    } catch (RbtArgParser::parsing_error &e) {
+    } catch (RbtArgParser::ParsingError &e) {
         std::cerr << "Error parsing options: " << e.what() << std::endl;
     } catch (RbtArgParser::ValidationError &e) {
         std::cerr << "Invalid configuration: " << e.what() << std::endl;
     }
     // if we reach this point, something went wrong. Print the help and exit
     std::cerr << parser.help() << std::endl;
-    exit(1);
+    throw RbtError(_WHERE_, "Log Expressions only have 1 operand");
 }
 
 void RBCavity(const RBCavityConfig &config) {
@@ -291,19 +291,18 @@ int main(int argc, const char *argv[]) {
     RbtString strExeName = exeFullPath.substr(exeFullPath.find_last_of("/\\") + 1);
     Rbt::PrintStdHeader(cout, strExeName + " - " + EXEVERSION);
 
-    RBCavityConfig config = parse_args(argc, argv);
-    // writing command line arguments
-    std::cout << config << std::endl;
-
-    cout.setf(ios_base::left, ios_base::adjustfield);
-
     try {
+        RBCavityConfig config = parse_args(argc, argv);
+        // writing command line arguments
+        std::cout << config << std::endl;
+        cout.setf(ios_base::left, ios_base::adjustfield);
         RBCavity(config);
     } catch (RbtError &e) {
         cerr << e << endl;
         return 1;
     } catch (std::exception &e) {
         cerr << "Unknown exception" << endl;
+        cerr << typeid(e).name() << endl;
         cerr << e.what() << endl;
         return 1;
     }
