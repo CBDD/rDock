@@ -1,0 +1,7 @@
+3
+if - -5.00 INTER 1.0 if - SCORE.NRUNS  3 0.0 -1.0,
+if - 1.00 RESTR 1.0 if - SCORE.NRUNS  5 0.0 -1.0,
+if - SCORE.NRUNS 9 0.0 -1.0
+2
+- INTER -5.0,
+- RESTR 1.0,
