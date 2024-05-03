@@ -39,25 +39,15 @@
 #
 #   CXX_EXTRA_FLAGS: extra flags to pass to the compiler. Default: empty
 #
-#   LEGACY_BUILD: set to YES for legacy systems that do not support modern c++ standards (like centos7)
-#                 this will enable the -fpermissive and -Wno-deprecated options too.
-#                 legacy build is deprecated, disabled by default, and will be removed in future
-#                 releases.
-#
 
 PREFIX                      ?= /usr
 CONFIG                      ?= RELEASE
 RBT_VERSION                 ?= v$(shell date +%y.%m-alpha)
 CXX                         ?= g++
 
-LEGACY_BUILD                ?= NO
-ifeq ($(LEGACY_BUILD),YES)
-	CXX_STD                 ?= c++11
-	CXX_BASE_FLAGS          += -Wno-deprecated -fpermissive
-else
-	CXX_BASE_FLAGS          += -Wall
-	CXX_STD                 ?= c++14
-endif
+CXX_BASE_FLAGS              += -Wall
+CXX_STD                     ?= c++17
+EXE_FOLDER				    = src/exe
 
 CXX_EXTRA_FLAGS             ?=
 CXX_BASE_FLAGS              += -pipe -std=$(CXX_STD) -fPIC
@@ -67,6 +57,10 @@ CXX_WARNING_FLAGS           +=
 
 DEBUG_DEFINES               := -D_DEBUG
 RELEASE_DEFINES             := -D_NDEBUG
+
+ifeq ($(LEGACY_BUILD),YES)
+	_ := $(error This option has been removed. If you really need it, checkout the rdock-legacy branch and try again.)
+endif
 
 ifeq ($(CONFIG),DEBUG)
 	CXX_CONFIG_FLAGS        += $(CXX_DEBUG_CONFIG_FLAGS)
@@ -79,7 +73,7 @@ endif
 DEFINES                     += -DRBT_VERSION=\"$(RBT_VERSION)\"
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
-LIB_DEPENDENCIES            := -lpopt -lm -lstdc++
+LIB_DEPENDENCIES            += -lm -lpopt
 LIBS                        += $(LIB_DEPENDENCIES) -lRbt
 INCLUDE                     := $(addprefix -I./, $(shell find include/ -type d )) $(addprefix -I./, $(shell find import/ -type d ))
 LIBRARY                     := ./lib
@@ -101,7 +95,6 @@ $(shell mkdir -p $(objdirs) ./lib ./bin)
 
 bin_names   = rbdock rbcavity rbmoegrid rblist rbcalcgrid
 bins        = $(addprefix bin/, $(bin_names))
-bin_sources = $(addprefix src/exe/, $(addsuffix .cxx $(bins)))
 
 
 .PHONY:	\
@@ -135,6 +128,10 @@ build_bin: build_directories
 build_lib: build_directories
 	$(MAKE) lib
 
+retest: build
+	$(MAKE) clean_tests
+	$(MAKE) test
+
 test: build ## run the tests suite
 	$(MAKE) test_rbcavity test_dock_run
 
@@ -162,7 +159,6 @@ veryclean: clean clean_bin clean_lib clean_tests ## equivalent to clean clean_bi
 
 lint: ## format the code using clang-format. Requires clang-format to be installed
 	@clang-format --style=file -i $(shell find src/ include/ -iname '*.cxx' -o -iname '*.h')
-
 
 ## Internal targets
 
