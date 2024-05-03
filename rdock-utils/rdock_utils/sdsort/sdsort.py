@@ -2,13 +2,22 @@ import itertools
 import logging
 import math
 import sys
+from dataclasses import dataclass
 from typing import Iterable, TextIO
 
 from rdock_utils.common import FastSDMol, inputs_generator, molecules_with_progress_log, read_molecules_from_all_inputs
 
-from .parser import SDSortConfig
-
 logger = logging.getLogger("sdsort")
+
+
+@dataclass(frozen=True)
+class SDSortConfig:
+    sorting_field: str
+    reverse_sort: bool
+    numeric_sort: bool
+    fast_mode: bool
+    group_key: str
+    files: list[str] | None
 
 
 class SDSort:

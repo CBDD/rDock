@@ -1,15 +1,6 @@
 import argparse
-from dataclasses import dataclass
 
-
-@dataclass(frozen=True)
-class SDSortConfig:
-    sorting_field: str
-    reverse_sort: bool
-    numeric_sort: bool
-    fast_mode: bool
-    group_key: str
-    files: list[str] | None
+from .sdsort import SDSortConfig
 
 
 def get_parser() -> argparse.ArgumentParser:
