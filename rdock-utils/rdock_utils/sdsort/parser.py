@@ -17,7 +17,7 @@ def get_parser() -> argparse.ArgumentParser:
     Notes:
     - If no SD file list is provided, the script reads from standard input.
     - Output is directed to standard output.
-    - Fast mode can be safely used for partial sorting of large SD files of raw docking hits without encountering memory issues.
+    - Fast mode can be safely used for partial sorting of large SD files of raw docking hits without encountering memory issues. It will sort together consecutive molecules with the same value for a grouping key (the title, by default) instead of sorting all provided molecules together.
     """
     parser = argparse.ArgumentParser(description=description)
     sorting_field_help = "Specify the field for sorting"
