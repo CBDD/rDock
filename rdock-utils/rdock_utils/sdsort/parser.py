@@ -15,7 +15,6 @@ class SDSortConfig:
 def get_parser() -> argparse.ArgumentParser:
     description = """Sorts SD records by a specified data field.
     Notes:
-    - "_REC" (record #) is provided as a pseudo-data field.
     - If no SD file list is provided, the script reads from standard input.
     - Output is directed to standard output.
     - Fast mode can be safely used for partial sorting of large SD files of raw docking hits without encountering memory issues.
