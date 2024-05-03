@@ -27,7 +27,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("--numeric", "-n", action="store_true", help="Perform a numeric sort (default: text sort)")
     fast_mode_help = "Enable fast mode: Sort records for each named compound independently (must be consecutive)"
     parser.add_argument("--fast", "-s", action="store_true", help=fast_mode_help)
-    name_field_help = "Specify the field for compound names (default: 1st title line)"
+    name_field_help = "Specify the grouping field for fast sorting mode (default: _TITLE1)"
     parser.add_argument("--group-key", "-id", default="_TITLE1", metavar="NameField", type=str, help=name_field_help)
     infile_help = "input file[s] to be processed. if not provided, stdin is used."
     parser.add_argument("files", nargs="*", type=str, help=infile_help)
