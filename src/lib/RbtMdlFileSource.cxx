@@ -27,8 +27,8 @@ RbtMdlFileSource::RbtMdlFileSource(
     m_bNegIonisable(bNegIonisable),
     m_bImplHydrogens(bImplHydrogens) {
     // Open an Element data source
-    m_spElementData =
-        RbtElementFileSourcePtr(new RbtElementFileSource(Rbt::GetRbtFileName("data", "RbtElements.dat")));
+    std::string elementsFileName = Rbt::GetRbtFileName("data", "RbtElements.dat");
+    m_spElementData = RbtElementFileSourcePtr(new RbtElementFileSource(elementsFileName));
     _RBTOBJECTCOUNTER_CONSTR_("RbtMdlFileSource");
 }
 
@@ -37,188 +37,185 @@ RbtMdlFileSource::~RbtMdlFileSource() { _RBTOBJECTCOUNTER_DESTR_("RbtMdlFileSour
 
 void RbtMdlFileSource::Parse() {
     // Only parse if we haven't already done so
-    if (!m_bParsedOK) {
-        ClearMolCache();  // Clear current cache
-        Read();           // Read the current record
+    if (m_bParsedOK) return;
 
-        try {
-            RbtFileRecListIter fileIter = m_lineRecs.begin();
-            RbtFileRecListIter fileEnd = m_lineRecs.end();
+    ClearMolCache();  // Clear current cache
+    Read();           // Read the current record
 
-            //////////////////////////////////////////////////////////
-            // 1a. Store title lines (first 3)..
-            RbtUInt nTitleRec = 3;
-            m_titleList.reserve(nTitleRec);  // Allocate enough memory for the vector
-            while ((m_titleList.size() < nTitleRec) && (fileIter != fileEnd)) {
-                m_titleList.push_back(*fileIter++);
+    try {
+        RbtFileRecListIter fileIter = m_lineRecs.begin();
+        RbtFileRecListIter fileEnd = m_lineRecs.end();
+
+        //////////////////////////////////////////////////////////
+        // 1a. Store title lines (first 3)..
+        RbtUInt nTitleRec = 3;
+        m_titleList.reserve(nTitleRec);  // Allocate enough memory for the vector
+        while ((m_titleList.size() < nTitleRec) && (fileIter != fileEnd)) {
+            m_titleList.push_back(*fileIter++);
+        }
+
+        // 1b ..and check we read them all before reaching the end of the file
+        if (m_titleList.size() != nTitleRec)
+            throw RbtFileParseError(_WHERE_, "Incomplete title records in " + GetFileName());
+
+        // 1c DM 20 Dec 1999 - throw model error if record is 2D instead of 3D
+        // DM 08 Aug 2000 - check for "3" at position 21 as well as "3D" at position 20
+        if ((m_titleList[1].find("3", 21) != 21) && (m_titleList[1].find("3D", 20) != 20)) {
+            throw RbtModelError(_WHERE_, "2D record in " + GetFileName());
+        }
+
+        //////////////////////////////////////////////////////////
+        // 2. Read number of atoms and bonds
+        RbtUInt nAtomRec;
+        RbtUInt nBondRec;
+        if (fileIter != fileEnd) {
+            // The SD file format only uses a field width of 3 to store nAtoms, nBonds
+            // so for values over 99 the two fields coalesce.
+            // Workaround is to insert a space between the two fields (or use sscanf)
+            if ((*fileIter).size() > 3) (*fileIter).insert(3, " ");
+            istringstream istr((*fileIter++).c_str());
+            istr >> nAtomRec >> nBondRec;
+        } else
+            throw RbtFileParseError(_WHERE_, "Missing atom and bond information in " + GetFileName());
+
+        //////////////////////////////////////////////////////////
+        // 3a. Create and store atoms
+        m_atomList.reserve(nAtomRec);  // Allocate enough memory for the vector
+
+        RbtInt nAtomId(0);
+        RbtCoord coord;                   // X,Y,Z coords
+        RbtString strElementName;         // element name
+        RbtInt nMassDiff;                 // mass difference
+        RbtInt nFormalCharge;             // formal charge (MDL stores in a funny way, see below)
+        RbtString strSegmentName("H");    // constant (i.e. one segment, one residue)
+        RbtString strSubunitId("1");      // constant
+        RbtString strSubunitName("MOL");  // constant
+
+        // DM 24 Mar 1999 - allocate a C-string for streaming the atom name into
+        RbtInt lenAtomName(10);
+        char* szAtomName(new char[lenAtomName + 1]);
+
+        while ((m_atomList.size() < nAtomRec) && (fileIter != fileEnd)) {
+            istringstream istr((*fileIter++).c_str());
+            istr >> coord.x >> coord.y >> coord.z >> strElementName >> nMassDiff >> nFormalCharge;
+
+            // Look up the element data
+            RbtElementData elData = m_spElementData->GetElementData(strElementName);
+            RbtInt nAtomicNo = elData.atomicNo;
+
+            // Correct the formal charge (for non-zero charges, MDL stores as 4-charge)
+            // i.e. -3 is stored as 7, -2 as 6, -1 as 5, 0 as 0 or 4
+            //+1 as 3, +2 as 2, +3 as 1
+            if (nFormalCharge > 0) nFormalCharge = 4 - nFormalCharge;
+
+            // Compose the atom name from element+atomID (i.e. C1, N2, C3 etc)
+            nAtomId++;
+            ostringstream ostr;
+            ostr << strElementName << nAtomId << ends;
+            RbtString strAtomName(ostr.str());
+
+            // Construct a new atom (constructor only accepts the 2D params)
+            RbtAtomPtr spAtom(new RbtAtom(
+                nAtomId,
+                nAtomicNo,
+                strAtomName,
+                strSubunitId,
+                strSubunitName,
+                strSegmentName,
+                RbtAtom::UNDEFINED,  // Hybridisation state
+                0,                   // Num implicit hydrogens
+                nFormalCharge
+            )  // Formal charge
+            );
+
+            // Now set the remaining 2-D and 3-D params
+            spAtom->SetCoords(coord);
+            spAtom->SetPartialCharge(0.0);
+            spAtom->SetGroupCharge(nFormalCharge);  // Default is group charge=formal charge (gets corrected later)
+            spAtom->SetAtomicMass(elData.mass + nMassDiff);
+
+            m_atomList.push_back(spAtom);
+            m_segmentMap[strSegmentName]++;  // increment atom count in segment map
+        }
+
+        delete[] szAtomName;  // Tidy up the C-string
+
+        // 3b ..and check we read them all before reaching the end of the file
+        if (m_atomList.size() != nAtomRec)
+            throw RbtFileParseError(_WHERE_, "Incomplete atom records in " + GetFileName());
+
+        //////////////////////////////////////////////////////////
+        // 4a. Create and store bonds
+        m_bondList.reserve(nBondRec);  // Allocate enough memory for the vector
+
+        RbtInt nBondId(0);
+        RbtUInt idxAtom1;
+        RbtUInt idxAtom2;
+        RbtInt nBondOrder;
+
+        while ((m_bondList.size() < nBondRec) && (fileIter != fileEnd)) {
+            // The SD file format only uses a field width of 3 to store atom1,atom2
+            // so for values over 99 the two fields coalesce.
+            // Workaround is to insert a space between the two fields (or use sscanf)
+            if ((*fileIter).size() > 3) (*fileIter).insert(3, " ");
+            istringstream istr((*fileIter++).c_str());
+            istr >> idxAtom1 >> idxAtom2 >> nBondOrder;
+            if ((idxAtom1 > nAtomRec) || (idxAtom2 > nAtomRec)) {  // Check for indices in range
+                throw RbtFileParseError(_WHERE_, "Atom index out of range in bond records in " + GetFileName());
             }
+            RbtAtomPtr spAtom1(m_atomList[idxAtom1 - 1]);  // Decrement the atom index as the atoms are numbered
+                                                           // from zero in our atom vector
+            RbtAtomPtr spAtom2(m_atomList[idxAtom2 - 1]);  // Decrement the atom index as the atoms are numbered
+                                                           // from zero in our atom vector
+            RbtBondPtr spBond(new RbtBond(
+                ++nBondId,  // Store a nominal bond ID starting from 1
+                spAtom1,
+                spAtom2,
+                nBondOrder
+            ));
+            m_bondList.push_back(spBond);
+        }
 
-            // 1b ..and check we read them all before reaching the end of the file
-            if (m_titleList.size() != nTitleRec)
-                throw RbtFileParseError(_WHERE_, "Incomplete title records in " + GetFileName());
+        // 4b ..and check we read them all before reaching the end of the file
+        if (m_bondList.size() != nBondRec)
+            throw RbtFileParseError(_WHERE_, "Incomplete bond records in " + GetFileName());
 
-            // 1c DM 20 Dec 1999 - throw model error if record is 2D instead of 3D
-            // DM 08 Aug 2000 - check for "3" at position 21 as well as "3D" at position 20
-            if ((m_titleList[1].find("3", 21) != 21) && (m_titleList[1].find("3D", 20) != 20)) {
-                throw RbtModelError(_WHERE_, "2D record in " + GetFileName());
-            }
-
-            //////////////////////////////////////////////////////////
-            // 2. Read number of atoms and bonds
-            RbtUInt nAtomRec;
-            RbtUInt nBondRec;
-            if (fileIter != fileEnd) {
-                // The SD file format only uses a field width of 3 to store nAtoms, nBonds
-                // so for values over 99 the two fields coalesce.
-                // Workaround is to insert a space between the two fields (or use sscanf)
-                if ((*fileIter).size() > 3) (*fileIter).insert(3, " ");
-                istringstream istr((*fileIter++).c_str());
-                istr >> nAtomRec >> nBondRec;
-#ifdef _DEBUG
-                // cout << nAtomRec << " atoms, " << nBondRec << " bonds" << endl;
-#endif  //_DEBUG
-            } else
-                throw RbtFileParseError(_WHERE_, "Missing atom and bond information in " + GetFileName());
-
-            //////////////////////////////////////////////////////////
-            // 3a. Create and store atoms
-            m_atomList.reserve(nAtomRec);  // Allocate enough memory for the vector
-
-            RbtInt nAtomId(0);
-            RbtCoord coord;                   // X,Y,Z coords
-            RbtString strElementName;         // element name
-            RbtInt nMassDiff;                 // mass difference
-            RbtInt nFormalCharge;             // formal charge (MDL stores in a funny way, see below)
-            RbtString strSegmentName("H");    // constant (i.e. one segment, one residue)
-            RbtString strSubunitId("1");      // constant
-            RbtString strSubunitName("MOL");  // constant
-
-            // DM 24 Mar 1999 - allocate a C-string for streaming the atom name into
-            RbtInt lenAtomName(10);
-            char* szAtomName(new char[lenAtomName + 1]);
-
-            while ((m_atomList.size() < nAtomRec) && (fileIter != fileEnd)) {
-                istringstream istr((*fileIter++).c_str());
-                istr >> coord.x >> coord.y >> coord.z >> strElementName >> nMassDiff >> nFormalCharge;
-
-                // Look up the element data
-                RbtElementData elData = m_spElementData->GetElementData(strElementName);
-                RbtInt nAtomicNo = elData.atomicNo;
-
-                // Correct the formal charge (for non-zero charges, MDL stores as 4-charge)
-                // i.e. -3 is stored as 7, -2 as 6, -1 as 5, 0 as 0 or 4
-                //+1 as 3, +2 as 2, +3 as 1
-                if (nFormalCharge > 0) nFormalCharge = 4 - nFormalCharge;
-
-                // Compose the atom name from element+atomID (i.e. C1, N2, C3 etc)
-                nAtomId++;
-                ostringstream ostr;
-                ostr << strElementName << nAtomId << ends;
-                RbtString strAtomName(ostr.str());
-
-                // Construct a new atom (constructor only accepts the 2D params)
-                RbtAtomPtr spAtom(new RbtAtom(
-                    nAtomId,
-                    nAtomicNo,
-                    strAtomName,
-                    strSubunitId,
-                    strSubunitName,
-                    strSegmentName,
-                    RbtAtom::UNDEFINED,  // Hybridisation state
-                    0,                   // Num implicit hydrogens
-                    nFormalCharge
-                )  // Formal charge
-                );
-
-                // Now set the remaining 2-D and 3-D params
-                spAtom->SetCoords(coord);
-                spAtom->SetPartialCharge(0.0);
-                spAtom->SetGroupCharge(nFormalCharge);  // Default is group charge=formal charge (gets corrected later)
-                spAtom->SetAtomicMass(elData.mass + nMassDiff);
-
-                m_atomList.push_back(spAtom);
-                m_segmentMap[strSegmentName]++;  // increment atom count in segment map
-            }
-
-            delete[] szAtomName;  // Tidy up the C-string
-
-            // 3b ..and check we read them all before reaching the end of the file
-            if (m_atomList.size() != nAtomRec)
-                throw RbtFileParseError(_WHERE_, "Incomplete atom records in " + GetFileName());
-
-            //////////////////////////////////////////////////////////
-            // 4a. Create and store bonds
-            m_bondList.reserve(nBondRec);  // Allocate enough memory for the vector
-
-            RbtInt nBondId(0);
-            RbtUInt idxAtom1;
-            RbtUInt idxAtom2;
-            RbtInt nBondOrder;
-
-            while ((m_bondList.size() < nBondRec) && (fileIter != fileEnd)) {
-                // The SD file format only uses a field width of 3 to store atom1,atom2
-                // so for values over 99 the two fields coalesce.
-                // Workaround is to insert a space between the two fields (or use sscanf)
-                if ((*fileIter).size() > 3) (*fileIter).insert(3, " ");
-                istringstream istr((*fileIter++).c_str());
-                istr >> idxAtom1 >> idxAtom2 >> nBondOrder;
-                if ((idxAtom1 > nAtomRec) || (idxAtom2 > nAtomRec)) {  // Check for indices in range
-                    throw RbtFileParseError(_WHERE_, "Atom index out of range in bond records in " + GetFileName());
-                }
-                RbtAtomPtr spAtom1(m_atomList[idxAtom1 - 1]);  // Decrement the atom index as the atoms are numbered
-                                                               // from zero in our atom vector
-                RbtAtomPtr spAtom2(m_atomList[idxAtom2 - 1]);  // Decrement the atom index as the atoms are numbered
-                                                               // from zero in our atom vector
-                RbtBondPtr spBond(new RbtBond(
-                    ++nBondId,  // Store a nominal bond ID starting from 1
-                    spAtom1,
-                    spAtom2,
-                    nBondOrder
-                ));
-                m_bondList.push_back(spBond);
-            }
-
-            // 4b ..and check we read them all before reaching the end of the file
-            if (m_bondList.size() != nBondRec)
-                throw RbtFileParseError(_WHERE_, "Incomplete bond records in " + GetFileName());
-
-            // DM 12 May 1999 - read data records (if any)
-            for (; fileIter != fileEnd; fileIter++) {
-                if ((*fileIter).find(">") == 0) {                      // Found a data record
-                    RbtString::size_type ob = (*fileIter).find("<");   // First open bracket
-                    RbtString::size_type cb = (*fileIter).rfind(">");  // Last closed bracket
-                    if ((ob != RbtString::npos) && (cb != RbtString::npos)) {
-                        RbtString fieldName = (*fileIter).substr(ob + 1, cb - ob - 1);  // Data field name
-                        RbtStringList sl;  // String list for storing data value
-                        while ((++fileIter != fileEnd) && !(*fileIter).empty()) {
-                            sl.push_back(*fileIter);
-                        }
-                        m_dataMap[fieldName] = RbtVariant(sl);
+        // DM 12 May 1999 - read data records (if any)
+        for (; fileIter != fileEnd; fileIter++) {
+            if ((*fileIter).find(">") == 0) {                      // Found a data record
+                RbtString::size_type ob = (*fileIter).find("<");   // First open bracket
+                RbtString::size_type cb = (*fileIter).rfind(">");  // Last closed bracket
+                if ((ob != RbtString::npos) && (cb != RbtString::npos)) {
+                    RbtString fieldName = (*fileIter).substr(ob + 1, cb - ob - 1);  // Data field name
+                    RbtStringList sl;  // String list for storing data value
+                    while ((++fileIter != fileEnd) && !(*fileIter).empty()) {
+                        sl.push_back(*fileIter);
                     }
+                    m_dataMap[fieldName] = RbtVariant(sl);
                 }
             }
-
-            // DM 18 May 1999 - check for <Name> record
-            // If not present, define <Name> as the first title record
-            if ((m_dataMap.find("Name") == m_dataMap.end()) && !m_titleList.empty()) {
-                m_dataMap["Name"] = RbtVariant(m_titleList.front());
-            }
-
-            // Setup the atomic params not stored in the file (e.g. hybridisation state etc)
-            SetupAtomParams();
-
-            // DM 4 June 1999 - set up distinct segment names for each molecular fragment in the record
-            SetupSegmentNames();
-
-            //////////////////////////////////////////////////////////
-            // If we get this far everything is OK
-            m_bParsedOK = true;
         }
 
-        catch (RbtError& error) {
-            ClearMolCache();  // Clear the molecular cache so we don't return incomplete atom and bond lists
-            throw;            // Rethrow the RbtError
+        // DM 18 May 1999 - check for <Name> record
+        // If not present, define <Name> as the first title record
+        if ((m_dataMap.find("Name") == m_dataMap.end()) && !m_titleList.empty()) {
+            m_dataMap["Name"] = RbtVariant(m_titleList.front());
         }
+
+        // Setup the atomic params not stored in the file (e.g. hybridisation state etc)
+        SetupAtomParams();
+
+        // DM 4 June 1999 - set up distinct segment names for each molecular fragment in the record
+        SetupSegmentNames();
+
+        //////////////////////////////////////////////////////////
+        // If we get this far everything is OK
+        m_bParsedOK = true;
+    }
+
+    catch (RbtError& error) {
+        ClearMolCache();  // Clear the molecular cache so we don't return incomplete atom and bond lists
+        throw;            // Rethrow the RbtError
     }
 }
 
