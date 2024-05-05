@@ -14,6 +14,7 @@
 
 #include <cstring>
 
+#include "RbtDebug.h"
 #include "RbtFileError.h"
 
 // Constructors
@@ -120,85 +121,38 @@ void RbtBaseFileSource::Rewind() {
 
 // Protected functions
 
-void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
-    // If we haven't already read the file, do it now
-    if (!m_bReadOK) {
-        if (aDelimiterAtEnd) {
-            ClearCache();
-            try {
-                Open();
-                // Multi-record read
-                // Only read up to record delimiter (or end of file)
-                // and leave file open for next record
-                if (m_bMultiRec) {
-                    const char* cszRecDelim = m_strRecDelim.c_str();
-                    RbtInt n = strlen(cszRecDelim);
-                    while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-#ifdef _DEBUG
-                        cout << m_szBuf << endl;
-#endif  //_DEBUG
-                        m_lineRecs.push_back(m_szBuf);
-                    }
-                }
-                // Single-record read
-                // Read entire file and close immediately
-                else {
-                    while (m_fileIn.getline(m_szBuf, MAXLINELENGTH)) {
-                        m_lineRecs.push_back(m_szBuf);
-                    }
-                    Close();
-                }
-                // DM 25 Mar 1999 - check for end of file (i.e. no lines read)
-                if (m_lineRecs.empty())
-                    throw RbtFileReadError(_WHERE_, "End of file/empty record in " + m_strFileName);
+void RbtBaseFileSource::Read(RbtBool delimiterIsAtEnd) {
+    if (m_bReadOK) return;  // If we have already read the file, skip
+    ClearCache();
+    std::string line;
+    try {
+        Open();
+        if (!m_bMultiRec) {
+            while (std::getline(m_fileIn, line)) {
+                DEBUG_OUT(line << endl);
+                m_lineRecs.push_back(line);
             }
-            // Catch exceptions so we can close the file, then rethrow it
-            catch (RbtError& error) {
-                Close();
-                throw;
+            Close();  // original code closed the single record file directly once read
+        } else if (delimiterIsAtEnd) {
+            while ((std::getline(m_fileIn, line)) && (line != m_strRecDelim)) {
+                DEBUG_OUT(line << endl);
+                m_lineRecs.push_back(line);
             }
-        } else {  // ie MOL2 file records starts (not ends) with a certain pattern
-            ClearCache();
-            try {
-                Open();
-                // Multi-record read
-                // Only read up to next record delimiter (or end of file)
-                // and leave file open for next record
-                if (m_bMultiRec) {
-                    const char* cszRecDelim = m_strRecDelim.c_str();
-                    RbtInt n = strlen(cszRecDelim);
-                    // skip to the header stuff until the first record
-                    // AND the first delimiter line
-                    while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0))
-                        ;
-                    while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-#ifdef _DEBUG
-                        cout << m_szBuf << endl;
-#endif  //_DEBUG
-                        m_lineRecs.push_back(m_szBuf);
-                    }
-                }
-                // Single-record read
-                // Read entire file and close immediately
-                else {
-                    while (m_fileIn.getline(m_szBuf, MAXLINELENGTH)) {
-                        m_lineRecs.push_back(m_szBuf);
-                    }
-                    Close();
-                }
-                // DM 25 Mar 1999 - check for end of file (i.e. no lines read)
-                if (m_lineRecs.empty())
-                    throw RbtFileReadError(_WHERE_, "End of file/empty record in " + m_strFileName);
-            }
-            // Catch exceptions so we can close the file, then rethrow it
-            catch (RbtError& error) {
-                Close();
-                throw;
+        } else {
+            // skip to the header stuff until the first record and the first delimiter line
+            while ((std::getline(m_fileIn, line)) && (line != m_strRecDelim)) {
+            };
+            while ((std::getline(m_fileIn, line)) && (line != m_strRecDelim)) {
+                DEBUG_OUT(line << endl);
+                m_lineRecs.push_back(line);
             }
         }
-        // If we get to here, we read the file OK
-        m_bReadOK = true;
+        if (m_lineRecs.empty()) throw RbtFileReadError(_WHERE_, "End of file/empty record in " + m_strFileName);
+    } catch (RbtError& error) {
+        Close();
+        throw;
     }
+    m_bReadOK = true;
 }
 
 // Private functions
