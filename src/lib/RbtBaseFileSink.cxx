@@ -68,12 +68,8 @@ void RbtBaseFileSink::Write(RbtBool bClearCache) {
 
     try {
         Open(m_bAppend);  // DM 06 Apr 1999 - open for append or overwrite, depending on m_bAppend attribute
-        for (RbtStringListConstIter iter = m_lineRecs.begin(); iter != m_lineRecs.end(); iter++) {
-            // for some reason the << overload is screwed up in some sstream
-            // implementations so it is worth to pay this "pointless" price in conversion
-            string delimited((*iter).c_str());
-            m_fileOut << delimited << endl;
-            // m_fileOut << *iter << endl;
+        for (auto line: m_lineRecs) {
+            m_fileOut << line << endl;
         }
         Close();
         if (bClearCache) ClearCache();  // Clear the cache so we don't write the file again
