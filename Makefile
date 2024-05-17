@@ -153,7 +153,7 @@ test_dock_run: build tests/data/1YET_test.as
 test_rbcavity: tests/data/1koc.as tests/data/1YET.as tests/data/1YET_test.as
 
 test_suite: build_tests
-	@tests/bin/test_suite
+	LD_LIBRARY_PATH=./lib tests/bin/test_suite
 
 clean: ## removes the object files and folder
 	@rm -rf obj
