@@ -42,8 +42,8 @@ RbtSiteMapper* RbtSiteMapperFactory::Create(const RbtString& strMapperClass, con
 // remaining parameter values in the current section
 // Note: the current section is restored to its original value upon exit
 RbtSiteMapper* RbtSiteMapperFactory::CreateFromFile(RbtParameterFileSourcePtr spPrmSource, const RbtString& strName) {
-    RbtString strOrigSection(spPrmSource->GetSection());
-    spPrmSource->SetSection(strName);
+    RbtString strOrigSection(spPrmSource->GetCurrentSectionName());
+    spPrmSource->SetCurrentSection(strName);
     if (spPrmSource->isParameterPresent(_MAPPER)) {
         RbtString strMapperClass(spPrmSource->GetParameterValueAsString(_MAPPER));
         // Create new site mapper according to the string value of _MAPPER parameter
@@ -55,10 +55,10 @@ RbtSiteMapper* RbtSiteMapperFactory::CreateFromFile(RbtParameterFileSourcePtr sp
                 pSiteMapper->SetParameter(*prmIter, spPrmSource->GetParameterValueAsString(*prmIter));
             }
         }
-        spPrmSource->SetSection(strOrigSection);
+        spPrmSource->SetCurrentSection(strOrigSection);
         return pSiteMapper;
     } else {
-        spPrmSource->SetSection(strOrigSection);
+        spPrmSource->SetCurrentSection(strOrigSection);
         throw RbtFileMissingParameter(_WHERE_, "Missing " + _MAPPER + " parameter in section " + strName);
     }
 }

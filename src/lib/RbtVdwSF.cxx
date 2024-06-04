@@ -281,7 +281,7 @@ void RbtVdwSF::Setup() {
     for (RbtInt i = RbtTriposAtomType::UNDEFINED; i < RbtTriposAtomType::MAXTYPES; i++) {
         // Read the params for atom type i
         RbtString stri = triposType.Type2Str(RbtTriposAtomType::eType(i));
-        m_spVdwSource->SetSection(stri);
+        m_spVdwSource->SetCurrentSection(stri);
         RbtDouble Ri = m_spVdwSource->GetParameterValue(_R);  // vdw radius
         RbtDouble Ki = m_spVdwSource->GetParameterValue(_K);  // Tripos 5.2 well depth
         RbtBool hasIPi = m_spVdwSource->isParameterPresent(_IP);
@@ -296,7 +296,7 @@ void RbtVdwSF::Setup() {
         for (RbtInt j = i; j < RbtTriposAtomType::MAXTYPES; j++) {
             // Read the params for atom type j
             RbtString strj = triposType.Type2Str(RbtTriposAtomType::eType(j));
-            m_spVdwSource->SetSection(strj);
+            m_spVdwSource->SetCurrentSection(strj);
             RbtDouble Rj = m_spVdwSource->GetParameterValue(_R);  // vdw radius
             RbtDouble Kj = m_spVdwSource->GetParameterValue(_K);  // Tripos 5.2 well depth
             RbtBool hasIPj = m_spVdwSource->isParameterPresent(_IP);

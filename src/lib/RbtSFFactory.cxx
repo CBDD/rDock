@@ -137,7 +137,7 @@ RbtSFAgg* RbtSFFactory::CreateAggFromFile(
     RbtSFAgg* pSFAgg(new RbtSFAgg(strName));
 
     for (RbtStringListConstIter sfIter = sfList.begin(); sfIter != sfList.end(); sfIter++) {
-        spPrmSource->SetSection(*sfIter);
+        spPrmSource->SetCurrentSection(*sfIter);
         // Check if this section is a valid scoring function definition
         if (spPrmSource->isParameterPresent(_SF)) {
             RbtString strSFClass(spPrmSource->GetParameterValueAsString(_SF));

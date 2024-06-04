@@ -46,7 +46,7 @@ RbtPRMFactory::RbtPRMFactory(RbtParameterFileSource* pParamSource, RbtDockingSit
     m_iTrace(0) {}
 RbtModelPtr RbtPRMFactory::CreateReceptor() {
     RbtModelPtr retVal;
-    m_pParamSource->SetSection(_REC_SECTION);
+    m_pParamSource->SetCurrentSection(_REC_SECTION);
     // Detect if we have an ensemble of receptor coordinate files defined
     RbtBool bEnsemble = m_pParamSource->isParameterPresent(_REC_NUM_COORD_FILES)
                         && (m_pParamSource->GetParameterValue(_REC_NUM_COORD_FILES) > 0);
@@ -166,7 +166,7 @@ RbtModelPtr RbtPRMFactory::CreateLigand(RbtBaseMolecularFileSource* pSource) {
 
 RbtModelList RbtPRMFactory::CreateSolvent() {
     RbtModelList retVal;
-    m_pParamSource->SetSection(_SOLV_SECTION);
+    m_pParamSource->SetCurrentSection(_SOLV_SECTION);
     if (m_pParamSource->isParameterPresent(_SOLV_FILE)) {
         RbtString strFile = m_pParamSource->GetParameterValueAsString(_SOLV_FILE);
         if (m_iTrace > 0) {
@@ -260,7 +260,7 @@ RbtModelList RbtPRMFactory::CreateSolvent() {
 }
 
 void RbtPRMFactory::AttachReceptorFlexData(RbtModel* pReceptor) {
-    m_pParamSource->SetSection(_REC_SECTION);
+    m_pParamSource->SetCurrentSection(_REC_SECTION);
     // Check whether flexible receptor is requested (terminal OH/NH3)
     // Parameter value is the range from the docking volume to include
     if (m_pParamSource->isParameterPresent(_REC_FLEX_DISTANCE)) {
@@ -286,7 +286,7 @@ void RbtPRMFactory::AttachReceptorFlexData(RbtModel* pReceptor) {
 }
 
 void RbtPRMFactory::AttachLigandFlexData(RbtModel* pLigand) {
-    m_pParamSource->SetSection(_LIG_SECTION);
+    m_pParamSource->SetCurrentSection(_LIG_SECTION);
     RbtStringList paramList = m_pParamSource->GetParameterList();
     RbtFlexData* pFlexData = new RbtLigandFlexData(m_pDS);
     for (RbtStringListConstIter iter = paramList.begin(); iter != paramList.end(); ++iter) {
@@ -300,7 +300,7 @@ void RbtPRMFactory::AttachLigandFlexData(RbtModel* pLigand) {
 }
 
 void RbtPRMFactory::AttachSolventFlexData(RbtModel* pSolvent) {
-    m_pParamSource->SetSection(_SOLV_SECTION);
+    m_pParamSource->SetCurrentSection(_SOLV_SECTION);
     RbtStringList paramList = m_pParamSource->GetParameterList();
     RbtFlexData* pFlexData = new RbtSolventFlexData(m_pDS);
     // Determine the occupancy and flexibility mode on a per-solvent basis

@@ -346,7 +346,7 @@ void RbtBaseMolecularFileSource::SetupPartialIonicGroups(RbtAtomList& atoms, Rbt
         return;
     }
 
-    spParamSource->SetSection(subunitName);
+    spParamSource->SetCurrentSection(subunitName);
     RbtStringList atList = spParamSource->GetParameterList();
     if (std::find(atList.begin(), atList.end(), _MANDATORY) != atList.end()) {
         RbtString mandatory = spParamSource->GetParameterValueAsString(_MANDATORY);

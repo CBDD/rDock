@@ -168,7 +168,7 @@ RbtDihedral::prms RbtDihedralSF::FindDihedralParams(
     RbtString str23 = str2 + "_" + str3;
     RbtString str32 = str3 + "_" + str2;
     if (std::find(m_centralPairs.begin(), m_centralPairs.end(), str23) != m_centralPairs.end()) {
-        m_spDihedralSource->SetSection(str23);
+        m_spDihedralSource->SetCurrentSection(str23);
         RbtString str14 = str1 + "_" + str4;
         RbtString str1w = str1 + "_" + wild;
         RbtString strw4 = wild + "_" + str4;
@@ -198,7 +198,7 @@ RbtDihedral::prms RbtDihedralSF::FindDihedralParams(
             }
         }
     } else if (std::find(m_centralPairs.begin(), m_centralPairs.end(), str32) != m_centralPairs.end()) {
-        m_spDihedralSource->SetSection(str32);
+        m_spDihedralSource->SetCurrentSection(str32);
         RbtString str41 = str4 + "_" + str1;
         RbtString str4w = str4 + "_" + wild;
         RbtString strw1 = wild + "_" + str1;
@@ -228,7 +228,7 @@ RbtDihedral::prms RbtDihedralSF::FindDihedralParams(
             }
         }
     } else {
-        m_spDihedralSource->SetSection();
+        m_spDihedralSource->SetCurrentSection();
         strParams = m_spDihedralSource->GetParameterValueAsString("DEFAULT");
         if (iTrace > 0) {
             cout << _CT << ": No match for " << str23 << ": using DEFAULT params" << endl;

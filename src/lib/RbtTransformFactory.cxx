@@ -76,7 +76,7 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
     RbtTransformAgg* pTransformAgg(new RbtTransformAgg(strName));
 
     for (RbtStringListConstIter tIter = transformList.begin(); tIter != transformList.end(); tIter++) {
-        spPrmSource->SetSection(*tIter);
+        spPrmSource->SetCurrentSection(*tIter);
         // Check if this section is a valid scoring function definition
         if (spPrmSource->isParameterPresent(_TRANSFORM)) {
             RbtString strTransformClass(spPrmSource->GetParameterValueAsString(_TRANSFORM));

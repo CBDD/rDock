@@ -536,7 +536,7 @@ void RbtSAIdxSF::Setup() {
 
     for (RbtInt i = RbtHHSType::UNDEFINED; i < RbtHHSType::MAXTYPES; i++) {
         RbtString stri = hhsType.Type2Str(RbtHHSType::eType(i));
-        m_spSolvSource->SetSection(stri);
+        m_spSolvSource->SetCurrentSection(stri);
         RbtDouble r = m_spSolvSource->GetParameterValue(_R);
         RbtDouble p = m_spSolvSource->GetParameterValue(_P);
         RbtDouble asp = m_spSolvSource->GetParameterValue(_ASP);
