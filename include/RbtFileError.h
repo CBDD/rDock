@@ -22,6 +22,8 @@ const RbtString IDS_FILE_READ_ERROR = "RBT_FILE_READ_ERROR";
 const RbtString IDS_FILE_WRITE_ERROR = "RBT_FILE_WRITE_ERROR";
 const RbtString IDS_FILE_PARSE_ERROR = "RBT_FILE_PARSE_ERROR";
 const RbtString IDS_FILE_MISSING_PARAMETER = "RBT_FILE_MISSING_PARAMETER";
+const RbtString IDS_FILE_UNKNOWN_SECTION = "RBT_FILE_UNKNOWN_SECTION";
+const RbtString IDS_FILE_SECTION_NOT_SET = "RBT_FILE_SECTION_NOT_SET";
 const RbtString IDS_DIR_NOACCESS = "RBT_DIR_NOACCESS";
 const RbtString IDS_NO_FILEINDIR = "RBT_NO_FILEINDIR";
 const RbtString IDS_NOENV = "RBT_NO_ENVIRONMENT";
@@ -64,6 +66,19 @@ class RbtFileMissingParameter: public RbtFileError {
  public:
     RbtFileMissingParameter(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
         RbtFileError(IDS_FILE_MISSING_PARAMETER, strFile, nLine, strMessage) {}
+};
+
+// Missing parameter error
+class RbtFileSectionNotSet: public RbtFileError {
+ public:
+    RbtFileSectionNotSet(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
+        RbtFileError(IDS_FILE_SECTION_NOT_SET, strFile, nLine, strMessage) {}
+};
+
+class RbtFileUnknownSection: public RbtFileError {
+ public:
+    RbtFileUnknownSection(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
+        RbtFileError(IDS_FILE_UNKNOWN_SECTION, strFile, nLine, strMessage) {}
 };
 
 // Exceptions for RbtDirectorySource and derived classes:

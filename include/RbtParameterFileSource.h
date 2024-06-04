@@ -19,6 +19,15 @@
 #include "RbtVariant.h"
 
 class RbtParameterFileSource: public RbtBaseFileSource {
+
+   struct Section {
+      std::string name;
+      std::unordered_map<std::string, RbtVariant> params;
+
+
+      Section(const std::string& name): name{name}{};
+   };
+
  public:
     // Constructors
     RbtParameterFileSource(const char* fileName);
@@ -54,8 +63,8 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // and need the same parameters to appear in each
     RbtInt GetNumSections();                            // Number of named sections
     RbtStringList GetSectionList();                     // List of section names
-    RbtString GetSection() const;                       // Get current section name
-    void SetSection(const RbtString& strSection = "");  // Set current section name
+    RbtString GetCurrentSectionName() const;                       // Get current section name
+    void SetCurrentSection(const RbtString& strSection = "");  // Set current section name
 
  protected:
     // Protected methods
@@ -69,13 +78,12 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // Pure virtual in RbtBaseFileSource - needs to be defined here
     virtual void Parse();
     void ClearParamsCache();
-    // Add a new section name
-    // Throws an error if section name is empty, or is a duplicate
-    void AddSection(const RbtString& strSection);
     // Returns the fully qualified parameter name (<section>::<parameter name>)
     // Checks if name already contains a section name, if so just returns the name unchanged
     // If not, prefixes the name with the current section name
     RbtString GetFullParameterName(const RbtString& strParamName);
+    Section & getSectionByName(const std::string& name) const;
+    RbtVariant getCurrentSectionParameter(const std::string& name);
 
  protected:
     // Protected data
@@ -84,9 +92,9 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // Private data
     RbtString m_strTitle;
     RbtString m_strVersion;
-    RbtStringVariantMap m_paramsMap;
-    RbtStringList m_sectionNames;  // List(vector) of section names
-    RbtString m_strSection;        // Current section
+    std::vector<Section> sections;
+    std::unordered_map<const std::string&, Section&> section_name_mapping;
+    Section* current_section;
 };
 
 // useful typedefs
