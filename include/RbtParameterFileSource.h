@@ -20,15 +20,13 @@
 
 class RbtParameterFileSource: public RbtBaseFileSource {
 
+ public:
    struct Section {
-      std::string name;
+      const std::string name;
       std::map<std::string, RbtVariant> params;
-
 
       Section(const std::string& name): name{name}{};
    };
-
- public:
     // Constructors
     RbtParameterFileSource(const char* fileName);
     RbtParameterFileSource(const RbtString& fileName);
@@ -63,8 +61,8 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // and need the same parameters to appear in each
     RbtInt GetNumSections();                            // Number of named sections
     RbtStringList GetSectionList();                     // List of section names
-    RbtString GetCurrentSectionName() const;                       // Get current section name
-    void SetCurrentSection(const RbtString& strSection = "");  // Set current section name
+    const RbtString& GetCurrentSectionName() const;                       // Get current section name
+    void SetCurrentSection(const RbtString& section_name = "");  // Set current section name
 
  protected:
     // Protected methods
@@ -92,10 +90,11 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // Private data
     RbtString m_strTitle;
     RbtString m_strVersion;
-    std::map<std::string, RbtVariant> parameters;
+    // Section for parameters defined at file level. Seems to 
+    Section global_section = Section("");
     std::vector<Section> sections;
     std::map<std::string, size_t> section_name_mapping;
-    Section* current_section;
+    Section* current_section = &global_section;
 };
 
 // useful typedefs

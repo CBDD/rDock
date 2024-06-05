@@ -46,25 +46,23 @@ RbtString RbtParameterFileSource::GetVersion() {
 // DM 06 June 2000 - limit #parameters to those in current section
 RbtUInt RbtParameterFileSource::GetNumParameters() {
     Parse();
-    return GetParameterList().size();
+    return current_section->params.size();
 }
 
 // DM 06 June 2000 - limit parameters to those in current section
 RbtStringList RbtParameterFileSource::GetParameterList() {
     Parse();
     std::vector<std::string> output;
-    auto params = (current_section == nullptr) ? parameters : current_section->params;
-    for (auto& it : params) output.emplace_back(it.first);
+    for (auto& it : current_section->params) output.emplace_back(it.first);
     return output;
 }
 
 RbtVariant RbtParameterFileSource::getParameter(const std::string& name) {
-    auto params = (current_section == nullptr) ? parameters : current_section->params;
-    auto iter = params.find(name);
-    if (iter == params.end())
+    auto it = current_section->params.find(name);
+    if (it == current_section->params.end())
         throw RbtFileMissingParameter(_WHERE_, GetFullParameterName(name) + " parameter not found in " + GetFileName());
     else
-        return iter->second;
+        return it->second;
 }
 
 // DM 4 Feb 1999 Get a particular named parameter value as a double
@@ -82,8 +80,7 @@ RbtString RbtParameterFileSource::GetParameterValueAsString(const RbtString& str
 // DM 11 Feb 1999 Check if parameter is present
 RbtBool RbtParameterFileSource::isParameterPresent(const RbtString& strParamName) {
     Parse();
-    auto params = (current_section == nullptr) ? parameters : current_section->params;
-    return params.find(strParamName) != params.end();
+    return current_section->params.find(strParamName) != current_section->params.end();
 }
         
 
@@ -112,22 +109,22 @@ RbtStringList RbtParameterFileSource::GetSectionList() {
 // Get current section name
 // This is essentially just a prefix for each parameter name
 // so we don't actually need to parse the file to get/set the section name
-RbtString RbtParameterFileSource::GetCurrentSectionName() const {
-    return (current_section == nullptr) ? "" : current_section->name;
+const RbtString& RbtParameterFileSource::GetCurrentSectionName() const {
+    return current_section->name;
 }
 
 // Set current section name
-void RbtParameterFileSource::SetCurrentSection(const RbtString& strSection) {
-    if (strSection == "")
-        current_section = nullptr;
-    else
-        current_section = &getSectionByName(strSection);
+void RbtParameterFileSource::SetCurrentSection(const RbtString& section_name) {
+    current_section = &((section_name == "") ? global_section : getSectionByName(section_name));
 }
 
-RbtParameterFileSource::Section & RbtParameterFileSource::getSectionByName(const std::string& name) {
+RbtParameterFileSource::Section& RbtParameterFileSource::getSectionByName(const std::string& name) {
+    std::cout << "CURRENT TITLE '" << m_strTitle << "'" << std::endl;
+    std::cout << "AVAILABLE SECTIONS:"<< std::endl;
+    for (auto& section : sections) std::cout << " - " << section.name << std::endl;
     auto it = section_name_mapping.find(name);
     if (it == section_name_mapping.end())
-        throw RbtFileUnknownSection(_WHERE_, name);
+        throw RbtFileUnknownSection(_WHERE_, "Unknown section '" + name + "'");
     else
         return sections[it->second];
 }
@@ -211,11 +208,7 @@ void RbtParameterFileSource::Parse() {
                     RbtString strParamValue;
                     istringstream istr((*fileIter).c_str());
                     istr >> strParamName >> strParamValue;
-    
-                    if (current_section == nullptr)
-                        parameters.insert({strParamName, RbtVariant(strParamValue)});
-                    else
-                        current_section->params.insert({strParamName, RbtVariant(strParamValue)});
+                    current_section->params.insert({strParamName, RbtVariant(strParamValue)});
 #ifdef _DEBUG
                     // cout << strParamName<< " = " << dParamValue << endl;
 #endif  //_DEBUG
@@ -237,10 +230,9 @@ void RbtParameterFileSource::Parse() {
 void RbtParameterFileSource::ClearParamsCache() {
     m_strTitle = "";
     m_strVersion = "";
-    current_section = nullptr;
     sections.clear();
     section_name_mapping.clear();
-    parameters.clear();
+    current_section = &global_section;
 }
 
 // Returns the fully qualified parameter name (<section>::<parameter name>)
