@@ -22,7 +22,7 @@ class RbtParameterFileSource: public RbtBaseFileSource {
 
    struct Section {
       std::string name;
-      std::unordered_map<std::string, RbtVariant> params;
+      std::map<std::string, RbtVariant> params;
 
 
       Section(const std::string& name): name{name}{};
@@ -83,7 +83,7 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // If not, prefixes the name with the current section name
     RbtString GetFullParameterName(const RbtString& strParamName);
     Section & getSectionByName(const std::string& name);
-    RbtVariant getCurrentSectionParameter(const std::string& name);
+    RbtVariant getParameter(const std::string& name);
 
  protected:
     // Protected data
@@ -92,8 +92,9 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // Private data
     RbtString m_strTitle;
     RbtString m_strVersion;
+    std::map<std::string, RbtVariant> parameters;
     std::vector<Section> sections;
-    std::unordered_map<std::string, size_t> section_name_mapping;
+    std::map<std::string, size_t> section_name_mapping;
     Section* current_section;
 };
 

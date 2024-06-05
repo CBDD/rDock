@@ -68,13 +68,6 @@ class RbtFileMissingParameter: public RbtFileError {
         RbtFileError(IDS_FILE_MISSING_PARAMETER, strFile, nLine, strMessage) {}
 };
 
-// Missing parameter error
-class RbtFileSectionNotSet: public RbtFileError {
- public:
-    RbtFileSectionNotSet(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
-        RbtFileError(IDS_FILE_SECTION_NOT_SET, strFile, nLine, strMessage) {}
-};
-
 class RbtFileUnknownSection: public RbtFileError {
  public:
     RbtFileUnknownSection(const RbtString& strFile, RbtInt nLine, const RbtString& strMessage = ""):
