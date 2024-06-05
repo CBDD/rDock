@@ -134,12 +134,12 @@ void RbtParameterFileSource::SetCurrentSection(const RbtString& strSection) {
         current_section = &getSectionByName(strSection);
 }
 
-RbtParameterFileSource::Section & RbtParameterFileSource::getSectionByName(const std::string& name) const {
+RbtParameterFileSource::Section & RbtParameterFileSource::getSectionByName(const std::string& name) {
     auto it = section_name_mapping.find(name);
     if (it == section_name_mapping.end())
         throw RbtFileUnknownSection(_WHERE_, name);
     else
-        return it->second;
+        return sections[it->second];
 }
 
 // Private methods
@@ -203,8 +203,8 @@ void RbtParameterFileSource::Parse() {
                     else if (section_name_mapping.find(section_name) != section_name_mapping.end())
                         throw RbtFileParseError(_WHERE_, "Duplicate " + section_name + " SECTION name in " + GetFileName());
                     else {
+                        section_name_mapping.insert({section_name, sections.size()});
                         sections.emplace_back(section_name);
-                        section_name_mapping[sections.back().name] = sections.back();
                         SetCurrentSection(section_name);
                     }
                 }
@@ -224,7 +224,7 @@ void RbtParameterFileSource::Parse() {
                     // Prefix the parameter name with the section name and ::
                     // Hopefully, this will ensure unique parameter names between sections
                     std::string fullyQualifiedParamName = GetFullParameterName(strParamName);
-                    current_section->params[strParamName] = RbtVariant(strParamValue);
+                    current_section->params.insert({strParamName, RbtVariant(strParamValue)});
 #ifdef _DEBUG
                     // cout << strParamName<< " = " << dParamValue << endl;
 #endif  //_DEBUG

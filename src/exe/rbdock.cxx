@@ -307,7 +307,7 @@ int main(int argc, const char *argv[]) {
         // Default directory is $RBT_ROOT/data/sf
         RbtSFFactoryPtr spSFFactory(new RbtSFFactory());  // Factory class for scoring functions
         RbtSFAggPtr spSF(new RbtSFAgg(_ROOT_SF));         // Root SF aggregate
-        spParamSource->SetSection(_ROOT_SF);
+        spParamSource->SetCurrentSection(_ROOT_SF);
         RbtStringList sfList(spParamSource->GetParameterList());
         // Loop over all parameters in the SCORE section
         for (RbtStringListConstIter sfIter = sfList.begin(); sfIter != sfList.end(); sfIter++) {
@@ -323,7 +323,7 @@ int main(int argc, const char *argv[]) {
 
         // Create the docking transform aggregate from the transform definitions in the docking prm file
         RbtTransformFactoryPtr spTransformFactory(new RbtTransformFactory());
-        spParamSource->SetSection();
+        spParamSource->SetCurrentSection();
         RbtTransformAggPtr spTransform(spTransformFactory->CreateAggFromFile(spParamSource, _ROOT_TRANSFORM));
 
         // Override the TRACE levels for the scoring function and transform
@@ -350,7 +350,7 @@ int main(int argc, const char *argv[]) {
         RbtVariant vPrm(spParamSource->GetFileName());
         RbtVariant vDir(Rbt::GetCurrentDirectory());
 
-        spRecepPrmSource->SetSection();
+        spRecepPrmSource->SetCurrentSection();
         // Read docking site from file and register with workspace
         RbtString strASFile = spWS->GetName() + ".as";
         RbtString strInputFile = Rbt::GetRbtFileName("data/grids", strASFile);

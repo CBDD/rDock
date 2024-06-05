@@ -50,7 +50,6 @@ RbtModelPtr RbtPRMFactory::CreateReceptor() {
     // Detect if we have an ensemble of receptor coordinate files defined
     RbtBool bEnsemble = m_pParamSource->isParameterPresent(_REC_NUM_COORD_FILES)
                         && (m_pParamSource->GetParameterValue(_REC_NUM_COORD_FILES) > 0);
-
     // Read topology and coordinates from a single molecular file source
     if (m_pParamSource->isParameterPresent(_REC_FILE)) {
         if (m_iTrace > 0) {

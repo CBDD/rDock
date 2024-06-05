@@ -82,7 +82,7 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     // Checks if name already contains a section name, if so just returns the name unchanged
     // If not, prefixes the name with the current section name
     RbtString GetFullParameterName(const RbtString& strParamName);
-    Section & getSectionByName(const std::string& name) const;
+    Section & getSectionByName(const std::string& name);
     RbtVariant getCurrentSectionParameter(const std::string& name);
 
  protected:
@@ -93,7 +93,7 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     RbtString m_strTitle;
     RbtString m_strVersion;
     std::vector<Section> sections;
-    std::unordered_map<const std::string&, Section&> section_name_mapping;
+    std::unordered_map<std::string, size_t> section_name_mapping;
     Section* current_section;
 };
 

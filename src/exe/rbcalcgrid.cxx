@@ -167,7 +167,7 @@ int main(int argc, char* argv[]) {
         cout << endl << "SCORING FUNCTION DETAILS:" << endl << *spSF << endl;
 
         // Create the receptor model from the file names in the receptor parameter file
-        spRecepPrmSource->SetSection();
+        spRecepPrmSource->SetCurrentSection();
         RbtPRMFactory prmFactory(spRecepPrmSource);
         RbtModelPtr spReceptor = prmFactory.CreateReceptor();
         // Trap multiple receptor conformations here: this SF does not support them yet

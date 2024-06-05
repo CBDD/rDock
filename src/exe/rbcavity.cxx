@@ -124,7 +124,7 @@ void RBCavity(const RBCavityConfig &config) {
     );
 
     // Create the receptor model from the file names in the parameter file
-    spRecepPrmSource->SetSection();
+    spRecepPrmSource->SetCurrentSection();
     RbtPRMFactory prmFactory(spRecepPrmSource);
     RbtModelPtr spReceptor = prmFactory.CreateReceptor();
 
