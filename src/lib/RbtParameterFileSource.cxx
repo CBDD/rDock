@@ -53,11 +53,8 @@ RbtUInt RbtParameterFileSource::GetNumParameters() {
 RbtStringList RbtParameterFileSource::GetParameterList() {
     Parse();
     std::vector<std::string> output;
-    for (auto& it : parameters) output.emplace_back(it.second);
-    if (current_section != nullptr) {
-        for (auto& it : current_section->params)
-            output.emplace_back(it.second);
-    }
+    auto params = (current_section == nullptr) ? parameters : current_section->params;
+    for (auto& it : params) output.emplace_back(it.first);
     return output;
 }
 
