@@ -52,12 +52,13 @@ RbtUInt RbtParameterFileSource::GetNumParameters() {
 // DM 06 June 2000 - limit parameters to those in current section
 RbtStringList RbtParameterFileSource::GetParameterList() {
     Parse();
-    std::vector<std::string> parameters;
+    std::vector<std::string> output;
+    for (auto& it : parameters) output.emplace_back(it.second);
     if (current_section != nullptr) {
         for (auto& it : current_section->params)
-            parameters.emplace_back(it.second);
+            output.emplace_back(it.second);
     }
-    return parameters;
+    return output;
 }
 
 RbtVariant RbtParameterFileSource::getParameter(const std::string& name) {
