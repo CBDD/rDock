@@ -31,6 +31,7 @@ RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr,
 RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
 
 // Parameter name which identifies a scoring function definition
@@ -118,7 +119,9 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
         aggPtr->Add(pTransform);
         return;
     } else if (kind == RbtTransformAgg::_CT) {
-        pTransform = new RbtTransformAgg(name);
+        pTransform = MakeAggregateTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        return;
     } else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
 
     // Set all the transform parameters from the rest of the parameters listed
@@ -207,4 +210,8 @@ RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr para
     SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_STEP_SIZE);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_CONVERGENCE);
     return transform;
+}
+
+RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    return new RbtTransformAgg(name);
 }
