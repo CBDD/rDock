@@ -73,14 +73,14 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
     // Create empty aggregate
     RbtTransformAgg* pTransformAgg(new RbtTransformAgg(strName));
 
-    for (RbtStringListConstIter tIter = transformList.begin(); tIter != transformList.end(); tIter++) {
-        spPrmSource->SetSection(*tIter);
-        // Check if this section is a valid scoring function definition
+    for (auto& sectionName : transformList) {
+        spPrmSource->SetSection(sectionName);
         if (spPrmSource->isParameterPresent(_TRANSFORM)) {
-            RbtString strTransformClass(spPrmSource->GetParameterValueAsString(_TRANSFORM));
-            AddTransformToAggFromFile(pTransformAgg, spPrmSource, strTransformClass, *tIter);
+            RbtBaseTransform* transform = MakeTransformFromFile(spPrmSource, sectionName);
+            RegisterScoreFunctionOverridesInTransform(transform, spPrmSource);
+            pTransformAgg->Add(transform);
         } else if (bThrowError) {
-            throw RbtFileMissingParameter(_WHERE_, "Missing " + _TRANSFORM + " parameter in section " + (*tIter));
+            throw RbtFileMissingParameter(_WHERE_, "Missing " + _TRANSFORM + " parameter in section " + (sectionName));
         }
     }
     return pTransformAgg;
@@ -95,7 +95,7 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
 }
 
 RbtBaseTransform* RbtTransformFactory::MakeTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    RbtString kind(paramsPtr->GetParameterValueAsString(_TRANSFORM));   // FOrce a cast from RbtVariant to String
+    RbtString kind = paramsPtr->GetParameterValueAsString(_TRANSFORM);   // Force a cast from RbtVariant to String
     if (kind == RbtSimAnnTransform::_CT) return MakeSimmulatedAnnealingTransformFromFile(paramsPtr, name);
     else if (kind == RbtGATransform::_CT) return MakeGeneticAlgorithmTransformFromFile(paramsPtr, name);
     else if (kind == RbtAlignTransform::_CT) return MakeLigandAlignTransformFromFile(paramsPtr, name);
