@@ -66,6 +66,14 @@ class RbtSimplexTransform: public RbtBaseBiMolTransform {
     // Private data
     //////////////
     RbtChromElementPtr m_chrom;
+
+    // Transform parameters
+    RbtInt max_calls;
+    RbtInt num_cycles;
+    RbtDouble stopping_step_length;
+    RbtDouble convergence_threshold;
+    RbtDouble step_size;
+    RbtDouble partition_distribution;
 };
 
 // Useful typedefs
