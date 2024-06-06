@@ -61,10 +61,7 @@ class RbtTransformFactory {
     /////////////////
 
     RbtTransformFactory(const RbtTransformFactory&);  // Copy constructor disabled by default
-
     RbtTransformFactory& operator=(const RbtTransformFactory&);  // Copy assignment disabled by default
-
-   void AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name);
    RbtBaseTransform* MakeTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
 

@@ -77,6 +77,8 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
         spPrmSource->SetSection(sectionName);
         if (spPrmSource->isParameterPresent(_TRANSFORM)) {
             RbtBaseTransform* transform = MakeTransformFromFile(spPrmSource, sectionName);
+            // All examples + the docs instruct to use NullTransform to set the SF overrides, nevertheless
+            // it is possible to set the overrides in an arbitrary transform.
             RegisterScoreFunctionOverridesInTransform(transform, spPrmSource);
             pTransformAgg->Add(transform);
         } else if (bThrowError) {
@@ -86,14 +88,7 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
     return pTransformAgg;
 }
 
-// Assumes that the file source is pointing to the appropriate section
-void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name) {
-    // Create new transform according to the string value of _TRANSFORM parameter
-    RbtBaseTransform* pTransform = MakeTransformFromFile(paramsPtr, name);
-    RegisterScoreFunctionOverridesInTransform(pTransform, paramsPtr);
-    aggPtr->Add(pTransform);
-}
-
+// Assumes that the fileSource has the appropriate Section set.
 RbtBaseTransform* RbtTransformFactory::MakeTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     RbtString kind = paramsPtr->GetParameterValueAsString(_TRANSFORM);   // Force a cast from RbtVariant to String
     if (kind == RbtSimAnnTransform::_CT) return MakeSimmulatedAnnealingTransformFromFile(paramsPtr, name);
