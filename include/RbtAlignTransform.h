@@ -65,6 +65,11 @@ class RbtAlignTransform: public RbtBaseBiMolTransform {
     RbtCavityList m_cavities;  // List of active site cavities to choose from
     RbtIntList m_cumulSize;    // Cumulative sizes, for weighted probabilities
     RbtInt m_totalSize;        // Total size of all cavities
+
+    // Transform parameters
+    // TODO: Make this enums
+    RbtString center_of_mass_translation;
+    RbtString axes_alignment;
 };
 
 // Useful typedefs
