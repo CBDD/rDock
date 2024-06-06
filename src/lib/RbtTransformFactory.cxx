@@ -32,6 +32,7 @@ RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSource
 RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr);
 
 
 // Parameter name which identifies a scoring function definition
@@ -89,22 +90,7 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
 void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name) {
     // Create new transform according to the string value of _TRANSFORM parameter
     RbtBaseTransform* pTransform = MakeTransformFromFile(paramsPtr, name);
-
-    // Set all the transform parameters from the rest of the parameters listed
-    RbtStringList prmList = paramsPtr->GetParameterList();
-    for (RbtStringListConstIter prmIter = prmList.begin(); prmIter != prmList.end(); prmIter++) {
-        // Look for scoring function request (PARAM@SF)
-        // Only SetParamRequest currently supported
-        // Parameters of the individual transformers are explicitly set by their respective constructor functions
-        // So we only look for score function overrides.
-        RbtStringList compList = Rbt::ConvertDelimitedStringToList(*prmIter, "@");
-        if (compList.size() == 2) {
-            RbtRequestPtr spReq(new RbtSFSetParamRequest(
-                compList[1], compList[0], paramsPtr->GetParameterValueAsString(*prmIter)
-            ));
-            pTransform->AddSFRequest(spReq);
-        }
-    }
+    RegisterScoreFunctionOverridesInTransform(pTransform, paramsPtr);
     aggPtr->Add(pTransform);
 }
 
@@ -193,4 +179,20 @@ RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr params
 void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName) {
     if (paramsPtr->isParameterPresent(paramName))
         transform->SetParameter(paramName, paramsPtr->GetParameterValueAsString(paramName));
+}
+
+void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr) {
+    // Set all the transform parameters from the rest of the parameters listed
+    for (auto& paramName : paramsPtr->GetParameterList()) {
+        // Look for scoring function request (PARAM@SF). Only SetParamRequest currently supported
+        // Parameters of the individual transformers are explicitly set by their respective constructor functions
+        // So we only look for score function overrides.
+        RbtStringList compList = Rbt::ConvertDelimitedStringToList(paramName, "@");
+        if (compList.size() == 2) {
+            RbtRequestPtr spReq(new RbtSFSetParamRequest(
+                compList[1], compList[0], paramsPtr->GetParameterValueAsString(paramName)
+            ));
+            transform->AddSFRequest(spReq);
+        }
+    }
 }
