@@ -27,6 +27,8 @@ void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFile
 RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
 // Parameter name which identifies a scoring function definition
 RbtString RbtTransformFactory::_TRANSFORM("TRANSFORM");
@@ -97,9 +99,13 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
         aggPtr->Add(pTransform);
         return;
     } else if (kind == RbtNullTransform::_CT) {
-        pTransform = new RbtNullTransform(name);
+        pTransform = MakeNullTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        // Do not exit as we're using the null transform to set parameters for the score functions.
     } else if (kind == RbtRandLigTransform::_CT) {
-        pTransform = new RbtRandLigTransform(name);
+        pTransform = MakeRandomizeLigandTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        return;
     } else if (kind == RbtRandPopTransform::_CT) {
         pTransform = new RbtRandPopTransform(name);
     } else if (kind == RbtSimplexTransform::_CT) {
@@ -164,5 +170,16 @@ RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr pa
     auto transform = new RbtAlignTransform(name);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtAlignTransform::_COM);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtAlignTransform::_AXES);
+    return transform;
+}
+
+// Doesn't have any parameters but let's create it for simmetry;
+RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    return new RbtNullTransform(name);
+}
+
+RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    auto transform = new RbtRandLigTransform(name);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtRandLigTransform::_TORS_STEP);
     return transform;
 }
