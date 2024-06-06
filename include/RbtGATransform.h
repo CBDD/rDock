@@ -67,6 +67,17 @@ class RbtGATransform: public RbtBaseBiMolTransform {
 
  private:
     RbtRand& m_rand;
+
+    RbtDouble population_size_fraction_AS_new_individuals_per_cycle;
+    RbtDouble crossover_probability;
+    RbtBool cauchy_mutation_after_crossover;
+    RbtBool use_cauchy_distribution_for_mutations; // We might want to make this an enum
+    RbtDouble relative_step_size;
+    RbtDouble equality_threshold;
+    RbtInt max_cycles;
+    RbtInt num_convergence_cycles;
+    RbtInt history_frequency;
+
 };
 
 #endif  //_RBTGATRANSFORM_H_
