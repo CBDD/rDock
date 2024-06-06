@@ -35,6 +35,45 @@ RbtTransformFactory::~RbtTransformFactory() {}
 // Public methods
 ////////////////
 
+
+// Creates an aggregate transform from a parameter file source
+// Each component transform is in a named section, which should minimally contain a TRANSFORM parameter
+// whose value is the class name to instantiate
+// strTransformClasses contains a comma-delimited list of transform class names to instantiate
+// If strTransformClasses is empty, all named sections in spPrmSource are scanned for valid transform definitions
+// Transform parameters and scoring function requests are set from the list of parameters in each named section
+RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
+    RbtParameterFileSourcePtr spPrmSource, const RbtString& strName, const RbtString& strTransformClasses
+) {
+    // Get list of transform objects to create
+    RbtStringList transformList = Rbt::ConvertDelimitedStringToList(strTransformClasses);
+    // If strTransformClasses is empty, then default to reading all sections of the
+    // parameter file for valid transform definitions
+    // In this case we do not throw an error if a particular section
+    // is not a transform, we simply skip it
+    RbtBool bThrowError(true);
+    if (transformList.empty()) {
+        transformList = spPrmSource->GetSectionList();
+        bThrowError = false;
+    }
+
+    // Create empty aggregate
+    RbtTransformAgg* pTransformAgg(new RbtTransformAgg(strName));
+
+    for (RbtStringListConstIter tIter = transformList.begin(); tIter != transformList.end(); tIter++) {
+        spPrmSource->SetSection(*tIter);
+        // Check if this section is a valid scoring function definition
+        if (spPrmSource->isParameterPresent(_TRANSFORM)) {
+            RbtString strTransformClass(spPrmSource->GetParameterValueAsString(_TRANSFORM));
+            AddTransformToAggFromFile(pTransformAgg, spPrmSource, strTransformClass, *tIter);
+        } else if (bThrowError) {
+            throw RbtFileMissingParameter(_WHERE_, "Missing " + _TRANSFORM + " parameter in section " + (*tIter));
+        }
+    }
+    return pTransformAgg;
+}
+
+// Assumes that the file source is pointing to the appropriate section
 void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name) {
     // Create new transform according to the string value of _TRANSFORM parameter
     RbtBaseTransform* pTransform;
@@ -75,39 +114,7 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
     aggPtr->Add(pTransform);
 }
 
-// Creates an aggregate transform from a parameter file source
-// Each component transform is in a named section, which should minimally contain a TRANSFORM parameter
-// whose value is the class name to instantiate
-// strTransformClasses contains a comma-delimited list of transform class names to instantiate
-// If strTransformClasses is empty, all named sections in spPrmSource are scanned for valid transform definitions
-// Transform parameters and scoring function requests are set from the list of parameters in each named section
-RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
-    RbtParameterFileSourcePtr spPrmSource, const RbtString& strName, const RbtString& strTransformClasses
-) {
-    // Get list of transform objects to create
-    RbtStringList transformList = Rbt::ConvertDelimitedStringToList(strTransformClasses);
-    // If strTransformClasses is empty, then default to reading all sections of the
-    // parameter file for valid transform definitions
-    // In this case we do not throw an error if a particular section
-    // is not a transform, we simply skip it
-    RbtBool bThrowError(true);
-    if (transformList.empty()) {
-        transformList = spPrmSource->GetSectionList();
-        bThrowError = false;
-    }
+RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtTransformAgg* aggPtr, const RbtString& name) {
+    auto transform = new RbtSimAnnTransform(name);
 
-    // Create empty aggregate
-    RbtTransformAgg* pTransformAgg(new RbtTransformAgg(strName));
-
-    for (RbtStringListConstIter tIter = transformList.begin(); tIter != transformList.end(); tIter++) {
-        spPrmSource->SetSection(*tIter);
-        // Check if this section is a valid scoring function definition
-        if (spPrmSource->isParameterPresent(_TRANSFORM)) {
-            RbtString strTransformClass(spPrmSource->GetParameterValueAsString(_TRANSFORM));
-            AddTransformToAggFromFile(pTransformAgg, spPrmSource, strTransformClass, *tIter);
-        } else if (bThrowError) {
-            throw RbtFileMissingParameter(_WHERE_, "Missing " + _TRANSFORM + " parameter in section " + (*tIter));
-        }
-    }
-    return pTransformAgg;
 }

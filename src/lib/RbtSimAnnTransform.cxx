@@ -89,6 +89,38 @@ RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName):
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
+RbtSimAnnTransform::RbtSimAnnTransform(
+    const RbtString& strName,
+    RbtDouble initial_temp,
+    RbtDouble final_temp,
+    RbtInt num_blocks,
+    RbtInt block_length,
+    RbtBool scale_chromosome_length,
+    RbtDouble step_size,
+    RbtDouble min_accuracy_rate,
+    RbtDouble partition_distance,
+    RbtInt partition_frequency,
+    RbtInt history_frequency
+):
+    RbtBaseBiMolTransform(_CT, strName),
+    initial_temp{initial_temp},
+    final_temp{final_temp},
+    num_blocks{num_blocks},
+    block_length{block_length},
+    scale_chromosome_length{scale_chromosome_length},
+    step_size{step_size},
+    min_accuracy_rate{min_accuracy_rate},
+    partition_distance{partition_distance},
+    partition_frequency{partition_frequency},
+    history_frequency{history_frequency},
+    m_rand(Rbt::GetRbtRand()) {
+    m_spStats = RbtMCStatsPtr(new RbtMCStats());
+#ifdef _DEBUG
+    cout << _CT << " parameterised constructor" << endl;
+#endif  //_DEBUG
+    _RBTOBJECTCOUNTER_CONSTR_(_CT);
+}
+
 RbtSimAnnTransform::~RbtSimAnnTransform() {
 #ifdef _DEBUG
     cout << _CT << " destructor" << endl;

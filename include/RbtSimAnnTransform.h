@@ -62,6 +62,19 @@ class RbtSimAnnTransform: public RbtBaseBiMolTransform {
     ////////////////////////////////////////
     // Constructors/destructors
     RbtSimAnnTransform(const RbtString& strName = "SIMANN");
+      RbtSimAnnTransform(
+         const RbtString& strName,
+         RbtDouble initial_temp,
+         RbtDouble final_temp,
+         RbtInt num_blocks,
+         RbtInt block_length,
+         RbtBool scale_chromosome_length,
+         RbtDouble step_size,
+         RbtDouble min_accuracy_rate,
+         RbtDouble partition_distance,
+         RbtInt partition_frequency,
+         RbtInt history_frequency
+      );
     virtual ~RbtSimAnnTransform();
 
     ////////////////////////////////////////
