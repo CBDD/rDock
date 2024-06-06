@@ -59,6 +59,10 @@ class RbtRandPopTransform: public RbtBaseBiMolTransform {
     // Private data
     //////////////
     RbtChromElementPtr m_chrom;
+
+    // Transform parameters
+    RbtInt population_size;
+    RbtBool scale_chromosome_length;
 };
 
 // Useful typedefs
