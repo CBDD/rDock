@@ -100,6 +100,18 @@ class RbtSimAnnTransform: public RbtBaseBiMolTransform {
     RbtChromElementPtr m_chrom;      // Current chromosome
     RbtDoubleList m_minVector;       // Chromosome vector corresponding to overall minimum score
     RbtDoubleList m_lastGoodVector;  // Saved chromosome before each MC mutation (to allow revert)
+
+    // Transform Parameters
+    RbtDouble initial_temp;
+    RbtDouble final_temp;
+    RbtInt num_blocks;
+    RbtInt block_length;
+    RbtBool scale_chromosome_length;
+    RbtDouble step_size;
+    RbtDouble min_accuracy_rate;
+    RbtDouble partition_distance;
+    RbtInt partition_frequency;
+    RbtInt history_frequency;
 };
 
 // Useful typedefs
