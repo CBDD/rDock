@@ -92,36 +92,20 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
     // Component transforms
     if (kind == RbtSimAnnTransform::_CT) {
         pTransform = MakeSimmulatedAnnealingTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        return;
     } else if (kind == RbtGATransform::_CT) {
         pTransform = MakeGeneticAlgorithmTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        return;
     } else if (kind == RbtAlignTransform::_CT) {
         pTransform = MakeLigandAlignTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        return;
     } else if (kind == RbtNullTransform::_CT) {
         pTransform = MakeNullTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        // Do not exit as we're using the null transform to set parameters for the score functions.
     } else if (kind == RbtRandLigTransform::_CT) {
         pTransform = MakeRandomizeLigandTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        return;
     } else if (kind == RbtRandPopTransform::_CT) {
         pTransform = MakeRandomizePopulationTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        return;
     } else if (kind == RbtSimplexTransform::_CT) {
         pTransform = MakeSimplexTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        return;
     } else if (kind == RbtTransformAgg::_CT) {
         pTransform = MakeAggregateTransformFromFile(paramsPtr, name);
-        aggPtr->Add(pTransform);
-        return;
     } else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
 
     // Set all the transform parameters from the rest of the parameters listed
@@ -129,14 +113,14 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
     for (RbtStringListConstIter prmIter = prmList.begin(); prmIter != prmList.end(); prmIter++) {
         // Look for scoring function request (PARAM@SF)
         // Only SetParamRequest currently supported
+        // Parameters of the individual transformers are explicitly set by their respective constructor functions
+        // So we only look for score function overrides.
         RbtStringList compList = Rbt::ConvertDelimitedStringToList(*prmIter, "@");
         if (compList.size() == 2) {
             RbtRequestPtr spReq(new RbtSFSetParamRequest(
                 compList[1], compList[0], paramsPtr->GetParameterValueAsString(*prmIter)
             ));
             pTransform->AddSFRequest(spReq);
-        } else if ((*prmIter) != _TRANSFORM) {  // Skip _TRANSFORM parameter
-            pTransform->SetParameter(*prmIter, paramsPtr->GetParameterValueAsString(*prmIter));
         }
     }
     aggPtr->Add(pTransform);
