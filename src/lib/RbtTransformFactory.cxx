@@ -25,6 +25,7 @@
 
 void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName);
 RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
 // Parameter name which identifies a scoring function definition
 RbtString RbtTransformFactory::_TRANSFORM("TRANSFORM");
@@ -87,7 +88,9 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
         aggPtr->Add(pTransform);
         return;
     } else if (kind == RbtGATransform::_CT) {
-        pTransform = new RbtGATransform(name);
+        pTransform = MakeGeneticAlgorithmTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        return;
     } else if (kind == RbtAlignTransform::_CT) {
         pTransform = new RbtAlignTransform(name);
     } else if (kind == RbtNullTransform::_CT) {
@@ -137,5 +140,19 @@ RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSou
     SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_PARTITION_DIST);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_PARTITION_FREQ);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_HISTORY_FREQ);
+    return transform;
+}
+
+RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    auto transform = new RbtGATransform(name);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NEW_FRACTION);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_PCROSSOVER);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_XOVERMUT);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_CMUTATE);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_STEP_SIZE);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_EQUALITY_THRESHOLD);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NCYCLES);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NCONVERGENCE);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_HISTORY_FREQ);
     return transform;
 }
