@@ -22,6 +22,10 @@
 #include "RbtSimAnnTransform.h"
 #include "RbtSimplexTransform.h"
 
+
+void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName);
+RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+
 // Parameter name which identifies a scoring function definition
 RbtString RbtTransformFactory::_TRANSFORM("TRANSFORM");
 
@@ -79,7 +83,9 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
     RbtBaseTransform* pTransform;
     // Component transforms
     if (kind == RbtSimAnnTransform::_CT) {
-        pTransform = new RbtSimAnnTransform(name);
+        pTransform = MakeSimmulatedAnnealingTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        return;
     } else if (kind == RbtGATransform::_CT) {
         pTransform = new RbtGATransform(name);
     } else if (kind == RbtAlignTransform::_CT) {
@@ -114,7 +120,22 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
     aggPtr->Add(pTransform);
 }
 
-RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtTransformAgg* aggPtr, const RbtString& name) {
-    auto transform = new RbtSimAnnTransform(name);
+void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName) {
+    if (paramsPtr->isParameterPresent(paramName))
+        transform->SetParameter(paramName, paramsPtr->GetParameterValueAsString(paramName));
+}
 
+RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    auto transform = new RbtSimAnnTransform(name);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_START_T);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_FINAL_T);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_BLOCK_LENGTH);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_SCALE_CHROM_LENGTH);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_NUM_BLOCKS);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_STEP_SIZE);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_MIN_ACC_RATE);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_PARTITION_DIST);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_PARTITION_FREQ);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_HISTORY_FREQ);
+    return transform;
 }
