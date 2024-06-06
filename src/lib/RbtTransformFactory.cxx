@@ -51,6 +51,27 @@ RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass
     throw RbtBadArgument(_WHERE_, "Unknown transform " + strTransformClass);
 }
 
+void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name) {
+    // Create new transform according to the string value of _TRANSFORM parameter
+    RbtBaseTransform* pTransform = Create(kind, name);
+    // Set all the transform parameters from the rest of the parameters listed
+    RbtStringList prmList = paramsPtr->GetParameterList();
+    for (RbtStringListConstIter prmIter = prmList.begin(); prmIter != prmList.end(); prmIter++) {
+        // Look for scoring function request (PARAM@SF)
+        // Only SetParamRequest currently supported
+        RbtStringList compList = Rbt::ConvertDelimitedStringToList(*prmIter, "@");
+        if (compList.size() == 2) {
+            RbtRequestPtr spReq(new RbtSFSetParamRequest(
+                compList[1], compList[0], paramsPtr->GetParameterValueAsString(*prmIter)
+            ));
+            pTransform->AddSFRequest(spReq);
+        } else if ((*prmIter) != _TRANSFORM) {  // Skip _TRANSFORM parameter
+            pTransform->SetParameter(*prmIter, paramsPtr->GetParameterValueAsString(*prmIter));
+        }
+    }
+    aggPtr->Add(pTransform);
+}
+
 // Creates an aggregate transform from a parameter file source
 // Each component transform is in a named section, which should minimally contain a TRANSFORM parameter
 // whose value is the class name to instantiate
@@ -80,24 +101,7 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
         // Check if this section is a valid scoring function definition
         if (spPrmSource->isParameterPresent(_TRANSFORM)) {
             RbtString strTransformClass(spPrmSource->GetParameterValueAsString(_TRANSFORM));
-            // Create new transform according to the string value of _TRANSFORM parameter
-            RbtBaseTransform* pTransform = Create(strTransformClass, *tIter);
-            // Set all the transform parameters from the rest of the parameters listed
-            RbtStringList prmList = spPrmSource->GetParameterList();
-            for (RbtStringListConstIter prmIter = prmList.begin(); prmIter != prmList.end(); prmIter++) {
-                // Look for scoring function request (PARAM@SF)
-                // Only SetParamRequest currently supported
-                RbtStringList compList = Rbt::ConvertDelimitedStringToList(*prmIter, "@");
-                if (compList.size() == 2) {
-                    RbtRequestPtr spReq(new RbtSFSetParamRequest(
-                        compList[1], compList[0], spPrmSource->GetParameterValueAsString(*prmIter)
-                    ));
-                    pTransform->AddSFRequest(spReq);
-                } else if ((*prmIter) != _TRANSFORM) {  // Skip _TRANSFORM parameter
-                    pTransform->SetParameter(*prmIter, spPrmSource->GetParameterValueAsString(*prmIter));
-                }
-            }
-            pTransformAgg->Add(pTransform);
+            AddTransformToAggFromFile(pTransformAgg, spPrmSource, strTransformClass, *tIter);
         } else if (bThrowError) {
             throw RbtFileMissingParameter(_WHERE_, "Missing " + _TRANSFORM + " parameter in section " + (*tIter));
         }

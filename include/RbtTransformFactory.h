@@ -68,6 +68,9 @@ class RbtTransformFactory {
 
     RbtTransformFactory& operator=(const RbtTransformFactory&);  // Copy assignment disabled by default
 
+   void AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name);
+
+
  protected:
     ////////////////////////////////////////
     // Protected data
