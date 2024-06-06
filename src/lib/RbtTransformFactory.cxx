@@ -34,22 +34,6 @@ RbtTransformFactory::~RbtTransformFactory() {}
 ////////////////////////////////////////
 // Public methods
 ////////////////
-// Creates a single transform object of type strTransformClass, and name strName
-// e.g. strTransformClass = RbtSimAnnTransform
-RbtBaseTransform* RbtTransformFactory::Create(const RbtString& strTransformClass, const RbtString& strName) {
-    // Component transforms
-    if (strTransformClass == RbtSimAnnTransform::_CT) return new RbtSimAnnTransform(strName);
-    if (strTransformClass == RbtGATransform::_CT) return new RbtGATransform(strName);
-    if (strTransformClass == RbtAlignTransform::_CT) return new RbtAlignTransform(strName);
-    if (strTransformClass == RbtNullTransform::_CT) return new RbtNullTransform(strName);
-    if (strTransformClass == RbtRandLigTransform::_CT) return new RbtRandLigTransform(strName);
-    if (strTransformClass == RbtRandPopTransform::_CT) return new RbtRandPopTransform(strName);
-    if (strTransformClass == RbtSimplexTransform::_CT) return new RbtSimplexTransform(strName);
-    // Aggregate transforms
-    if (strTransformClass == RbtTransformAgg::_CT) return new RbtTransformAgg(strName);
-
-    throw RbtBadArgument(_WHERE_, "Unknown transform " + strTransformClass);
-}
 
 void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name) {
     // Create new transform according to the string value of _TRANSFORM parameter
