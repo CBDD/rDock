@@ -30,6 +30,8 @@ RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr pa
 RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+
 
 // Parameter name which identifies a scoring function definition
 RbtString RbtTransformFactory::_TRANSFORM("TRANSFORM");
@@ -108,9 +110,13 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
         aggPtr->Add(pTransform);
         return;
     } else if (kind == RbtRandPopTransform::_CT) {
-        pTransform = new RbtRandPopTransform(name);
+        pTransform = MakeRandomizePopulationTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        return;
     } else if (kind == RbtSimplexTransform::_CT) {
-        pTransform = new RbtSimplexTransform(name);
+        pTransform = MakeSimplexTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        return;
     } else if (kind == RbtTransformAgg::_CT) {
         pTransform = new RbtTransformAgg(name);
     } else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
@@ -189,5 +195,16 @@ RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSo
     auto transform = new RbtRandPopTransform(name);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_POP_SIZE);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_SCALE_CHROM_LENGTH);
+    return transform;
+}
+
+RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    auto transform = new RbtSimplexTransform(name);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_MAX_CALLS);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_NCYCLES);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_STOPPING_STEP_LENGTH);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_PARTITION_DIST);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_STEP_SIZE);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_CONVERGENCE);
     return transform;
 }
