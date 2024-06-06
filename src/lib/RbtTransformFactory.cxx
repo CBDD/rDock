@@ -88,25 +88,7 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
 // Assumes that the file source is pointing to the appropriate section
 void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, RbtParameterFileSourcePtr paramsPtr, const RbtString& kind, const RbtString& name) {
     // Create new transform according to the string value of _TRANSFORM parameter
-    RbtBaseTransform* pTransform;
-    // Component transforms
-    if (kind == RbtSimAnnTransform::_CT) {
-        pTransform = MakeSimmulatedAnnealingTransformFromFile(paramsPtr, name);
-    } else if (kind == RbtGATransform::_CT) {
-        pTransform = MakeGeneticAlgorithmTransformFromFile(paramsPtr, name);
-    } else if (kind == RbtAlignTransform::_CT) {
-        pTransform = MakeLigandAlignTransformFromFile(paramsPtr, name);
-    } else if (kind == RbtNullTransform::_CT) {
-        pTransform = MakeNullTransformFromFile(paramsPtr, name);
-    } else if (kind == RbtRandLigTransform::_CT) {
-        pTransform = MakeRandomizeLigandTransformFromFile(paramsPtr, name);
-    } else if (kind == RbtRandPopTransform::_CT) {
-        pTransform = MakeRandomizePopulationTransformFromFile(paramsPtr, name);
-    } else if (kind == RbtSimplexTransform::_CT) {
-        pTransform = MakeSimplexTransformFromFile(paramsPtr, name);
-    } else if (kind == RbtTransformAgg::_CT) {
-        pTransform = MakeAggregateTransformFromFile(paramsPtr, name);
-    } else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
+    RbtBaseTransform* pTransform = MakeTransformFromFile(paramsPtr, name);
 
     // Set all the transform parameters from the rest of the parameters listed
     RbtStringList prmList = paramsPtr->GetParameterList();
@@ -126,9 +108,17 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
     aggPtr->Add(pTransform);
 }
 
-void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName) {
-    if (paramsPtr->isParameterPresent(paramName))
-        transform->SetParameter(paramName, paramsPtr->GetParameterValueAsString(paramName));
+RbtBaseTransform* RbtTransformFactory::MakeTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    RbtString kind(paramsPtr->GetParameterValueAsString(_TRANSFORM));   // FOrce a cast from RbtVariant to String
+    if (kind == RbtSimAnnTransform::_CT) return MakeSimmulatedAnnealingTransformFromFile(paramsPtr, name);
+    else if (kind == RbtGATransform::_CT) return MakeGeneticAlgorithmTransformFromFile(paramsPtr, name);
+    else if (kind == RbtAlignTransform::_CT) return MakeLigandAlignTransformFromFile(paramsPtr, name);
+    else if (kind == RbtNullTransform::_CT) return MakeNullTransformFromFile(paramsPtr, name);
+    else if (kind == RbtRandLigTransform::_CT) return MakeRandomizeLigandTransformFromFile(paramsPtr, name);
+    else if (kind == RbtRandPopTransform::_CT) return MakeRandomizePopulationTransformFromFile(paramsPtr, name);
+    else if (kind == RbtSimplexTransform::_CT) return MakeSimplexTransformFromFile(paramsPtr, name);
+    else if (kind == RbtTransformAgg::_CT) return MakeAggregateTransformFromFile(paramsPtr, name);
+    else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
 }
 
 RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
@@ -198,4 +188,9 @@ RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr para
 
 RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     return new RbtTransformAgg(name);
+}
+
+void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName) {
+    if (paramsPtr->isParameterPresent(paramName))
+        transform->SetParameter(paramName, paramsPtr->GetParameterValueAsString(paramName));
 }
