@@ -39,15 +39,23 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
     // Create new transform according to the string value of _TRANSFORM parameter
     RbtBaseTransform* pTransform;
     // Component transforms
-    if (kind == RbtSimAnnTransform::_CT) pTransform = new RbtSimAnnTransform(name);
-    else if (kind == RbtGATransform::_CT) pTransform = new RbtGATransform(name);
-    else if (kind == RbtAlignTransform::_CT) pTransform = new RbtAlignTransform(name);
-    else if (kind == RbtNullTransform::_CT) pTransform = new RbtNullTransform(name);
-    else if (kind == RbtRandLigTransform::_CT) pTransform = new RbtRandLigTransform(name);
-    else if (kind == RbtRandPopTransform::_CT) pTransform = new RbtRandPopTransform(name);
-    else if (kind == RbtSimplexTransform::_CT) pTransform = new RbtSimplexTransform(name);
-    else if (kind == RbtTransformAgg::_CT) pTransform = new RbtTransformAgg(name);
-    else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
+    if (kind == RbtSimAnnTransform::_CT) {
+        pTransform = new RbtSimAnnTransform(name);
+    } else if (kind == RbtGATransform::_CT) {
+        pTransform = new RbtGATransform(name);
+    } else if (kind == RbtAlignTransform::_CT) {
+        pTransform = new RbtAlignTransform(name);
+    } else if (kind == RbtNullTransform::_CT) {
+        pTransform = new RbtNullTransform(name);
+    } else if (kind == RbtRandLigTransform::_CT) {
+        pTransform = new RbtRandLigTransform(name);
+    } else if (kind == RbtRandPopTransform::_CT) {
+        pTransform = new RbtRandPopTransform(name);
+    } else if (kind == RbtSimplexTransform::_CT) {
+        pTransform = new RbtSimplexTransform(name);
+    } else if (kind == RbtTransformAgg::_CT) {
+        pTransform = new RbtTransformAgg(name);
+    } else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
 
     // Set all the transform parameters from the rest of the parameters listed
     RbtStringList prmList = paramsPtr->GetParameterList();
