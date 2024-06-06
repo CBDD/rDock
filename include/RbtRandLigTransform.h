@@ -60,6 +60,10 @@ class RbtRandLigTransform: public RbtBaseUniMolTransform {
     //////////////
     RbtRand& m_rand;  // keep a reference to the singleton random number generator
     RbtBondList m_rotableBonds;
+
+    // Transform parameters
+    RbtDouble torsion_step;
+
 };
 
 // Useful typedefs
