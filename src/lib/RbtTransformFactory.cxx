@@ -26,6 +26,7 @@
 void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName);
 RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
 // Parameter name which identifies a scoring function definition
 RbtString RbtTransformFactory::_TRANSFORM("TRANSFORM");
@@ -92,7 +93,9 @@ void RbtTransformFactory::AddTransformToAggFromFile(RbtTransformAgg* aggPtr, Rbt
         aggPtr->Add(pTransform);
         return;
     } else if (kind == RbtAlignTransform::_CT) {
-        pTransform = new RbtAlignTransform(name);
+        pTransform = MakeLigandAlignTransformFromFile(paramsPtr, name);
+        aggPtr->Add(pTransform);
+        return;
     } else if (kind == RbtNullTransform::_CT) {
         pTransform = new RbtNullTransform(name);
     } else if (kind == RbtRandLigTransform::_CT) {
@@ -154,5 +157,12 @@ RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr 
     SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NCYCLES);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NCONVERGENCE);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_HISTORY_FREQ);
+    return transform;
+}
+
+RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    auto transform = new RbtAlignTransform(name);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtAlignTransform::_COM);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtAlignTransform::_AXES);
     return transform;
 }
