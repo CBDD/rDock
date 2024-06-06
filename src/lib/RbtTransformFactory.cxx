@@ -29,6 +29,7 @@ RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr 
 RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
 // Parameter name which identifies a scoring function definition
 RbtString RbtTransformFactory::_TRANSFORM("TRANSFORM");
@@ -181,5 +182,12 @@ RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr,
 RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     auto transform = new RbtRandLigTransform(name);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtRandLigTransform::_TORS_STEP);
+    return transform;
+}
+
+RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+    auto transform = new RbtRandPopTransform(name);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_POP_SIZE);
+    SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_SCALE_CHROM_LENGTH);
     return transform;
 }
