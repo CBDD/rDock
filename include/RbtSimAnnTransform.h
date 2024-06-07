@@ -59,6 +59,32 @@ class RbtSimAnnTransform: public RbtBaseBiMolTransform {
     static RbtString _PARTITION_FREQ;
     static RbtString _HISTORY_FREQ;
 
+   struct Config {
+         RbtDouble initial_temp;
+         RbtDouble final_temp;
+         RbtInt num_blocks;
+         RbtInt block_length;
+         RbtBool scale_chromosome_length;
+         RbtDouble step_size;
+         RbtDouble min_accuracy_rate;
+         RbtDouble partition_distance;
+         RbtInt partition_frequency;
+         RbtInt history_frequency;
+   };
+
+   static constexpr Config DEFAULT_CONFIG {
+      .initial_temp = 1000.0,
+      .final_temp = 300.0,
+      .num_blocks = 25,
+      .block_length = 50,
+      .scale_chromosome_length = true,
+      .step_size = 1.0,
+      .min_accuracy_rate = 0.25,
+      .partition_distance = 0.0,
+      .partition_frequency = 0,
+      .history_frequency = 0,
+   };
+
     ////////////////////////////////////////
     // Constructors/destructors
     RbtSimAnnTransform(const RbtString& strName = "SIMANN");
@@ -75,6 +101,8 @@ class RbtSimAnnTransform: public RbtBaseBiMolTransform {
          RbtInt partition_frequency,
          RbtInt history_frequency
       );
+
+      RbtSimAnnTransform(const RbtString& strName, Config config);
     virtual ~RbtSimAnnTransform();
 
     ////////////////////////////////////////
@@ -114,17 +142,7 @@ class RbtSimAnnTransform: public RbtBaseBiMolTransform {
     RbtDoubleList m_minVector;       // Chromosome vector corresponding to overall minimum score
     RbtDoubleList m_lastGoodVector;  // Saved chromosome before each MC mutation (to allow revert)
 
-    // Transform Parameters
-    RbtDouble initial_temp;
-    RbtDouble final_temp;
-    RbtInt num_blocks;
-    RbtInt block_length;
-    RbtBool scale_chromosome_length;
-    RbtDouble step_size;
-    RbtDouble min_accuracy_rate;
-    RbtDouble partition_distance;
-    RbtInt partition_frequency;
-    RbtInt history_frequency;
+    const Config config;
 };
 
 // Useful typedefs
