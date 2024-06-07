@@ -44,28 +44,18 @@ class RbtGATransform: public RbtBaseBiMolTransform {
     static RbtString _HISTORY_FREQ;
 
     struct Config {
-      RbtDouble population_size_fraction_as_new_individuals_per_cycle;
-      RbtDouble crossover_probability;
-      RbtBool cauchy_mutation_after_crossover;
-      RbtBool use_cauchy_distribution_for_mutations; // We might want to make this an enum
-      RbtDouble relative_step_size;
-      RbtDouble equality_threshold;
-      RbtInt max_cycles;
-      RbtInt num_convergence_cycles;
-      RbtInt history_frequency;
+      RbtDouble population_size_fraction_as_new_individuals_per_cycle = 0.5;
+      RbtDouble crossover_probability = 0.4;
+      RbtBool cauchy_mutation_after_crossover = true;
+      RbtBool use_cauchy_distribution_for_mutations = false; // We might want to make this an enum
+      RbtDouble relative_step_size = 1.0;
+      RbtDouble equality_threshold = 0.1;
+      RbtInt max_cycles = 100;
+      RbtInt num_convergence_cycles = 6;
+      RbtInt history_frequency = 0;
     };
 
-    static constexpr Config DEFAULT_CONFIG {
-      .population_size_fraction_as_new_individuals_per_cycle = 0.5,
-      .crossover_probability = 0.4,
-      .cauchy_mutation_after_crossover = true,
-      .use_cauchy_distribution_for_mutations = false,
-      .relative_step_size = 1.0,
-      .equality_threshold = 0.1,
-      .max_cycles = 100,
-      .num_convergence_cycles = 6,
-      .history_frequency = 0,
-    };
+    static const Config DEFAULT_CONFIG;
 
     ////////////////////////////////////////
     // Constructors/destructors

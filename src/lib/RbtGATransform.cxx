@@ -30,6 +30,8 @@ RbtString RbtGATransform::_NCYCLES("NCYCLES");
 RbtString RbtGATransform::_NCONVERGENCE("NCONVERGENCE");
 RbtString RbtGATransform::_HISTORY_FREQ("HISTORY_FREQ");
 
+const RbtGATransform::Config RbtGATransform::DEFAULT_CONFIG {};  // Empty initializer to fall back to default values
+
 RbtGATransform::RbtGATransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),

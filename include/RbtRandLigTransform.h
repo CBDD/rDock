@@ -27,12 +27,10 @@ class RbtRandLigTransform: public RbtBaseUniMolTransform {
     static RbtString _TORS_STEP;
 
     struct Config {
-      RbtDouble torsion_step;
+      RbtDouble torsion_step {180.0};
     };
 
-    static constexpr Config DEFAULT_CONFIG {
-      .torsion_step = 180.0,
-    };
+    static const Config DEFAULT_CONFIG;
 
     ////////////////////////////////////////
     // Constructors/destructors

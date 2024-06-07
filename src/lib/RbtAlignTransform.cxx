@@ -21,6 +21,8 @@ RbtString RbtAlignTransform::_CT("RbtAlignTransform");
 RbtString RbtAlignTransform::_COM("COM");
 RbtString RbtAlignTransform::_AXES("AXES");
 
+const RbtAlignTransform::Config RbtAlignTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
+
 RbtAlignTransform::RbtAlignTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),

@@ -17,6 +17,8 @@ RbtString RbtRandLigTransform::_CT("RbtRandLigTransform");
 // Parameter names
 RbtString RbtRandLigTransform::_TORS_STEP("TORS_STEP");
 
+const RbtRandLigTransform::Config RbtRandLigTransform::DEFAULT_CONFIG {};  // Empty initializer to fall back to default values
+
 RbtRandLigTransform::RbtRandLigTransform(const RbtString& strName, const Config& config):
     RbtBaseUniMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),

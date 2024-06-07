@@ -66,6 +66,8 @@ RbtString RbtSimAnnTransform::_PARTITION_DIST("PARTITION_DIST");
 RbtString RbtSimAnnTransform::_PARTITION_FREQ("PARTITION_FREQ");
 RbtString RbtSimAnnTransform::_HISTORY_FREQ("HISTORY_FREQ");
 
+const RbtSimAnnTransform::Config RbtSimAnnTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
+
 RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),

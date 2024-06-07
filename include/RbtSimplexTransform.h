@@ -32,22 +32,15 @@ class RbtSimplexTransform: public RbtBaseBiMolTransform {
     static RbtString _CONVERGENCE;
 
     struct Config {
-      RbtInt max_calls;
-      RbtInt num_cycles;
-      RbtDouble stopping_step_length;
-      RbtDouble convergence_threshold;
-      RbtDouble step_size;
-      RbtDouble partition_distribution;
+      RbtInt max_calls {200};
+      RbtInt num_cycles {5};
+      RbtDouble stopping_step_length {10e-4};
+      RbtDouble convergence_threshold {0.001};
+      RbtDouble step_size {0.1};
+      RbtDouble partition_distribution {0.0};
     };
 
-    static constexpr Config DEFAULT_CONFIG {
-      .max_calls = 200,
-      .num_cycles = 5,
-      .stopping_step_length = 10e-4,
-      .convergence_threshold = 0.001,
-      .step_size = 0.1,
-      .partition_distribution = 0.0
-    };
+    static const Config DEFAULT_CONFIG;
 
     RbtSimplexTransform(const RbtString& strName, const Config& config);
     virtual ~RbtSimplexTransform();
