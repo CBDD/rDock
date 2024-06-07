@@ -42,8 +42,19 @@ class RbtParameterFileSource: public RbtBaseFileSource {
     RbtDouble GetParameterValue(const RbtString& strParamName);
     // DM 12 Feb 1999 Get a particular named parameter value as a string
     RbtString GetParameterValueAsString(const RbtString& strParamName);
+
+    RbtVariant GetParameterValueAsVariant(const RbtString& strParamName);
     // DM 11 Feb 1999 Check if parameter is present
     RbtBool isParameterPresent(const RbtString& strParamName);
+
+    template <typename ParamType>
+    ParamType GetParamOrDefault(const RbtString& paramName, const ParamType& defaultValue) {
+        if (isParameterPresent(paramName)) {
+            return GetParameterValueAsVariant(paramName);
+        } else {
+            return defaultValue;
+        }
+    }
 
     // DM 11 Feb 1999 - section handling
     // Parameters can be grouped into named sections

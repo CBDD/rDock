@@ -31,9 +31,18 @@ class RbtSimplexTransform: public RbtBaseBiMolTransform {
     // between cycles
     static RbtString _CONVERGENCE;
 
-    ////////////////////////////////////////
-    // Constructors/destructors
-    RbtSimplexTransform(const RbtString& strName = "SIMPLEX");
+    struct Config {
+        RbtInt max_calls{200};
+        RbtInt num_cycles{5};
+        RbtDouble stopping_step_length{10e-4};
+        RbtDouble convergence_threshold{0.001};
+        RbtDouble step_size{0.1};
+        RbtDouble partition_distribution{0.0};
+    };
+
+    static const Config DEFAULT_CONFIG;
+
+    RbtSimplexTransform(const RbtString& strName, const Config& config);
     virtual ~RbtSimplexTransform();
 
     ////////////////////////////////////////
@@ -66,6 +75,8 @@ class RbtSimplexTransform: public RbtBaseBiMolTransform {
     // Private data
     //////////////
     RbtChromElementPtr m_chrom;
+
+    const Config config;
 };
 
 // Useful typedefs

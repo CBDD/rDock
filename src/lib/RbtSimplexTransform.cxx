@@ -30,15 +30,12 @@ RbtString RbtSimplexTransform::_PARTITION_DIST("PARTITION_DIST");
 RbtString RbtSimplexTransform::_STEP_SIZE("STEP_SIZE");
 RbtString RbtSimplexTransform::_CONVERGENCE("CONVERGENCE");
 
-////////////////////////////////////////
-// Constructors/destructors
-RbtSimplexTransform::RbtSimplexTransform(const RbtString& strName): RbtBaseBiMolTransform(_CT, strName) {
-    AddParameter(_MAX_CALLS, 200);
-    AddParameter(_NCYCLES, 5);
-    AddParameter(_STOPPING_STEP_LENGTH, 10e-4);
-    AddParameter(_PARTITION_DIST, 0.0);
-    AddParameter(_STEP_SIZE, 0.1);
-    AddParameter(_CONVERGENCE, 0.001);
+const RbtSimplexTransform::Config
+    RbtSimplexTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
+
+RbtSimplexTransform::RbtSimplexTransform(const RbtString& strName, const Config& config):
+    RbtBaseBiMolTransform(_CT, strName),
+    config{config} {
 #ifdef _DEBUG
     cout << _CT << " parameterised constructor" << endl;
 #endif  //_DEBUG
@@ -86,13 +83,7 @@ void RbtSimplexTransform::Execute() {
     RbtInt iTrace = GetTrace();
 
     pWorkSpace->ClearPopulation();
-    RbtInt maxcalls = GetParameter(_MAX_CALLS);
-    RbtInt ncycles = GetParameter(_NCYCLES);
-    RbtDouble stopping = GetParameter(_STOPPING_STEP_LENGTH);
-    RbtDouble convergence = GetParameter(_CONVERGENCE);
-    RbtDouble stepSize = GetParameter(_STEP_SIZE);
-    RbtDouble partDist = GetParameter(_PARTITION_DIST);
-    RbtRequestPtr spPartReq(new RbtSFPartitionRequest(partDist));
+    RbtRequestPtr spPartReq(new RbtSFPartitionRequest(config.partition_distribution));
     RbtRequestPtr spClearPartReq(new RbtSFPartitionRequest(0.0));
     pSF->HandleRequest(spPartReq);
 
@@ -104,20 +95,19 @@ void RbtSimplexTransform::Execute() {
     RbtInt nsv = sv.size();
     RbtDouble* steps = new RbtDouble[nsv];
     for (RbtInt i = 0; i < nsv; ++i) {
-        steps[i] = sv[i] * stepSize;
+        steps[i] = sv[i] * config.step_size;
     }
 
     // Set up the Simplex search object
     NMSearch* ssearch;
-    NMSearch::SetMaxCalls(maxcalls);
-    NMSearch::SetStoppingLength(stopping);
+    NMSearch::SetMaxCalls(config.max_calls);
+    NMSearch::SetStoppingLength(config.stopping_step_length);
     RbtInt calls = 0;
     RbtDouble initScore = pSF->Score();  // Current score
     RbtDouble min = initScore;
     RbtDoubleList vc;  // Vector representation of chromosome
-    RbtInt N = ncycles;
     // Energy change between cycles - initialise so as not to terminate loop immediately
-    RbtDouble delta = -convergence - 1.0;
+    RbtDouble delta = -config.convergence_threshold - 1.0;
 
     if (iTrace > 0) {
         cout.precision(3);
@@ -136,8 +126,8 @@ void RbtSimplexTransform::Execute() {
         }
     }
 
-    for (RbtInt i = 0; (i < N) && (delta < -convergence); i++) {
-        if (partDist > 0.0) {
+    for (RbtInt i = 0; (i < config.num_cycles) && (delta < -config.convergence_threshold); i++) {
+        if (config.partition_distribution > 0.0) {
             pSF->HandleRequest(spPartReq);
         }
         // Use a variable length simplex

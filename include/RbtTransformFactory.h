@@ -37,10 +37,6 @@ class RbtTransformFactory {
     // Public methods
     ////////////////
 
-    // Creates a single transform object of type strTransformClass, and name strName
-    // e.g. strTransformClass = RbtSimAnnTransform
-    virtual RbtBaseTransform* Create(const RbtString& strTransformClass, const RbtString& strName);
-
     // Creates an aggregate transform from a parameter file source
     // Each component transform is in a named section, which should minimally contain a TRANSFORM parameter
     // whose value is the class name to instantiate
@@ -64,9 +60,9 @@ class RbtTransformFactory {
     // Private methods
     /////////////////
 
-    RbtTransformFactory(const RbtTransformFactory&);  // Copy constructor disabled by default
-
+    RbtTransformFactory(const RbtTransformFactory&);             // Copy constructor disabled by default
     RbtTransformFactory& operator=(const RbtTransformFactory&);  // Copy assignment disabled by default
+    RbtBaseTransform* MakeTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
  protected:
     ////////////////////////////////////////
