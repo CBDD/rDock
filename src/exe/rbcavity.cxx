@@ -12,22 +12,22 @@
 
 // Standalone executable for generating docking site .as files for rbdock
 
+#include <iomanip>
 #include <iostream>
 #include <string>
-#include <iomanip>
 
+#include "rbcavity/rbcavity_argparser.h"
 #include "rbcavity/rbcavity_config.h"
 #include "rbcavity/rbcavity_main.h"
-#include "rbcavity/rbcavity_argparser.h"
 
 #include "Rbt.h"
-#include "RbtVersion.h"
 #include "RbtDebug.h"
+#include "RbtVersion.h"
 
 const std::string EXEVERSION = RBT_VERSION;
 
-using std::cout;
 using std::cerr;
+using std::cout;
 using std::endl;
 /////////////////////////////////////////////////////////////////////
 // MAIN PROGRAM STARTS HERE

@@ -1,12 +1,12 @@
+#include "rbcavity/rbcavity_argparser.h"
+
 #include <iostream>
 #include <string>
 
+#include "rbcavity/rbcavity_config.h"
+
 #include "RbtArgParser.h"
 #include "RbtError.h"
-
-#include "rbcavity/rbcavity_config.h"
-#include "rbcavity/rbcavity_argparser.h"
-
 
 RbtArgParser::RbtArgParser RBCavity::get_options_parser() {
     using std::string;

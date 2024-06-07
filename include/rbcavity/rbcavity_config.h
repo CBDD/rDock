@@ -42,19 +42,11 @@ struct RBCavityConfig {
         if (bBorder && border <= 0) throw ValidationError("Invalid border distance. must be a positive number");
     }
 
-    friend bool operator==(const RBCavity::RBCavityConfig & c1, const RBCavity::RBCavityConfig & c2) {
+    friend bool operator==(const RBCavity::RBCavityConfig &c1, const RBCavity::RBCavityConfig &c2) {
         return (
-            c1.strReceptorPrmFile == c2.strReceptorPrmFile
-            && c1.bReadAS == c2.bReadAS
-            && c1.bWriteAS == c2.bWriteAS
-            && c1.bDump == c2.bDump
-            && c1.bViewer == c2.bViewer
-            && c1.bList == c2.bList
-            && c1.bBorder == c2.bBorder
-            && c1.bSite == c2.bSite
-            && c1.bMOEgrid == c2.bMOEgrid
-            && c1.border == c2.border
-            && c1.dist == c2.dist
+            c1.strReceptorPrmFile == c2.strReceptorPrmFile && c1.bReadAS == c2.bReadAS && c1.bWriteAS == c2.bWriteAS
+            && c1.bDump == c2.bDump && c1.bViewer == c2.bViewer && c1.bList == c2.bList && c1.bBorder == c2.bBorder
+            && c1.bSite == c2.bSite && c1.bMOEgrid == c2.bMOEgrid && c1.border == c2.border && c1.dist == c2.dist
         );
     }
 };
