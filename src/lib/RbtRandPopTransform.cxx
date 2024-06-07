@@ -20,9 +20,10 @@ RbtString RbtRandPopTransform::_CT("RbtRandPopTransform");
 RbtString RbtRandPopTransform::_POP_SIZE("POP_SIZE");
 RbtString RbtRandPopTransform::_SCALE_CHROM_LENGTH("SCALE_CHROM_LENGTH");
 
-RbtRandPopTransform::RbtRandPopTransform(const RbtString& strName): RbtBaseBiMolTransform(_CT, strName) {
-    AddParameter(_POP_SIZE, 50);
-    AddParameter(_SCALE_CHROM_LENGTH, true);
+RbtRandPopTransform::RbtRandPopTransform(const RbtString& strName, const Config& config):
+    RbtBaseBiMolTransform(_CT, strName),
+    config{config}
+{
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
@@ -55,16 +56,13 @@ void RbtRandPopTransform::Execute() {
     if (pSF == NULL) {
         return;
     }
-    RbtInt popSize = GetParameter(_POP_SIZE);
-    RbtBool bScale = GetParameter(_SCALE_CHROM_LENGTH);
-    if (bScale) {
+    RbtInt population_size = config.population_size;
+    if (config.scale_chromosome_length) {
         RbtInt chromLength = m_chrom->GetLength();
-        popSize *= chromLength;
+        population_size *= chromLength;
     }
-    if (GetTrace() > 3) {
-        cout << _CT << ": popSize=" << popSize << endl;
-    }
-    RbtPopulationPtr pop = new RbtPopulation(m_chrom, popSize, pSF);
+    if (GetTrace() > 3) cout << _CT << ": popSize=" << population_size << endl;
+    RbtPopulationPtr pop = new RbtPopulation(m_chrom, population_size, pSF);
     pop->Best()->GetChrom()->SyncToModel();
     GetWorkSpace()->SetPopulation(pop);
 }

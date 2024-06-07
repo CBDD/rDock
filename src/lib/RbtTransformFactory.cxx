@@ -159,10 +159,12 @@ static RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFil
 }
 
 static RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    auto transform = new RbtRandPopTransform(name);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_POP_SIZE);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_SCALE_CHROM_LENGTH);
-    return transform;
+    const RbtRandPopTransform::Config& default_config = RbtRandPopTransform::DEFAULT_CONFIG;
+    RbtRandPopTransform::Config config {
+        .population_size = paramsPtr->GetParamOrDefault(RbtRandPopTransform::_POP_SIZE, default_config.population_size),
+        .scale_chromosome_length = paramsPtr->GetParamOrDefault(RbtRandPopTransform::_SCALE_CHROM_LENGTH, default_config.scale_chromosome_length),
+    };
+    return new RbtRandPopTransform(name, config);
 }
 
 static RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
