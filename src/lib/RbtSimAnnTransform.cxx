@@ -66,7 +66,7 @@ RbtString RbtSimAnnTransform::_PARTITION_DIST("PARTITION_DIST");
 RbtString RbtSimAnnTransform::_PARTITION_FREQ("PARTITION_FREQ");
 RbtString RbtSimAnnTransform::_HISTORY_FREQ("HISTORY_FREQ");
 
-RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName, Config config):
+RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),
     config{config}  // For now simply copy the config structure.
