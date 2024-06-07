@@ -44,15 +44,15 @@ class RbtGATransform: public RbtBaseBiMolTransform {
     static RbtString _HISTORY_FREQ;
 
     struct Config {
-        RbtDouble population_size_fraction_as_new_individuals_per_cycle = 0.5;
-        RbtDouble crossover_probability = 0.4;
-        RbtBool cauchy_mutation_after_crossover = true;
-        RbtBool use_cauchy_distribution_for_mutations = false;  // We might want to make this an enum
-        RbtDouble relative_step_size = 1.0;
-        RbtDouble equality_threshold = 0.1;
-        RbtInt max_cycles = 100;
-        RbtInt num_convergence_cycles = 6;
-        RbtInt history_frequency = 0;
+        RbtDouble population_size_fraction_as_new_individuals_per_cycle {0.5};
+        RbtDouble crossover_probability {0.4};
+        RbtBool cauchy_mutation_after_crossover {true};
+        RbtBool use_cauchy_distribution_for_mutations {false};  // We might want to make this an enum
+        RbtDouble relative_step_size {1.0};
+        RbtDouble equality_threshold {0.1};
+        RbtInt max_cycles {100};
+        RbtInt num_convergence_cycles {6};
+        RbtInt history_frequency {0};
     };
 
     static const Config DEFAULT_CONFIG;
