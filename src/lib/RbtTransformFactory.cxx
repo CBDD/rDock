@@ -60,10 +60,9 @@ RbtTransformAgg* RbtTransformFactory::CreateAggFromFile(
 ) {
     // Get list of transform objects to create
     RbtStringList transformList = Rbt::ConvertDelimitedStringToList(strTransformClasses);
-    // If strTransformClasses is empty, then default to reading all sections of the
-    // parameter file for valid transform definitions
-    // In this case we do not throw an error if a particular section
-    // is not a transform, we simply skip it
+    // If strTransformClasses is empty, then default to reading all sections of the parameter file for valid transform definitions
+    // In this case we do not throw an error if a particular section is not a transform, we simply skip it.
+    // This is not used anywhere but not sure if any user of the API needs it.
     RbtBool bThrowError(true);
     if (transformList.empty()) {
         transformList = spPrmSource->GetSectionList();
@@ -103,18 +102,19 @@ RbtBaseTransform* RbtTransformFactory::MakeTransformFromFile(RbtParameterFileSou
 }
 
 RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    auto transform = new RbtSimAnnTransform(name);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_START_T);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_FINAL_T);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_BLOCK_LENGTH);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_SCALE_CHROM_LENGTH);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_NUM_BLOCKS);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_STEP_SIZE);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_MIN_ACC_RATE);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_PARTITION_DIST);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_PARTITION_FREQ);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimAnnTransform::_HISTORY_FREQ);
-    return transform;
+    return new RbtSimAnnTransform(
+        name,
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_START_T, 1000.0),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_FINAL_T, 300.0),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_NUM_BLOCKS, 25),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_BLOCK_LENGTH, 50),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_SCALE_CHROM_LENGTH, true),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_STEP_SIZE, 1.0),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_MIN_ACC_RATE, 0.25),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_DIST, 0.0),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_FREQ, 0),
+        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_HISTORY_FREQ, 0)
+    );
 }
 
 RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
