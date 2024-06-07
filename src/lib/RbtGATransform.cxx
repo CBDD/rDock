@@ -30,18 +30,11 @@ RbtString RbtGATransform::_NCYCLES("NCYCLES");
 RbtString RbtGATransform::_NCONVERGENCE("NCONVERGENCE");
 RbtString RbtGATransform::_HISTORY_FREQ("HISTORY_FREQ");
 
-RbtGATransform::RbtGATransform(const RbtString& strName):
+RbtGATransform::RbtGATransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
-    m_rand(Rbt::GetRbtRand()) {
-    AddParameter(_NEW_FRACTION, 0.5);
-    AddParameter(_PCROSSOVER, 0.4);
-    AddParameter(_XOVERMUT, true);
-    AddParameter(_CMUTATE, false);
-    AddParameter(_STEP_SIZE, 1.0);
-    AddParameter(_EQUALITY_THRESHOLD, 0.1);
-    AddParameter(_NCYCLES, 100);
-    AddParameter(_NCONVERGENCE, 6);
-    AddParameter(_HISTORY_FREQ, 0);
+    m_rand(Rbt::GetRbtRand()),
+    config{config}
+{
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
@@ -73,19 +66,9 @@ void RbtGATransform::Execute() {
     // the scoring function has changed
     pop->SetSF(pSF);
 
-    RbtDouble newFraction = GetParameter(_NEW_FRACTION);
-    RbtDouble pcross = GetParameter(_PCROSSOVER);
-    RbtBool xovermut = GetParameter(_XOVERMUT);
-    RbtBool cmutate = GetParameter(_CMUTATE);
-    RbtDouble relStepSize = GetParameter(_STEP_SIZE);
-    RbtDouble equalityThreshold = GetParameter(_EQUALITY_THRESHOLD);
-    RbtInt nCycles = GetParameter(_NCYCLES);
-    RbtInt nConvergence = GetParameter(_NCONVERGENCE);
-    RbtInt nHisFreq = GetParameter(_HISTORY_FREQ);
-
     RbtInt popsize = pop->GetMaxSize();
-    RbtInt nrepl = newFraction * popsize;
-    RbtBool bHistory = nHisFreq > 0;
+    RbtInt nrepl = config.population_size_fraction_as_new_individuals_per_cycle * popsize;
+    RbtBool bHistory = config.history_frequency > 0;
     RbtInt iTrace = GetTrace();
 
     RbtDouble bestScore = pop->Best()->GetScore();
@@ -105,12 +88,19 @@ void RbtGATransform::Execute() {
              << setw(10) << pop->GetScoreVariance() << endl;
     }
 
-    for (RbtInt iCycle = 0; (iCycle < nCycles) && (iConvergence < nConvergence); ++iCycle) {
-        if (bHistory && ((iCycle % nHisFreq) == 0)) {
+    for (RbtInt iCycle = 0; (iCycle < config.max_cycles) && (iConvergence < config.num_convergence_cycles); ++iCycle) {
+        if (bHistory && ((iCycle % config.history_frequency) == 0)) {
             pop->Best()->GetChrom()->SyncToModel();
             pWorkSpace->SaveHistory(true);
         }
-        pop->GAstep(nrepl, relStepSize, equalityThreshold, pcross, xovermut, cmutate);
+        pop->GAstep(
+            nrepl,
+            config.relative_step_size,
+            config.equality_threshold,
+            config.crossover_probability,
+            config.cauchy_mutation_after_crossover,
+            config.use_cauchy_distribution_for_mutations
+        );
         RbtDouble score = pop->Best()->GetScore();
         if (score > bestScore) {
             bestScore = score;

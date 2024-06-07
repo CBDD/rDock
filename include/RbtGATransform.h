@@ -43,10 +43,34 @@ class RbtGATransform: public RbtBaseBiMolTransform {
     // Output the best pose every _HISTORY_FREQ cycles.
     static RbtString _HISTORY_FREQ;
 
+    struct Config {
+      RbtDouble population_size_fraction_as_new_individuals_per_cycle;
+      RbtDouble crossover_probability;
+      RbtBool cauchy_mutation_after_crossover;
+      RbtBool use_cauchy_distribution_for_mutations; // We might want to make this an enum
+      RbtDouble relative_step_size;
+      RbtDouble equality_threshold;
+      RbtInt max_cycles;
+      RbtInt num_convergence_cycles;
+      RbtInt history_frequency;
+    };
+
+    static constexpr Config DEFAULT_CONFIG {
+      .population_size_fraction_as_new_individuals_per_cycle = 0.5,
+      .crossover_probability = 0.4,
+      .cauchy_mutation_after_crossover = true,
+      .use_cauchy_distribution_for_mutations = false,
+      .relative_step_size = 1.0,
+      .equality_threshold = 0.1,
+      .max_cycles = 100,
+      .num_convergence_cycles = 6,
+      .history_frequency = 0,
+    };
+
     ////////////////////////////////////////
     // Constructors/destructors
     ////////////////////////////////////////
-    RbtGATransform(const RbtString& strName = "GAGENRW");
+    RbtGATransform(const RbtString& strName, const Config& config);
     virtual ~RbtGATransform();
 
  protected:
@@ -67,16 +91,7 @@ class RbtGATransform: public RbtBaseBiMolTransform {
 
  private:
     RbtRand& m_rand;
-
-    RbtDouble population_size_fraction_AS_new_individuals_per_cycle;
-    RbtDouble crossover_probability;
-    RbtBool cauchy_mutation_after_crossover;
-    RbtBool use_cauchy_distribution_for_mutations; // We might want to make this an enum
-    RbtDouble relative_step_size;
-    RbtDouble equality_threshold;
-    RbtInt max_cycles;
-    RbtInt num_convergence_cycles;
-    RbtInt history_frequency;
+    const Config config;
 
 };
 
