@@ -102,19 +102,20 @@ RbtBaseTransform* RbtTransformFactory::MakeTransformFromFile(RbtParameterFileSou
 }
 
 RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    return new RbtSimAnnTransform(
-        name,
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_START_T, 1000.0),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_FINAL_T, 300.0),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_NUM_BLOCKS, 25),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_BLOCK_LENGTH, 50),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_SCALE_CHROM_LENGTH, true),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_STEP_SIZE, 1.0),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_MIN_ACC_RATE, 0.25),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_DIST, 0.0),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_FREQ, 0),
-        paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_HISTORY_FREQ, 0)
-    );
+    const RbtSimAnnTransform::Config& default_config = RbtSimAnnTransform::DEFAULT_CONFIG;
+    RbtSimAnnTransform::Config config {
+        .initial_temp=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_START_T, default_config.initial_temp),
+        .final_temp=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_FINAL_T, default_config.final_temp),
+        .num_blocks=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_NUM_BLOCKS, default_config.num_blocks),
+        .block_length=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_BLOCK_LENGTH, default_config.block_length),
+        .scale_chromosome_length=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_SCALE_CHROM_LENGTH, default_config.scale_chromosome_length),
+        .step_size=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_STEP_SIZE, default_config.step_size),
+        .min_accuracy_rate=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_MIN_ACC_RATE, default_config.min_accuracy_rate),
+        .partition_distance=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_DIST, default_config.partition_distance),
+        .partition_frequency=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_FREQ, default_config.partition_frequency),
+        .history_frequency=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_HISTORY_FREQ, default_config.history_frequency),
+    };
+    return new RbtSimAnnTransform(name, config);
 }
 
 RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
