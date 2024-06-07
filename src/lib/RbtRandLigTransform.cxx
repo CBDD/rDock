@@ -17,13 +17,11 @@ RbtString RbtRandLigTransform::_CT("RbtRandLigTransform");
 // Parameter names
 RbtString RbtRandLigTransform::_TORS_STEP("TORS_STEP");
 
-////////////////////////////////////////
-// Constructors/destructors
-RbtRandLigTransform::RbtRandLigTransform(const RbtString& strName):
+RbtRandLigTransform::RbtRandLigTransform(const RbtString& strName, const Config& config):
     RbtBaseUniMolTransform(_CT, strName),
-    m_rand(Rbt::GetRbtRand()) {
-    // Add parameters
-    AddParameter(_TORS_STEP, 180);
+    m_rand(Rbt::GetRbtRand()),
+    config{config}
+{
 #ifdef _DEBUG
     cout << _CT << " parameterised constructor" << endl;
 #endif  //_DEBUG
@@ -56,9 +54,8 @@ void RbtRandLigTransform::SetupTransform() {
 void RbtRandLigTransform::Execute() {
     RbtModelPtr spLigand = GetLigand();
     if (spLigand.Null()) return;
-    RbtDouble torsStep = GetParameter(_TORS_STEP);
-    for (RbtBondListIter iter = m_rotableBonds.begin(); iter != m_rotableBonds.end(); iter++) {
-        RbtDouble thetaDeg = 2.0 * torsStep * m_rand.GetRandom01() - torsStep;
-        spLigand->RotateBond(*iter, thetaDeg, false);
+    for (auto& rotable_bond : m_rotableBonds) {
+        RbtDouble thetaDeg = 2.0 * config.torsion_step * m_rand.GetRandom01() - config.torsion_step;
+        spLigand->RotateBond(rotable_bond, thetaDeg, false);
     }
 }

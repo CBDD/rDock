@@ -151,9 +151,11 @@ static RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr par
 }
 
 static RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    auto transform = new RbtRandLigTransform(name);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtRandLigTransform::_TORS_STEP);
-    return transform;
+    const RbtRandLigTransform::Config& default_config = RbtRandLigTransform::DEFAULT_CONFIG;
+    RbtRandLigTransform::Config config {
+        .torsion_step = paramsPtr->GetParamOrDefault(RbtRandLigTransform::_TORS_STEP, default_config.torsion_step),
+    };
+    return new RbtRandLigTransform(name, config);
 }
 
 static RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {

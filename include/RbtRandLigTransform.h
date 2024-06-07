@@ -26,9 +26,18 @@ class RbtRandLigTransform: public RbtBaseUniMolTransform {
     // Parameter names
     static RbtString _TORS_STEP;
 
+    struct Config {
+      RbtDouble torsion_step;
+    };
+
+    static constexpr Config DEFAULT_CONFIG {
+      .torsion_step = 180.0,
+    };
+
     ////////////////////////////////////////
     // Constructors/destructors
     RbtRandLigTransform(const RbtString& strName = "RANDLIG");
+    RbtRandLigTransform(const RbtString& strName, const Config& config);
     virtual ~RbtRandLigTransform();
 
     ////////////////////////////////////////
@@ -61,8 +70,7 @@ class RbtRandLigTransform: public RbtBaseUniMolTransform {
     RbtRand& m_rand;  // keep a reference to the singleton random number generator
     RbtBondList m_rotableBonds;
 
-    // Transform parameters
-    RbtDouble torsion_step;
+    const Config config;
 
 };
 
