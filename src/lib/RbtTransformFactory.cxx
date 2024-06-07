@@ -23,7 +23,6 @@
 #include "RbtSimplexTransform.h"
 
 
-static void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName);
 static RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 static RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 static RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
@@ -168,23 +167,20 @@ static RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParamete
 }
 
 static RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    auto transform = new RbtSimplexTransform(name);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_MAX_CALLS);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_NCYCLES);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_STOPPING_STEP_LENGTH);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_PARTITION_DIST);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_STEP_SIZE);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_CONVERGENCE);
-    return transform;
+    const RbtSimplexTransform::Config& default_config = RbtSimplexTransform::DEFAULT_CONFIG;
+    RbtSimplexTransform::Config config {
+        .max_calls = paramsPtr->GetParamOrDefault(RbtSimplexTransform::_MAX_CALLS, default_config.max_calls),
+        .num_cycles = paramsPtr->GetParamOrDefault(RbtSimplexTransform::_NCYCLES, default_config.num_cycles),
+        .stopping_step_length = paramsPtr->GetParamOrDefault(RbtSimplexTransform::_STOPPING_STEP_LENGTH, default_config.stopping_step_length),
+        .convergence_threshold = paramsPtr->GetParamOrDefault(RbtSimplexTransform::_CONVERGENCE, default_config.convergence_threshold),
+        .step_size = paramsPtr->GetParamOrDefault(RbtSimplexTransform::_STEP_SIZE, default_config.step_size),
+        .partition_distribution = paramsPtr->GetParamOrDefault(RbtSimplexTransform::_PARTITION_DIST, default_config.partition_distribution),
+    };
+    return new RbtSimplexTransform(name, config);
 }
 
 static RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     return new RbtTransformAgg(name);
-}
-
-static void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName) {
-    if (paramsPtr->isParameterPresent(paramName))
-        transform->SetParameter(paramName, paramsPtr->GetParameterValueAsString(paramName));
 }
 
 static void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr) {
