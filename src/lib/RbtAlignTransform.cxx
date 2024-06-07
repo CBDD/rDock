@@ -104,6 +104,9 @@ void RbtAlignTransform::Execute() {
             if (iTrace > 1) cout << "Translating ligand COM to active site COM: " << prAxes.com << endl;
             spLigand->SetCenterOfMass(prAxes.com);
             break;
+        default:
+            throw RbtBadArgument(_WHERE_, "Bad ligand center of mass placement strategy");
+            break;
     }
 
     switch (config.axes_alignment_strategy) {
@@ -133,6 +136,9 @@ void RbtAlignTransform::Execute() {
                 spLigand->Rotate(prAxes.axis3, 180.0, prAxes.com);
                 if (iTrace > 1) cout << "180 deg rotation around PA#3" << endl;
             }
+            break;
+        default:
+            throw RbtBadArgument(_WHERE_, "Bad ligand axes alignment strategy");
             break;
     }
 }
