@@ -20,12 +20,12 @@ RbtString RbtRandPopTransform::_CT("RbtRandPopTransform");
 RbtString RbtRandPopTransform::_POP_SIZE("POP_SIZE");
 RbtString RbtRandPopTransform::_SCALE_CHROM_LENGTH("SCALE_CHROM_LENGTH");
 
-const RbtRandPopTransform::Config RbtRandPopTransform::DEFAULT_CONFIG {};  // Empty initializer to fall back to default values
+const RbtRandPopTransform::Config
+    RbtRandPopTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
 
 RbtRandPopTransform::RbtRandPopTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
-    config{config}
-{
+    config{config} {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 

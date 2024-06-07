@@ -17,13 +17,13 @@ RbtString RbtRandLigTransform::_CT("RbtRandLigTransform");
 // Parameter names
 RbtString RbtRandLigTransform::_TORS_STEP("TORS_STEP");
 
-const RbtRandLigTransform::Config RbtRandLigTransform::DEFAULT_CONFIG {};  // Empty initializer to fall back to default values
+const RbtRandLigTransform::Config
+    RbtRandLigTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
 
 RbtRandLigTransform::RbtRandLigTransform(const RbtString& strName, const Config& config):
     RbtBaseUniMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),
-    config{config}
-{
+    config{config} {
 #ifdef _DEBUG
     cout << _CT << " parameterised constructor" << endl;
 #endif  //_DEBUG
@@ -56,7 +56,7 @@ void RbtRandLigTransform::SetupTransform() {
 void RbtRandLigTransform::Execute() {
     RbtModelPtr spLigand = GetLigand();
     if (spLigand.Null()) return;
-    for (auto& rotable_bond : m_rotableBonds) {
+    for (auto& rotable_bond: m_rotableBonds) {
         RbtDouble thetaDeg = 2.0 * config.torsion_step * m_rand.GetRandom01() - config.torsion_step;
         spLigand->RotateBond(rotable_bond, thetaDeg, false);
     }

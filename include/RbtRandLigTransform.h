@@ -27,7 +27,7 @@ class RbtRandLigTransform: public RbtBaseUniMolTransform {
     static RbtString _TORS_STEP;
 
     struct Config {
-      RbtDouble torsion_step {180.0};
+        RbtDouble torsion_step{180.0};
     };
 
     static const Config DEFAULT_CONFIG;
@@ -69,7 +69,6 @@ class RbtRandLigTransform: public RbtBaseUniMolTransform {
     RbtBondList m_rotableBonds;
 
     const Config config;
-
 };
 
 // Useful typedefs

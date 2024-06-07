@@ -60,10 +60,9 @@ class RbtTransformFactory {
     // Private methods
     /////////////////
 
-    RbtTransformFactory(const RbtTransformFactory&);  // Copy constructor disabled by default
+    RbtTransformFactory(const RbtTransformFactory&);             // Copy constructor disabled by default
     RbtTransformFactory& operator=(const RbtTransformFactory&);  // Copy assignment disabled by default
-   RbtBaseTransform* MakeTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-
+    RbtBaseTransform* MakeTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
 
  protected:
     ////////////////////////////////////////

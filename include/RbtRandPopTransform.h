@@ -24,8 +24,8 @@ class RbtRandPopTransform: public RbtBaseBiMolTransform {
     static RbtString _SCALE_CHROM_LENGTH;
 
     struct Config {
-      RbtInt population_size {50};
-      RbtBool scale_chromosome_length {true};
+        RbtInt population_size{50};
+        RbtBool scale_chromosome_length{true};
     };
 
     static const Config DEFAULT_CONFIG;

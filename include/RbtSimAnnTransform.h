@@ -59,25 +59,25 @@ class RbtSimAnnTransform: public RbtBaseBiMolTransform {
     static RbtString _PARTITION_FREQ;
     static RbtString _HISTORY_FREQ;
 
-   struct Config {
-         RbtDouble initial_temp {1000.0};
-         RbtDouble final_temp {300.0};
-         RbtInt num_blocks {25};
-         RbtInt block_length {50};
-         RbtBool scale_chromosome_length {true};
-         RbtDouble step_size {1.0}; 
-         RbtDouble min_accuracy_rate {0.25};
-         RbtDouble partition_distance {0.0};
-         RbtInt partition_frequency {0};
-         RbtInt history_frequency {0};
-   };
+    struct Config {
+        RbtDouble initial_temp{1000.0};
+        RbtDouble final_temp{300.0};
+        RbtInt num_blocks{25};
+        RbtInt block_length{50};
+        RbtBool scale_chromosome_length{true};
+        RbtDouble step_size{1.0};
+        RbtDouble min_accuracy_rate{0.25};
+        RbtDouble partition_distance{0.0};
+        RbtInt partition_frequency{0};
+        RbtInt history_frequency{0};
+    };
 
-   static const Config DEFAULT_CONFIG;
+    static const Config DEFAULT_CONFIG;
 
     ////////////////////////////////////////
     // Constructors/destructors
 
-      RbtSimAnnTransform(const RbtString& strName, const Config& config);
+    RbtSimAnnTransform(const RbtString& strName, const Config& config);
     virtual ~RbtSimAnnTransform();
 
     ////////////////////////////////////////

@@ -66,7 +66,8 @@ RbtString RbtSimAnnTransform::_PARTITION_DIST("PARTITION_DIST");
 RbtString RbtSimAnnTransform::_PARTITION_FREQ("PARTITION_FREQ");
 RbtString RbtSimAnnTransform::_HISTORY_FREQ("HISTORY_FREQ");
 
-const RbtSimAnnTransform::Config RbtSimAnnTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
+const RbtSimAnnTransform::Config
+    RbtSimAnnTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
 
 RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
@@ -130,8 +131,7 @@ void RbtSimAnnTransform::Execute() {
         RbtInt chromLength = m_chrom->GetLength();
         block_length *= chromLength;
     }
-    if (iTrace > 0)
-        cout << _CT << ": Block length = " << block_length << endl;
+    if (iTrace > 0) cout << _CT << ": Block length = " << block_length << endl;
 
     // Send the partitioning request separately based on the current partition distance
     // If partDist is zero, the partitioning automatically gets removed
@@ -165,7 +165,8 @@ void RbtSimAnnTransform::Execute() {
     // DM 15 Feb 1999 - don't initialise the Monte Carlo stats each block
     // if we are doing a constant temperature run
     RbtBool bInitBlock = (config.initial_temp != config.final_temp);
-    RbtDouble tFac = (config.num_blocks > 1) ? pow(config.final_temp / config.initial_temp, 1.0 / (config.num_blocks - 1)) : 1.0;
+    RbtDouble tFac =
+        (config.num_blocks > 1) ? pow(config.final_temp / config.initial_temp, 1.0 / (config.num_blocks - 1)) : 1.0;
 
     for (RbtInt iBlock = 1; iBlock <= config.num_blocks; iBlock++, initial_temp *= tFac) {
         if (bInitBlock) {
@@ -173,8 +174,8 @@ void RbtSimAnnTransform::Execute() {
         }
         MC(initial_temp, block_length, step_size);
         if (iTrace > 0) {
-            cout << setw(5) << iBlock << setw(10) << initial_temp << setw(10) << m_spStats->AccRate() << setw(10) << step_size
-                 << setw(10) << m_spStats->_blockInitial << setw(10) << m_spStats->_blockFinal << setw(10)
+            cout << setw(5) << iBlock << setw(10) << initial_temp << setw(10) << m_spStats->AccRate() << setw(10)
+                 << step_size << setw(10) << m_spStats->_blockInitial << setw(10) << m_spStats->_blockFinal << setw(10)
                  << m_spStats->Mean() << setw(10) << sqrt(m_spStats->Variance()) << setw(10) << m_spStats->_blockMin
                  << setw(10) << m_spStats->_blockMax << endl;
         }

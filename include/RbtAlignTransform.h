@@ -31,8 +31,9 @@ class RbtAlignTransform: public RbtBaseBiMolTransform {
     enum LigandAxesAlignmentStrategy { AXES_ALIGN, AXES_RANDOM };
 
     struct Config {
-      LigandCenterOfMassPlacementStrategy center_of_mass_placement_strategy {LigandCenterOfMassPlacementStrategy::COM_ALIGN};
-      LigandAxesAlignmentStrategy axes_alignment_strategy {LigandAxesAlignmentStrategy::AXES_ALIGN};
+        LigandCenterOfMassPlacementStrategy center_of_mass_placement_strategy{
+            LigandCenterOfMassPlacementStrategy::COM_ALIGN};
+        LigandAxesAlignmentStrategy axes_alignment_strategy{LigandAxesAlignmentStrategy::AXES_ALIGN};
     };
 
     static const Config DEFAULT_CONFIG;
