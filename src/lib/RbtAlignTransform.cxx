@@ -86,64 +86,50 @@ void RbtAlignTransform::Execute() {
     const RbtCoordList& coordList = spCavity->GetCoordList();
     const RbtPrincipalAxes& prAxes = spCavity->GetPrincipalAxes();
 
-    // Get the alignment parameters
-    RbtString strPlaceCOM = GetParameter(_COM);
-    RbtString strPlaceAxes = GetParameter(_AXES);
-
-    // 1. Ligand translation
-    // A. Random
-    if ((strPlaceCOM == "RANDOM") && !coordList.empty()) {
-        // Select a coord at random
-        RbtInt iRand = m_rand.GetRandomInt(coordList.size());
-        RbtCoord asCavityCoord = coordList[iRand];
-        if (iTrace > 1) {
-            cout << "Translating ligand COM to active site coord #" << iRand << ": " << asCavityCoord << endl;
+    switch (config.center_of_mass_placement_strategy) {
+    case COM_RANDOM:
+        if (!coordList.empty()) {
+            RbtInt iRand = m_rand.GetRandomInt(coordList.size());
+            RbtCoord asCavityCoord = coordList[iRand];
+            if (iTrace > 1) {
+                cout << "Translating ligand COM to active site coord #" << iRand << ": " << asCavityCoord << endl;
+            }
+            // Translate the ligand center of mass to the selected coord
+            spLigand->SetCenterOfMass(asCavityCoord); 
         }
-        // Translate the ligand center of mass to the selected coord
-        spLigand->SetCenterOfMass(asCavityCoord);
-    }
-    // B. Active site center of mass
-    else if (strPlaceCOM == "ALIGN") {
-        if (iTrace > 1) {
-            cout << "Translating ligand COM to active site COM: " << prAxes.com << endl;
-        }
+        break;
+    case COM_ALIGN:
+        if (iTrace > 1) cout << "Translating ligand COM to active site COM: " << prAxes.com << endl;
         spLigand->SetCenterOfMass(prAxes.com);
+        break;
     }
 
-    // 2. Ligand axes
-    // A. Random rotation around random axis
-    if (strPlaceAxes == "RANDOM") {
+    switch (config.axes_alignment_strategy) {
+    case AXES_RANDOM:
+    {   // Braces to prevent compiler complains due to variables initialized inside this case
+
         RbtDouble thetaDeg = 180.0 * m_rand.GetRandom01();
         RbtCoord axis = m_rand.GetRandomUnitVector();
-        if (iTrace > 1) {
-            cout << "Rotating ligand by " << thetaDeg << " deg around axis=" << axis << " through COM" << endl;
-        }
+        if (iTrace > 1) cout << "Rotating ligand by " << thetaDeg << " deg around axis=" << axis << " through COM" << endl;
         spLigand->Rotate(axis, thetaDeg);
+        break;
     }
-    // B. Align ligand principal axes with principal axes of active site
-    else if (strPlaceAxes == "ALIGN") {
+    case AXES_ALIGN:
         spLigand->AlignPrincipalAxes(prAxes, false);  // false = don't translate COM as we've already done it above
-        if (iTrace > 1) {
-            cout << "Aligning ligand principal axes with active site principal axes" << endl;
-        }
+        if (iTrace > 1) cout << "Aligning ligand principal axes with active site principal axes" << endl;
         // Make random 180 deg rotations around each of the principal axes
         if (m_rand.GetRandom01() < 0.5) {
             spLigand->Rotate(prAxes.axis1, 180.0, prAxes.com);
-            if (iTrace > 1) {
-                cout << "180 deg rotation around PA#1" << endl;
-            }
+            if (iTrace > 1) cout << "180 deg rotation around PA#1" << endl;
         }
         if (m_rand.GetRandom01() < 0.5) {
             spLigand->Rotate(prAxes.axis2, 180.0, prAxes.com);
-            if (iTrace > 1) {
-                cout << "180 deg rotation around PA#2" << endl;
-            }
+            if (iTrace > 1) cout << "180 deg rotation around PA#2" << endl;
         }
         if (m_rand.GetRandom01() < 0.5) {
             spLigand->Rotate(prAxes.axis3, 180.0, prAxes.com);
-            if (iTrace > 1) {
-                cout << "180 deg rotation around PA#3" << endl;
-            }
+            if (iTrace > 1) cout << "180 deg rotation around PA#3" << endl;
         }
+        break;
     }
 }

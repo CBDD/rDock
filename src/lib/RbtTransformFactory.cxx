@@ -23,16 +23,19 @@
 #include "RbtSimplexTransform.h"
 
 
-void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName);
-RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
-void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr);
+static void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName);
+static RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name);
+static void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr);
+
+static RbtAlignTransform::LigandCenterOfMassPlacementStrategy GetLigandCenterOfMassPlacementStrategyFromFile(RbtParameterFileSourcePtr paramsPtr);
+static RbtAlignTransform::LigandAxesAlignmentStrategy GetLigandAxesAlignmentStrategyFromFile(RbtParameterFileSourcePtr paramsPtr);
 
 
 // Parameter name which identifies a scoring function definition
@@ -101,7 +104,7 @@ RbtBaseTransform* RbtTransformFactory::MakeTransformFromFile(RbtParameterFileSou
     else throw RbtBadArgument(_WHERE_, "Unknown transform: " + kind);
 }
 
-RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+static RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     const RbtSimAnnTransform::Config& default_config = RbtSimAnnTransform::DEFAULT_CONFIG;
     RbtSimAnnTransform::Config config {
         .initial_temp = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_START_T, default_config.initial_temp),
@@ -118,7 +121,7 @@ RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSou
     return new RbtSimAnnTransform(name, config);
 }
 
-RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+static RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     const RbtGATransform::Config& default_config = RbtGATransform::DEFAULT_CONFIG;
     RbtGATransform::Config config {
       .population_size_fraction_as_new_individuals_per_cycle = paramsPtr->GetParamOrDefault(RbtGATransform::_NEW_FRACTION, default_config.population_size_fraction_as_new_individuals_per_cycle),
@@ -134,32 +137,33 @@ RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr 
     return new RbtGATransform(name, config);
 }
 
-RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    auto transform = new RbtAlignTransform(name);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtAlignTransform::_COM);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtAlignTransform::_AXES);
-    return transform;
+static RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {    
+    RbtAlignTransform::Config config {
+        .center_of_mass_placement_strategy = GetLigandCenterOfMassPlacementStrategyFromFile(paramsPtr),
+        .axes_alignment_strategy = GetLigandAxesAlignmentStrategyFromFile(paramsPtr),
+    };
+    return new RbtAlignTransform(name, config);
 }
 
 // Doesn't have any parameters but let's create it for simmetry;
-RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+static RbtNullTransform* MakeNullTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     return new RbtNullTransform(name);
 }
 
-RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+static RbtRandLigTransform* MakeRandomizeLigandTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     auto transform = new RbtRandLigTransform(name);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtRandLigTransform::_TORS_STEP);
     return transform;
 }
 
-RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+static RbtRandPopTransform* MakeRandomizePopulationTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     auto transform = new RbtRandPopTransform(name);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_POP_SIZE);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtRandPopTransform::_SCALE_CHROM_LENGTH);
     return transform;
 }
 
-RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+static RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     auto transform = new RbtSimplexTransform(name);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_MAX_CALLS);
     SetParameterIfExistsInSection(transform, paramsPtr, RbtSimplexTransform::_NCYCLES);
@@ -170,16 +174,16 @@ RbtSimplexTransform* MakeSimplexTransformFromFile(RbtParameterFileSourcePtr para
     return transform;
 }
 
-RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
+static RbtTransformAgg* MakeAggregateTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     return new RbtTransformAgg(name);
 }
 
-void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName) {
+static void SetParameterIfExistsInSection(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr, const RbtString& paramName) {
     if (paramsPtr->isParameterPresent(paramName))
         transform->SetParameter(paramName, paramsPtr->GetParameterValueAsString(paramName));
 }
 
-void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr) {
+static void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtParameterFileSourcePtr paramsPtr) {
     // Set all the transform parameters from the rest of the parameters listed
     for (auto& paramName : paramsPtr->GetParameterList()) {
         // Look for scoring function request (PARAM@SF). Only SetParamRequest currently supported
@@ -193,4 +197,30 @@ void RegisterScoreFunctionOverridesInTransform(RbtBaseTransform* transform, RbtP
             transform->AddSFRequest(spReq);
         }
     }
+}
+
+static RbtAlignTransform::LigandCenterOfMassPlacementStrategy GetLigandCenterOfMassPlacementStrategyFromFile(RbtParameterFileSourcePtr paramsPtr) {
+    if (paramsPtr->isParameterPresent(RbtAlignTransform::_COM)) {
+        RbtString placement_strategy_val = paramsPtr->GetParameterValueAsString(RbtAlignTransform::_COM);
+        if (placement_strategy_val == "ALIGN")
+            return RbtAlignTransform::LigandCenterOfMassPlacementStrategy::COM_ALIGN;
+        else if (placement_strategy_val == "RANDOM")
+            return RbtAlignTransform::LigandCenterOfMassPlacementStrategy::COM_RANDOM;
+        else
+            throw RbtBadArgument(_WHERE_, "Invalid ligand center of mass placement strategy: " + placement_strategy_val);
+    } else
+        return RbtAlignTransform::DEFAULT_CONFIG.center_of_mass_placement_strategy;
+}
+
+static RbtAlignTransform::LigandAxesAlignmentStrategy GetLigandAxesAlignmentStrategyFromFile(RbtParameterFileSourcePtr paramsPtr) {
+    if (paramsPtr->isParameterPresent(RbtAlignTransform::_AXES)) {
+        RbtString alignment_strategy_val = paramsPtr->GetParameterValueAsString(RbtAlignTransform::_AXES);
+        if (alignment_strategy_val == "ALIGN")
+            return RbtAlignTransform::LigandAxesAlignmentStrategy::AXES_ALIGN;
+        else if (alignment_strategy_val == "RANDOM")
+            return RbtAlignTransform::LigandAxesAlignmentStrategy::AXES_RANDOM;
+        else
+            throw RbtBadArgument(_WHERE_, "Invalid ligand axes alignment strategy: " + alignment_strategy_val); 
+    } else
+        return RbtAlignTransform::DEFAULT_CONFIG.axes_alignment_strategy;
 }

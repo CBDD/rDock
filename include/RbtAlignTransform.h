@@ -27,22 +27,21 @@ class RbtAlignTransform: public RbtBaseBiMolTransform {
     static RbtString _COM;
     static RbtString _AXES;
 
-    enum LigandCenterOfMassTranslationStrategy { ALIGN, RANDOM };
-    enum LigandAxesAlignmentStrategy { ALIGN, RANDOM };
+    enum LigandCenterOfMassPlacementStrategy { COM_ALIGN, COM_RANDOM };
+    enum LigandAxesAlignmentStrategy { AXES_ALIGN, AXES_RANDOM };
 
     struct Config {
-      LigandCenterOfMassTranslationStrategy translation_strategy;
+      LigandCenterOfMassPlacementStrategy center_of_mass_placement_strategy;
       LigandAxesAlignmentStrategy axes_alignment_strategy;
     };
 
     static constexpr Config DEFAULT_CONFIG {
-      .translation_strategy = LigandCenterOfMassTranslationStrategy::ALIGN,
-      .axes_alignment_strategy = LigandAxesAlignmentStrategy::RANDOM,
+      .center_of_mass_placement_strategy = LigandCenterOfMassPlacementStrategy::COM_ALIGN,
+      .axes_alignment_strategy = LigandAxesAlignmentStrategy::AXES_ALIGN,
     };
 
     ////////////////////////////////////////
     // Constructors/destructors
-    RbtAlignTransform(const RbtString& strName = "ALIGN");
     RbtAlignTransform(const RbtString& strName, const Config& config);
     virtual ~RbtAlignTransform();
 
