@@ -21,15 +21,12 @@ RbtString RbtAlignTransform::_CT("RbtAlignTransform");
 RbtString RbtAlignTransform::_COM("COM");
 RbtString RbtAlignTransform::_AXES("AXES");
 
-////////////////////////////////////////
-// Constructors/destructors
-RbtAlignTransform::RbtAlignTransform(const RbtString& strName):
+RbtAlignTransform::RbtAlignTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),
-    m_totalSize(0) {
-    // Add parameters
-    AddParameter(_COM, "ALIGN");
-    AddParameter(_AXES, "ALIGN");
+    m_totalSize(0),
+    config{config}
+{
 #ifdef _DEBUG
     cout << _CT << " parameterised constructor" << endl;
 #endif  //_DEBUG

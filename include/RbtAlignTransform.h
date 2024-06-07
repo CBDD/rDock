@@ -27,9 +27,23 @@ class RbtAlignTransform: public RbtBaseBiMolTransform {
     static RbtString _COM;
     static RbtString _AXES;
 
+    enum LigandCenterOfMassTranslationStrategy { ALIGN, RANDOM };
+    enum LigandAxesAlignmentStrategy { ALIGN, RANDOM };
+
+    struct Config {
+      LigandCenterOfMassTranslationStrategy translation_strategy;
+      LigandAxesAlignmentStrategy axes_alignment_strategy;
+    };
+
+    static constexpr Config DEFAULT_CONFIG {
+      .translation_strategy = LigandCenterOfMassTranslationStrategy::ALIGN,
+      .axes_alignment_strategy = LigandAxesAlignmentStrategy::RANDOM,
+    };
+
     ////////////////////////////////////////
     // Constructors/destructors
     RbtAlignTransform(const RbtString& strName = "ALIGN");
+    RbtAlignTransform(const RbtString& strName, const Config& config);
     virtual ~RbtAlignTransform();
 
     ////////////////////////////////////////
@@ -66,10 +80,7 @@ class RbtAlignTransform: public RbtBaseBiMolTransform {
     RbtIntList m_cumulSize;    // Cumulative sizes, for weighted probabilities
     RbtInt m_totalSize;        // Total size of all cavities
 
-    // Transform parameters
-    // TODO: Make this enums
-    RbtString center_of_mass_translation;
-    RbtString axes_alignment;
+    const Config config;
 };
 
 // Useful typedefs
