@@ -85,6 +85,16 @@ RbtString RbtParameterFileSource::GetParameterValueAsString(const RbtString& str
         throw RbtFileMissingParameter(_WHERE_, strFullParamName + " parameter not found in " + GetFileName());
 }
 
+RbtVariant RbtParameterFileSource::GetParameterValueAsVariant(const RbtString& strParamName) {
+    Parse();
+    RbtString strFullParamName = GetFullParameterName(strParamName);
+    RbtStringVariantMapConstIter iter = m_paramsMap.find(strFullParamName);
+    if (iter != m_paramsMap.end())
+        return (*iter).second;
+    else
+        throw RbtFileMissingParameter(_WHERE_, strFullParamName + " parameter not found in " + GetFileName());
+}
+
 // DM 11 Feb 1999 Check if parameter is present
 RbtBool RbtParameterFileSource::isParameterPresent(const RbtString& strParamName) {
     Parse();
