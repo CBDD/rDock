@@ -29,8 +29,7 @@ jobs:
           - ubuntu-20.04
           - debian-11
           - debian-10
-          - centos-stream8
-          - centos-centos7
+          - centos-stream9
         compiler:
           - g++
         include:
