@@ -104,32 +104,34 @@ RbtBaseTransform* RbtTransformFactory::MakeTransformFromFile(RbtParameterFileSou
 RbtSimAnnTransform* MakeSimmulatedAnnealingTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
     const RbtSimAnnTransform::Config& default_config = RbtSimAnnTransform::DEFAULT_CONFIG;
     RbtSimAnnTransform::Config config {
-        .initial_temp=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_START_T, default_config.initial_temp),
-        .final_temp=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_FINAL_T, default_config.final_temp),
-        .num_blocks=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_NUM_BLOCKS, default_config.num_blocks),
-        .block_length=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_BLOCK_LENGTH, default_config.block_length),
-        .scale_chromosome_length=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_SCALE_CHROM_LENGTH, default_config.scale_chromosome_length),
-        .step_size=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_STEP_SIZE, default_config.step_size),
-        .min_accuracy_rate=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_MIN_ACC_RATE, default_config.min_accuracy_rate),
-        .partition_distance=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_DIST, default_config.partition_distance),
-        .partition_frequency=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_FREQ, default_config.partition_frequency),
-        .history_frequency=paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_HISTORY_FREQ, default_config.history_frequency),
+        .initial_temp = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_START_T, default_config.initial_temp),
+        .final_temp = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_FINAL_T, default_config.final_temp),
+        .num_blocks = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_NUM_BLOCKS, default_config.num_blocks),
+        .block_length = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_BLOCK_LENGTH, default_config.block_length),
+        .scale_chromosome_length = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_SCALE_CHROM_LENGTH, default_config.scale_chromosome_length),
+        .step_size = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_STEP_SIZE, default_config.step_size),
+        .min_accuracy_rate = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_MIN_ACC_RATE, default_config.min_accuracy_rate),
+        .partition_distance = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_DIST, default_config.partition_distance),
+        .partition_frequency = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_PARTITION_FREQ, default_config.partition_frequency),
+        .history_frequency = paramsPtr->GetParamOrDefault(RbtSimAnnTransform::_HISTORY_FREQ, default_config.history_frequency),
     };
     return new RbtSimAnnTransform(name, config);
 }
 
 RbtGATransform* MakeGeneticAlgorithmTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
-    auto transform = new RbtGATransform(name);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NEW_FRACTION);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_PCROSSOVER);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_XOVERMUT);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_CMUTATE);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_STEP_SIZE);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_EQUALITY_THRESHOLD);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NCYCLES);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_NCONVERGENCE);
-    SetParameterIfExistsInSection(transform, paramsPtr, RbtGATransform::_HISTORY_FREQ);
-    return transform;
+    const RbtGATransform::Config& default_config = RbtGATransform::DEFAULT_CONFIG;
+    RbtGATransform::Config config {
+      .population_size_fraction_as_new_individuals_per_cycle = paramsPtr->GetParamOrDefault(RbtGATransform::_NEW_FRACTION, default_config.population_size_fraction_as_new_individuals_per_cycle),
+      .crossover_probability = paramsPtr->GetParamOrDefault(RbtGATransform::_PCROSSOVER, default_config.crossover_probability),
+      .cauchy_mutation_after_crossover = paramsPtr->GetParamOrDefault(RbtGATransform::_XOVERMUT, default_config.cauchy_mutation_after_crossover),
+      .use_cauchy_distribution_for_mutations = paramsPtr->GetParamOrDefault(RbtGATransform::_CMUTATE, default_config.use_cauchy_distribution_for_mutations),
+      .relative_step_size = paramsPtr->GetParamOrDefault(RbtGATransform::_STEP_SIZE, default_config.relative_step_size),
+      .equality_threshold = paramsPtr->GetParamOrDefault(RbtGATransform::_EQUALITY_THRESHOLD, default_config.equality_threshold),
+      .max_cycles = paramsPtr->GetParamOrDefault(RbtGATransform::_NCYCLES, default_config.max_cycles),
+      .num_convergence_cycles = paramsPtr->GetParamOrDefault(RbtGATransform::_NCONVERGENCE, default_config.num_convergence_cycles),
+      .history_frequency = paramsPtr->GetParamOrDefault(RbtGATransform::_HISTORY_FREQ, default_config.history_frequency),
+    };
+    return new RbtGATransform(name, config);
 }
 
 RbtAlignTransform* MakeLigandAlignTransformFromFile(RbtParameterFileSourcePtr paramsPtr, const RbtString& name) {
