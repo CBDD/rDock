@@ -1,8 +1,0 @@
-FROM centos:centos7 as base
-
-# Install dependencies
-RUN yum install -y centos-release-scl && yum install -y devtoolset-11-gcc devtoolset-11-gcc-c++ devtoolset-11-make devtoolset-11-binutils
-RUN echo "source /opt/rh/devtoolset-11/enable" >> /etc/profile.d/devtoolset-11.sh
-RUN chmod +x /etc/profile.d/devtoolset-11.sh
-
-ENTRYPOINT ["/bin/bash", "-l", "-c"]

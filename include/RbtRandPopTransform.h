@@ -23,9 +23,14 @@ class RbtRandPopTransform: public RbtBaseBiMolTransform {
     static RbtString _POP_SIZE;
     static RbtString _SCALE_CHROM_LENGTH;
 
-    ////////////////////////////////////////
-    // Constructors/destructors
-    RbtRandPopTransform(const RbtString& strName = "RANDPOP");
+    struct Config {
+        RbtInt population_size{50};
+        RbtBool scale_chromosome_length{true};
+    };
+
+    static const Config DEFAULT_CONFIG;
+
+    RbtRandPopTransform(const RbtString& strName, const Config& config);
     virtual ~RbtRandPopTransform();
 
     ////////////////////////////////////////
@@ -59,6 +64,8 @@ class RbtRandPopTransform: public RbtBaseBiMolTransform {
     // Private data
     //////////////
     RbtChromElementPtr m_chrom;
+
+    const Config config;
 };
 
 // Useful typedefs

@@ -66,22 +66,14 @@ RbtString RbtSimAnnTransform::_PARTITION_DIST("PARTITION_DIST");
 RbtString RbtSimAnnTransform::_PARTITION_FREQ("PARTITION_FREQ");
 RbtString RbtSimAnnTransform::_HISTORY_FREQ("HISTORY_FREQ");
 
-////////////////////////////////////////
-// Constructors/destructors
-RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName):
+const RbtSimAnnTransform::Config
+    RbtSimAnnTransform::DEFAULT_CONFIG{};  // Empty initializer to fall back to default values
+
+RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
-    m_rand(Rbt::GetRbtRand()) {
-    // Add parameters
-    AddParameter(_START_T, 1000.0);
-    AddParameter(_FINAL_T, 300.0);
-    AddParameter(_BLOCK_LENGTH, 50);
-    AddParameter(_SCALE_CHROM_LENGTH, true);
-    AddParameter(_NUM_BLOCKS, 25);
-    AddParameter(_STEP_SIZE, 1.0);
-    AddParameter(_MIN_ACC_RATE, 0.25);
-    AddParameter(_PARTITION_DIST, 0.0);
-    AddParameter(_PARTITION_FREQ, 0);
-    AddParameter(_HISTORY_FREQ, 0);
+    m_rand(Rbt::GetRbtRand()),
+    config{config}  // For now simply copy the config structure.
+{
     m_spStats = RbtMCStatsPtr(new RbtMCStats());
 #ifdef _DEBUG
     cout << _CT << " parameterised constructor" << endl;
@@ -133,34 +125,17 @@ void RbtSimAnnTransform::Execute() {
     RbtInt iTrace = GetTrace();
 
     pWorkSpace->ClearPopulation();
-    // Get the cooling schedule params
-    RbtDouble t = GetParameter(_START_T);
-    RbtDouble tFinal = GetParameter(_FINAL_T);
-    RbtInt nBlocks = GetParameter(_NUM_BLOCKS);
-    RbtInt blockLen = GetParameter(_BLOCK_LENGTH);
-    RbtBool bScale = GetParameter(_SCALE_CHROM_LENGTH);
-    RbtDouble stepSize = GetParameter(_STEP_SIZE);
-    RbtDouble minAccRate = GetParameter(_MIN_ACC_RATE);
 
-    if (bScale) {
+    RbtInt block_length = config.block_length;
+    if (config.scale_chromosome_length) {
         RbtInt chromLength = m_chrom->GetLength();
-        blockLen *= chromLength;
+        block_length *= chromLength;
     }
-    if (iTrace > 0) {
-        cout << _CT << ": Block length = " << blockLen << endl;
-    }
-
-    // Cooling factor (check for nBlocks=1)
-    RbtDouble tFac = (nBlocks > 1) ? pow(tFinal / t, 1.0 / (nBlocks - 1)) : 1.0;
-
-    // DM 15 Feb 1999 - don't initialise the Monte Carlo stats each block
-    // if we are doing a constant temperature run
-    RbtBool bInitBlock = (t != tFinal);
+    if (iTrace > 0) cout << _CT << ": Block length = " << block_length << endl;
 
     // Send the partitioning request separately based on the current partition distance
     // If partDist is zero, the partitioning automatically gets removed
-    RbtDouble partDist = GetParameter(_PARTITION_DIST);
-    m_spPartReq = RbtRequestPtr(new RbtSFPartitionRequest(partDist));
+    m_spPartReq = RbtRequestPtr(new RbtSFPartitionRequest(config.partition_distance));
     pSF->HandleRequest(m_spPartReq);
 
     // Update the chromosome to match the current model coords
@@ -184,22 +159,31 @@ void RbtSimAnnTransform::Execute() {
              << setw(10) << "MAX" << endl;
     }
 
-    for (RbtInt iBlock = 1; iBlock <= nBlocks; iBlock++, t *= tFac) {
+    RbtDouble initial_temp = config.initial_temp;
+    RbtDouble step_size = config.step_size;
+
+    // DM 15 Feb 1999 - don't initialise the Monte Carlo stats each block
+    // if we are doing a constant temperature run
+    RbtBool bInitBlock = (config.initial_temp != config.final_temp);
+    RbtDouble tFac =
+        (config.num_blocks > 1) ? pow(config.final_temp / config.initial_temp, 1.0 / (config.num_blocks - 1)) : 1.0;
+
+    for (RbtInt iBlock = 1; iBlock <= config.num_blocks; iBlock++, initial_temp *= tFac) {
         if (bInitBlock) {
             m_spStats->InitBlock(pSF->Score());
         }
-        MC(t, blockLen, stepSize);
+        MC(initial_temp, block_length, step_size);
         if (iTrace > 0) {
-            cout << setw(5) << iBlock << setw(10) << t << setw(10) << m_spStats->AccRate() << setw(10) << stepSize
-                 << setw(10) << m_spStats->_blockInitial << setw(10) << m_spStats->_blockFinal << setw(10)
+            cout << setw(5) << iBlock << setw(10) << initial_temp << setw(10) << m_spStats->AccRate() << setw(10)
+                 << step_size << setw(10) << m_spStats->_blockInitial << setw(10) << m_spStats->_blockFinal << setw(10)
                  << m_spStats->Mean() << setw(10) << sqrt(m_spStats->Variance()) << setw(10) << m_spStats->_blockMin
                  << setw(10) << m_spStats->_blockMax << endl;
         }
 
         // Halve the maximum step sizes for all enabled modes
         // if the acceptance rate is less than the threshold
-        if (m_spStats->AccRate() < minAccRate) {
-            stepSize *= 0.5;
+        if (m_spStats->AccRate() < config.min_accuracy_rate) {
+            step_size *= 0.5;
             // Reinitialise the stats (only need to do it here if bInitBlock is false
             // otherwise it will be done at the beginning of the next block)
             if (!bInitBlock) {
@@ -221,11 +205,6 @@ void RbtSimAnnTransform::MC(RbtDouble t, RbtInt blockLen, RbtDouble stepSize) {
     RbtBaseSF* pSF = GetWorkSpace()->GetSF();
     RbtInt iTrace = GetTrace();
     RbtDouble score = pSF->Score();
-
-    RbtInt nHisFreq = GetParameter(_HISTORY_FREQ);
-    RbtBool bHistory = nHisFreq > 0;
-    RbtInt nPartFreq = GetParameter(_PARTITION_FREQ);
-    RbtBool bPartition = (nPartFreq > 0);
 
     // Keep a record of the last good chromosome vector, for fast revert following a failed Metropolic test
     m_lastGoodVector.clear();
@@ -258,13 +237,13 @@ void RbtSimAnnTransform::MC(RbtDouble t, RbtInt blockLen, RbtDouble stepSize) {
         // Gather the statistics
         m_spStats->Accumulate(score, bMetrop);
         // Render to the history file if appropriate (true = with component scores)
-        if (bHistory && (iStep % nHisFreq) == 0) {
+        if ((config.history_frequency > 0) && (iStep % config.history_frequency) == 0) {
             GetWorkSpace()->SaveHistory(true);
         }
 
         // Update the interaction lists if appropriate
         // We update the lists every nth accepted trial (as rejected trials don't change the coords)
-        if (bPartition && ((m_spStats->_accepted % nPartFreq) == 0)) {
+        if ((config.partition_frequency > 0) && ((m_spStats->_accepted % config.partition_frequency) == 0)) {
             pSF->HandleRequest(m_spPartReq);
             RbtDouble oldScore = score;
             score = pSF->Score();

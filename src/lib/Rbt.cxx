@@ -24,6 +24,7 @@
 #include "Rbt.h"
 #include "RbtFileError.h"
 #include "RbtResources.h"
+#include "RbtVersion.h"
 using std::istream;
 
 // GetRbtRoot - returns value of RBT_ROOT env variable
