@@ -20,7 +20,7 @@ RbtArgParser::RbtArgParser RBCavity::get_options_parser() {
     parser.add_flag("d,dump-insight", "dump InsightII/PyMOL grids for each cavity for visualisation");
     parser.add_flag("v,viewer", "dump target PSF/CRD files for rDock Viewer");
     parser.add_flag("s,site", "print SITE descriptors (counts of exposed atoms)");
-    parser.add_flag("m", "write active site into a MOE grid");
+    parser.add_flag("m,dump-moe", "write active site into a MOE grid");
     return parser;
 }
 
