@@ -94,7 +94,7 @@ tests_objects   = tests/obj/catch_amalgamated.o $(subst tests/src/, tests/obj/, 
 
 objects         = $(RBT_objects) $(simplex_objects) $(GP_objects)
 
-objdirs         = obj obj/simplex obj/GP
+objdirs         = $(sort $(dir $(objects)))
 $(shell mkdir -p $(objdirs) ./lib ./bin)
 
 bin_names   = rbdock rbcavity rbmoegrid rblist rbcalcgrid
