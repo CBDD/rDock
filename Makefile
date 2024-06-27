@@ -76,6 +76,7 @@ LINK_FLAGS                  := -shared
 LIB_DEPENDENCIES            += -lm -lpopt
 LIBS                        += $(LIB_DEPENDENCIES) -lRbt
 INCLUDE                     := $(addprefix -I./, $(shell find include/ -type d )) $(addprefix -I./, $(shell find import/ -type d ))
+TESTS_INCLUDE				:= $(INCLUDE) $(addprefix -I./, $(shell find tests/include/ -type d ))
 LIBRARY                     := ./lib
 
 
@@ -214,15 +215,15 @@ tests_directories:
 	@mkdir -p tests/obj tests/bin
 
 tests_bin: $(tests_objects)
-	$(CXX) $(CXX_FLAGS) $(INCLUDE) -L$(LIBRARY) -o tests/bin/test_suite $^ $(LIBS)
+	$(CXX) $(CXX_FLAGS) $(TESTS_INCLUDE) -L$(LIBRARY) -o tests/bin/test_suite $^ $(LIBS)
 
 tests/obj/catch_amalgamated.o: import/catch2/catch_amalgamated.cpp
-	@echo $(CXX) $(CXX_FLAGS) $(INCLUDE) -c -o $@ $<
-	$(CXX) $(CXX_FLAGS) $(INCLUDE) -c -o $@ $<
+	@echo $(CXX) $(CXX_FLAGS) $(TESTS_INCLUDE) -c -o $@ $<
+	$(CXX) $(CXX_FLAGS) $(TESTS_INCLUDE) -c -o $@ $<
 
 tests/obj/%.o: tests/src/%.cpp
-	@echo $(CXX) $(CXX_FLAGS) $(INCLUDE) -c -o $@ $<
-	$(CXX) $(CXX_FLAGS) $(INCLUDE) -c -o $@ $<
+	@echo $(CXX) $(CXX_FLAGS) $(TESTS_INCLUDE) -c -o $@ $<
+	$(CXX) $(CXX_FLAGS) $(TESTS_INCLUDE) -c -o $@ $<
 
 lint-check:
 	@echo "Checking code style..."
