@@ -1,19 +1,17 @@
-#!/usr/bin/env python3
-
 import numpy as np
 
 try:
     import pandas as pd
 except ImportError:
     pd = None
-
 import argparse
 import itertools
 import multiprocessing
 import os
 from collections import Counter
 from functools import partial
-from pathlib import Path
+
+Filter = dict[str, float]
 
 
 def apply_threshold(scored_poses, column, steps, threshold):
@@ -27,19 +25,26 @@ def apply_threshold(scored_poses, column, steps, threshold):
     return passing_molecules
 
 
-def prepare_array(sdreport_array, name_column):
+def prepare_array(sdreport_array: np.ndarray, name_column: int) -> np.ndarray:
     """
     Convert `sdreport_array` (read directly from the tsv) to 3D array (molecules x poses x columns) and filter out molecules with too few/many poses
     """
+    # print(sdreport_array.shape[1])
+    # if name_column >= sdreport_array.shape[1]:
+    #     raise IndexError(
+    #         f"name_column index {name_column} is out of bounds for array with shape {sdreport_array.shape}"
+    #     )
+
     # find points in the array where the name_column changes (i.e. we are dealing with a new molecule) and split the array
-    split_array = np.split(
-        sdreport_array,
+    split_indices = (
         np.where(
             sdreport_array[:, name_column]
             != np.hstack((sdreport_array[1:, name_column], sdreport_array[0, name_column]))
         )[0]
-        + 1,
+        + 1
     )
+    split_array = np.split(sdreport_array, split_indices)
+
     modal_shape = Counter([n.shape for n in split_array]).most_common(1)[0]
     number_of_poses = modal_shape[0][0]  # find modal number of poses per molecule in the array
 
@@ -190,7 +195,16 @@ def write_threshold_file(filters, best_filter_combination, threshold_file, colum
             f.write(f"- {column_names[col]} {min(values)},\n")
 
 
-def main():
+def parse_filter(filter_str: str) -> Filter:
+    parsed_filter = {}
+    for item in filter_str.split(","):
+        key, value = item.split("=")
+        parsed_filter[key] = float(value) if key in ["interval", "min", "max"] else int(value)
+    parsed_filter["column"] -= 1
+    return parsed_filter
+
+
+def main(argv: list[str] | None = None):
     """
     Parse arguments; read in data; calculate filter combinations and apply them; print results
     """
@@ -271,37 +285,36 @@ throughput protocol. The following steps should be followed:
         "-i",
         "--input",
         help="Input from sdreport (tabular separated format).",
-        type=Path,
+        type=str,
         required=True,
     )
     parser.add_argument(
         "-o",
         "--output",
         help="Output file for report on threshold combinations.",
-        type=Path,
+        type=str,
         required=True,
     )
     parser.add_argument(
         "-t",
         "--threshold",
         help="Threshold file used by rDock as input.",
-        type=Path,
+        type=str,
     )
     parser.add_argument(
         "-n",
         "--name",
         type=int,
-        default=2,
-        help="Index of column containing the molecule name. Default is 2.",
+        default=1,  # Index of molecule name in input file is 1 by default
+        help="Index of column containing the molecule name (0 indexed). Default is 1.",
     )
     parser.add_argument(
         "-f",
         "--filter",
         nargs="+",
-        action="append",
         type=str,
         help="Filter to apply, e.g. column=4,steps=5,min=-10,max=-15,interval=1 will test applying a filter to column 4 after generation of 5 poses, with threshold values between -10 and -15 tested. The variables column, steps, min and max must all be specified; interval defaults to 1 if not given.",
-    )
+    )  # Removed action 'append' to avoid unnecessary nested structure
     parser.add_argument(
         "-v",
         "--validation",
@@ -327,38 +340,17 @@ throughput protocol. The following steps should be followed:
         help="Minimum value for the estimated final percentage of compounds to use when autogenerating a high-throughput protocol - default is 1.",
     )
 
-    args = parser.parse_args()
-    args.name -= 1  # because np arrays need 0-based indices
+    args = parser.parse_args(argv)
 
     # create filters dictionary from args.filter passed in
-    filters = [dict([n.split("=") for n in filtr[0].split(",")]) for filtr in args.filter]
-    filters = [
-        {k: float(v) if k in ["interval", "min", "max"] else int(v) for k, v in filtr.items()} for filtr in filters
-    ]
-
-    for filtr in filters:
-        # user inputs with 1-based numbering whereas python uses 0-based
-        filtr["column"] -= 1
+    filters = [parse_filter(filter) for filter in args.filter]
 
     # sort filters by step at which they are applied
     filters.sort(key=lambda n: n["steps"])
 
     # generates all possible combinations from filters provided
-    filter_combinations = list(
-        itertools.product(
-            *(
-                np.arange(*n)
-                for n in [
-                    (
-                        filtr["min"],
-                        filtr["max"] + filtr.get("interval", 1),
-                        filtr.get("interval", 1),
-                    )
-                    for filtr in filters
-                ]
-            )
-        )
-    )
+    fils = [(filtr["min"], filtr["max"] + filtr.get("interval", 1.0), filtr.get("interval", 1.0)) for filtr in filters]
+    filter_combinations = list(itertools.product(*(np.arange(*n) for n in fils)))
     print(f"{len(filter_combinations)} combinations of filters calculated.")
 
     # remove redundant combinations, i.e. where filters for later steps are less or equally strict to earlier steps
@@ -394,6 +386,7 @@ throughput protocol. The following steps should be followed:
             # use index names; add 1 to deal with zero-based numbering
             column_names = [f"COL{n+1}" for n in range(len(sdreport_dataframe.columns))]
         sdreport_array = sdreport_dataframe.values
+        print(f"First few rows of the input array:\n{sdreport_array[:5]}")
     else:  # pd not available
         np_array = np.loadtxt(args.input, dtype=str)
         if args.header:
