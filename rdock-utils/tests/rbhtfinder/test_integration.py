@@ -1,3 +1,6 @@
+from pathlib import Path
+from typing import Callable
+
 import pytest
 
 from rdock_utils.rbhtfinder.main import main as rbhtfinder_main
@@ -15,13 +18,13 @@ parametrize_main = pytest.mark.parametrize(
 
 
 @parametrize_main
-def test_do_nothing(main):
+def test_do_nothing(main: Callable[[list[str]], None]):
     with pytest.raises(SystemExit):
         main()
 
 
 @parametrize_main
-def test_integration(main, file_path, argv):
+def test_integration(main: Callable[[list[str]], None], file_path: Path, argv: list[str]):
     main(argv)
     result = get_file_content(file_path)
     expected_result = get_file_content(EXPECTED_OUTPUT_FILE)
