@@ -5,7 +5,7 @@ Filter = dict[str, float]
 
 
 @dataclass
-class rbhtfinderConfig:
+class RBHTFinderConfig:
     input: str
     output: str
     threshold: str
@@ -31,7 +31,7 @@ class rbhtfinderConfig:
 
         for item in filter_str.split(","):
             key, value = item.split("=")
-            parsed_filter[key] = float(value) if key in ["interval", "min", "max"] else int(value)
+            parsed_filter[key] = float(value) if key in ("interval", "min", "max") else int(value)
         # User inputs with 1-based numbering whereas python uses 0-based
         parsed_filter["column"] -= 1
 
@@ -127,10 +127,10 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def get_config(argv: list[str] | None = None) -> rbhtfinderConfig:
+def get_config(argv: list[str] | None = None) -> RBHTFinderConfig:
     parser = get_parser()
     args = parser.parse_args(argv)
-    return rbhtfinderConfig(
+    return RBHTFinderConfig(
         input=args.input,
         output=args.output,
         threshold=args.threshold,
