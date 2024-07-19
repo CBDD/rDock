@@ -196,50 +196,65 @@ def write_threshold_file(filters, best_filter_combination, threshold_file, colum
             f.write(f"- {column_names[col]} {min(values)},\n")
 
 
-def parse_filter(filter_str: str) -> Filter:
-    parsed_filter = {}
-    for item in filter_str.split(","):
-        key, value = item.split("=")
-        parsed_filter[key] = float(value) if key in ["interval", "min", "max"] else int(value)
-    parsed_filter["column"] -= 1
-    return parsed_filter
+def generate_all_filter_combinations(filters: list[Filter]) -> list[tuple]:
+    filter_ranges = ((filter["min"], filter["max"] + filter["interval"], filter["interval"]) for filter in filters)
+    combinations = (np.arange(*fr) for fr in filter_ranges)
+    all_filter_combinations = list(itertools.product(*combinations))
+    return all_filter_combinations
+
+
+def remove_redundant_combinations(all_combinations: list[tuple], filters: list[Filter]) -> list[tuple]:
+    all_combinations_array = np.array(all_combinations)
+    columns = [filter["column"] for filter in filters]
+    indices_per_col = {col: [i for i, c in enumerate(columns) if c == col] for col in set(columns)}
+
+    # Create a mask to keep only valid combinations
+    mask = np.ones(len(all_combinations_array), dtype=bool)
+
+    for _, indices in indices_per_col.items():
+        col_data = all_combinations_array[:, indices]
+        sorted_data = np.sort(col_data, axis=1)[:, ::-1]  # sort descending
+        is_valid = np.all(col_data == sorted_data, axis=1)  # Check if sorted matches original
+        is_unique = np.apply_along_axis(lambda x: len(set(x)) == len(x), 1, col_data)
+        mask &= is_valid & is_unique
+
+    filtered_combinations = all_combinations_array[mask]
+    return filtered_combinations
 
 
 def main(argv: list[str] | None = None) -> None:
     config = get_config(argv)
-    print(f"args.filter: {config.filters}")
-    # create filters dictionary from args.filter passed in
-    # filters = [parse_filter(filter) for filter in args.filter]
-    # print(f"parsed filters: {filters}")
 
     # generates all possible combinations from filters provided
-    fils = [
-        (filtr["min"], filtr["max"] + filtr.get("interval", 1.0), filtr.get("interval", 1.0))
-        for filtr in config.filters
-    ]
-    print(f"fils: {fils}")
-    filter_combinations = list(itertools.product(*(np.arange(*n) for n in fils)))
-    print(f"combinations {filter_combinations}")
-    print(f"{len(filter_combinations)} combinations of filters calculated.")
+    # filter_ranges = (
+    #     (filter["min"], filter["max"] + filter["interval"], filter["interval"]) for filter in config.filters
+    # )
+    # combinations = (np.arange(*fr) for fr in filter_ranges)
+    # filter_combinations = list(itertools.product(*combinations))
+    all_filter_combinations = generate_all_filter_combinations(config.filters)
+    print(f"{len(all_filter_combinations)} combinations of filters calculated.")
 
     # remove redundant combinations, i.e. where filters for later steps are less or equally strict to earlier steps
-    filter_combinations = np.array(filter_combinations)
-    cols = [filtr["column"] for filtr in config.filters]
-    indices_per_col = {col: [n for n, filter_col in enumerate(cols) if col == filter_col] for col in set(cols)}
-    filter_combination_indices_to_keep = range(len(filter_combinations))
-    for col, indices in indices_per_col.items():
-        filter_combination_indices_to_keep = [
-            n
-            for n, comb in enumerate(filter_combinations[:, indices])
-            if list(comb) == sorted(comb, reverse=True)
-            and len(set(comb)) == comb.shape[0]
-            and n in filter_combination_indices_to_keep
-        ]
-    filter_combinations = filter_combinations[filter_combination_indices_to_keep]
+    # filter_combinations_array = np.array(all_filter_combinations)
+    # columns = [filter["column"] for filter in config.filters]
+    # indices_per_col = {col: [i for i, c in enumerate(columns) if c == col] for col in set(columns)}
+    # # Create a mask to keep only valid combinations
+    # mask = np.ones(len(filter_combinations_array), dtype=bool)
 
-    if len(filter_combinations):
+    # for _, indices in indices_per_col.items():
+    #     col_data = filter_combinations_array[:, indices]
+    #     sorted_data = np.sort(col_data, axis=1)[:, ::-1]  # sort descending
+    #     is_valid = np.all(col_data == sorted_data, axis=1)  # Check if sorted matches original
+    #     is_unique = np.apply_along_axis(lambda x: len(set(x)) == len(x), 1, col_data)
+    #     mask &= is_valid & is_unique
+
+    # cleaned_filter_combinations = filter_combinations_array[mask]
+
+    distinct_filter_combinations = remove_redundant_combinations(all_filter_combinations, config.filters)
+
+    if len(distinct_filter_combinations):
         print(
-            f"{len(filter_combinations)} combinations of filters remain after removal of redundant combinations. Starting calculations..."
+            f"{len(distinct_filter_combinations)} combinations of filters remain after removal of redundant combinations. Starting calculations..."
         )
     else:
         print("No filter combinations could be calculated - check the thresholds specified.")
@@ -286,7 +301,7 @@ def main(argv: list[str] | None = None) -> None:
             min_score_indices=min_score_indices,
             number_of_validation_mols=config.validation,
         ),
-        filter_combinations,
+        distinct_filter_combinations,
     )
 
     write_output(results, config.filters, config.validation, config.output, column_names)
@@ -296,7 +311,7 @@ def main(argv: list[str] | None = None) -> None:
         if best_filter_combination:
             write_threshold_file(
                 config.filters,
-                filter_combinations[best_filter_combination],
+                distinct_filter_combinations[best_filter_combination],
                 config.threshold,
                 column_names,
                 molecule_array.shape[1],

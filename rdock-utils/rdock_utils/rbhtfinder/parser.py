@@ -35,6 +35,9 @@ class rbhtfinderConfig:
         # User inputs with 1-based numbering whereas python uses 0-based
         parsed_filter["column"] -= 1
 
+        if "interval" not in parsed_filter:
+            parsed_filter["interval"] = 1.0
+
         return parsed_filter
 
 
