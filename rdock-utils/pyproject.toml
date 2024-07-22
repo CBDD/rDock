@@ -6,8 +6,8 @@ description = "Utilities for working with RDock and operating on SD files"
 requires-python = ">=3.10.0"
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.txt"]}
-optional-dependencies = { dev = {file = ["requirements-dev.txt"]} }
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies = { dev = { file = ["requirements-dev.txt"] } }
 
 [project.scripts]
 sdfield = "rdock_utils.sdfield:main"
@@ -26,11 +26,16 @@ Repository = "https://github.com/CBDD/rDock.git"
 [tool.ruff]
 line-length = 119
 target-version = "py312"
-exclude = [".git", "__pycache__", "rdock_utils/sdrmsd_original.py", "rdock_utils/sdtether_original.py"]
+exclude = [
+    ".git",
+    "__pycache__",
+    "rdock_utils/sdrmsd_original.py",
+    "rdock_utils/sdtether_original.py",
+]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]
-ignore = ["E231","E501","E203"]
+ignore = ["E231", "E501", "E203"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -67,4 +72,9 @@ no_implicit_reexport = false
 
 strict_equality = true
 
-exclude = ["build/*", "rdock_utils/sdrmsd_original.py", "tests/", "rdock_utils/sdtether_original.py"]
+exclude = [
+    "build/*",
+    "rdock_utils/sdrmsd_original.py",
+    "tests/",
+    "rdock_utils/sdtether_original.py",
+]

@@ -3,6 +3,7 @@ import logging
 import multiprocessing
 import os
 from collections import Counter
+from dataclasses import dataclass
 from functools import partial
 
 import numpy as np
@@ -13,6 +14,14 @@ from .parser import Filter, RBHTFinderConfig
 logger = logging.getLogger("RBHTFinder")
 
 InputData = tuple[np.ndarray, list[str]]
+
+
+@dataclass
+class RBHTResult:
+    filter_combination: np.ndarray
+    perc_val: dict[str, int]
+    filter_percentages: list[int]
+    time: float
 
 
 class RBHTFinder:
@@ -39,21 +48,17 @@ class RBHTFinder:
         molecule_array = self.prepare_array(sdreport_array, self.config.name)
 
         # find the top scoring compounds for validation of the filter combinations
-        min_score_indices = {}
-        for column in set(filtr["column"] for filtr in self.config.filters):
+        min_score_indices: dict[float, np.ndarray] = {}
+        for column in set(filter["column"] for filter in self.config.filters):
             min_scores = np.min(molecule_array[:, :, column], axis=1)
             min_score_indices[column] = np.argpartition(min_scores, self.config.validation)[: self.config.validation]
-
-        results = []
 
         pool = multiprocessing.Pool(os.cpu_count())
         results = pool.map(
             partial(
                 self.calculate_results_for_filter_combination,
                 molecule_array=molecule_array,
-                filters=self.config.filters,
                 min_score_indices=min_score_indices,
-                number_of_validation_mols=self.config.validation,
             ),
             distinct_combinations,
         )
@@ -120,29 +125,19 @@ class RBHTFinder:
         passing_molecules = np.where(mins < threshold)[0]
         return passing_molecules
 
-    def prepare_array(self, sdreport_array: np.ndarray, name_column: int) -> np.ndarray:
+    def prepare_array(self, data_array: np.ndarray, name_column: int) -> np.ndarray:
         """
         Convert `sdreport_array` (read directly from the tsv) to 3D array (molecules x poses x columns) and filter out molecules with too few/many poses
         """
-        # print(sdreport_array.shape[1])
-        # if name_column >= sdreport_array.shape[1]:
-        #     raise IndexError(
-        #         f"name_column index {name_column} is out of bounds for array with shape {sdreport_array.shape}"
-        #     )
-
-        # find points in the array where the name_column changes (i.e. we are dealing with a new molecule) and split the array
         split_indices = (
             np.where(
-                sdreport_array[:, name_column]
-                != np.hstack((sdreport_array[1:, name_column], sdreport_array[0, name_column]))
+                data_array[:, name_column] != np.hstack((data_array[1:, name_column], data_array[0, name_column]))
             )[0]
             + 1
         )
-        split_array = np.split(sdreport_array, split_indices)
-
+        split_array = np.split(data_array, split_indices)
         modal_shape = Counter([n.shape for n in split_array]).most_common(1)[0]
-        number_of_poses = modal_shape[0][0]  # find modal number of poses per molecule in the array
-
+        number_of_poses = modal_shape[0][0]  # Find modal number of poses per molecule in the array
         split_array_clean = sum(
             [
                 np.array_split(n, n.shape[0] / number_of_poses)
@@ -152,24 +147,22 @@ class RBHTFinder:
             [],
         )
 
-        if len(split_array_clean) * number_of_poses < sdreport_array.shape[0] * 0.99:
-            print(
-                f"WARNING: the number of poses provided per molecule is inconsistent. Only {len(split_array_clean)} of {int(sdreport_array.shape[0] / number_of_poses)} moleules have {number_of_poses} poses."
+        if len(split_array_clean) * number_of_poses < data_array.shape[0] * 0.99:
+            message = (
+                "WARNING: The number of poses provided per molecule is inconsistent. "
+                f"Only {len(split_array_clean)} of {int(data_array.shape[0] / number_of_poses)} moleules have {number_of_poses} poses."
             )
+            logger.warning(message)
 
-        molecule_array = np.array(split_array_clean)
-        # overwrite the name column (should be the only one with dtype=str) so we can force everything to float
-        molecule_array[:, :, name_column] = 0
-        return np.array(molecule_array, dtype=float)
+        molecule_3d_array = np.array(split_array_clean)
+        # Overwrite the name column (should be the only one with dtype=str) so we can force everything to float
+        molecule_3d_array[:, :, name_column] = 0
+        final_array = molecule_3d_array.astype(float)
+        return final_array
 
     def calculate_results_for_filter_combination(
-        self,
-        filter_combination,
-        molecule_array,
-        filters,
-        min_score_indices,
-        number_of_validation_mols,
-    ):
+        self, filter_combination: np.ndarray, molecule_array: np.ndarray, min_score_indices: dict[float, np.ndarray]
+    ) -> RBHTResult:
         """
         For a particular combination of filters, calculate the percentage of molecules that will be filtered, the percentage of top-scoring molecules that will be filtered, and the time taken relative to exhaustive docking
         """
@@ -181,57 +174,60 @@ class RBHTFinder:
             if n:
                 # e.g. if there are 5000 mols left after 15 steps and the last filter was at 5 steps, append 5000 * (15 - 5) to number_of_simulated_poses
                 number_of_simulated_poses += len(mols_passed_threshold) * (
-                    filters[n]["steps"] - filters[n - 1]["steps"]
+                    self.config.filters[n]["steps"] - self.config.filters[n - 1]["steps"]
                 )
             else:
-                number_of_simulated_poses += len(mols_passed_threshold) * filters[n]["steps"]
+                number_of_simulated_poses += len(mols_passed_threshold) * self.config.filters[n]["steps"]
             mols_passed_threshold = [  # all mols which pass the threshold and which were already in mols_passed_threshold, i.e. passed all previous filters
                 n
-                for n in self.apply_threshold(molecule_array, filters[n]["column"], filters[n]["steps"], threshold)
+                for n in self.apply_threshold(
+                    molecule_array, self.config.filters[n]["column"], self.config.filters[n]["steps"], threshold
+                )
                 if n in mols_passed_threshold
             ]
             filter_percentages.append(len(mols_passed_threshold) / molecule_array.shape[0])
-        number_of_simulated_poses += len(mols_passed_threshold) * (molecule_array.shape[1] - filters[-1]["steps"])
+        number_of_simulated_poses += len(mols_passed_threshold) * (
+            molecule_array.shape[1] - self.config.filters[-1]["steps"]
+        )
         perc_val = {
-            k: len([n for n in v if n in mols_passed_threshold]) / number_of_validation_mols
+            k: len([n for n in v if n in mols_passed_threshold]) / self.config.validation
             for k, v in min_score_indices.items()
         }
-        return {
-            "filter_combination": filter_combination,
-            "perc_val": perc_val,
-            "filter_percentages": filter_percentages,
-            "time": number_of_simulated_poses / np.product(molecule_array.shape[:2]),
-        }
+        time = number_of_simulated_poses / np.product(molecule_array.shape[:2])
+        rbhtresult = RBHTResult(
+            filter_combination=filter_combination, perc_val=perc_val, filter_percentages=filter_percentages, time=time
+        )
+        return rbhtresult
 
-    def write_output(self, results, filters, number_of_validation_mols, output_file, column_names):
+    def write_output(self, results: list[RBHTResult], filters, number_of_validation_mols, output_file, column_names):
         """
         Print results as a table. The number of columns varies depending how many columns the user picked.
         """
         with open(output_file, "w") as f:
             # write header
-            for n in range(len(results[0]["filter_combination"])):
+            for n in range(len(results[0].filter_combination)):
                 f.write(f"FILTER{n+1}\tNSTEPS{n+1}\tTHR{n+1}\tPERC{n+1}\t")
-            for n in results[0]["perc_val"]:
+            for n in results[0].perc_val:
                 f.write(f"TOP{number_of_validation_mols}_{column_names[n]}\t")
                 f.write(f"ENRICH_{column_names[n]}\t")
             f.write("TIME\n")
 
             # write results
             for result in results:
-                for n, threshold in enumerate(result["filter_combination"]):
+                for n, threshold in enumerate(result.filter_combination):
                     f.write(
-                        f"{column_names[filters[n]['column']]}\t{filters[n]['steps']}\t{threshold:.2f}\t{result['filter_percentages'][n]*100:.2f}\t"
+                        f"{column_names[filters[n]['column']]}\t{filters[n]['steps']}\t{threshold:.2f}\t{result.filter_percentages[n]*100:.2f}\t"
                     )
-                for n in result["perc_val"]:
-                    f.write(f"{result['perc_val'][n]*100:.2f}\t")
-                    if result["filter_percentages"][-1]:
-                        f.write(f"{result['perc_val'][n]/result['filter_percentages'][-1]:.2f}\t")
+                for n in result.perc_val:
+                    f.write(f"{result.perc_val[n]*100:.2f}\t")
+                    if result.filter_percentages[-1]:
+                        f.write(f"{result.perc_val[n]/result.filter_percentages[-1]:.2f}\t")
                     else:
                         f.write("NaN\t")
-                f.write(f"{result['time']:.4f}\n")
+                f.write(f"{result.time:.4f}\n")
         return
 
-    def select_best_filter_combination(self, results, max_time, min_perc):
+    def select_best_filter_combination(self, results: list[RBHTResult], max_time, min_perc):
         """
         Very debatable how to do this...
         Here we exclude all combinations with TIME < max_time and calculate an "enrichment factor"
@@ -239,27 +235,27 @@ class RBHTFinder:
         threshold with the highest enrichment factor
         """
         min_max_values = {}
-        for col in results[0]["perc_val"].keys():
-            vals = [result["perc_val"][col] for result in results]
+        for col in results[0].perc_val.keys():
+            vals = [result.perc_val[col] for result in results]
             min_max_values[col] = {"min": min(vals), "max": max(vals)}
-        time_vals = [result["time"] for result in results]
+        time_vals = [result.time for result in results]
         min_max_values["time"] = {"min": min(time_vals), "max": max(time_vals)}
 
         combination_scores = [
             sum(
                 [
                     (
-                        (result["perc_val"][col] - min_max_values[col]["min"])
+                        (result.perc_val[col] - min_max_values[col]["min"])
                         / (min_max_values[col]["max"] - min_max_values[col]["min"])
                     )
-                    for col in results[0]["perc_val"].keys()
+                    for col in results[0].perc_val.keys()
                 ]
                 + [
-                    (min_max_values["time"]["max"] - result["time"])
+                    (min_max_values["time"]["max"] - result.time)
                     / (min_max_values["time"]["max"] - min_max_values["time"]["min"])
                 ]
             )
-            if result["time"] < max_time and result["filter_percentages"][-1] >= min_perc / 100
+            if result.time < max_time and result.filter_percentages[-1] >= min_perc / 100
             else 0
             for result in results
         ]
@@ -294,7 +290,7 @@ class RBHTFinder:
         filters_combinations = list(itertools.product(*combinations))
         return filters_combinations
 
-    def remove_redundant_combinations(self, all_combinations: list[tuple], filters: list[Filter]) -> list[tuple]:
+    def remove_redundant_combinations(self, all_combinations: list[tuple], filters: list[Filter]) -> np.ndarray:
         all_combinations_array = np.array(all_combinations)
         columns = [filter["column"] for filter in filters]
         indices_per_col = {col: [i for i, c in enumerate(columns) if c == col] for col in set(columns)}
