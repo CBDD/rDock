@@ -8,7 +8,7 @@ Filter = dict[str, float]
 class RBHTFinderConfig:
     input: str
     output: str
-    threshold: str
+    threshold: str | None
     name: int
     filters: list[Filter]
     validation: int
@@ -101,7 +101,7 @@ def get_parser() -> argparse.ArgumentParser:
     considered a template that the user modifies as needed.
 
     Requirements:
-    rbhtfinder requires NumPy. Installation of pandas is recommended, but optional; if pandas is 
+    rbhtfinder requires NumPy. Installation of Pandas is recommended, but optional; if Pandas is 
     not available, loading the input file for calculations will be considerably slower.
     """
     input_help = "Input from sdreport (tabular separated format)."
@@ -119,7 +119,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("-o", "--output", help=output_help, type=str, required=True)
     parser.add_argument("-t", "--threshold", help=threshold_help, type=str)
     parser.add_argument("-n", "--name", type=int, default=1, help=name_help)
-    parser.add_argument("-f", "--filters", nargs="+", type=str, help=filter_help)
+    parser.add_argument("-f", "--filters", nargs="+", type=str, help=filter_help, required=True)  # Review 'required'
     parser.add_argument("-v", "--validation", type=int, default=500, help=validation_help)
     parser.add_argument("--header", action="store_true", help=header_help)
     parser.add_argument("--max-time", type=float, default=0.1, help=max_time_help)
