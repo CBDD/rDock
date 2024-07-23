@@ -6,7 +6,7 @@ import pytest
 from rdock_utils.rbhtfinder.main import main as rbhtfinder_main
 from rdock_utils.rbhtfinder_original_copy import main as rbhtfinder_old_main
 
-from .conftest import EXPECTED_OUTPUT_FILE, get_file_content
+from .conftest import EXPECTED_OUTPUT_FILE, EXPECTED_THRESHOLD_FILE, get_file_content
 
 parametrize_main = pytest.mark.parametrize(
     "main",
@@ -24,8 +24,11 @@ def test_do_nothing(main: Callable[[list[str]], None]):
 
 
 @parametrize_main
-def test_integration(main: Callable[[list[str]], None], file_path: Path, argv: list[str]):
+def test_integration(main: Callable[[list[str]], None], output_temp: Path, threshold_temp: Path, argv: list[str]):
     main(argv)
-    result = get_file_content(file_path)
-    expected_result = get_file_content(EXPECTED_OUTPUT_FILE)
-    assert result == expected_result
+    output = get_file_content(output_temp)
+    threshold = get_file_content(threshold_temp)
+    expected_output = get_file_content(EXPECTED_OUTPUT_FILE)
+    expected_threshold = get_file_content(EXPECTED_THRESHOLD_FILE)
+    assert output == expected_output
+    assert threshold == expected_threshold
