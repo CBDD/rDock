@@ -1,7 +1,7 @@
 import argparse
 from dataclasses import dataclass
 
-Filter = dict[str, float]
+Filter = dict[str, float | int]
 
 
 @dataclass
@@ -20,7 +20,7 @@ class RBHTFinderConfig:
         self.filters = self.get_parsed_filters()
 
     def get_parsed_filters(self) -> list[Filter]:
-        parsed_filters = [self._parse_filter(filter) for filter in self.filters]
+        parsed_filters = [self._parse_filter(filter) for filter in self.filters]  # type: ignore
         # sort filters by step at which they are applied
         parsed_filters.sort(key=lambda n: n["steps"])
         return parsed_filters
