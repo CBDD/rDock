@@ -10,6 +10,8 @@ dependencies = { file = ["requirements.txt"] }
 optional-dependencies = { dev = { file = ["requirements-dev.txt"] } }
 
 [project.scripts]
+rbhtfinder = "rdock_utils.rbhtfinder:main"
+rbhtfinder_old = "rdock_utils.rbhtfinder_original_copy:main"
 sdfield = "rdock_utils.sdfield:main"
 sdrmsd_old = "rdock_utils.sdrmsd_original:main"
 sdrmsd = "rdock_utils.sdrmsd.main:main"
