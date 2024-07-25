@@ -51,45 +51,30 @@ class RBHTFinder:
         self.write_output(results, column_names)
         self.handle_threshold(results, distinct_combinations, column_names, molecule_array.shape[1])
 
-    def process_filter_combinations(
-        self, molecule_array: Array3DFloat, distinct_combinations: Array2DFloat
-    ) -> list[FilterCombinationResult]:
-        # Find the top scoring compounds for validation of the filter combinations
-        columns = set(filter.column for filter in self.config.filters)
-        min_score_indices = {
-            column: np.argpartition(np.min(molecule_array[:, :, column], axis=1), self.config.validation)[
-                : self.config.validation
-            ]
-            for column in columns
-        }
-        num_cpus = os.cpu_count() or 1
-        with multiprocessing.Pool(num_cpus) as pool:
-            function_to_apply = partial(
-                self.calculate_results_for_filter_combination,
-                molecule_array=molecule_array,
-                min_score_indices=min_score_indices,
-            )
-            results = pool.map(function_to_apply, distinct_combinations)
-        return results
+    def generate_filters_combinations(self, filters: list[Filter]) -> list[FilterCombination]:
+        filter_ranges = ((filter.min, filter.max + filter.interval, filter.interval) for filter in filters)
+        combinations = (np.arange(*range) for range in filter_ranges)
+        filters_combinations = list(itertools.product(*combinations))
+        return filters_combinations
 
-    def handle_threshold(
-        self,
-        filter_combinations: list[FilterCombinationResult],
-        distinct_combinations: Array2DFloat,
-        column_names: ColumnNamesArray,
-        num_poses: int,
-    ) -> None:
-        threshold_file = self.config.threshold or ""
-        if not threshold_file:
-            return
+    def remove_redundant_combinations(
+        self, all_combinations: list[FilterCombination], filters: list[Filter]
+    ) -> Array2DFloat:
+        all_combinations_array = np.array(all_combinations)
+        columns = [filter.column for filter in filters]
+        indices_per_col = {col: [i for i, c in enumerate(columns) if c == col] for col in set(columns)}
+        # Create a mask to keep only valid combinations
+        mask = np.ones(len(all_combinations_array), dtype=bool)
 
-        best_combination_index = self.get_best_filter_combination_index(filter_combinations)
-        if best_combination_index:
-            best_combination = distinct_combinations[best_combination_index]
-            self.write_threshold(best_combination, column_names, num_poses)
-        else:
-            message = "Filter combinations defined are too strict or would take too long to run; no threshold file was written."
-            logger.warning(message)
+        for indices in indices_per_col.values():
+            col_data = all_combinations_array[:, indices]
+            sorted_data = np.sort(col_data, axis=1)[:, ::-1]  # Sort descending
+            is_valid = np.all(col_data == sorted_data, axis=1)  # Check if sorted matches original
+            is_unique = np.apply_along_axis(lambda x: len(set(x)) == len(x), 1, col_data)
+            mask &= is_valid & is_unique
+
+        valid_combinations: Array2DFloat = all_combinations_array[mask]
+        return valid_combinations
 
     def read_data(self) -> InputData:
         try:
@@ -123,16 +108,6 @@ class RBHTFinder:
 
         return sdreport_array, column_names
 
-    def apply_threshold(self, scored_poses: Array3DFloat, column: int, steps: int, threshold: float) -> Array1DInt:
-        """
-        Filter out molecules from `scored_poses`, where the minimum score reached (for a specified `column`) after `steps` is more negative than `threshold`.
-        """
-        # Minimum score after `steps` per molecule
-        mins = np.min(scored_poses[:, :steps, column], axis=1)
-        # Return those molecules where the minimum score is less than the threshold
-        passing_molecules = np.where(mins < threshold)[0]
-        return passing_molecules
-
     def prepare_array(self, data_array: SDReportArray, name_column: int) -> Array3DFloat:
         """
         Convert `sdreport_array` (read directly from the tsv) to 3D array (molecules x poses x columns) and filter out molecules with too few/many poses
@@ -165,6 +140,27 @@ class RBHTFinder:
         molecule_3d_array[:, :, name_column] = 0
         final_array = molecule_3d_array.astype(float)
         return final_array
+
+    def process_filter_combinations(
+        self, molecule_array: Array3DFloat, distinct_combinations: Array2DFloat
+    ) -> list[FilterCombinationResult]:
+        # Find the top scoring compounds for validation of the filter combinations
+        columns = set(filter.column for filter in self.config.filters)
+        min_score_indices = {
+            column: np.argpartition(np.min(molecule_array[:, :, column], axis=1), self.config.validation)[
+                : self.config.validation
+            ]
+            for column in columns
+        }
+        num_cpus = os.cpu_count() or 1
+        with multiprocessing.Pool(num_cpus) as pool:
+            process_combination = partial(
+                self.calculate_results_for_filter_combination,
+                molecule_array=molecule_array,
+                min_score_indices=min_score_indices,
+            )
+            results = pool.map(process_combination, distinct_combinations)
+        return results
 
     def calculate_results_for_filter_combination(
         self, filter_combination: Array2DFloat, molecule_array: Array3DFloat, min_score_indices: MinScoreIndices
@@ -214,6 +210,16 @@ class RBHTFinder:
             increment = len(passing_molecule_indices) * self.config.filters[index].steps
         return increment
 
+    def apply_threshold(self, scored_poses: Array3DFloat, column: int, steps: int, threshold: float) -> Array1DInt:
+        """
+        Filter out molecules from `scored_poses`, where the minimum score reached (for a specified `column`) after `steps` is more negative than `threshold`.
+        """
+        # Minimum score after `steps` per molecule
+        mins = np.min(scored_poses[:, :steps, column], axis=1)
+        # Return those molecules where the minimum score is less than the threshold
+        passing_molecules = np.where(mins < threshold)[0]
+        return passing_molecules
+
     def write_output(
         self, results: list[FilterCombinationResult], column_names: ColumnNamesArray, sep: str = "\t", end: str = "\n"
     ) -> None:
@@ -221,25 +227,25 @@ class RBHTFinder:
         Print results as a table. The number of columns varies depending how many columns the user picked.
         """
         with open(self.config.output, "w") as f:
-            header = self._get_output_header(results[0], column_names)
+            header = self.get_output_header(results[0], column_names)
             f.write(sep.join(header) + end)
-            content_lines = [sep.join(self._get_output_content(result, column_names)) + end for result in results]
+            content_lines = [sep.join(self.get_output_content(result, column_names)) + end for result in results]
             f.writelines(content_lines)
 
-    def _get_output_header(self, result: FilterCombinationResult, column_names: ColumnNamesArray) -> list[str]:
+    def get_output_header(self, result: FilterCombinationResult, column_names: ColumnNamesArray) -> list[str]:
         header = []
         for i in range(len(result.combination)):
             header.extend([f"FILTER{i + 1}", f"NSTEPS{i + 1}", f"THR{i + 1}", f"PERC{i + 1}"])
 
         for col_index in result.perc_val.keys():
-            header.append(f"TOP{self.config.validation}_{column_names[col_index]}")
-            header.append(f"ENRICH_{column_names[col_index]}")
+            column_name = column_names[col_index]
+            header.extend([f"TOP{self.config.validation}_{column_name}", f"ENRICH_{column_name}"])
 
         header.append("TIME")
 
         return header
 
-    def _get_output_content(self, result: FilterCombinationResult, column_names: ColumnNamesArray) -> list[str]:
+    def get_output_content(self, result: FilterCombinationResult, column_names: ColumnNamesArray) -> list[str]:
         content = []
 
         for i, threshold in enumerate(result.combination):
@@ -251,12 +257,30 @@ class RBHTFinder:
         for value in result.perc_val.values():
             perc_val_percent = value * 100
             enrichment = value / result.percentages[-1] if result.percentages[-1] else float("nan")
-            content.append(f"{perc_val_percent:.2f}")
-            content.append(f"{enrichment:.2f}")
+            content.extend([f"{perc_val_percent:.2f}", f"{enrichment:.2f}"])
 
         content.append(f"{result.time:.4f}")
 
         return content
+
+    def handle_threshold(
+        self,
+        filter_combinations: list[FilterCombinationResult],
+        distinct_combinations: Array2DFloat,
+        column_names: ColumnNamesArray,
+        num_poses: int,
+    ) -> None:
+        threshold_file = self.config.threshold or ""
+        if not threshold_file:
+            return
+
+        best_combination_index = self.get_best_filter_combination_index(filter_combinations)
+        if best_combination_index:
+            best_combination = distinct_combinations[best_combination_index]
+            self.write_threshold(best_combination, column_names, num_poses)
+        else:
+            message = "Filter combinations defined are too strict or would take too long to run; no threshold file was written."
+            logger.warning(message)
 
     def get_best_filter_combination_index(self, results: list[FilterCombinationResult]) -> int:
         """
@@ -303,10 +327,10 @@ class RBHTFinder:
     ) -> None:
         path = self.config.threshold or "default_threshold.txt"
         with open(path, "w") as f:
-            content = self._get_threshold_content(best_filter_combination, column_names, max_number_of_runs)
+            content = self.get_threshold_content(best_filter_combination, column_names, max_number_of_runs)
             f.write(sep.join(content) + end)
 
-    def _get_threshold_content(
+    def get_threshold_content(
         self, best_filter_combination: Array1DFloat, column_names: ColumnNamesArray, max_number_of_runs: int
     ) -> list[str]:
         content = []
@@ -331,28 +355,3 @@ class RBHTFinder:
         filter_min_values = [f"- {column_names[col]} {min(values)}," for col, values in filters_by_column.items()]
         content.extend(filter_min_values)
         return content
-
-    def generate_filters_combinations(self, filters: list[Filter]) -> list[FilterCombination]:
-        filter_ranges = ((filter.min, filter.max + filter.interval, filter.interval) for filter in filters)
-        combinations = (np.arange(*range) for range in filter_ranges)
-        filters_combinations = list(itertools.product(*combinations))
-        return filters_combinations
-
-    def remove_redundant_combinations(
-        self, all_combinations: list[FilterCombination], filters: list[Filter]
-    ) -> Array2DFloat:
-        all_combinations_array = np.array(all_combinations)
-        columns = [filter.column for filter in filters]
-        indices_per_col = {col: [i for i, c in enumerate(columns) if c == col] for col in set(columns)}
-        # Create a mask to keep only valid combinations
-        mask = np.ones(len(all_combinations_array), dtype=bool)
-
-        for indices in indices_per_col.values():
-            col_data = all_combinations_array[:, indices]
-            sorted_data = np.sort(col_data, axis=1)[:, ::-1]  # Sort descending
-            is_valid = np.all(col_data == sorted_data, axis=1)  # Check if sorted matches original
-            is_unique = np.apply_along_axis(lambda x: len(set(x)) == len(x), 1, col_data)
-            mask &= is_valid & is_unique
-
-        valid_combinations: Array2DFloat = all_combinations_array[mask]
-        return valid_combinations
