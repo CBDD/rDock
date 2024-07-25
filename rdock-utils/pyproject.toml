@@ -79,6 +79,7 @@ exclude = [
     "rdock_utils/sdrmsd_original.py",
     "tests/",
     "rdock_utils/sdtether_original.py",
+    "rdock_utils/rbhtfinder_original_copy.py",
 ]
 
 plugins = "numpy.typing.mypy_plugin"
