@@ -1,6 +1,42 @@
 import argparse
+from dataclasses import dataclass
 
-from .models import RBHTFinderConfig
+from .schemas import Filter
+
+
+@dataclass
+class RBHTFinderConfig:
+    input: str
+    output: str
+    threshold: str | None
+    name: int
+    filters: list[Filter]
+    validation: int
+    header: bool
+    max_time: float
+    min_percentage: float
+
+    def __post_init__(self) -> None:
+        self.filters = self.get_parsed_filters()
+
+    def get_parsed_filters(self) -> list[Filter]:
+        filter_args: list[str] = self.filters  # type: ignore
+        parsed_filters = [self._parse_filter(arg) for arg in filter_args]
+        # sort filters by step at which they are applied
+        parsed_filters.sort(key=lambda filter: filter.steps)
+        return parsed_filters
+
+    @staticmethod
+    def _parse_filter(argument: str) -> Filter:
+        parsed_filter = Filter()
+
+        for item in argument.split(","):
+            key, value = item.split("=")
+            setattr(parsed_filter, key, float(value) if key in ("interval", "min", "max") else int(value))
+        # User inputs with 1-based numbering whereas python uses 0-based
+        parsed_filter.column -= 1
+        parsed_filter.interval = parsed_filter.interval or 1.0
+        return parsed_filter
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -15,9 +51,9 @@ def get_parser() -> argparse.ArgumentParser:
        using the -f option, for example, "-f column=6,steps=5,min=0.5,max=1.0,interval=0.1". 
        This example would simulate the effect of applying thresholds on column 6 after 5 poses 
        have been generated, for values between 0.5 and 1.0 (i.e., 0.5, 0.6, 0.7, 0.8, 0.9, 1.0). 
-       More than one threshold can be specified, e.g., "-f column=4,steps=5,min=-12,max=-10,
-       interval=1 column=4,steps=15,min=-16,max=-15,interval=1" will test the following 
-       combinations of thresholds on column 4:
+       More than one threshold can be specified, e.g., 
+       "-f column=4,steps=5,min=-12,max=-10,interval=1 column=4,steps=15,min=-16,max=-15,interval=1" 
+       will test the following combinations of thresholds on column 4:
             5   -10     15      -15
             5   -11     15      -15
             5   -12     15      -15

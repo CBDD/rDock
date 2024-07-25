@@ -4,6 +4,7 @@ import numpy as np
 import numpy.typing as npt
 
 # TODO: Review common types for all rdock_utils scripts
+# SDRMSD types
 FloatArray = np.ndarray[Any, np.dtype[np.float64]]
 CoordsArray = np.ndarray[Any, np.dtype[np.float64]]
 AutomorphismRMSD = tuple[float, CoordsArray | None]
@@ -13,18 +14,15 @@ SingularValueDecomposition = tuple[Matrix3x3, Vector3D, Matrix3x3]
 Superpose3DResult = tuple[CoordsArray, float, Matrix3x3]
 AtomsMapping = tuple[tuple[int, int], ...]
 
-
 # RBHTFinder types
 SDReportArray = np.ndarray[list[int | str | float], np.dtype[np.object_]]
 Array1DFloat = npt.NDArray[np.float_]
-Array3DFloat = npt.NDArray[np.float_]
 Array2DFloat = npt.NDArray[np.float_]
+Array3DFloat = npt.NDArray[np.float_]
 Array1DStr = npt.NDArray[np.str_]
 Array1DInt = npt.NDArray[np.int_]
 ColumnNamesArray = Array1DStr | list[str]
 InputData = tuple[SDReportArray, ColumnNamesArray]
-MinMaxDict = dict[str, float]
-MinMaxValues = dict[Any, MinMaxDict]
 MinScoreIndices = dict[int, Array1DInt]
 FilterCombination = tuple[float, float]
 
