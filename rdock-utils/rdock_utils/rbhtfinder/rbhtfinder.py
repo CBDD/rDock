@@ -1,12 +1,10 @@
 import itertools
 import logging
 import multiprocessing
-import os
 from collections import Counter, defaultdict
 from functools import partial
 
-import numpy as np
-import pandas as pd
+import numpy
 
 from rdock_utils.common import (
     Array1DFloat,
@@ -22,6 +20,13 @@ from rdock_utils.common import (
 
 from .parser import RBHTFinderConfig
 from .schemas import Filter, FilterCombinationResult, MinMaxValues
+
+try:
+    import pandas
+except ImportError:
+    PANDAS_IS_AVAILABLE = False
+else:
+    PANDAS_IS_AVAILABLE = True
 
 logger = logging.getLogger("RBHTFinder")
 
@@ -53,39 +58,39 @@ class RBHTFinder:
 
     def generate_filters_combinations(self, filters: list[Filter]) -> list[FilterCombination]:
         filter_ranges = ((filter.min, filter.max + filter.interval, filter.interval) for filter in filters)
-        combinations = (np.arange(*range) for range in filter_ranges)
+        combinations = (numpy.arange(*range) for range in filter_ranges)
         filters_combinations = list(itertools.product(*combinations))
         return filters_combinations
 
     def remove_redundant_combinations(
         self, all_combinations: list[FilterCombination], filters: list[Filter]
     ) -> Array2DFloat:
-        all_combinations_array = np.array(all_combinations)
+        all_combinations_array = numpy.array(all_combinations)
         columns = [filter.column for filter in filters]
         indices_per_col = {col: [i for i, c in enumerate(columns) if c == col] for col in set(columns)}
         # Create a mask to keep only valid combinations
-        mask = np.ones(len(all_combinations_array), dtype=bool)
+        mask = numpy.ones(len(all_combinations_array), dtype=bool)
 
         for indices in indices_per_col.values():
             col_data = all_combinations_array[:, indices]
-            sorted_data = np.sort(col_data, axis=1)[:, ::-1]  # Sort descending
-            is_valid = np.all(col_data == sorted_data, axis=1)  # Check if sorted matches original
-            is_unique = np.apply_along_axis(lambda x: len(set(x)) == len(x), 1, col_data)
+            sorted_data = numpy.sort(col_data, axis=1)[:, ::-1]  # Sort descending
+            is_valid = numpy.all(col_data == sorted_data, axis=1)  # Check if sorted matches original
+            is_unique = numpy.apply_along_axis(lambda x: len(set(x)) == len(x), 1, col_data)
             mask &= is_valid & is_unique
 
         valid_combinations: Array2DFloat = all_combinations_array[mask]
         return valid_combinations
 
     def read_data(self) -> InputData:
-        try:
+        if PANDAS_IS_AVAILABLE:
             data_array, column_names = self.read_data_using_pandas()
-        except Exception as e:
-            logging.warning(f"Error reading data with pandas: {e}")
+        else:
+            logging.warning("Pandas is not available to read the data")
             data_array, column_names = self.read_data_using_numpy()
         return data_array, column_names
 
     def read_data_using_pandas(self) -> InputData:
-        sdreport_dataframe = pd.read_csv(self.config.input, sep="\t", header=0 if self.config.header else None)
+        sdreport_dataframe = pandas.read_csv(self.config.input, sep="\t", header=0 if self.config.header else None)
 
         if self.config.header:
             column_names = sdreport_dataframe.columns.values
@@ -97,7 +102,7 @@ class RBHTFinder:
         return sdreport_array, column_names
 
     def read_data_using_numpy(self) -> InputData:
-        np_array = np.loadtxt(self.config.input, dtype=str)
+        np_array = numpy.loadtxt(self.config.input, dtype=str)
 
         if self.config.header:
             column_names = np_array[0]
@@ -113,20 +118,20 @@ class RBHTFinder:
         Convert `sdreport_array` (read directly from the tsv) to 3D array (molecules x poses x columns) and filter out molecules with too few/many poses
         """
         split_indices = (
-            np.where(
-                data_array[:, name_column] != np.hstack((data_array[1:, name_column], data_array[0, name_column]))
+            numpy.where(
+                data_array[:, name_column] != numpy.hstack((data_array[1:, name_column], data_array[0, name_column]))
             )[0]
             + 1
         )
-        split_array = np.split(data_array, split_indices)
+        split_array = numpy.split(data_array, split_indices)
         modal_shape = Counter([array.shape for array in split_array]).most_common(1)[0]
         number_of_poses = modal_shape[0][0]  # Find modal number of poses per molecule in the array
         valid_split_arrays = [
-            np.array_split(array, array.shape[0] / number_of_poses)  # type: ignore
+            numpy.array_split(array, array.shape[0] / number_of_poses)  # type: ignore
             for array in split_array
             if not array.shape[0] % number_of_poses and array.shape[0]
         ]
-        flattened_split_array = np.concatenate(valid_split_arrays)
+        flattened_split_array = numpy.concatenate(valid_split_arrays)
 
         if len(flattened_split_array) * number_of_poses < data_array.shape[0] * 0.99:
             message = (
@@ -135,7 +140,7 @@ class RBHTFinder:
             )
             logger.warning(message)
 
-        molecule_3d_array = np.array(flattened_split_array)
+        molecule_3d_array = numpy.array(flattened_split_array)
         # Overwrite the name column (should be the only one with dtype=str) so we can force everything to float
         molecule_3d_array[:, :, name_column] = 0
         final_array = molecule_3d_array.astype(float)
@@ -147,13 +152,12 @@ class RBHTFinder:
         # Find the top scoring compounds for validation of the filter combinations
         columns = set(filter.column for filter in self.config.filters)
         min_score_indices = {
-            column: np.argpartition(np.min(molecule_array[:, :, column], axis=1), self.config.validation)[
+            column: numpy.argpartition(numpy.min(molecule_array[:, :, column], axis=1), self.config.validation)[
                 : self.config.validation
             ]
             for column in columns
         }
-        num_cpus = os.cpu_count() or 1
-        with multiprocessing.Pool(num_cpus) as pool:
+        with multiprocessing.Pool(self.config.cpu_count) as pool:
             process_combination = partial(
                 self.calculate_results_for_filter_combination,
                 molecule_array=molecule_array,
@@ -173,7 +177,7 @@ class RBHTFinder:
         num_steps = molecule_array.shape[1]
         # Passing_molecule_indices is a list of indices of molecules which have passed the applied filters.
         # As more filters are applied, it gets smaller. Before any iteration, we initialise with all molecules passing
-        passing_molecule_indices = np.arange(num_molecules)
+        passing_molecule_indices = numpy.arange(num_molecules)
         filter_percentages = []
         number_of_simulated_poses = 0  # Number of poses which we calculate would be generated, we use this to calculate the TIME column in the final output
 
@@ -183,15 +187,15 @@ class RBHTFinder:
             step = self.config.filters[i].steps
             passing_indices = self.apply_threshold(molecule_array, column, step, threshold)
             # All mols which pass the threshold and which were already in passing_molecule_indices, i.e. passed all previous filters
-            passing_molecule_indices = np.intersect1d(passing_molecule_indices, passing_indices, assume_unique=True)
+            passing_molecule_indices = numpy.intersect1d(passing_molecule_indices, passing_indices, assume_unique=True)
             filter_percentages.append(len(passing_molecule_indices) / num_molecules)
 
         number_of_simulated_poses += len(passing_molecule_indices) * (num_steps - self.config.filters[-1].steps)
         perc_val = {
-            k: len(np.intersect1d(v, passing_molecule_indices, assume_unique=True)) / self.config.validation
+            k: len(numpy.intersect1d(v, passing_molecule_indices, assume_unique=True)) / self.config.validation
             for k, v in min_score_indices.items()
         }
-        time = float(number_of_simulated_poses / np.prod(molecule_array.shape[:2]))
+        time = float(number_of_simulated_poses / numpy.prod(molecule_array.shape[:2]))
         result = FilterCombinationResult(
             combination=filter_combination,
             perc_val=perc_val,
@@ -215,9 +219,9 @@ class RBHTFinder:
         Filter out molecules from `scored_poses`, where the minimum score reached (for a specified `column`) after `steps` is more negative than `threshold`.
         """
         # Minimum score after `steps` per molecule
-        mins = np.min(scored_poses[:, :steps, column], axis=1)
+        mins = numpy.min(scored_poses[:, :steps, column], axis=1)
         # Return those molecules where the minimum score is less than the threshold
-        passing_molecules = np.where(mins < threshold)[0]
+        passing_molecules = numpy.where(mins < threshold)[0]
         return passing_molecules
 
     def write_output(
@@ -297,7 +301,7 @@ class RBHTFinder:
         time_vals = [result.time for result in results]
         min_max_values.update("time", min(time_vals), max(time_vals))
         combination_scores = [self.calculate_combination_score(result, min_max_values) for result in results]
-        index = np.argmax(combination_scores)
+        index = numpy.argmax(combination_scores)
         return int(index)
 
     def calculate_combination_score(self, result: FilterCombinationResult, min_max_values: MinMaxValues) -> float:

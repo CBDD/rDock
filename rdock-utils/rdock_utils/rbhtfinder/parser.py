@@ -15,6 +15,7 @@ class RBHTFinderConfig:
     header: bool
     max_time: float
     min_percentage: float
+    cpu_count: int
 
     def __post_init__(self) -> None:
         self.filters = self.get_parsed_filters()
@@ -111,6 +112,7 @@ def get_parser() -> argparse.ArgumentParser:
     header_help = "Specify if the input file from sdreport contains a header line with column names. If not, output files will describe columns using indices, e.g. COL4, COL5."
     max_time_help = "Maximum value for time to use when autogenerating a high-throughput protocol - default is 0.1, i.e. 10%% of the time exhaustive docking would take."
     min_perc_help = "Minimum value for the estimated final percentage of compounds to use when autogenerating a high-throughput protocol - default is 1."
+    cpu_count_help = "Specify the number of CPU cores to use for multiprocessing. Defaults to '1' if not provided."
 
     parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("-i", "--input", help=input_help, type=str, required=True)
@@ -119,6 +121,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("-n", "--name", type=int, default=1, help=name_help)
     parser.add_argument("-f", "--filters", nargs="+", type=str, help=filter_help, required=True)  # Review 'required'
     parser.add_argument("-v", "--validation", type=int, default=500, help=validation_help)
+    parser.add_argument("-c", "--cpu-count", type=int, default=1, help=cpu_count_help)
     parser.add_argument("--header", action="store_true", help=header_help)
     parser.add_argument("--max-time", type=float, default=0.1, help=max_time_help)
     parser.add_argument("--min-perc", type=float, default=1.0, help=min_perc_help)
@@ -138,4 +141,5 @@ def get_config(argv: list[str] | None = None) -> RBHTFinderConfig:
         header=args.header,
         max_time=args.max_time,
         min_percentage=args.min_perc,
+        cpu_count=args.cpu_count,
     )
