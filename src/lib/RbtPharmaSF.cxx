@@ -189,13 +189,13 @@ void RbtPharmaSF::ScoreMap(RbtStringVariantMap& scoreMap) const {
         // Store the mandatory constraint scores
         for (RbtUInt i = 0; i < m_conScores.size(); i++) {
             ostringstream field;
-            field << name << ".con_" << i + 1 << ">" << ends;
+            field << name << ".con_" << i + 1;
             scoreMap[field.str()] = m_conScores[i];
         }
         // Store the optional constraint scores (unsorted)
         for (RbtUInt i = 0; i < m_optScores.size(); i++) {
             ostringstream field;
-            field << name << ".opt_" << i + 1 << ">" << ends;
+            field << name << ".opt_" << i + 1;
             scoreMap[field.str()] = m_optScores[i];
         }
     }
