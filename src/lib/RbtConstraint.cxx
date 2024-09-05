@@ -238,8 +238,7 @@ void RbtHydroConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     m_atomList = Rbt::GetAtomList(lig->GetAtomList(), Rbt::isAtomLipophilic());
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
-        ostr << "The ligand has only " << m_atomList.size() << " hydrophobic atom(s) (" << counter << " required)"
-            ;
+        ostr << "The ligand has only " << m_atomList.size() << " hydrophobic atom(s) (" << counter << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -298,8 +297,7 @@ void RbtRingAromaticConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     }
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
-        ostr << "The ligand has only " << m_atomList.size() << " aromatic ring(s) (" << counter << " required)"
-            ;
+        ostr << "The ligand has only " << m_atomList.size() << " aromatic ring(s) (" << counter << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
