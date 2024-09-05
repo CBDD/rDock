@@ -67,7 +67,7 @@ void RbtCrdFileSink::Render() {
 
             // 2. Write number of atoms
             ostringstream ostr;
-            ostr << setw(5) << spModel->GetNumAtoms() << ends;
+            ostr << setw(5) << spModel->GetNumAtoms();
             AddLine(ostr.str());
             // Remember the line number containing the number of atoms
             // as we'll need to update the total num atoms after each Render when we are in multiconf mode
@@ -131,7 +131,7 @@ void RbtCrdFileSink::Render() {
             ostr << setw(0) << " " << setw(4)
                  << spAtom->GetSubunitId().c_str();  // This subunit ID is unique in the segment
             ostr.setf(ios_base::right, ios_base::adjustfield);
-            ostr << setw(10) << 0.0 << ends;
+            ostr << setw(10) << 0.0;
             AddLine(ostr.str());
         }
 
@@ -139,7 +139,7 @@ void RbtCrdFileSink::Render() {
         // then write the file without clearing the cache
         if (GetMultiConf()) {
             ostringstream ostr;
-            ostr << setw(5) << m_nAtomId << ends;
+            ostr << setw(5) << m_nAtomId;
             ReplaceLine(ostr.str(), m_numAtomsLineRec);
             Write(false);
         } else

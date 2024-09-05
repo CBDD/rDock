@@ -19,7 +19,6 @@
 
 #include <sstream>
 using std::cout;
-using std::ends;
 using std::istringstream;
 using std::ostringstream;
 
@@ -155,7 +154,7 @@ class RbtVariant {
         ostringstream ostr;
         // Don't need "ends" with ostringstream apparently
         //(was introducing a non-ASCII \0 char into log files
-        // ostr << d << ends;
+        // ostr << d;
         ostr << d;
         RbtString s(ostr.str());
         m_sl.push_back(s);
@@ -186,7 +185,7 @@ class RbtVariant {
         ostringstream ostr;
         // Don't need "ends" with ostringstream apparently
         //(was introducing a non-ASCII \0 char into log files
-        // ostr << c << ends;
+        // ostr << c;
         ostr << c;
         RbtString s(ostr.str());
         m_sl.push_back(s);

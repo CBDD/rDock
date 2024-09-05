@@ -274,5 +274,5 @@ void print_atoms(RbtAtomList &atoms, ostringstream &ost) {
         else
             ost << ",";
     }
-    ost << ends;
+    ost;
 }
