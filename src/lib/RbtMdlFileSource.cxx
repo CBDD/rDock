@@ -113,7 +113,7 @@ void RbtMdlFileSource::Parse() {
                 // Compose the atom name from element+atomID (i.e. C1, N2, C3 etc)
                 nAtomId++;
                 ostringstream ostr;
-                ostr << strElementName << nAtomId << ends;
+                ostr << strElementName << nAtomId;
                 RbtString strAtomName(ostr.str());
 
                 // Construct a new atom (constructor only accepts the 2D params)
@@ -728,7 +728,7 @@ void RbtMdlFileSource::AddHydrogen(RbtAtomPtr spAtom) {
     // Construct the new hydrogen atom (constructor only accepts the 2D params)
     RbtInt nAtomId = m_atomList.size() + 1;
     ostringstream ostr;
-    ostr << "H" << nAtomId << ends;
+    ostr << "H" << nAtomId;
     RbtString strAtomName(ostr.str());
     RbtAtomPtr spHAtom(new RbtAtom(
         nAtomId,
@@ -940,7 +940,7 @@ void RbtMdlFileSource::SetupSegmentNames() {
          nSeg++, seed = Rbt::FindAtom(m_atomList, Rbt::isSegmentName_eq("H"))) {
         // New segment name (H1, H2 etc)
         ostringstream ostr;
-        ostr << "H" << nSeg << ends;
+        ostr << "H" << nSeg;
         RbtString strSegName(ostr.str());
         // Temporary atom list containing atoms to be processed
         // Note: this is a true list (not a vector) as we will be making numerous insertions and deletions

@@ -60,7 +60,7 @@ class RbtCell {
         evaluated = true;
         constant = true;
         ostringstream nm;
-        nm << r << ends;
+        nm << r;
         name = nm.str();
     };
     void ResetConstant() {
