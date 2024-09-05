@@ -148,7 +148,7 @@ void RbtMdlFileSink::RenderBondList(const RbtBondList& bondList) {
             ostr.setf(ios_base::right, ios_base::adjustfield);
             ostr << setw(3) << id1 << setw(3) << id2 << setw(3) << spBond->GetFormalBondOrder() << setw(3) << 0
                  << setw(3) << 0 << setw(3) << 0;
-                 // Atom1, Atom2, bond order, stereo designator, unused, topology code
+            // Atom1, Atom2, bond order, stereo designator, unused, topology code
             AddLine(ostr.str());
         } else {
             // Should never happen. Probably best to throw an error at this point.
