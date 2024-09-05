@@ -91,7 +91,7 @@ void RBCavity::RBCavity(const RBCavity::RBCavityConfig &config) {
         RbtCavityList cavList = spDockSite->GetCavityList();
         for (RbtUInt i = 0; i < cavList.size(); i++) {
             ostringstream filename;
-            filename << wsName << "_cav" << i + 1 << ".grd" << ends;
+            filename << wsName << "_cav" << i + 1 << ".grd";
             ofstream dumpFile(filename.str());
             if (dumpFile) {
                 cavList[i]->GetGrid()->PrintInsightGrid(dumpFile);

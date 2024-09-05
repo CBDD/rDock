@@ -482,7 +482,7 @@ int main(int argc, const char *argv[]) {
                     try {
                         if (bOutput) {
                             ostringstream histr;
-                            histr << strRunName << "_" << strMolName << nRec << "_his_" << iRun << ".sd" << ends;
+                            histr << strRunName << "_" << strMolName << nRec << "_his_" << iRun << ".sd";
                             RbtMolecularFileSinkPtr spHistoryFileSink(new RbtMdlFileSink(histr.str(), spLigand));
                             spWS->SetHistorySink(spHistoryFileSink);
                         }

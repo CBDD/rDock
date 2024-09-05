@@ -22,7 +22,6 @@
 using std::cerr;
 using std::cout;
 using std::endl;
-using std::ends;
 using std::ios_base;
 using std::istream;
 using std::istringstream;
