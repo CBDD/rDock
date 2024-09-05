@@ -11,7 +11,6 @@
  ***********************************************************************/
 
 #include <sstream>
-using std::ends;
 using std::ostringstream;
 
 #include "RbtFilter.h"
@@ -202,7 +201,7 @@ RbtBool RbtFilter::Terminate() {
         } else {
             ostringstream error;
             error << "Wrong output: " << val;
-            error << "; Termination filters should return 0,1 or -1" << ends;
+            error << "; Termination filters should return 0,1 or -1";
             throw RbtError(_WHERE_, error.str());
         }
     } else

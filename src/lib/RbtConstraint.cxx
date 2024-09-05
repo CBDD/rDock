@@ -16,7 +16,6 @@
 
 #include "RbtLigandError.h"
 
-using std::ends;
 using std::ostringstream;
 
 // initialization of the static data of RbtConstraint
@@ -206,7 +205,7 @@ void RbtHeavyConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     m_atomList = Rbt::GetAtomList(lig->GetAtomList(), std::not1(Rbt::isAtomicNo_eq(1)));
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
-        ostr << "The ligand has only " << m_atomList.size() << " heavy atom(s) (" << counter << " required)" << ends;
+        ostr << "The ligand has only " << m_atomList.size() << " heavy atom(s) (" << counter << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -218,7 +217,7 @@ void RbtHBDConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " neutral H-bond donor hydrogens(s) (" << counter
-             << " required)" << ends;
+             << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -230,7 +229,7 @@ void RbtHBAConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " neutral H-bond acceptor(s) (" << counter
-             << " required)" << ends;
+             << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -240,7 +239,7 @@ void RbtHydroConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " hydrophobic atom(s) (" << counter << " required)"
-             << ends;
+            ;
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -251,7 +250,7 @@ void RbtHydroAliphaticConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " hydrophobic aliphatic atom(s) (" << counter
-             << " required)" << ends;
+             << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -262,7 +261,7 @@ void RbtHydroAromaticConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " hydrophobic aromatic atom(s) (" << counter
-             << " required)" << ends;
+             << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -272,7 +271,7 @@ void RbtNegChargeConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " negatively charged atom(s) (" << counter
-             << " required)" << ends;
+             << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -282,7 +281,7 @@ void RbtPosChargeConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " positively charged atom(s) (" << counter
-             << " required)" << ends;
+             << " required)";
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }
@@ -300,7 +299,7 @@ void RbtRingAromaticConstraint::AddAtomList(RbtModelPtr lig, RbtBool bCheck) {
     if (bCheck && (m_atomList.size() < counter)) {
         ostringstream ostr;
         ostr << "The ligand has only " << m_atomList.size() << " aromatic ring(s) (" << counter << " required)"
-             << ends;
+            ;
         throw RbtLigandError(_WHERE_, ostr.str());
     }
 }

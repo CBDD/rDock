@@ -352,7 +352,7 @@ RbtString Rbt::ConvertFormalChargeToString(RbtInt nCharge) {
             // For higher charges, return as +3,-3 etc
             ostringstream ostr;
             ostr.setf(ios_base::showpos);
-            ostr << nCharge << ends;
+            ostr << nCharge;
             RbtString strCharge(ostr.str());
             return strCharge;
     }

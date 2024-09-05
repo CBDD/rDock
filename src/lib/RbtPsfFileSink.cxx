@@ -55,7 +55,7 @@ void RbtPsfFileSink::Render() {
         AddLine("");
         RbtStringList titleList(spModel->GetTitleList());
         ostringstream ostr;
-        ostr << setw(8) << titleList.size() << setw(0) << " " << strTitleKey << ends;
+        ostr << setw(8) << titleList.size() << setw(0) << " " << strTitleKey;
         AddLine(ostr.str());
         for (RbtStringListConstIter iter = titleList.begin(); iter != titleList.end(); iter++) {
             // Add an initial star if the title does not already commence with a star
@@ -68,7 +68,7 @@ void RbtPsfFileSink::Render() {
 
         // 2. Write number of atoms
         ostringstream ostr2;
-        ostr2 << setw(8) << spModel->GetNumAtoms() << setw(0) << " " << strAtomKey << ends;
+        ostr2 << setw(8) << spModel->GetNumAtoms() << setw(0) << " " << strAtomKey;
         AddLine(ostr2.str());
         // delete ostr2.str();
 
@@ -97,7 +97,7 @@ void RbtPsfFileSink::Render() {
         delete[] line;
         // 4. Write number of bonds
         ostringstream ostr3;
-        ostr3 << setw(8) << spModel->GetNumBonds() << setw(0) << " " << strBondKey << ends;
+        ostr3 << setw(8) << spModel->GetNumBonds() << setw(0) << " " << strBondKey;
         AddLine("");
         AddLine(ostr3.str());
         // delete ostr3.str();
@@ -117,7 +117,7 @@ void RbtPsfFileSink::Render() {
             bIter++;
             ostr << setw(8) << (*bIter)->GetAtom1Ptr()->GetAtomId() << setw(8) << (*bIter)->GetAtom2Ptr()->GetAtomId();
             bIter++;
-            ostr << ends;
+            ostr;
             AddLine(ostr.str());
         }
         // Remaining bonds on final incomplete line
@@ -127,7 +127,7 @@ void RbtPsfFileSink::Render() {
                 ostr << setw(8) << (*bIter)->GetAtom1Ptr()->GetAtomId() << setw(8)
                      << (*bIter)->GetAtom2Ptr()->GetAtomId();
             }
-            ostr << ends;
+            ostr;
             AddLine(ostr.str());
         }
 

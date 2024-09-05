@@ -11,7 +11,6 @@
  ***********************************************************************/
 
 #include <sstream>
-using std::ends;
 using std::istringstream;
 using std::ostringstream;
 
@@ -93,7 +92,7 @@ RbtElementData RbtElementFileSource::GetElementData(RbtInt nAtomicNumber) {
         return (*iter).second;
     else {
         ostringstream ostr;
-        ostr << "Atomic number " << nAtomicNumber << " not found in " << GetFileName() << ends;
+        ostr << "Atomic number " << nAtomicNumber << " not found in " << GetFileName();
         RbtString strError(ostr.str());
         throw RbtFileMissingParameter(_WHERE_, strError);
     }
