@@ -49,9 +49,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4  # probably not needed, but just in case
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: artifacts/
+        pattern: rdock-*
+        merge-multiple: true
 
     - name: Set version
       id: set_version
@@ -60,7 +62,7 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}-legacy
-        artifacts: artifacts/*/*.tar.gz
+        tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}
+        artifacts: artifacts/*.tar.gz
         draft: true
 
