@@ -53,4 +53,5 @@ jobs:
     - name: Upload bundle
       uses: actions/upload-artifact@v4
       with:
+        name: rdock-${{ inputs.compiler }}-${{ inputs.distribution }}-${{ inputs.arch }}
         path: rdock-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz
