@@ -17,11 +17,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
     - name: Build base image
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v6
       with:
         context: .
         tags: rdock-${{ inputs.distribution }}:base
@@ -51,6 +51,7 @@ jobs:
           bin/ lib/ include/ data/ scripts/ Makefile license.txt README.md
 
     - name: Upload bundle
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        name: rdock-${{ inputs.compiler }}-${{ inputs.distribution }}-${{ inputs.arch }}
         path: rdock-${{ steps.set_candidate_name.outputs.CANDIDATE_NAME }}.tar.gz
