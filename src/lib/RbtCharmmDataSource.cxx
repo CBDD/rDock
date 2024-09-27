@@ -11,7 +11,6 @@
  ***********************************************************************/
 
 #include <sstream>
-using std::ends;
 using std::ostringstream;
 
 #include "RbtCharmmDataSource.h"
@@ -69,7 +68,7 @@ RbtString RbtCharmmDataSource::AtomTypeString(RbtInt nAtomType) {
         return (*iter).second;
     else {
         ostringstream ostr;
-        ostr << "CHARMm atom type #" << nAtomType << " not found in CharmmDataSource" << ends;
+        ostr << "CHARMm atom type #" << nAtomType << " not found in CharmmDataSource";
         RbtString strError(ostr.str());
         throw RbtFileMissingParameter(_WHERE_, strError);
     }

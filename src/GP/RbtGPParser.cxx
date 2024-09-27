@@ -107,9 +107,9 @@ RbtString RbtGPParser::PrintEval(RbtGPChromosomePtr chrom, RbtInt n, RbtBool num
         if (numbers) {
             nm << "(";
             nm << n << " ";
-            nm << o << ") " << ends;
+            nm << o << ") ";
         } else
-            nm << o << ends;
+            nm << o;
         chrom->Cells(n)->SetName(nm.str());
         return (nm.str());
     } else

@@ -1,5 +1,0 @@
-FROM centos:centos7 as base
-
-# Install dependencies
-RUN yum install -y popt-devel gcc-c++ make
-ENV LEGACY_BUILD=YES
