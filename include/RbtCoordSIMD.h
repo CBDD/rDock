@@ -50,9 +50,7 @@ class alignas(32) RbtCoord {
     inline RbtCoord(RbtDouble x1, RbtDouble y1, RbtDouble z1): x(x1), y(y1), z(z1), __align(0.0) {}
 
     // Copy constructor
-    inline RbtCoord(const RbtCoord& coord) {
-        _mm256_store_pd(&this->x, coord._as_m256d());
-    }
+    inline RbtCoord(const RbtCoord& coord) { _mm256_store_pd(&this->x, coord._as_m256d()); }
 
     // DM 19 Jul 2000 - Read,Write methods to read/write coords to binary streams
     inline ostream& Write(ostream& ostr) const {
@@ -68,9 +66,7 @@ class alignas(32) RbtCoord {
         return istr;
     }
 
-    inline __m256d _as_m256d() const {
-        return _mm256_load_pd(&this->x);
-    }
+    inline __m256d _as_m256d() const { return _mm256_load_pd(&this->x); }
     ///////////////////////////////////////////////
     // Operator functions:
     /////////////////////
@@ -236,9 +232,7 @@ class alignas(32) RbtCoord {
     }
 
     // Addition (const + coord)
-    inline friend RbtCoord operator+(RbtDouble d, const RbtCoord& coord1) {
-        return coord1 + d;
-    }
+    inline friend RbtCoord operator+(RbtDouble d, const RbtCoord& coord1) { return coord1 + d; }
 
     // Subtraction (coord - coord)
     inline friend RbtCoord operator-(const RbtCoord& coord1, const RbtCoord& coord2) {
@@ -285,9 +279,7 @@ class alignas(32) RbtCoord {
     }
 
     // Scalar product (const * coord)
-    inline friend RbtCoord operator*(const RbtDouble& d, const RbtCoord& coord) {
-        return coord * d;
-    }
+    inline friend RbtCoord operator*(const RbtDouble& d, const RbtCoord& coord) { return coord * d; }
 
     // Scalar product (coord * coord : component-wise multiplication)
     inline friend RbtCoord operator*(const RbtCoord& coord1, const RbtCoord& coord2) {
@@ -313,9 +305,7 @@ class alignas(32) RbtCoord {
     // Mostly applicable to vectors (rather than coords)
 
     // Returns square of magnitude of vector (or distance from origin)
-    inline RbtDouble Length2() const {
-        return x * x + y * y + z * z;
-    }
+    inline RbtDouble Length2() const { return x * x + y * y + z * z; }
 
     // Returns magnitude of vector (or distance from origin)
     inline RbtDouble Length() const { return sqrt(Length2()); }

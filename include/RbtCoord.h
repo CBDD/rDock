@@ -14,9 +14,9 @@
 #define _RBTCOORD_H_
 
 #ifndef _SIMD_ENABLED
-#include "RbtCoordBasic.h"
+    #include "RbtCoordBasic.h"
 #else
-#include "RbtCoordSIMD.h"
+    #include "RbtCoordSIMD.h"
 #endif
 
 #endif  //_RBTCOORD_H_
