@@ -49,7 +49,7 @@ CXX_BASE_FLAGS              += -Wall
 CXX_STD                     ?= c++17
 EXE_FOLDER				    = src/exe
 
-CXX_EXTRA_FLAGS             ?=
+CXX_EXTRA_FLAGS             ?= -mavx2
 CXX_BASE_FLAGS              += -pipe -std=$(CXX_STD) -fPIC
 CXX_DEBUG_CONFIG_FLAGS      += -O0 -g
 CXX_RELEASE_CONFIG_FLAGS    += -O3 -ffast-math
@@ -68,6 +68,11 @@ ifeq ($(CONFIG),DEBUG)
 else
 	CXX_CONFIG_FLAGS        += $(CXX_RELEASE_CONFIG_FLAGS)
 	DEFINES                 += $(RELEASE_DEFINES)
+endif
+
+ifeq ($(SIMD),YES)
+	CXX_EXTRA_FLAGS         += -mavx2
+	DEFINES				 	+= -D_SIMD_ENABLED
 endif
 
 DEFINES                     += -DRBT_VERSION=\"$(RBT_VERSION)\"
