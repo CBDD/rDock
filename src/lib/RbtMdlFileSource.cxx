@@ -762,10 +762,8 @@ void RbtMdlFileSource::SetupNSP3Plus() {
         (*iter)->SetGroupCharge(0.0);                        // Neutralise the nitrogen
         for (RbtAtomListIter hIter = hbdAtomList.begin(); hIter != hbdAtomList.end(); hIter++) {
             (*hIter)->SetGroupCharge(pCharge);  // Charge up the hydrogens
-#ifdef _DEBUG
-            cout << "Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
-                 << (*hIter)->GetAtomName() << endl;
-#endif  //_DEBUG
+            DEBUG("Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
+                 << (*hIter)->GetAtomName() << endl);
         }
     }
 }

@@ -141,17 +141,13 @@ RbtPMFIdxSF::RbtPMFIdxSF(const RbtString& aName): RbtBaseSF(_CT, aName) {
 }
 
 RbtPMFIdxSF::~RbtPMFIdxSF() {
-#ifdef _DEBUG
-    cout << _CT << " PMF destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " PMF destructor" << endl);
 
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
 void RbtPMFIdxSF::Update(RbtSubject* theChangedSubject) {
-#ifdef _DEBUG
-    cout << _CT << " PMF Update" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " PMF Update" << endl);
     RbtBaseInterSF::Update(theChangedSubject);
 }
 
@@ -161,9 +157,7 @@ void RbtPMFIdxSF::Update(RbtSubject* theChangedSubject) {
  * create RbtNonBondedGrid of nearest neighbours
  */
 void RbtPMFIdxSF::SetupReceptor() {
-#ifdef _DEBUG
-    cout << _CT << " PMF SetupReceptor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " PMF SetupReceptor" << endl);
     // clear to be on the safe side
     theReceptorList.clear();
     theReceptorRList.clear();
@@ -190,9 +184,7 @@ void RbtPMFIdxSF::SetupReceptor() {
 }
 
 void RbtPMFIdxSF::SetupLigand() {
-#ifdef _DEBUG
-    cout << _CT << " PMF SetupLigand" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " PMF SetupLigand" << endl);
 
     theLigandList = Rbt::GetAtomList(GetLigand()->GetAtomList(), std::not1(Rbt::isAtomicNo_eq(1)));
 
@@ -203,16 +195,12 @@ void RbtPMFIdxSF::SetupLigand() {
 }
 
 void RbtPMFIdxSF::SetupScore() {
-#ifdef _DEBUG
-    cout << _CT << " PMF SetupScore" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " PMF SetupScore" << endl);
 }
 
 RbtDouble RbtPMFIdxSF::RawScore() const {
     //	return 0.0;
-#ifdef _DEBUG
-    cout << _CT << " PMF RawScore " << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " PMF RawScore " << endl);
     RbtDouble theScore = 0.0;
 
     // check for existence of  atom list grid

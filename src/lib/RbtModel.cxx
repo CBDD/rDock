@@ -50,10 +50,8 @@ RbtModel::RbtModel(RbtAtomList& atomList, RbtBondList& bondList):
 
 // Default destructor
 RbtModel::~RbtModel() {
-#ifdef _DEBUG
-    cout << "~RbtModel: deleting " << m_strName << " (" << m_atomList.size() << " atoms, " << m_bondList.size()
-         << " bonds)" << endl;
-#endif        //_DEBUG
+    DEBUG("~RbtModel: deleting " << m_strName << " (" << m_atomList.size() << " atoms, " << m_bondList.size()
+         << " bonds)" << endl);
     Clear();  // clear the current model
     _RBTOBJECTCOUNTER_DESTR_("RbtModel");
 }

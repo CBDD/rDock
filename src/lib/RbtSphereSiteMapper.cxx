@@ -35,16 +35,12 @@ RbtSphereSiteMapper::RbtSphereSiteMapper(const RbtString& strName): RbtSiteMappe
     AddParameter(_RADIUS, 10.0);
     AddParameter(_MIN_VOLUME, 100.0);  // Min cavity volume in A^3
     AddParameter(_MAX_CAVITIES, 99);   // Max number of cavities to return
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtSphereSiteMapper::~RbtSphereSiteMapper() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

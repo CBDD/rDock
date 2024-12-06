@@ -19,9 +19,9 @@
 namespace Tmp {
 void PrintAtomList(RbtAtomRListConstIter i1, RbtAtomRListConstIter i2) {
     for (RbtAtomRListConstIter iter = i1; iter != i2; iter++) {
-        cout << "\t" << (*iter)->GetFullAtomName() << " (" << (*iter)->GetAtomId() << ")";
+        cerr << "\t" << (*iter)->GetFullAtomName() << " (" << (*iter)->GetAtomId() << ")";
     }
-    cout << endl;
+    cerr << endl;
 }
 }  // namespace Tmp
 #endif  //_DEBUG
@@ -180,12 +180,12 @@ void RbtModelMutator::Setup() {
 #ifdef _DEBUG
             RbtInt id = lIter - m_flexIntns.begin();
             RbtAtom* pAtom = m_pModel->m_atomList[id];
-            cout << "Atom " << pAtom->GetFullAtomName() << " (" << id + 1 << "): with dups=" << (*lIter).size();
+            DEBUG("Atom " << pAtom->GetFullAtomName() << " (" << id + 1 << "): with dups=" << (*lIter).size());
 #endif  //_DEBUG
         // Remove duplicates
             (*lIter).erase(uniqIter, (*lIter).end());
 #ifdef _DEBUG
-            cout << "; unique=" << (*lIter).size() << endl;
+            DEBUG("; unique=" << (*lIter).size() << endl);
             Tmp::PrintAtomList((*lIter).begin(), (*lIter).end());
 #endif  //_DEBUG
         }

@@ -148,22 +148,16 @@ RbtDouble RbtRealGrid::GetSmoothedValue(const RbtCoord& c) const {
     RbtUInt iX = int(rx * (c.x - gridMin.x) - 0.5) + 1;
     RbtUInt iY = int(ry * (c.y - gridMin.y) - 0.5) + 1;
     RbtUInt iZ = int(rz * (c.z - gridMin.z) - 0.5) + 1;
-#ifdef _DEBUG
-    cout << "GetSmoothedValue" << c << "\tiX,iY,iZ=" << iX << "\t" << iY << "\t" << iZ << endl;
-#endif  //_DEBUG
+    DEBUG("GetSmoothedValue" << c << "\tiX,iY,iZ=" << iX << "\t" << iY << "\t" << iZ << endl);
     // Check this point (iX,iY,iZ) and (iX+1,iY+1,iZ+1) are all in bounds
     // else return the unsmoothed GetValue(c)
     if (!isValid(iX, iY, iZ) || !isValid(iX + 1, iY + 1, iZ + 1)) {
-#ifdef _DEBUG
-        cout << "Out of bounds" << endl;
-#endif  //_DEBUG
+        DEBUG("Out of bounds" << endl);
         return GetValue(c);
     }
     // p is the vector relative to the lower left corner
     RbtVector p = c - GetCoord(iX, iY, iZ);
-#ifdef _DEBUG
-    cout << "p=" << p << endl;
-#endif  //_DEBUG
+    DEBUG("p=" << p << endl);
     // Set up B0 and B1 for each of x,y,z axes
     // RbtDoubleList bx(2);
     // RbtDoubleList by(2);

@@ -20,16 +20,12 @@ RbtString RbtSiteMapper::_CT("RbtSiteMapper");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtSiteMapper::RbtSiteMapper(const RbtString& strClass, const RbtString& strName): RbtBaseObject(strClass, strName) {
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtSiteMapper::~RbtSiteMapper() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

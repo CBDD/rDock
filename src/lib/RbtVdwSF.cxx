@@ -23,9 +23,7 @@ RbtString RbtVdwSF::_ECUT("ECUT");
 RbtString RbtVdwSF::_E0("E0");
 
 RbtVdwSF::RbtVdwSF(): m_use_4_8(true), m_use_tripos(false), m_rmax(1.5), m_ecut(1.0), m_e0(1.5) {
-#ifdef _DEBUG
-    cout << _CT << " default constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " default constructor" << endl);
     // Add parameters
     AddParameter(_USE_4_8, m_use_4_8);
     AddParameter(_USE_TRIPOS, m_use_tripos);
@@ -39,9 +37,7 @@ RbtVdwSF::RbtVdwSF(): m_use_4_8(true), m_use_tripos(false), m_rmax(1.5), m_ecut(
 }
 
 RbtVdwSF::~RbtVdwSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

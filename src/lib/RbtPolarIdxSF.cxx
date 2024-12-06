@@ -38,9 +38,7 @@ RbtPolarIdxSF::RbtPolarIdxSF(const RbtString& strName):
     AddParameter(_ATTR, m_bAttr);
     AddParameter(_THRESHOLD_POS, m_posThreshold);
     AddParameter(_THRESHOLD_NEG, m_negThreshold);
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
@@ -48,9 +46,7 @@ RbtPolarIdxSF::~RbtPolarIdxSF() {
     ClearReceptor();
     ClearLigand();
     ClearSolvent();
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
