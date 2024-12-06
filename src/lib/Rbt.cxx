@@ -175,9 +175,6 @@ RbtStringList Rbt::GetDirList(const RbtString& strDir, const RbtString& strFileP
 
 // Converts (comma)-delimited string of segment names to segment map
 RbtSegmentMap Rbt::ConvertStringToSegmentMap(const RbtString& strSegments, const RbtString& strDelimiter) {
-#ifdef _DEBUG
-    // cout << "ConvertStringToSegmentMap: " << strSegments << " delimiter=" << strDelimiter << endl;
-#endif  //_DEBUG
 
     RbtString::size_type nDelimiterSize = strDelimiter.size();
     RbtSegmentMap segmentMap;
@@ -190,9 +187,6 @@ RbtSegmentMap Rbt::ConvertStringToSegmentMap(const RbtString& strSegments, const
         // Even if no delimiter is present, we still need to extract the whole string
         do {
             iEnd = strSegments.find(strDelimiter, iBegin);
-#ifdef _DEBUG
-            // cout << strSegments.substr(iBegin, iEnd-iBegin) << endl;
-#endif  //_DEBUG
             segmentMap[strSegments.substr(iBegin, iEnd - iBegin)] = 0;
             iBegin = iEnd + nDelimiterSize;
         } while (iEnd != RbtString::npos);  // This is the check for delimiter not found

@@ -14,6 +14,8 @@
 
 #include <cmath>
 
+#include "RbtDebug.h"
+
 RbtDihedral::RbtDihedral(RbtAtom* pAtom1, RbtAtom* pAtom2, RbtAtom* pAtom3, RbtAtom* pAtom4, const prms& dihprms):
     m_pAtom1(pAtom1),
     m_pAtom2(pAtom2),
@@ -46,9 +48,7 @@ RbtString RbtDihedralSF::_CT("RbtDihedralSF");
 RbtString RbtDihedralSF::_IMPL_H_CORR("IMPL_H_CORR");
 
 RbtDihedralSF::RbtDihedralSF() {
-#ifdef _DEBUG
-    cout << _CT << " default constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " default constructor" << endl);
     // Add parameters
     AddParameter(_IMPL_H_CORR, false);
     m_spDihedralSource =
@@ -59,9 +59,7 @@ RbtDihedralSF::RbtDihedralSF() {
 }
 
 RbtDihedralSF::~RbtDihedralSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

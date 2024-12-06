@@ -12,6 +12,7 @@
 
 #include "RbtAromIdxSF.h"
 
+#include "RbtDebug.h"
 #include "RbtWorkSpace.h"
 
 // Static data members
@@ -42,18 +43,14 @@ RbtAromIdxSF::RbtAromIdxSF(const RbtString& strName):
     AddParameter(_DAMIN, m_DAMin);
     AddParameter(_DAMAX, m_DAMax);
     AddParameter(_THRESHOLD, m_threshold);
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(cout << _CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtAromIdxSF::~RbtAromIdxSF() {
     ClearReceptor();
     ClearLigand();
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(cout << _CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

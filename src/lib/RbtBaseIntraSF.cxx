@@ -11,23 +11,19 @@
  ***********************************************************************/
 
 #include "RbtBaseIntraSF.h"
-
+#include "RbtDebug.h"
 #include "RbtWorkSpace.h"
 
 // Static data members
 RbtString RbtBaseIntraSF::_CT("RbtBaseIntraSF");
 
 RbtBaseIntraSF::RbtBaseIntraSF(): m_zero(0.0) {
-#ifdef _DEBUG
-    cout << _CT << " default constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " default constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseIntraSF::~RbtBaseIntraSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -46,9 +42,7 @@ void RbtBaseIntraSF::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 2) {
             RbtModelPtr spLigand = GetWorkSpace()->GetModel(1);
             if (spLigand != m_spLigand) {
-#ifdef _DEBUG
-                cout << _CT << "::Update(): Ligand has been updated" << endl;
-#endif  //_DEBUG
+                DEBUG(_CT << "::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupScore();
                 // Retain the zero-point offset from the ligand model data if present

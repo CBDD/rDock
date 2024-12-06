@@ -13,6 +13,7 @@
 #include "RbtCavityGridSF.h"
 
 #include "RbtChromPositionRefData.h"
+#include "RbtDebug.h"
 #include "RbtLigandFlexData.h"
 #include "RbtReceptorFlexData.h"
 #include "RbtSolventFlexData.h"
@@ -33,16 +34,12 @@ RbtCavityGridSF::RbtCavityGridSF(const RbtString& strName):
     // Add parameters
     AddParameter(_RMAX, m_rMax);
     AddParameter(_QUADRATIC, m_bQuadratic);
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtCavityGridSF::~RbtCavityGridSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

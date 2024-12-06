@@ -12,6 +12,7 @@
 
 #include "RbtBaseBiMolTransform.h"
 
+#include "RbtDebug.h"
 #include "RbtWorkSpace.h"
 
 // Static data members
@@ -21,16 +22,12 @@ RbtString RbtBaseBiMolTransform::_CT("RbtBaseBiMolTransform");
 // Constructors/destructors
 RbtBaseBiMolTransform::RbtBaseBiMolTransform(const RbtString& strClass, const RbtString& strName):
     RbtBaseTransform(strClass, strName) {
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseBiMolTransform::~RbtBaseBiMolTransform() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -52,9 +49,7 @@ void RbtBaseBiMolTransform::Update(RbtSubject* theChangedSubject) {
         if (numModels >= 1) {
             RbtModelPtr spReceptor = pWorkSpace->GetModel(0);
             if (spReceptor != m_spReceptor) {
-#ifdef _DEBUG
-                cout << _CT << "::Update(): Receptor has been updated" << endl;
-#endif  //_DEBUG
+                DEBUG(_CT << "::Update(): Receptor has been updated" << endl);
                 m_spReceptor = spReceptor;
                 SetupReceptor();
             }
@@ -63,9 +58,7 @@ void RbtBaseBiMolTransform::Update(RbtSubject* theChangedSubject) {
         if (numModels >= 2) {
             RbtModelPtr spLigand = pWorkSpace->GetModel(1);
             if (spLigand != m_spLigand) {
-#ifdef _DEBUG
-                cout << _CT << "::Update(): Ligand has been updated" << endl;
-#endif  //_DEBUG
+                DEBUG(_CT << "::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupLigand();
             }

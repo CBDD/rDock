@@ -12,22 +12,20 @@
 
 #include "RbtConstSF.h"
 
+#include "RbtDebug.h"
+
 // Static data member for class type
 RbtString RbtConstSF::_CT("RbtConstSF");
 RbtString RbtConstSF::_SOLVENT_PENALTY("SOLVENT_PENALTY");
 
 RbtConstSF::RbtConstSF(const RbtString& strName): RbtBaseSF(_CT, strName), m_solventPenalty(0.5) {
     AddParameter(_SOLVENT_PENALTY, m_solventPenalty);
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtConstSF::~RbtConstSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

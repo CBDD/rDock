@@ -29,16 +29,13 @@ RbtAlignTransform::RbtAlignTransform(const RbtString& strName, const Config& con
     m_rand(Rbt::GetRbtRand()),
     m_totalSize(0),
     config{config} {
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+
+    DEBUG(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtAlignTransform::~RbtAlignTransform() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

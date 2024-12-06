@@ -12,6 +12,8 @@
 
 #include "RbtAtomFuncs.h"
 
+#include "RbtDebug.h"
+
 // DM 31 Oct 2000
 // Given a bond, determines if it is in a ring (cutdown version of ToSpin)
 RbtBool Rbt::FindCyclic(RbtBondPtr spBond, RbtAtomList& atomList, RbtBondList& bondList) {
@@ -54,9 +56,7 @@ RbtBool Rbt::FindCyclic(RbtBondPtr spBond, RbtAtomList& atomList, RbtBondList& b
                 // If this atom is first in the bond (bIter->second == true), get atom 2 ptr, else get atom 1 ptr
                 RbtAtomPtr spA2 = ((*bIter).second) ? pBnd->GetAtom2Ptr() : pBnd->GetAtom1Ptr();
                 if (spA2 == spAtom1) {
-#ifdef _DEBUG
-                    cout << spAtom1->GetFullAtomName() << " is cyclic" << endl;
-#endif  //_DEBUG
+                    DEBUG(spAtom1->GetFullAtomName() << " is cyclic" << endl);
                     return true;
                 } else if (!spA2->GetSelectionFlag()) {
                     // Mark the atom and bond as selected and add the atom to the pending list
@@ -95,18 +95,11 @@ RbtBool Rbt::ToSpin(RbtBondPtr spBond, RbtAtomList& atomList, RbtBondList& bondL
     spBond->SetSelectionFlag(true);
     pendingAtomList.push_back(spAtom2);
 
-#ifdef _DEBUG
-    // cout << "ToSpin: Bond ID=" << spBond->GetBondId() << endl;
-#endif  //_DEBUG
-
     // While we still have atoms to process
     while (!pendingAtomList.empty()) {
         // Take the last atom from the list and remove it
         RbtAtomPtr spA1 = pendingAtomList.back();
         pendingAtomList.pop_back();
-#ifdef _DEBUG
-        // cout << "ToSpin: Checking atom " << spA1->GetAtomId() << endl;
-#endif  //_DEBUG
 
         // Get the bonds this atom is in
         const RbtBondMap& bondMap = spA1->GetBondMap();
@@ -118,25 +111,16 @@ RbtBool Rbt::ToSpin(RbtBondPtr spBond, RbtAtomList& atomList, RbtBondList& bondL
             if (!pBnd->GetSelectionFlag()) {
                 // If this atom is first in the bond (bIter->second == true), get atom 2 ptr, else get atom 1 ptr
                 RbtAtomPtr spA2 = ((*bIter).second) ? pBnd->GetAtom2Ptr() : pBnd->GetAtom1Ptr();
-#ifdef _DEBUG
-                //	cout << "ToSpin: Checking bond " << spBnd->GetBondId() << " to atom " << spA2->GetAtomId() << endl;
-#endif  //_DEBUG
         // If we've got back to atom 1 of the bond passed into ToSpin, then the bond must be in a ring
         // so set the cyclic flag but don't consider this atom any further (we don't want to set the selection
         // flag otherwise we'd end up selecting the entire molecule).
                 if (spA2 == spAtom1) {
                     bIsCyclic = true;
-#ifdef _DEBUG
-                    // cout << "ToSpin: We've hit " << spAtom1->GetAtomId() << " so must be cyclic!!" << endl;
-#endif  //_DEBUG
                 } else if (!spA2->GetSelectionFlag()) {
                     // Mark the atom and bond as selected and add the atom to the pending list
                     spA2->SetSelectionFlag(true);
                     pBnd->SetSelectionFlag(true);
                     pendingAtomList.push_back(spA2);
-#ifdef _DEBUG
-                    //	  cout << "ToSpin: Adding atom " << spA2->GetAtomId() << " to the pending list" << endl;
-#endif  //_DEBUG
                 }
             }
         }
@@ -196,9 +180,6 @@ RbtAtomList Rbt::FindRing(RbtAtomPtr spAtom, RbtBondList& bondList) {
         // First replicate any partial rings whose head atom is at a ring branch point
         //(defined by having >1 unselected cyclic bond)
         RbtUInt nRings = partialRings.size();
-#ifdef _DEBUG
-        // cout << "FindRing: " << nRings << " rings prior to forking" << endl;
-#endif  //_DEBUG
 
         // Use indices rather than iterators, as we may be increasing the number of partial rings in the ring list
         //(Iterators are unstable if the container increases in size inside the loop)
@@ -213,17 +194,9 @@ RbtAtomList Rbt::FindRing(RbtAtomPtr spAtom, RbtBondList& bondList) {
             for (RbtBondMapIter bIter = cyclicBondMap.begin(); bIter != cyclicBondMap.end(); bIter++) {
                 if (!(*bIter).first->GetSelectionFlag()) nUnSelected++;
             }
-#ifdef _DEBUG
-            // cout << "FindRing: #Unselected cyclic bonds = " << nUnSelected << " for " << ringIter << " at atom " <<
-            // spHeadAtom->GetAtomId() << endl;
-#endif  //_DEBUG
 
             // Add a new copy of the partial ring for each unselected cyclic bond from this atom above the normal one
             for (RbtInt forkIter = 0; forkIter < (nUnSelected - 1); forkIter++) {
-#ifdef _DEBUG
-                // cout << "FindRing: Forking ring path " << ringIter << " at atom " << spHeadAtom->GetAtomId() <<
-                // endl;
-#endif  //_DEBUG
                 partialRings.push_back(partialRings[ringIter]);
             }
         }
@@ -242,15 +215,8 @@ RbtAtomList Rbt::FindRing(RbtAtomPtr spAtom, RbtBondList& bondList) {
                     RbtAtomPtr spA2 = Rbt::GetBondedAtomPtr(*bIter);
                     // We've hit atom 1 so this must be the smallest ring
                     if (spA2 == spAtom) {
-#ifdef _DEBUG
-                        // cout << "FindRing: Found seed atom " << spAtom->GetAtomId() << endl;
-#endif  //_DEBUG
                         return *rIter;
                     } else {
-#ifdef _DEBUG
-                        // cout << "FindRing: Adding atom " << spA2->GetAtomId() << " to " << spHeadAtom->GetAtomId()
-                        // << endl;
-#endif  //_DEBUG
                         (*rIter).push_back(spA2);
                         pBnd->SetSelectionFlag(true);
                         break;  // Break because we only want to add one atom to each head atom
