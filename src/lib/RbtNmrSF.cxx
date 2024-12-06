@@ -48,7 +48,7 @@ void RbtNmrSF::SetupReceptor() {
     RbtInt iTrace = GetTrace();
 
     // Create indexed grid for STD restraints penalty function
-    m_spGrid = CreateNonBondedGrid();
+    m_spGrid = CreateGrid<RbtNonBondedGrid>();
     // Fixed distance range used for indexing the relevant receptor atoms
     RbtDouble range = GetRange() + GetMaxError();
     RbtDockingSitePtr spDS = GetWorkSpace()->GetDockingSite();

@@ -109,9 +109,9 @@ void RbtPolarIdxSF::SetupReceptor() {
     RbtInt nCoords = GetReceptor()->GetNumSavedCoords() - 1;
     if (nCoords > 0) {
         RbtAtomList atomList = GetReceptor()->GetAtomList();
-        m_spPosGrid = CreateInteractionGrid();
+        m_spPosGrid = CreateGrid<RbtInteractionGrid>();
         m_recepPosList = CreateDonorInteractionCenters(atomList);
-        m_spNegGrid = CreateInteractionGrid();
+        m_spNegGrid = CreateGrid<RbtInteractionGrid>();
         m_recepNegList = CreateAcceptorInteractionCenters(atomList);
         for (RbtInt i = 1; i <= nCoords; i++) {
             if (iTrace > 0) {
@@ -133,8 +133,8 @@ void RbtPolarIdxSF::SetupReceptor() {
         }
     } else {
         RbtAtomList atomList = spDS->GetAtomList(GetReceptor()->GetAtomList(), 0.0, GetCorrectedRange());
-        m_spPosGrid = CreateInteractionGrid();
-        m_spNegGrid = CreateInteractionGrid();
+        m_spPosGrid = CreateGrid<RbtInteractionGrid>();
+        m_spNegGrid = CreateGrid<RbtInteractionGrid>();
         m_recepPosList = CreateDonorInteractionCenters(atomList);
         m_recepNegList = CreateAcceptorInteractionCenters(atomList);
 

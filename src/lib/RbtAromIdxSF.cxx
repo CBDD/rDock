@@ -94,8 +94,8 @@ void RbtAromIdxSF::SetupReceptor() {
     ClearReceptor();
     if (GetReceptor().Null()) return;
 
-    m_spAromGrid = CreateInteractionGrid();
-    m_spGuanGrid = CreateInteractionGrid();
+    m_spAromGrid = CreateGrid<RbtInteractionGrid>();
+    m_spGuanGrid = CreateGrid<RbtInteractionGrid>();
 
     RbtDouble idxIncr = GetParameter(_INCR);  // vdw Radius increment for indexing
     RbtDouble maxError = GetMaxError();
