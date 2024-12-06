@@ -39,59 +39,6 @@ RbtDouble RbtBaseIdxSF::GetBorder() const { return m_border; }
 
 void RbtBaseIdxSF::SetBorder(RbtDouble border) { SetParameter(_BORDER, border); }
 
-// DM 10 Apr 2002
-// I know, I know, grids should be templated to avoid the need for two different CreateGrid methods...
-RbtInteractionGridPtr RbtBaseIdxSF::CreateInteractionGrid() const {
-    // Create a grid covering the docking site
-    RbtDockingSitePtr spDS = GetWorkSpace()->GetDockingSite();
-    if (spDS.Null()) return RbtInteractionGridPtr();
-
-    // Extend grid by _BORDER, mainly to allow for the possibility of polar hydrogens
-    // falling outside of the docking site
-    RbtCoord minCoord = spDS->GetMinCoord() - m_border;
-    RbtCoord maxCoord = spDS->GetMaxCoord() + m_border;
-    RbtVector recepExtent = maxCoord - minCoord;
-    RbtVector gridStep(m_gridStep, m_gridStep, m_gridStep);
-    RbtUInt nX = int(recepExtent.x / gridStep.x) + 1;
-    RbtUInt nY = int(recepExtent.y / gridStep.y) + 1;
-    RbtUInt nZ = int(recepExtent.z / gridStep.z) + 1;
-    return RbtInteractionGridPtr(new RbtInteractionGrid(minCoord, gridStep, nX, nY, nZ));
-}
-
-RbtNonBondedGridPtr RbtBaseIdxSF::CreateNonBondedGrid() const {
-    // Create a grid covering the docking site
-    RbtDockingSitePtr spDS = GetWorkSpace()->GetDockingSite();
-    if (spDS.Null()) return RbtInteractionGridPtr();
-
-    // Extend grid by _BORDER, mainly to allow for the possibility of polar hydrogens
-    // falling outside of the docking site
-    RbtCoord minCoord = spDS->GetMinCoord() - m_border;
-    RbtCoord maxCoord = spDS->GetMaxCoord() + m_border;
-    RbtVector recepExtent = maxCoord - minCoord;
-    RbtVector gridStep(m_gridStep, m_gridStep, m_gridStep);
-    RbtUInt nX = int(recepExtent.x / gridStep.x) + 1;
-    RbtUInt nY = int(recepExtent.y / gridStep.y) + 1;
-    RbtUInt nZ = int(recepExtent.z / gridStep.z) + 1;
-    return RbtNonBondedGridPtr(new RbtNonBondedGrid(minCoord, gridStep, nX, nY, nZ));
-}
-
-RbtNonBondedHHSGridPtr RbtBaseIdxSF::CreateNonBondedHHSGrid() const {
-    // Create a grid covering the docking site
-    RbtDockingSitePtr spDS = GetWorkSpace()->GetDockingSite();
-    if (spDS.Null()) return RbtNonBondedHHSGridPtr();
-
-    // Extend grid by _BORDER, mainly to allow for the possibility of polar hydrogens
-    // falling outside of the docking site
-    RbtCoord minCoord = spDS->GetMinCoord() - m_border;
-    RbtCoord maxCoord = spDS->GetMaxCoord() + m_border;
-    RbtVector recepExtent = maxCoord - minCoord;
-    RbtVector gridStep(m_gridStep, m_gridStep, m_gridStep);
-    RbtUInt nX = int(recepExtent.x / gridStep.x) + 1;
-    RbtUInt nY = int(recepExtent.y / gridStep.y) + 1;
-    RbtUInt nZ = int(recepExtent.z / gridStep.z) + 1;
-    return RbtNonBondedHHSGridPtr(new RbtNonBondedHHSGrid(minCoord, gridStep, nX, nY, nZ));
-}
-
 RbtDouble RbtBaseIdxSF::GetMaxError() const {
     // maxError is half a grid diagonal. This is the tolerance we have to allow when indexing the receptor atoms on the
     // grid When retrieving the nearest neighbours to a ligand atom, we do the lookup on the nearest grid point to the

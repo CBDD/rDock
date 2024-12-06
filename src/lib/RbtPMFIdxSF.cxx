@@ -172,7 +172,7 @@ void RbtPMFIdxSF::SetupReceptor() {
         cout << _CT << "WARNING: no receptor defined. " << endl;
         return;
     } else {  // load PMFs from table files
-        theSurround = CreateNonBondedGrid();
+        theSurround = CreateGrid<RbtNonBondedGrid>();
         RbtDockingSitePtr spDS = GetWorkSpace()->GetDockingSite();
         RbtDouble range = GetRange() + GetMaxError();
         RbtAtomList atomList = spDS->GetAtomList(GetReceptor()->GetAtomList(), 0.0, GetCorrectedRange());
