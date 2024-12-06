@@ -117,7 +117,6 @@ void RbtPsfFileSink::Render() {
             bIter++;
             ostr << setw(8) << (*bIter)->GetAtom1Ptr()->GetAtomId() << setw(8) << (*bIter)->GetAtom2Ptr()->GetAtomId();
             bIter++;
-            ostr;
             AddLine(ostr.str());
         }
         // Remaining bonds on final incomplete line
@@ -127,7 +126,6 @@ void RbtPsfFileSink::Render() {
                 ostr << setw(8) << (*bIter)->GetAtom1Ptr()->GetAtomId() << setw(8)
                      << (*bIter)->GetAtom2Ptr()->GetAtomId();
             }
-            ostr;
             AddLine(ostr.str());
         }
 
