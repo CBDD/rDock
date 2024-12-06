@@ -17,13 +17,14 @@
 #define _RBTBASEIDXSF_H_
 
 #include <type_traits>
-#include "RbtBaseSF.h"
+
 #include "RbtBaseGrid.h"
-#include "RbtWorkSpace.h"
+#include "RbtBaseSF.h"
 #include "RbtDockingSite.h"
 #include "RbtInteractionGrid.h"
 #include "RbtNonBondedGrid.h"
 #include "RbtNonBondedHHSGrid.h"
+#include "RbtWorkSpace.h"
 
 class RbtBaseIdxSF: public virtual RbtBaseSF {
  public:
@@ -51,7 +52,8 @@ class RbtBaseIdxSF: public virtual RbtBaseSF {
     ///////////////////
     RbtBaseIdxSF();
 
-    template <class T> SmartPtr<T> CreateGrid() const;
+    template <class T>
+    SmartPtr<T> CreateGrid() const;
     RbtDouble GetMaxError() const;
     // DM 12 Apr 2002
     // Returns the maximum range of the scoring function,
