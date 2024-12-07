@@ -13,6 +13,7 @@
 #include <sstream>
 using std::ostringstream;
 
+#include "RbtDebug.h"
 #include "RbtFilter.h"
 #include "RbtParser.h"
 #include "RbtStringTokenIter.h"
@@ -32,10 +33,8 @@ RbtString RbtFilter::_CT("RbtFilter");
 // that contains the filter (filter = false) This is the most
 // common, so filter's value by default is false
 RbtFilter::RbtFilter(RbtString strfilter, RbtBool filter): RbtBaseObject(_CT, "Filter") {
-#ifdef _DEBUG
-    cout << _CT << " default constructor" << endl;
-#endif  //_DEBUG
-        //  RbtString filterfilen = GetParameter("_FILTER_FILE");
+    DEBUG_ERR(_CT << " default constructor" << endl);
+    //  RbtString filterfilen = GetParameter("_FILTER_FILE");
     SmartPtr<istream> filterfile;
     if (filter)  // filterfilen is the filter
         filterfile = new istringstream(strfilter.c_str());
@@ -75,9 +74,7 @@ RbtFilter::RbtFilter(RbtString strfilter, RbtBool filter): RbtBaseObject(_CT, "F
 }
 
 RbtFilter::~RbtFilter() {
-#ifdef _DEBUG
-    cout << _CT << "  destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "  destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -97,9 +94,7 @@ void RbtFilter::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 1) {
             RbtModelPtr spReceptor = GetWorkSpace()->GetModel(0);
             if (spReceptor != m_spReceptor) {
-#ifdef _DEBUG
-                cout << "RbtBaseInterSF::Update(): Receptor has been updated" << endl;
-#endif  //_DEBUG
+                DEBUG_ERR("RbtBaseInterSF::Update(): Receptor has been updated" << endl);
                 m_spReceptor = spReceptor;
                 SetupReceptor();
             }
@@ -108,9 +103,7 @@ void RbtFilter::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 2) {
             RbtModelPtr spLigand = GetWorkSpace()->GetModel(1);
             if (spLigand != m_spLigand) {
-#ifdef _DEBUG
-                cout << "RbtBaseInterSF::Update(): Ligand has been updated" << endl;
-#endif  //_DEBUG
+                DEBUG_ERR("RbtBaseInterSF::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupLigand();
             }

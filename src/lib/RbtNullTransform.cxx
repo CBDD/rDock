@@ -21,16 +21,12 @@ RbtString RbtNullTransform::_CT("RbtNullTransform");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtNullTransform::RbtNullTransform(const RbtString& strName): RbtBaseTransform(_CT, strName) {
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtNullTransform::~RbtNullTransform() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

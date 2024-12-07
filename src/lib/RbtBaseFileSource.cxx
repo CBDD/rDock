@@ -14,15 +14,10 @@
 
 #include <cstring>
 
+#include "RbtDebug.h"
 #include "RbtFileError.h"
 
 // Constructors
-// RbtBaseFileSource::RbtBaseFileSource(const char* fileName)
-//{
-//   m_strFileName = fileName;
-//   ClearCache();
-//   _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
-// }
 
 RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName): m_bFileOpen(false), m_bMultiRec(false) {
     m_strFileName = fileName;
@@ -134,9 +129,7 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
                     const char* cszRecDelim = m_strRecDelim.c_str();
                     RbtInt n = strlen(cszRecDelim);
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-#ifdef _DEBUG
-                        cout << m_szBuf << endl;
-#endif  //_DEBUG
+                        DEBUG_ERR(m_szBuf << endl);
                         m_lineRecs.push_back(m_szBuf);
                     }
                 }
@@ -172,9 +165,7 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0))
                         ;
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-#ifdef _DEBUG
-                        cout << m_szBuf << endl;
-#endif  //_DEBUG
+                        DEBUG_ERR(m_szBuf << endl);
                         m_lineRecs.push_back(m_szBuf);
                     }
                 }

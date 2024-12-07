@@ -17,6 +17,7 @@
 #include <iomanip>
 #include <queue>
 
+#include "RbtDebug.h"
 #include "RbtFileError.h"
 
 // Static data members
@@ -117,9 +118,7 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
         if (nrData[i] > threshold) stillToProcess.insert(i);
     }
 
-#ifdef _DEBUG
-    cout << stillToProcess.size() << " data points found higher than  " << threshold << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(stillToProcess.size() << " data points found higher than  " << threshold << endl);
 
     // Repeat while we still have data points to process
     while (!stillToProcess.empty()) {
@@ -135,10 +134,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
         float peakHeight = nrData[peakPos];
         toAddToPeak.push(iXYZ0);
         stillToProcess.erase(iter);
-
-#ifdef _DEBUG
-        // cout << "Seeding new peak at point " << iXYZ0 << endl;
-#endif  //_DEBUG
 
         // Repeat while the peak keeps growing
         while (!toAddToPeak.empty()) {
@@ -156,9 +151,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
             }
             // Add the point to the current peak
             currentPeak.insert(iXYZ0);
-#ifdef _DEBUG
-            // cout << "Popping point " << iXYZ0 << endl;
-#endif  //_DEBUG
 
             // Now check if any neighbours of the point can also be added to the queue
 
@@ -170,9 +162,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
                 if (iter != stillToProcess.end()) {
                     toAddToPeak.push(iXYZ1);
                     stillToProcess.erase(iter);
-#ifdef _DEBUG
-                    // cout << "Pushing X+1 point " << iXYZ1 << endl;
-#endif  //_DEBUG
                 }
             }
             // Is X-1 within range ?
@@ -183,9 +172,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
                 if (iter != stillToProcess.end()) {
                     toAddToPeak.push(iXYZ1);
                     stillToProcess.erase(iter);
-#ifdef _DEBUG
-                    // cout << "Pushing X-1 point " << iXYZ1 << endl;
-#endif  //_DEBUG
                 }
             }
             // Is Y+1 within range ?
@@ -196,9 +182,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
                 if (iter != stillToProcess.end()) {
                     toAddToPeak.push(iXYZ1);
                     stillToProcess.erase(iter);
-#ifdef _DEBUG
-                    // cout << "Pushing Y+1 point " << iXYZ1 << endl;
-#endif  //_DEBUG
                 }
             }
             // Is Y-1 within range ?
@@ -209,9 +192,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
                 if (iter != stillToProcess.end()) {
                     toAddToPeak.push(iXYZ1);
                     stillToProcess.erase(iter);
-#ifdef _DEBUG
-                    // cout << "Pushing Y-1 point " << iXYZ1 << endl;
-#endif  //_DEBUG
                 }
             }
             // Is Z+1 within range ?
@@ -222,9 +202,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
                 if (iter != stillToProcess.end()) {
                     toAddToPeak.push(iXYZ1);
                     stillToProcess.erase(iter);
-#ifdef _DEBUG
-                    // cout << "Pushing Z+1 point " << iXYZ1 << endl;
-#endif  //_DEBUG
                 }
             }
             // Is Z-1 within range ?
@@ -235,9 +212,6 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
                 if (iter != stillToProcess.end()) {
                     toAddToPeak.push(iXYZ1);
                     stillToProcess.erase(iter);
-#ifdef _DEBUG
-                    // cout << "Pushing Z-1 point " << iXYZ1 << endl;
-#endif  //_DEBUG
                 }
             }
         }
