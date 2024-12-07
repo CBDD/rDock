@@ -29,7 +29,6 @@ RbtAlignTransform::RbtAlignTransform(const RbtString& strName, const Config& con
     m_rand(Rbt::GetRbtRand()),
     m_totalSize(0),
     config{config} {
-
     DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }

@@ -157,7 +157,9 @@ void RbtMOL2FileSource::Parse(void) {
                 }
                 if (tt_file != tt_auto) {
                     DEBUG_ERR(_CT << ": INFO Disagreement in Tripos atom types for " << (*iter)->GetFullAtomName());
-                    DEBUG_ERR(": File=" << m_typer.Type2Str(tt_file) << "; Auto=" << m_typer.Type2Str(tt_auto) << endl);
+                    DEBUG_ERR(
+                        ": File=" << m_typer.Type2Str(tt_file) << "; Auto=" << m_typer.Type2Str(tt_auto) << endl
+                    );
                 }
             }
 

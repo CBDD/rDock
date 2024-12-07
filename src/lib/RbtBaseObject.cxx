@@ -42,7 +42,7 @@ RbtBaseObject::RbtBaseObject(const RbtString& strClass, const RbtString& strName
 // Should never get called
 RbtBaseObject::RbtBaseObject() {
     DEBUG_ERR("WARNING: " << _CT << " default constructor" << endl);
-        //_RBTOBJECTCOUNTER_CONSTR_(_CT);
+    //_RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseObject::~RbtBaseObject() {

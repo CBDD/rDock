@@ -111,9 +111,9 @@ RbtBool Rbt::ToSpin(RbtBondPtr spBond, RbtAtomList& atomList, RbtBondList& bondL
             if (!pBnd->GetSelectionFlag()) {
                 // If this atom is first in the bond (bIter->second == true), get atom 2 ptr, else get atom 1 ptr
                 RbtAtomPtr spA2 = ((*bIter).second) ? pBnd->GetAtom2Ptr() : pBnd->GetAtom1Ptr();
-        // If we've got back to atom 1 of the bond passed into ToSpin, then the bond must be in a ring
-        // so set the cyclic flag but don't consider this atom any further (we don't want to set the selection
-        // flag otherwise we'd end up selecting the entire molecule).
+                // If we've got back to atom 1 of the bond passed into ToSpin, then the bond must be in a ring
+                // so set the cyclic flag but don't consider this atom any further (we don't want to set the selection
+                // flag otherwise we'd end up selecting the entire molecule).
                 if (spA2 == spAtom1) {
                     bIsCyclic = true;
                 } else if (!spA2->GetSelectionFlag()) {

@@ -175,7 +175,6 @@ RbtStringList Rbt::GetDirList(const RbtString& strDir, const RbtString& strFileP
 
 // Converts (comma)-delimited string of segment names to segment map
 RbtSegmentMap Rbt::ConvertStringToSegmentMap(const RbtString& strSegments, const RbtString& strDelimiter) {
-
     RbtString::size_type nDelimiterSize = strDelimiter.size();
     RbtSegmentMap segmentMap;
 

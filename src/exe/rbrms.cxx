@@ -111,14 +111,18 @@ void EnumerateSymCoords::Setup() {
                 RbtSymBondPtr spSymBond(new RbtSymBond(*bIter, nSym, false));
                 m_symBondList.push_back(spSymBond);
                 bMatch = true;
-                DEBUG_ERR("Matched bond ID " << (*bIter)->GetBondId() << " for atoms " << atomId1 << ", " << atomId2
-                     << ", swap=false" << endl);
+                DEBUG_ERR(
+                    "Matched bond ID " << (*bIter)->GetBondId() << " for atoms " << atomId1 << ", " << atomId2
+                                       << ", swap=false" << endl
+                );
             } else if (((*bIter)->GetAtom1Ptr()->GetAtomId() == atomId2) && ((*bIter)->GetAtom2Ptr()->GetAtomId() == atomId1)) {
                 RbtSymBondPtr spSymBond(new RbtSymBond(*bIter, nSym, true));
                 m_symBondList.push_back(spSymBond);
                 bMatch = true;
-                DEBUG_ERR("Matched bond ID " << (*bIter)->GetBondId() << " for atoms " << atomId1 << ", " << atomId2
-                     << ", swap=true" << endl);
+                DEBUG_ERR(
+                    "Matched bond ID " << (*bIter)->GetBondId() << " for atoms " << atomId1 << ", " << atomId2
+                                       << ", swap=true" << endl
+                );
             }
         }
         if (bMatch == false) {

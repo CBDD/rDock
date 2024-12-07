@@ -317,7 +317,9 @@ void RbtMdlFileSource::SetupHybridState() {
                                                                                                 // substs
                         // This is the signed distance from the atom to the plane
                         RbtDouble dist = fabs(Rbt::DistanceFromPointToPlane(c0, p));
-                        DEBUG_ERR("Distance from " << (*iter)->GetAtomName() << " to plane of substituents=" << dist << endl);
+                        DEBUG_ERR(
+                            "Distance from " << (*iter)->GetAtomName() << " to plane of substituents=" << dist << endl
+                        );
                         if (dist > 0.1) {  // Not planar
                             DEBUG_ERR("Not planar" << endl);
                             break;
@@ -371,8 +373,10 @@ void RbtMdlFileSource::SetupTheRest() {
                     (*iter)->SetAtomicMass(elData.mass + (nMinVal - nValency) * elHData.mass);  // Adjust atomic mass
                     if (bIsSP3(*iter)) {
                         vdwRadius += dImplRadIncr;  // adjust vdw radius (for sp3 implicit atoms only)
-                        DEBUG_ERR("Adding " << nMinVal - nValency << " implicit hydrogens to " << (*iter)->GetAtomName()
-                             << endl);
+                        DEBUG_ERR(
+                            "Adding " << nMinVal - nValency << " implicit hydrogens to " << (*iter)->GetAtomName()
+                                      << endl
+                        );
                     }
                     break;
                 default:
@@ -430,8 +434,7 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
             cout << "Protonating neutral amine " << (*iter)->GetAtomName() << endl;
             //#endif //_DEBUG
             AddHydrogen(*iter);
-        }
-        else {
+        } else {
             DEBUG_ERR("Amine adjacent to pi-atom, not protonated: " << (*iter)->GetAtomName() << endl);
         }
     }
@@ -486,9 +489,10 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
                             cout << "Protonating neutral guanidine " << (*nsp2Iter)->GetAtomName() << endl;
                             //#endif //_DEBUG
                             AddHydrogen(*nsp2Iter);
-                        }
-                        else {
-                            DEBUG_ERR("Cyclic guanidine-like fragment - ignored " << (*nsp2Iter)->GetAtomName() << endl);
+                        } else {
+                            DEBUG_ERR(
+                                "Cyclic guanidine-like fragment - ignored " << (*nsp2Iter)->GetAtomName() << endl
+                            );
                         }
                         break;
 
@@ -499,19 +503,21 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
                         ntriIter = Rbt::FindAtom(bondedAtomList, bIsN_TRI);
                         nsp2BondedAtomList = Rbt::GetBondedAtomList(*nsp2Iter);
                         ntriBondedAtomList = Rbt::GetBondedAtomList(*ntriIter);
-                        DEBUG_ERR("Possible imidazole/amidine, found 1xN_SP2, 1xN_TRI bonded to "
-                             << (*iter)->GetAtomName() << endl);
-        // IMIDAZOLE - Check that the N_SP2 is bonded to 2 x C_SP2 and that
-        // the N_TRI is bonded to 2 x C_SP2 and 1 hydrogen
+                        DEBUG_ERR(
+                            "Possible imidazole/amidine, found 1xN_SP2, 1xN_TRI bonded to " << (*iter)->GetAtomName()
+                                                                                            << endl
+                        );
+                        // IMIDAZOLE - Check that the N_SP2 is bonded to 2 x C_SP2 and that
+                        // the N_TRI is bonded to 2 x C_SP2 and 1 hydrogen
                         if ((Rbt::GetNumAtoms(nsp2BondedAtomList, bIsC_SP2) == 2)
                             && (Rbt::GetNumAtoms(ntriBondedAtomList, bIsC_SP2) == 2)
                             && (Rbt::GetNumAtoms(ntriBondedAtomList, Rbt::isAtomicNo_eq(1)) == 1)) {
                             DEBUG_ERR("Possible imidazole, bonding requirements for N_SP2 and N_TRI met" << endl);
-        // Now check if any of the atoms bonded to the N_TRI are 1-2 connected to any
-        // of the atoms bonded to the N_SP2. If so, it is a 5-membered ring
-        // DM 25 Jul 2002 - also check whether the atoms are bridgeheads or not
-        // We don't want to protonate imidazoles which are part of larger fused ring systems
-        //(can have very different pKa's)
+                            // Now check if any of the atoms bonded to the N_TRI are 1-2 connected to any
+                            // of the atoms bonded to the N_SP2. If so, it is a 5-membered ring
+                            // DM 25 Jul 2002 - also check whether the atoms are bridgeheads or not
+                            // We don't want to protonate imidazoles which are part of larger fused ring systems
+                            //(can have very different pKa's)
                             RbtAtomList atoms12Conn;
                             for (RbtAtomListConstIter iter2 = ntriBondedAtomList.begin();
                                  iter2 != ntriBondedAtomList.end();
@@ -527,12 +533,10 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
                                 if (atoms12Conn.size() == 1) {  // Imidazole!!
                                     cout << "Protonating neutral imidazole " << (*nsp2Iter)->GetAtomName() << endl;
                                     AddHydrogen(*nsp2Iter);
-                                }
-                                else {
+                                } else {
                                     DEBUG_ERR("Fused imidazole - ignored " << (*nsp2Iter)->GetAtomName() << endl);
                                 }
-                            }
-                            else {
+                            } else {
                                 DEBUG_ERR("Not a 5-membered ring" << endl);
                             }
                         }
@@ -542,8 +546,7 @@ void RbtMdlFileSource::SetupPosIonisableGroups() {
                             cout << "Protonating neutral amidine " << (*nsp2Iter)->GetAtomName() << endl;
                             //#endif //_DEBUG
                             AddHydrogen(*nsp2Iter);
-                        }
-                        else {
+                        } else {
                             DEBUG_ERR("Bonding requirements for N_SP2 and N_TRI not met" << endl);
                         }
                         break;
@@ -762,8 +765,10 @@ void RbtMdlFileSource::SetupNSP3Plus() {
         (*iter)->SetGroupCharge(0.0);                        // Neutralise the nitrogen
         for (RbtAtomListIter hIter = hbdAtomList.begin(); hIter != hbdAtomList.end(); hIter++) {
             (*hIter)->SetGroupCharge(pCharge);  // Charge up the hydrogens
-            DEBUG_ERR("Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
-                 << (*hIter)->GetAtomName() << endl);
+            DEBUG_ERR(
+                "Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
+                                          << (*hIter)->GetAtomName() << endl
+            );
         }
     }
 }
@@ -814,7 +819,9 @@ void RbtMdlFileSource::SetupNSP2Plus() {
         if (csp2Iter != csp2AtomList.end()) {
             // Now add the hydrogens on the (1 or 2) N_TRI atoms
             RbtAtomList ntriAtomList = Rbt::GetAtomList(Rbt::GetBondedAtomList(*csp2Iter), bIsN_TRI);
-            DEBUG_ERR("Found " << ntriAtomList.size() << " nitrogens bonded to " << (*csp2Iter)->GetAtomName() << endl);
+            DEBUG_ERR(
+                "Found " << ntriAtomList.size() << " nitrogens bonded to " << (*csp2Iter)->GetAtomName() << endl
+            );
             for (RbtAtomListConstIter nIter = ntriAtomList.begin(); nIter != ntriAtomList.end(); nIter++) {
                 RbtAtomList hAtomList = Rbt::GetAtomList(Rbt::GetBondedAtomList(*nIter), bIsH);
                 DEBUG_ERR("Found " << hAtomList.size() << " hydrogens bonded to " << (*nIter)->GetAtomName() << endl);
@@ -832,8 +839,10 @@ void RbtMdlFileSource::SetupNSP2Plus() {
             (*iter)->SetGroupCharge(0.0);  // N_SP2+
             for (RbtAtomListIter hIter = hbdAtomList.begin(); hIter != hbdAtomList.end(); hIter++) {
                 (*hIter)->SetGroupCharge(pCharge);  // H
-                DEBUG_ERR("Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
-                     << (*hIter)->GetAtomName() << endl);
+                DEBUG_ERR(
+                    "Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
+                                              << (*hIter)->GetAtomName() << endl
+                );
             }
         }
     }
@@ -877,8 +886,10 @@ void RbtMdlFileSource::SetupOTRIMinus() {
             RbtDouble pCharge = -nCharge / (oAtomList.size());  // Partial charge
             for (RbtAtomListIter oIter = oAtomList.begin(); oIter != oAtomList.end(); oIter++) {
                 (*oIter)->SetGroupCharge(pCharge);  // Charge up the oxygens
-                DEBUG_ERR("Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
-                     << (*oIter)->GetAtomName() << endl);
+                DEBUG_ERR(
+                    "Transferring charge of " << pCharge << " from " << (*iter)->GetAtomName() << " to "
+                                              << (*oIter)->GetAtomName() << endl
+                );
             }
         }
     }
@@ -955,8 +966,10 @@ void RbtMdlFileSource::RemoveNonPolarHydrogens() {
     }
 #ifdef _DEBUG
     for (RbtBondListConstIter bIter = m_bondList.begin(); bIter != m_bondList.end(); bIter++) {
-        DEBUG_ERR("Bond ID=" << (*bIter)->GetBondId() << " (" << (*bIter)->GetAtom1Ptr()->GetAtomName() << "-"
-             << (*bIter)->GetAtom2Ptr()->GetAtomName() << ")" << endl);
+        DEBUG_ERR(
+            "Bond ID=" << (*bIter)->GetBondId() << " (" << (*bIter)->GetAtom1Ptr()->GetAtomName() << "-"
+                       << (*bIter)->GetAtom2Ptr()->GetAtomName() << ")" << endl
+        );
     }
 #endif  //_DEBUG
 }

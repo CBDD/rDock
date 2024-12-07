@@ -50,7 +50,7 @@ void RbtPMFDirSource::ReadFiles(
         // when file has no .pmf extension, skip. Also check for existence and perm
         if (string::npos != theExtIdx && !stat(theFileName.c_str(), &fStat) && S_ISREG(fStat.st_mode)) {
             DEBUG_ERR(_CT << " Processing: " << theFileStr << endl);
-        // get rid of .pmf and put it into the vector that will be used later to figure out types
+            // get rid of .pmf and put it into the vector that will be used later to figure out types
             aNameVect->push_back(theFileStr.erase(theFileStr.find_last_of("."), 4));
             inFile.open(theFileName.c_str(), ifstream::in);
             // read file contents into vector
@@ -74,8 +74,7 @@ void RbtPMFDirSource::ReadFiles(
             cout << theFileStr.substr(0, 2) << " " << theFileStr.substr(2, 2) << endl;
 #endif                                                               // GETJUNK
             theStrData.erase(theStrData.begin(), theStrData.end());  // delete vector after parsing
-        }
-        else {
+        } else {
             DEBUG_ERR(_CT << " Skipping file: " << theFileName << endl);
         }
         theFileName.erase();

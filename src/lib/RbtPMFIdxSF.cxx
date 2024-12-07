@@ -194,9 +194,7 @@ void RbtPMFIdxSF::SetupLigand() {
     std::copy(theLigandList.begin(), theLigandList.end(), std::back_inserter(theLigandRList));
 }
 
-void RbtPMFIdxSF::SetupScore() {
-    DEBUG_ERR(_CT << " PMF SetupScore" << endl);
-}
+void RbtPMFIdxSF::SetupScore() { DEBUG_ERR(_CT << " PMF SetupScore" << endl); }
 
 RbtDouble RbtPMFIdxSF::RawScore() const {
     //	return 0.0;

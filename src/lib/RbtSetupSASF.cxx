@@ -33,9 +33,7 @@ void RbtSetupSASF::SetupReceptor() {
     DEBUG_ERR(_CT << "::SetupReceptor(): #ATOMS = " << theReceptorList.size() << endl);
 }
 
-void RbtSetupSASF::SetupScore() {
-    DEBUG_ERR(_CT << " SetupScore                    <--------" << endl);
-}
+void RbtSetupSASF::SetupScore() { DEBUG_ERR(_CT << " SetupScore                    <--------" << endl); }
 
 void RbtSetupSASF::SetupLigand() {
     DEBUG_ERR(_CT << " SetupLigand                   <--------" << endl);
