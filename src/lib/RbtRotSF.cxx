@@ -21,12 +21,12 @@ RbtRotSF::RbtRotSF(const RbtString& strName): RbtBaseSF(_CT, strName), nRot(0), 
     // Add parameters
     AddParameter(_INCNH3, bIncNH3);
     AddParameter(_INCOH, bIncOH);
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtRotSF::~RbtRotSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

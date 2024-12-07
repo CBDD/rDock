@@ -17,7 +17,7 @@ RbtSubject::RbtSubject() { _RBTOBJECTCOUNTER_CONSTR_("RbtSubject"); }
 
 // Destructor - notify observers of impending destruction
 RbtSubject::~RbtSubject() {
-    DEBUG("RbtSubject::~RbtSubject: Notifying observers of impending destruction" << endl);
+    DEBUG_ERR("RbtSubject::~RbtSubject: Notifying observers of impending destruction" << endl);
     // We need to iterate using a while loop because call to Deleted will trigger a call back to Detach,
     // reducing the size of m_observers, hence invalidating a conventional iterator
     while (m_observers.size() > 0) {
@@ -36,7 +36,7 @@ void RbtSubject::Attach(RbtObserver* pObserver) {
         throw RbtBadArgument(_WHERE_, "RbtSubject::Attach(): pObserver is already attached to this subject");
     } else {
         m_observers.push_back(pObserver);
-        DEBUG("RbtSubject::Attach: Attaching new observer; #observers=" << m_observers.size() << endl);
+        DEBUG_ERR("RbtSubject::Attach: Attaching new observer; #observers=" << m_observers.size() << endl);
     }
 }
 
@@ -46,12 +46,12 @@ void RbtSubject::Detach(RbtObserver* pObserver) {
         throw RbtBadArgument(_WHERE_, "RbtSubject::Detach(): pObserver not attached to this subject");
     } else {
         m_observers.erase(iter);
-        DEBUG("RbtSubject::Detach: Detaching observer; #observers=" << m_observers.size() << endl);
+        DEBUG_ERR("RbtSubject::Detach: Detaching observer; #observers=" << m_observers.size() << endl);
     }
 }
 
 void RbtSubject::Notify() {
-    DEBUG("RbtSubject::Notify: Notifying observers of change of state" << endl);
+    DEBUG_ERR("RbtSubject::Notify: Notifying observers of change of state" << endl);
     for (RbtObserverListIter iter = m_observers.begin(); iter != m_observers.end(); iter++) {
         (*iter)->Update(this);
     }

@@ -22,12 +22,12 @@ RbtString RbtBaseUniMolTransform::_CT("RbtBaseUniMolTransform");
 // Constructors/destructors
 RbtBaseUniMolTransform::RbtBaseUniMolTransform(const RbtString& strClass, const RbtString& strName):
     RbtBaseTransform(strClass, strName) {
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseUniMolTransform::~RbtBaseUniMolTransform() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -46,7 +46,7 @@ void RbtBaseUniMolTransform::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 2) {
             RbtModelPtr spLigand = GetWorkSpace()->GetModel(1);
             if (spLigand != m_spLigand) {
-                DEBUG(_CT << "::Update(): Ligand has been updated" << endl);
+                DEBUG_ERR(_CT << "::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupTransform();
             }

@@ -24,13 +24,13 @@ RbtString RbtBaseTransform::_CT("RbtBaseTransform");
 RbtBaseTransform::RbtBaseTransform(const RbtString& strClass, const RbtString& strName):
     RbtBaseObject(strClass, strName),
     m_parent(NULL) {
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseTransform::~RbtBaseTransform() {
     Orphan();  // Remove object from parent aggregate
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -76,7 +76,7 @@ RbtBaseTransform* RbtBaseTransform::GetParentTransform() const { return m_parent
 // Force removal from the parent aggregate
 void RbtBaseTransform::Orphan() {
     if (m_parent) {
-        DEBUG("RbtBaseTransform::Orphan(): Removing " << GetName() << " from " << m_parent->GetName() << endl);
+        DEBUG_ERR("RbtBaseTransform::Orphan(): Removing " << GetName() << " from " << m_parent->GetName() << endl);
         m_parent->Remove(this);
     }
 }

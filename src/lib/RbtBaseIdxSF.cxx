@@ -21,7 +21,7 @@ RbtString RbtBaseIdxSF::_GRIDSTEP("GRIDSTEP");
 RbtString RbtBaseIdxSF::_BORDER("BORDER");
 
 RbtBaseIdxSF::RbtBaseIdxSF(): m_gridStep(0.5), m_border(1.0) {
-    DEBUG(_CT << " default constructor" << endl);
+    DEBUG_ERR(_CT << " default constructor" << endl);
     // Add parameters
     AddParameter(_GRIDSTEP, m_gridStep);
     AddParameter(_BORDER, m_border);

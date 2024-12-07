@@ -43,14 +43,14 @@ RbtAromIdxSF::RbtAromIdxSF(const RbtString& strName):
     AddParameter(_DAMIN, m_DAMin);
     AddParameter(_DAMAX, m_DAMax);
     AddParameter(_THRESHOLD, m_threshold);
-    DEBUG(cout << _CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtAromIdxSF::~RbtAromIdxSF() {
     ClearReceptor();
     ClearLigand();
-    DEBUG(cout << _CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

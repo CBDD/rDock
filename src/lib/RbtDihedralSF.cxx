@@ -48,7 +48,7 @@ RbtString RbtDihedralSF::_CT("RbtDihedralSF");
 RbtString RbtDihedralSF::_IMPL_H_CORR("IMPL_H_CORR");
 
 RbtDihedralSF::RbtDihedralSF() {
-    DEBUG(_CT << " default constructor" << endl);
+    DEBUG_ERR(_CT << " default constructor" << endl);
     // Add parameters
     AddParameter(_IMPL_H_CORR, false);
     m_spDihedralSource =
@@ -59,7 +59,7 @@ RbtDihedralSF::RbtDihedralSF() {
 }
 
 RbtDihedralSF::~RbtDihedralSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

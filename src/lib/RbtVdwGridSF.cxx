@@ -26,12 +26,12 @@ RbtVdwGridSF::RbtVdwGridSF(const RbtString& strName): RbtBaseSF(_CT, strName), m
     // Add parameters
     AddParameter(_GRID, ".grd");
     AddParameter(_SMOOTHED, m_bSmoothed);
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtVdwGridSF::~RbtVdwGridSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

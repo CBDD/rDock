@@ -27,12 +27,12 @@ RbtString RbtTetherSF::_REFERENCE_FILE("REFERENCE_FILE");
 RbtTetherSF::RbtTetherSF(const RbtString& strName): RbtBaseSF(_CT, strName) {
     // Add parameters It gets the right name in SetupReceptor
     AddParameter(_REFERENCE_FILE, "_reference.sd");
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtTetherSF::~RbtTetherSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -78,7 +78,7 @@ void RbtTetherSF::SetupLigand() {
         );
 
     m_ligAtomList = GetLigand()->GetAtomList();
-    DEBUG(_CT << "::SetupLigand(): #ATOMS = " << m_ligAtomList.size() << endl);
+    DEBUG_ERR(_CT << "::SetupLigand(): #ATOMS = " << m_ligAtomList.size() << endl);
 }
 
 void RbtTetherSF::SetupScore() {

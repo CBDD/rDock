@@ -36,12 +36,12 @@ const RbtSimplexTransform::Config
 RbtSimplexTransform::RbtSimplexTransform(const RbtString& strName, const Config& config):
     RbtBaseBiMolTransform(_CT, strName),
     config{config} {
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtSimplexTransform::~RbtSimplexTransform() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

@@ -225,7 +225,7 @@ void RbtBaseMolecularFileSource::RemoveAtom(RbtAtomPtr spAtom) {
 
     // and then remove them
     for (auto bIter: bondIterators) {
-        DEBUG("Removing bond #" << (*bIter)->GetBondId() << " (" << (*bIter)->GetAtom1Ptr()->GetAtomName() << "-"
+        DEBUG_ERR("Removing bond #" << (*bIter)->GetBondId() << " (" << (*bIter)->GetAtom1Ptr()->GetAtomName() << "-"
              << (*bIter)->GetAtom2Ptr()->GetAtomName() << ")" << endl);
         m_bondList.erase(bIter);
     }
@@ -236,7 +236,7 @@ void RbtBaseMolecularFileSource::RemoveAtom(RbtAtomPtr spAtom) {
     // RbtAtomListIter aIter = Rbt::FindAtom(m_atomList,std::bind2nd(Rbt::isAtomPtr_eq(),spAtom));
     RbtAtomListIter aIter = Rbt::FindAtom(m_atomList, std::bind2nd(Rbt::isAtom_eq(), spAtom));
     if (aIter != m_atomList.end()) {
-        DEBUG("Removing atom #" << (*aIter)->GetAtomId() << ", " << (*aIter)->GetAtomName() << endl);
+        DEBUG_ERR("Removing atom #" << (*aIter)->GetAtomId() << ", " << (*aIter)->GetAtomName() << endl);
         m_atomList.erase(aIter);  // Erase the atom
     }
 }
@@ -350,7 +350,7 @@ void RbtBaseMolecularFileSource::SetupPartialIonicGroups(RbtAtomList& atoms, Rbt
         RbtStringList mandAtoms = Rbt::ConvertDelimitedStringToList(mandatory);
         RbtUInt nPresent = Rbt::GetNumMatchingAtoms(atoms, mandAtoms);
         if (nPresent != mandAtoms.size()) {
-            DEBUG("INFO SetupPartialIonicGroups: Only " << nPresent << " out of " << mandAtoms.size()
+            DEBUG_ERR("INFO SetupPartialIonicGroups: Only " << nPresent << " out of " << mandAtoms.size()
                  << " mandatory atoms present in atom list headed by " << leadAtom->GetFullAtomName() << endl);
             return;
         }
@@ -361,7 +361,7 @@ void RbtBaseMolecularFileSource::SetupPartialIonicGroups(RbtAtomList& atoms, Rbt
         RbtStringList forbAtoms = Rbt::ConvertDelimitedStringToList(forbidden);
         RbtInt nPresent = Rbt::GetNumMatchingAtoms(atoms, forbAtoms);
         if (nPresent > 0) {
-            DEBUG("INFO SetupPartialIonicGroups: " << nPresent << " forbidden atoms present in atom list headed by "
+            DEBUG_ERR("INFO SetupPartialIonicGroups: " << nPresent << " forbidden atoms present in atom list headed by "
                  << leadAtom->GetFullAtomName() << endl);
             return;
         }
@@ -371,13 +371,13 @@ void RbtBaseMolecularFileSource::SetupPartialIonicGroups(RbtAtomList& atoms, Rbt
     for (RbtStringListConstIter aIter = atList.begin(); aIter != atList.end(); aIter++) {
         if (*aIter != "") {
             RbtDouble partialCharge(spParamSource->GetParameterValue(*aIter));  // Get the partial charge value
-            DEBUG(endl << "Trying to match " << *aIter << endl);
+            DEBUG_ERR(endl << "Trying to match " << *aIter << endl);
             // Find the atoms which match the specifier string
             RbtAtomList selectedAtoms = Rbt::GetMatchingAtomList(atoms, *aIter);
             // Now we've got the matching atoms, set the group charge on each atom
             for (RbtAtomListIter iter = selectedAtoms.begin(); iter != selectedAtoms.end(); iter++) {
                 (*iter)->SetGroupCharge(partialCharge);
-                DEBUG("INFO Setting group charge on " << (*iter)->GetFullAtomName() << " to " << partialCharge
+                DEBUG_ERR("INFO Setting group charge on " << (*iter)->GetFullAtomName() << " to " << partialCharge
                      << endl);
             }
         }

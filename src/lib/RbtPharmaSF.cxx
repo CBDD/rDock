@@ -33,12 +33,12 @@ RbtPharmaSF::RbtPharmaSF(const RbtString& strName): RbtBaseSF(_CT, strName), m_n
     AddParameter(_NOPT, m_nopt);
     AddParameter(_WRITE_ERRORS, m_bWriteErrors);
     SetTrace(1);  // Provide a bit of debug output by default
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtPharmaSF::~RbtPharmaSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

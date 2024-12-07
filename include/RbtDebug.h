@@ -71,7 +71,7 @@ extern RbtObjectCounterMap theObjectCounterMap;
         do {                \
             std::cout << x; \
         } while (0)
-    #define DEBUG(x)    \
+    #define DEBUG_ERR(x)    \
         do {                \
             std::cerr << x; \
         } while (0)
@@ -79,7 +79,7 @@ extern RbtObjectCounterMap theObjectCounterMap;
     #define DEBUG_OUT(x) \
         do {             \
         } while (0)
-    #define DEBUG(x) \
+    #define DEBUG_ERR(x) \
         do {             \
         } while (0)
 #endif

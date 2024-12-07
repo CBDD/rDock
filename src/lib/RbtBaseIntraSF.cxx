@@ -18,12 +18,12 @@
 RbtString RbtBaseIntraSF::_CT("RbtBaseIntraSF");
 
 RbtBaseIntraSF::RbtBaseIntraSF(): m_zero(0.0) {
-    DEBUG(_CT << " default constructor" << endl);
+    DEBUG_ERR(_CT << " default constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseIntraSF::~RbtBaseIntraSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -42,7 +42,7 @@ void RbtBaseIntraSF::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 2) {
             RbtModelPtr spLigand = GetWorkSpace()->GetModel(1);
             if (spLigand != m_spLigand) {
-                DEBUG(_CT << "::Update(): Ligand has been updated" << endl);
+                DEBUG_ERR(_CT << "::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupScore();
                 // Retain the zero-point offset from the ligand model data if present

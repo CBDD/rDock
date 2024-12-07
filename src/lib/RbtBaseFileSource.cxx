@@ -129,7 +129,7 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
                     const char* cszRecDelim = m_strRecDelim.c_str();
                     RbtInt n = strlen(cszRecDelim);
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-                        DEBUG(m_szBuf << endl);
+                        DEBUG_ERR(m_szBuf << endl);
                         m_lineRecs.push_back(m_szBuf);
                     }
                 }
@@ -165,7 +165,7 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0))
                         ;
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-                        DEBUG(m_szBuf << endl);
+                        DEBUG_ERR(m_szBuf << endl);
                         m_lineRecs.push_back(m_szBuf);
                     }
                 }

@@ -56,7 +56,7 @@ RbtBool Rbt::FindCyclic(RbtBondPtr spBond, RbtAtomList& atomList, RbtBondList& b
                 // If this atom is first in the bond (bIter->second == true), get atom 2 ptr, else get atom 1 ptr
                 RbtAtomPtr spA2 = ((*bIter).second) ? pBnd->GetAtom2Ptr() : pBnd->GetAtom1Ptr();
                 if (spA2 == spAtom1) {
-                    DEBUG(spAtom1->GetFullAtomName() << " is cyclic" << endl);
+                    DEBUG_ERR(spAtom1->GetFullAtomName() << " is cyclic" << endl);
                     return true;
                 } else if (!spA2->GetSelectionFlag()) {
                     // Mark the atom and bond as selected and add the atom to the pending list

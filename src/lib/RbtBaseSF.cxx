@@ -29,7 +29,7 @@ RbtBaseSF::RbtBaseSF(const RbtString& strClass, const RbtString& strName):
     m_parent(NULL),
     m_weight(1.0),
     m_range(10.0) {
-    DEBUG(_CT << " parameterised constructor for " << strClass << endl);
+    DEBUG_ERR(_CT << " parameterised constructor for " << strClass << endl);
     // Add parameters
     AddParameter(_WEIGHT, m_weight);
     AddParameter(_RANGE, m_range);
@@ -39,13 +39,13 @@ RbtBaseSF::RbtBaseSF(const RbtString& strClass, const RbtString& strName):
 // Dummy default constructor for virtual base subclasses
 // Should never get called
 RbtBaseSF::RbtBaseSF() {
-    DEBUG("WARNING: " << _CT << " default constructor" << endl);
+    DEBUG_ERR("WARNING: " << _CT << " default constructor" << endl);
     //_RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseSF::~RbtBaseSF() {
     Orphan();  // Remove object from parent aggregate
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -124,7 +124,7 @@ RbtBaseSF* RbtBaseSF::GetParentSF() const { return m_parent; }
 // Force removal from the parent aggregate
 void RbtBaseSF::Orphan() {
     if (m_parent) {
-        DEBUG(_CT << "::Orphan(): Removing " << GetName() << " from " << m_parent->GetName() << endl);
+        DEBUG_ERR(_CT << "::Orphan(): Removing " << GetName() << " from " << m_parent->GetName() << endl);
         m_parent->Remove(this);
     }
 }

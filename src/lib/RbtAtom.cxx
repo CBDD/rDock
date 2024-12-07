@@ -825,11 +825,11 @@ void Rbt::RemoveZwitterions(RbtAtomList& atomList) {
     // Now we can safely neutralise the 1-2 and 1-3 atoms
     for (RbtAtomListIter iter = cationicAtomList.begin(); iter != c14begin; iter++) {
         (*iter)->SetGroupCharge(0.0);
-        DEBUG("RemoveZwitterions: Neutralising cation " << (*iter)->GetFullAtomName() << endl);
+        DEBUG_ERR("RemoveZwitterions: Neutralising cation " << (*iter)->GetFullAtomName() << endl);
     }
 
     for (RbtAtomListIter iter = anionicAtomList.begin(); iter != a14begin; iter++) {
         (*iter)->SetGroupCharge(0.0);
-        DEBUG("RemoveZwitterions: Neutralising anion " << (*iter)->GetFullAtomName() << endl);
+        DEBUG_ERR("RemoveZwitterions: Neutralising anion " << (*iter)->GetFullAtomName() << endl);
     }
 }

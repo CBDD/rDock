@@ -33,7 +33,7 @@ RbtString RbtFilter::_CT("RbtFilter");
 // that contains the filter (filter = false) This is the most
 // common, so filter's value by default is false
 RbtFilter::RbtFilter(RbtString strfilter, RbtBool filter): RbtBaseObject(_CT, "Filter") {
-    DEBUG(_CT << " default constructor" << endl);
+    DEBUG_ERR(_CT << " default constructor" << endl);
     //  RbtString filterfilen = GetParameter("_FILTER_FILE");
     SmartPtr<istream> filterfile;
     if (filter)  // filterfilen is the filter
@@ -74,7 +74,7 @@ RbtFilter::RbtFilter(RbtString strfilter, RbtBool filter): RbtBaseObject(_CT, "F
 }
 
 RbtFilter::~RbtFilter() {
-    DEBUG(_CT << "  destructor" << endl);
+    DEBUG_ERR(_CT << "  destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -94,7 +94,7 @@ void RbtFilter::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 1) {
             RbtModelPtr spReceptor = GetWorkSpace()->GetModel(0);
             if (spReceptor != m_spReceptor) {
-                DEBUG("RbtBaseInterSF::Update(): Receptor has been updated" << endl);
+                DEBUG_ERR("RbtBaseInterSF::Update(): Receptor has been updated" << endl);
                 m_spReceptor = spReceptor;
                 SetupReceptor();
             }
@@ -103,7 +103,7 @@ void RbtFilter::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 2) {
             RbtModelPtr spLigand = GetWorkSpace()->GetModel(1);
             if (spLigand != m_spLigand) {
-                DEBUG("RbtBaseInterSF::Update(): Ligand has been updated" << endl);
+                DEBUG_ERR("RbtBaseInterSF::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupLigand();
             }

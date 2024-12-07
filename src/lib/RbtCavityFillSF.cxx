@@ -23,12 +23,12 @@ RbtString RbtCavityFillSF::_CT("RbtCavityFillSF");
 // implicit constructor for RbtBaseInterSF is called second
 RbtCavityFillSF::RbtCavityFillSF(const RbtString& strName): RbtBaseSF(_CT, strName) {
     // Add parameters
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtCavityFillSF::~RbtCavityFillSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

@@ -15,32 +15,32 @@
 RbtString RbtSetupSASF::_CT("RbtSetupSASF");
 
 RbtSetupSASF::RbtSetupSASF(const RbtString& strName): RbtBaseSF(_CT, strName) {
-    DEBUG(_CT << "parameterized constructor      <--------" << endl);
+    DEBUG_ERR(_CT << "parameterized constructor      <--------" << endl);
     Disable();
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtSetupSASF::~RbtSetupSASF() {
-    DEBUG(_CT << " destructor                    <--------" << endl);
+    DEBUG_ERR(_CT << " destructor                    <--------" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
 void RbtSetupSASF::SetupReceptor() {
-    DEBUG(_CT << " SetupReceptor                 <--------" << endl);
+    DEBUG_ERR(_CT << " SetupReceptor                 <--------" << endl);
     // get receptor atoms
     // theReceptorList = Rbt::GetAtomList(GetReceptor()->GetAtomList(),std::not1(Rbt::isAtomicNo_eq(1)));
     theReceptorList = GetReceptor()->GetAtomList();
-    DEBUG(_CT << "::SetupReceptor(): #ATOMS = " << theReceptorList.size() << endl);
+    DEBUG_ERR(_CT << "::SetupReceptor(): #ATOMS = " << theReceptorList.size() << endl);
 }
 
 void RbtSetupSASF::SetupScore() {
-    DEBUG(_CT << " SetupScore                    <--------" << endl);
+    DEBUG_ERR(_CT << " SetupScore                    <--------" << endl);
 }
 
 void RbtSetupSASF::SetupLigand() {
-    DEBUG(_CT << " SetupLigand                   <--------" << endl);
+    DEBUG_ERR(_CT << " SetupLigand                   <--------" << endl);
     theLigandList = GetLigand()->GetAtomList();
-    DEBUG(_CT << "::SetupLigand(): #ATOMS = " << theLigandList.size() << endl);
+    DEBUG_ERR(_CT << "::SetupLigand(): #ATOMS = " << theLigandList.size() << endl);
 }
 
 RbtDouble RbtSetupSASF::RawScore() const { return 0.0; }

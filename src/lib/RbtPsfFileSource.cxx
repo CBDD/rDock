@@ -319,7 +319,7 @@ void RbtPsfFileSource::RemoveNonPolarHydrogens() {
             }
             // Adjust number of implicit hydrogens
             (*cIter)->SetNumImplicitHydrogens((*cIter)->GetNumImplicitHydrogens() + nImplH);
-            DEBUG("Removing " << nImplH << " hydrogens from " << (*cIter)->GetFullAtomName() << endl);
+            DEBUG_ERR("Removing " << nImplH << " hydrogens from " << (*cIter)->GetFullAtomName() << endl);
         }
     }
 }

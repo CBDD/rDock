@@ -180,12 +180,12 @@ void RbtModelMutator::Setup() {
 #ifdef _DEBUG
             RbtInt id = lIter - m_flexIntns.begin();
             RbtAtom* pAtom = m_pModel->m_atomList[id];
-            DEBUG("Atom " << pAtom->GetFullAtomName() << " (" << id + 1 << "): with dups=" << (*lIter).size());
+            DEBUG_ERR("Atom " << pAtom->GetFullAtomName() << " (" << id + 1 << "): with dups=" << (*lIter).size());
 #endif  //_DEBUG
         // Remove duplicates
             (*lIter).erase(uniqIter, (*lIter).end());
 #ifdef _DEBUG
-            DEBUG("; unique=" << (*lIter).size() << endl);
+            DEBUG_ERR("; unique=" << (*lIter).size() << endl);
             Tmp::PrintAtomList((*lIter).begin(), (*lIter).end());
 #endif  //_DEBUG
         }

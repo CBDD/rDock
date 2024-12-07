@@ -118,7 +118,7 @@ RbtFFTPeakMap RbtFFTGrid::FindPeaks(RbtDouble threshold, RbtUInt minVol) const {
         if (nrData[i] > threshold) stillToProcess.insert(i);
     }
 
-    DEBUG(stillToProcess.size() << " data points found higher than  " << threshold << endl);
+    DEBUG_ERR(stillToProcess.size() << " data points found higher than  " << threshold << endl);
 
     // Repeat while we still have data points to process
     while (!stillToProcess.empty()) {

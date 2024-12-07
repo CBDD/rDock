@@ -29,12 +29,12 @@ RbtNmrSF::RbtNmrSF(const RbtString& strName): RbtBaseSF(_CT, strName), m_bQuadra
     AddParameter(_QUADRATIC, m_bQuadratic);
     SetRange(6.0);
     SetTrace(1);
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtNmrSF::~RbtNmrSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

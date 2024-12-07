@@ -156,8 +156,8 @@ void RbtMOL2FileSource::Parse(void) {
                     cout << _CT << ": WARNING Undefined Tripos type for " << (*iter)->GetFullAtomName() << endl;
                 }
                 if (tt_file != tt_auto) {
-                    DEBUG(_CT << ": INFO Disagreement in Tripos atom types for " << (*iter)->GetFullAtomName());
-                    DEBUG(": File=" << m_typer.Type2Str(tt_file) << "; Auto=" << m_typer.Type2Str(tt_auto) << endl);
+                    DEBUG_ERR(_CT << ": INFO Disagreement in Tripos atom types for " << (*iter)->GetFullAtomName());
+                    DEBUG_ERR(": File=" << m_typer.Type2Str(tt_file) << "; Auto=" << m_typer.Type2Str(tt_auto) << endl);
                 }
             }
 

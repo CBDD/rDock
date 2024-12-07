@@ -20,12 +20,12 @@ RbtString RbtConstSF::_SOLVENT_PENALTY("SOLVENT_PENALTY");
 
 RbtConstSF::RbtConstSF(const RbtString& strName): RbtBaseSF(_CT, strName), m_solventPenalty(0.5) {
     AddParameter(_SOLVENT_PENALTY, m_solventPenalty);
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtConstSF::~RbtConstSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

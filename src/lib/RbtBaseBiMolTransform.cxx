@@ -22,12 +22,12 @@ RbtString RbtBaseBiMolTransform::_CT("RbtBaseBiMolTransform");
 // Constructors/destructors
 RbtBaseBiMolTransform::RbtBaseBiMolTransform(const RbtString& strClass, const RbtString& strName):
     RbtBaseTransform(strClass, strName) {
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseBiMolTransform::~RbtBaseBiMolTransform() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -49,7 +49,7 @@ void RbtBaseBiMolTransform::Update(RbtSubject* theChangedSubject) {
         if (numModels >= 1) {
             RbtModelPtr spReceptor = pWorkSpace->GetModel(0);
             if (spReceptor != m_spReceptor) {
-                DEBUG(_CT << "::Update(): Receptor has been updated" << endl);
+                DEBUG_ERR(_CT << "::Update(): Receptor has been updated" << endl);
                 m_spReceptor = spReceptor;
                 SetupReceptor();
             }
@@ -58,7 +58,7 @@ void RbtBaseBiMolTransform::Update(RbtSubject* theChangedSubject) {
         if (numModels >= 2) {
             RbtModelPtr spLigand = pWorkSpace->GetModel(1);
             if (spLigand != m_spLigand) {
-                DEBUG(_CT << "::Update(): Ligand has been updated" << endl);
+                DEBUG_ERR(_CT << "::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupLigand();
             }

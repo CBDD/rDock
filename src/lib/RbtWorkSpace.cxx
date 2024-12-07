@@ -25,7 +25,7 @@ RbtString RbtWorkSpace::_NAME("NAME");
 // Create an empty model container of the right size
 RbtWorkSpace::RbtWorkSpace(RbtUInt nModels): m_models(nModels), m_SF(NULL), m_transform(NULL) {
     AddParameter(_NAME, _CT);
-    DEBUG("RbtWorkSpace::RbtWorkSpace(): Created model list of size " << m_models.size() << endl);
+    DEBUG_ERR("RbtWorkSpace::RbtWorkSpace(): Created model list of size " << m_models.size() << endl);
     _RBTOBJECTCOUNTER_CONSTR_("RbtWorkSpace");
 }
 

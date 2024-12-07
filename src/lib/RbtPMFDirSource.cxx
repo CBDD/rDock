@@ -18,7 +18,7 @@ using std::cout;
 using std::endl;
 
 RbtPMFDirSource::RbtPMFDirSource(const RbtString &aDir): RbtDirectorySource(aDir) {
-    DEBUG(_CT << " RbtPMFDirSource constructor" << endl);
+    DEBUG_ERR(_CT << " RbtPMFDirSource constructor" << endl);
 }
 
 void RbtPMFDirSource::ReadFiles(
@@ -49,7 +49,7 @@ void RbtPMFDirSource::ReadFiles(
         vector<RbtPMFValue> theValues;
         // when file has no .pmf extension, skip. Also check for existence and perm
         if (string::npos != theExtIdx && !stat(theFileName.c_str(), &fStat) && S_ISREG(fStat.st_mode)) {
-            DEBUG(_CT << " Processing: " << theFileStr << endl);
+            DEBUG_ERR(_CT << " Processing: " << theFileStr << endl);
         // get rid of .pmf and put it into the vector that will be used later to figure out types
             aNameVect->push_back(theFileStr.erase(theFileStr.find_last_of("."), 4));
             inFile.open(theFileName.c_str(), ifstream::in);
@@ -76,7 +76,7 @@ void RbtPMFDirSource::ReadFiles(
             theStrData.erase(theStrData.begin(), theStrData.end());  // delete vector after parsing
         }
         else {
-            DEBUG(_CT << " Skipping file: " << theFileName << endl);
+            DEBUG_ERR(_CT << " Skipping file: " << theFileName << endl);
         }
         theFileName.erase();
     }

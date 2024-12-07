@@ -23,7 +23,7 @@ RbtString RbtVble::_CT("RbtVble");
 
 RbtContext::RbtContext() {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
-    DEBUG(_CT << "base context const\n");
+    DEBUG_ERR(_CT << "base context const\n");
 }
 
 RbtContext::RbtContext(const RbtContext& c) { _RBTOBJECTCOUNTER_COPYCONSTR_(_CT); }
@@ -80,7 +80,7 @@ RbtCellContext::RbtCellContext(ifstream& ifile) {
         vm[key] = new RbtVble(name, val);
     }
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
-    DEBUG("cell context const\n");
+    DEBUG_ERR("cell context const\n");
 }
 
 RbtDouble RbtStringContext::Get(RbtModelPtr lig, RbtString name) {

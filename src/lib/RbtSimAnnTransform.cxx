@@ -75,12 +75,12 @@ RbtSimAnnTransform::RbtSimAnnTransform(const RbtString& strName, const Config& c
     config{config}  // For now simply copy the config structure.
 {
     m_spStats = RbtMCStatsPtr(new RbtMCStats());
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtSimAnnTransform::~RbtSimAnnTransform() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

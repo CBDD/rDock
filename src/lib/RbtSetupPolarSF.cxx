@@ -32,12 +32,12 @@ RbtSetupPolarSF::RbtSetupPolarSF(const RbtString& strName): RbtBaseSF(_CT, strNa
     AddParameter(_CHGFACTOR, 0.5);
     AddParameter(_GUANFACTOR, 1.0);
     Disable();
-    DEBUG(_CT << " parameterised constructor" << endl);
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtSetupPolarSF::~RbtSetupPolarSF() {
-    DEBUG(_CT << " destructor" << endl);
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
