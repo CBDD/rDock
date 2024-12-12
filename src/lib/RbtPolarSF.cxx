@@ -60,9 +60,7 @@ RbtPolarSF::RbtPolarSF():
     m_PHI_lp_prms(m_LP_PHI, m_LP_DPHIMin, m_LP_DPHIMax),
     m_PHI_plane_prms(0.0, m_LP_PHI + m_LP_DPHIMin, m_LP_PHI + m_LP_DPHIMax),
     m_THETAprms(0.0, m_LP_DTHETAMin, m_LP_DTHETAMax) {
-#ifdef _DEBUG
-    cout << _CT << " default constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " default constructor" << endl);
     // Add parameters
     AddParameter(_R12FACTOR, m_R12Factor);
     AddParameter(_R12INCR, m_R12Incr);
@@ -90,9 +88,7 @@ RbtPolarSF::RbtPolarSF():
 }
 
 RbtPolarSF::~RbtPolarSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

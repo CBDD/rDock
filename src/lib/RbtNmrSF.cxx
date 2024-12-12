@@ -12,6 +12,7 @@
 
 #include "RbtNmrSF.h"
 
+#include "RbtDebug.h"
 #include "RbtNmrRestraintFileSource.h"
 #include "RbtWorkSpace.h"
 
@@ -28,16 +29,12 @@ RbtNmrSF::RbtNmrSF(const RbtString& strName): RbtBaseSF(_CT, strName), m_bQuadra
     AddParameter(_QUADRATIC, m_bQuadratic);
     SetRange(6.0);
     SetTrace(1);
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtNmrSF::~RbtNmrSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

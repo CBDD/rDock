@@ -66,9 +66,6 @@ void RbtCharmmTypesFileSource::Parse() {
                     // was truncating the comment at the first whitespace character
                     chrmType.comment = *fileIter;
                     m_typesList.push_back(chrmType);
-#ifdef _DEBUG
-                    //	  cout << "Type #" << chrmType.nAtomType << " = " << chrmType.strAtomType << endl;
-#endif  //_DEBUG
                 }
             }
             //////////////////////////////////////////////////////////

@@ -55,9 +55,7 @@ void RbtPMFGridSF::SetupLigand() {
 
     // get the  non-H atoms only
     theLigandList = Rbt::GetAtomList(GetLigand()->GetAtomList(), std::not1(Rbt::isAtomicNo_eq(1)));
-#ifdef _DEBUG
-    cout << _CT << "::SetupLigand(): #ATOMS = " << theLigandList.size() << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "::SetupLigand(): #ATOMS = " << theLigandList.size() << endl);
 }
 
 RbtDouble RbtPMFGridSF::RawScore() const {

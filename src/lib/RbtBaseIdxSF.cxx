@@ -12,6 +12,7 @@
 
 #include "RbtBaseIdxSF.h"
 
+#include "RbtDebug.h"
 #include "RbtWorkSpace.h"
 
 // Static data members
@@ -20,9 +21,7 @@ RbtString RbtBaseIdxSF::_GRIDSTEP("GRIDSTEP");
 RbtString RbtBaseIdxSF::_BORDER("BORDER");
 
 RbtBaseIdxSF::RbtBaseIdxSF(): m_gridStep(0.5), m_border(1.0) {
-#ifdef _DEBUG
-    cout << _CT << " default constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " default constructor" << endl);
     // Add parameters
     AddParameter(_GRIDSTEP, m_gridStep);
     AddParameter(_BORDER, m_border);

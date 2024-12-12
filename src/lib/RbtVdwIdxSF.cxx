@@ -40,16 +40,12 @@ RbtVdwIdxSF::RbtVdwIdxSF(const RbtString& strName):
     AddParameter(_ANNOTATION_LIPO, m_lipoAnnot);  // Threshold for outputting lipo vdW annotations
     AddParameter(_ANNOTATE, m_bAnnotate);         // Threshold for outputting lipo vdW annotations
     AddParameter(_FAST_SOLVENT, m_bFastSolvent);  // Controls solvent performance enhancements
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtVdwIdxSF::~RbtVdwIdxSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
