@@ -21,7 +21,7 @@ using std::ios;
 // Constructors/destructors
 
 RbtBaseFileSink::RbtBaseFileSink(const RbtString& fileName): m_strFileName(fileName), m_bAppend(false) {
-    m_fileOut.exceptions(ios::failbit | ios::badbit);
+    m_fileOut.exceptions(ios::badbit);
     _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSink");
 }
 

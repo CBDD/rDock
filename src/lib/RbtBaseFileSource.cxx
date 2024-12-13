@@ -19,9 +19,11 @@
 
 // Constructors
 
-RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName): m_bFileOpen(false), m_bMultiRec(false) {
-    m_fileIn.exceptions(std::ios::failbit | std::ios::badbit);
-    m_strFileName = fileName;
+RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName):
+    m_strFileName(fileName),
+    m_bFileOpen(false),
+    m_bMultiRec(false) {
+    m_fileIn.exceptions(std::ios::badbit);
     m_szBuf = new char[MAXLINELENGTH + 1];  // DM 24 Mar - allocate line buffer
     ClearCache();
     _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
@@ -29,14 +31,9 @@ RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName): m_bFileOpen(fal
 
 // Multi-record constructor
 RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName, const RbtString& strRecDelim):
-    m_bFileOpen(false),
-    m_bMultiRec(true),
-    m_strRecDelim(strRecDelim) {
-    m_fileIn.exceptions(std::ios::failbit | std::ios::badbit);
-    m_strFileName = fileName;
-    m_szBuf = new char[MAXLINELENGTH + 1];  // DM 24 Mar - allocate line buffer
-    ClearCache();
-    _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
+    RbtBaseFileSource(fileName) {
+    this->m_strRecDelim = strRecDelim;
+    this->m_bMultiRec = true;
 }
 
 // Default destructor
@@ -190,8 +187,9 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
 // Private functions
 void RbtBaseFileSource::Open() {
     // DM 23 Mar 1999 - check if file is already open, to allow Open() to be called redundantly
-    try{
-        if (!m_bFileOpen) m_fileIn.open(m_strFileName, ios_base::in);
+    if (m_bFileOpen) return;
+    try {
+        m_fileIn.open(m_strFileName, ios_base::in);
         m_bFileOpen = true;
     } catch (...) {
         throw RbtFileReadError(_WHERE_, "Error opening " + m_strFileName);
