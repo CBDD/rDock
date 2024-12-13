@@ -12,6 +12,7 @@
 
 #include "RbtPMFGridSF.h"
 
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
 #include "RbtWorkSpace.h"
 
@@ -89,34 +90,32 @@ void RbtPMFGridSF::ReadGrids(istream& istr) {
     theGrids.clear();
 
     // Read header string
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* header = new char[length + 1];
-    Rbt::ReadWithThrow(istr, header, length);
-    // Add null character to end of string
-    header[length] = '\0';
-    // Compare title with
-    RbtBool match = (_CT == header);
-    delete[] header;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::ReadGrids()");
-    }
+    try {
+        std::string header;
+        bin_read(istr, header);
+        RbtBool match = (_CT == header);
+        if (!match) {
+            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::ReadGrids()");
+        }
 
-    // Now read number of grids
-    RbtInt nGrids;
-    Rbt::ReadWithThrow(istr, (char*)&nGrids, sizeof(nGrids));
-    cout << "Reading " << nGrids << " grids..." << endl;
-    theGrids.reserve(nGrids);
-    for (RbtInt i = CF; i <= nGrids; i++) {
-        cout << "Grid# " << i << " ";
-        // Read type
-        RbtPMFType theType;
-        Rbt::ReadWithThrow(istr, (char*)&theType, sizeof(theType));
-        cout << "type " << Rbt::PMFType2Str(theType);
-        // Now we can read the grid
-        RbtRealGridPtr spGrid(new RbtRealGrid(istr));
-        cout << " done" << endl;
-        theGrids.push_back(spGrid);
+        // Now read number of grids
+        RbtInt nGrids;
+        bin_read(istr, nGrids);
+        cout << "Reading " << nGrids << " grids..." << endl;
+        theGrids.reserve(nGrids);
+        for (RbtInt i = CF; i <= nGrids; i++) {
+            cout << "Grid# " << i << " ";
+            // Read type
+            RbtPMFType theType;
+            bin_read(istr, theType);
+            cout << "type " << Rbt::PMFType2Str(theType);
+            // Now we can read the grid
+            RbtRealGridPtr spGrid(new RbtRealGrid(istr));
+            cout << " done" << endl;
+            theGrids.push_back(spGrid);
+        }
+    } catch (std::ios_base::failure& e) {
+        throw RbtFileReadError(_WHERE_, "Error reading from binary stream in " + _CT + "::Read()" + e.what());
     }
 }
 
