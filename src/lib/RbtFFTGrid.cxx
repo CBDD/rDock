@@ -17,6 +17,7 @@
 #include <iomanip>
 #include <queue>
 
+#include "RbtBinaryIO.h"
 #include "RbtDebug.h"
 #include "RbtFileError.h"
 
@@ -261,26 +262,25 @@ void RbtFFTGrid::OwnPrint(ostream& ostr) const { ostr << "Class\t" << _CT << end
 void RbtFFTGrid::OwnWrite(ostream& ostr) const {
     // Write the class name as a title so we can check the authenticity of streams
     // on read
-    const char* const gridTitle = _CT.c_str();
-    RbtInt length = strlen(gridTitle);
-    Rbt::WriteWithThrow(ostr, (const char*)&length, sizeof(length));
-    Rbt::WriteWithThrow(ostr, gridTitle, length);
+    try {
+        bin_write(ostr, _CT);
+    } catch (std::ios_base::failure& e) {
+        throw RbtFileWriteError(_WHERE_, "Error writing to binary stream in " + _CT + "::Write()" + e.what());
+    }
 }
 
 // Protected method for reading data members for this class from binary stream
 void RbtFFTGrid::OwnRead(istream& istr) {
     // Read title
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* gridTitle = new char[length + 1];
-    Rbt::ReadWithThrow(istr, gridTitle, length);
-    // Add null character to end of string
-    gridTitle[length] = '\0';
-    // Compare title with class name
-    RbtBool match = (_CT == gridTitle);
-    delete[] gridTitle;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
+    try {
+        std::string title;
+        bin_read(istr, title);
+        RbtBool match = (_CT == title);
+        if (!match) {
+            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
+        }
+    } catch (std::ios_base::failure& e) {
+        throw RbtFileReadError(_WHERE_, "Error reading from binary stream in " + _CT + "::Read()" + e.what());
     }
 }
 
