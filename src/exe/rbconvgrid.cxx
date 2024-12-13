@@ -65,15 +65,9 @@ int main(int argc, char* argv[]) {
             cout << strInputFile << " opened OK" << endl;
         }
         // Read header string
-        RbtInt length;
-        bin_read(istr, length);
-        char* header = new char[length + 1];
-        bin_read(istr, header, length);
-        // Add null character to end of string
-        header[length] = '\0';
-        // Compare title with
+        RbtString header;
+        bin_read(istr, header);
         RbtBool match = (RbtVdwGridSF::_CT == header);
-        delete[] header;
         if (!match) {
             throw RbtFileParseError(_WHERE_, "Invalid title string in " + strInputFile);
         }
@@ -89,14 +83,9 @@ int main(int argc, char* argv[]) {
         }
         RbtRealGridPtr spGrid;
         for (RbtInt i = 1; (i <= nGrids) && (i <= iGrid); i++) {
+            RbtString strType;
             // Read the atom type string
-            bin_read(istr, length);
-            char* szType = new char[length + 1];
-            bin_read(istr, szType, length);
-            // Add null character to end of string
-            szType[length] = '\0';
-            RbtString strType(szType);
-            delete[] szType;
+            bin_read(istr, strType);
             RbtTriposAtomType triposType;
             RbtTriposAtomType::eType aType = triposType.Str2Type(strType);
             cout << "Grid# " << i << "\t"

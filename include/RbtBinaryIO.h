@@ -46,8 +46,6 @@ inline void bin_read(std::istream& istr, T* data, size_t n) {
     }
 }
 
-//speciallization for std::string
-
 template <>
 inline void bin_write(std::ostream& ostr, const std::string& data) {
     bin_write(ostr, data.size());
