@@ -15,6 +15,7 @@
 #include <iomanip>
 using std::setw;
 
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
 #include "RbtRealGrid.h"
 
@@ -429,15 +430,13 @@ void RbtRealGrid::OwnPrint(ostream& ostr) const {
 void RbtRealGrid::OwnWrite(ostream& ostr) const {
     // Write the class name as a title so we can check the authenticity of streams
     // on read
-    const char* const gridTitle = _CT.c_str();
-    RbtInt length = strlen(gridTitle);
-    Rbt::WriteWithThrow(ostr, (const char*)&length, sizeof(length));
-    Rbt::WriteWithThrow(ostr, gridTitle, length);
-
-    // Write all the data members
-    Rbt::WriteWithThrow(ostr, (const char*)&m_tol, sizeof(m_tol));
-    for (RbtUInt i = 0; i < GetN(); i++) {
-        Rbt::WriteWithThrow(ostr, (const char*)&m_data[i], sizeof(m_data[i]));
+    try {
+        bin_write(ostr, _CT);
+        // Write all the data members
+        bin_write(ostr, m_tol);
+        bin_write(ostr, m_data, GetN());
+    } catch (const std::ios_base::failure& e) {
+        throw RbtFileWriteError(_WHERE_, "Error writing to binary stream in " + _CT + "::Write()");
     }
 }
 
@@ -445,24 +444,20 @@ void RbtRealGrid::OwnWrite(ostream& ostr) const {
 // WARNING: Assumes grid data array has already been created
 // and is of the correct size
 void RbtRealGrid::OwnRead(istream& istr) {
-    // Read title
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* gridTitle = new char[length + 1];
-    Rbt::ReadWithThrow(istr, gridTitle, length);
-    // Add null character to end of string
-    gridTitle[length] = '\0';
-    // Compare title with class name
-    RbtBool match = (_CT == gridTitle);
-    delete[] gridTitle;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-    }
-
-    // Read all the data members
-    Rbt::ReadWithThrow(istr, (char*)&m_tol, sizeof(m_tol));
-    for (RbtUInt i = 0; i < GetN(); i++) {
-        Rbt::ReadWithThrow(istr, (char*)&m_data[i], sizeof(m_data[i]));
+    try {
+        // Read title
+        std::string title;
+        bin_read(istr, title);
+        // Compare title with class name
+        RbtBool match = (_CT == title);
+        if (!match) {
+            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
+        }
+        // Read all the data members
+        bin_read(istr, m_tol);
+        bin_read(istr, m_data, GetN());
+    } catch (const std::ios_base::failure& e) {
+        throw RbtFileReadError(_WHERE_, "Error reading from binary stream in " + _CT + "::Read(): " + e.what());
     }
 }
 
