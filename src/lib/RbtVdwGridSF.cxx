@@ -12,7 +12,9 @@
 
 #include "RbtVdwGridSF.h"
 
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
+#include "RbtPlatformCompatibility.h"
 #include "RbtWorkSpace.h"
 
 // Static data members
@@ -56,13 +58,7 @@ void RbtVdwGridSF::SetupReceptor() {
 
     RbtString strSuffix = GetParameter(_GRID);
     RbtString strFile = Rbt::GetRbtFileName("data/grids", strWSName + strSuffix);
-    // DM 26 Sep 2000 - ios_base::binary qualifier doesn't appear to be valid
-    // with IRIX CC
-#ifdef __sgi
-    ifstream istr(strFile.c_str(), ios_base::in);
-#else
-    ifstream istr(strFile.c_str(), ios_base::in | ios_base::binary);
-#endif
+    ifstream istr(strFile, Rbt::inputMode);
     ReadGrids(istr);
     istr.close();
 }
@@ -159,54 +155,45 @@ RbtDouble RbtVdwGridSF::RawScore() const {
 void RbtVdwGridSF::ReadGrids(istream& istr) {
     m_grids.clear();
     RbtInt iTrace = GetTrace();
-
-    // Read header string
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* header = new char[length + 1];
-    Rbt::ReadWithThrow(istr, header, length);
-    // Add null character to end of string
-    header[length] = '\0';
-    // Compare title with
-    RbtBool match = (_CT == header);
-    delete[] header;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::ReadGrids()");
-    }
-
-    // Now read number of grids
-    RbtInt nGrids;
-    Rbt::ReadWithThrow(istr, (char*)&nGrids, sizeof(nGrids));
-    if (iTrace > 0) {
-        cout << _CT << ": reading " << nGrids << " grids..." << endl;
-    }
-
-    // We actually create a vector of size RbtTriposAtomType::MAXTYPES
-    // Each grid is in the file is prefixed by the atom type string (e.g. C.2)
-    // This string is converted to the corresponding RbtTriposAtomType::eType
-    // and the grid stored at m_grids[eType]
-    // This is slightly more transferable as it means grids can be read correctly even if the atom
-    // type enums change (as long as the atom type string stay the same)
-    // It also means we do not have to have a grid for each and every atom type if we don't want to
-    m_grids = RbtRealGridList(RbtTriposAtomType::MAXTYPES);
-    for (RbtInt i = 0; i < nGrids; i++) {
-        // Read the atom type string
-        Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-        char* szType = new char[length + 1];
-        Rbt::ReadWithThrow(istr, szType, length);
-        // Add null character to end of string
-        szType[length] = '\0';
-        RbtString strType(szType);
-        delete[] szType;
-        RbtTriposAtomType triposType;
-        RbtTriposAtomType::eType aType = triposType.Str2Type(strType);
-        if (iTrace > 0) {
-            cout << "Grid# " << i << "\t"
-                 << "atom type=" << strType << " (type #" << aType << ")" << endl;
+    try {
+        std::string header;
+        bin_read(istr, header);
+        RbtBool match = (_CT == header);
+        if (!match) {
+            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::ReadGrids()");
         }
-        // Now we can read the grid
-        RbtRealGridPtr spGrid(new RbtRealGrid(istr));
-        m_grids[aType] = spGrid;
+
+        // Now read number of grids
+        RbtInt nGrids;
+        bin_read(istr, nGrids);
+        if (iTrace > 0) {
+            cout << _CT << ": reading " << nGrids << " grids..." << endl;
+        }
+
+        // We actually create a vector of size RbtTriposAtomType::MAXTYPES
+        // Each grid is in the file is prefixed by the atom type string (e.g. C.2)
+        // This string is converted to the corresponding RbtTriposAtomType::eType
+        // and the grid stored at m_grids[eType]
+        // This is slightly more transferable as it means grids can be read correctly even if the atom
+        // type enums change (as long as the atom type string stay the same)
+        // It also means we do not have to have a grid for each and every atom type if we don't want to
+        m_grids = RbtRealGridList(RbtTriposAtomType::MAXTYPES);
+        for (RbtInt i = 0; i < nGrids; i++) {
+            // Read the atom type string
+            std::string strType;
+            bin_read(istr, strType);
+            RbtTriposAtomType triposType;
+            RbtTriposAtomType::eType aType = triposType.Str2Type(strType);
+            if (iTrace > 0) {
+                cout << "Grid# " << i << "\t"
+                     << "atom type=" << strType << " (type #" << aType << ")" << endl;
+            }
+            // Now we can read the grid
+            RbtRealGridPtr spGrid(new RbtRealGrid(istr));
+            m_grids[aType] = spGrid;
+        }
+    } catch (const std::ios_base::failure& e) {
+        throw RbtFileReadError(_WHERE_, "Error reading from binary stream in " + _CT + "::ReadGrids()" + e.what());
     }
 }
 
