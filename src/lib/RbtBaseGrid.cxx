@@ -257,13 +257,7 @@ void RbtBaseGrid::OwnWrite(ostream& ostr) const {
 // Protected method for reading data members for this class from binary stream
 void RbtBaseGrid::OwnRead(istream& istr) {
     try {
-        std::string title;
-        bin_read(istr, title);
-        RbtBool match = (_CT == title);
-        if (!match) {
-            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-        }
-
+        Rbt::ValidateTitle(istr, _CT);
         // Read all the data members
         // The RbtCoord::Read method doesn't throw an error, but we can live with that for now
         m_min.Read(istr);

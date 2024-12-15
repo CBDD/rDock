@@ -105,6 +105,8 @@ RbtString ConvertListToDelimitedString(const RbtStringList& listOfValues, const 
 // DM 19 Feb 1999 - include executable information
 std::ostream& PrintStdHeader(std::ostream& s, const RbtString& strExecutable = "");
 
+void ValidateTitle(std::istream& istr, const std::string& className);
+
 }  // namespace Rbt
 
 #endif  //_RBT_H_

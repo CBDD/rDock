@@ -125,13 +125,7 @@ void RbtDockingSite::Read(istream& istr) {
     m_spGrid = RbtRealGridPtr();
     m_border = 0.0;
 
-    // Read title
-    std::string title;
-    bin_read(istr, title);
-    RbtBool match = (_CT == title);
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-    }
+    Rbt::ValidateTitle(istr, _CT);
 
     // DM 4 Apr 2002 - read overall min, max coords of all cavities, plus border
     m_minCoord.Read(istr);

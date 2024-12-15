@@ -273,12 +273,7 @@ void RbtFFTGrid::OwnWrite(ostream& ostr) const {
 void RbtFFTGrid::OwnRead(istream& istr) {
     // Read title
     try {
-        std::string title;
-        bin_read(istr, title);
-        RbtBool match = (_CT == title);
-        if (!match) {
-            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-        }
+        Rbt::ValidateTitle(istr, _CT);
     } catch (std::ios_base::failure& e) {
         throw RbtFileReadError(_WHERE_, "Error reading from binary stream in " + _CT + "::Read()" + e.what());
     }

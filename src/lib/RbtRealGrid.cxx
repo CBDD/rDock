@@ -445,14 +445,7 @@ void RbtRealGrid::OwnWrite(ostream& ostr) const {
 // and is of the correct size
 void RbtRealGrid::OwnRead(istream& istr) {
     try {
-        // Read title
-        std::string title;
-        bin_read(istr, title);
-        // Compare title with class name
-        RbtBool match = (_CT == title);
-        if (!match) {
-            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-        }
+        Rbt::ValidateTitle(istr, _CT);
         // Read all the data members
         bin_read(istr, m_tol);
         bin_read(istr, m_data, GetN());

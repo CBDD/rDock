@@ -22,6 +22,7 @@
 #include <fstream>    //For ifstream
 //#include <ios>
 #include "Rbt.h"
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
 #include "RbtResources.h"
 #include "RbtVersion.h"
@@ -296,4 +297,14 @@ istream& eatSeps(istream& is) {
         }
     }
     return is;
+}
+
+void Rbt::ValidateTitle(istream& istr, const std::string& className) {
+    std::string title;
+    bin_read(istr, title);
+    if (title != className) {
+        throw RbtFileParseError(
+            _WHERE_, "Invalid title string for class " + className + " while deserializing: " + title
+        );
+    }
 }

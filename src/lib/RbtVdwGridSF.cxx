@@ -156,12 +156,7 @@ void RbtVdwGridSF::ReadGrids(istream& istr) {
     m_grids.clear();
     RbtInt iTrace = GetTrace();
     try {
-        std::string header;
-        bin_read(istr, header);
-        RbtBool match = (_CT == header);
-        if (!match) {
-            throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::ReadGrids()");
-        }
+        Rbt::ValidateTitle(istr, _CT);
 
         // Now read number of grids
         RbtInt nGrids;
