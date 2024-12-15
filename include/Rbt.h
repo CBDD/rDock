@@ -105,21 +105,6 @@ RbtString ConvertListToDelimitedString(const RbtStringList& listOfValues, const 
 // DM 19 Feb 1999 - include executable information
 std::ostream& PrintStdHeader(std::ostream& s, const RbtString& strExecutable = "");
 
-// Helper functions to read/write chars from iostreams
-// Throws error if stream state is not Good() before and after the read/write
-// It appears the STL ios_base exception throwing is not yet implemented
-// at least on RedHat 6.1, so this is a temporary workaround (yeah right)
-//
-// DM 25 Sep 2000 - with MIPSPro CC compiler, streamsize is not defined,
-// at least with the iostreams library we are using, so typedef it here
-//  it is not in gcc 3.2.1 either SJ
-// #ifdef __sgi
-typedef int streamsize;
-// #endif
-
-void WriteWithThrow(std::ostream& ostr, const char* p, streamsize n);
-void ReadWithThrow(std::istream& istr, char* p, streamsize n);
-
 }  // namespace Rbt
 
 #endif  //_RBT_H_
