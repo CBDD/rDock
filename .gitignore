@@ -12,3 +12,4 @@ lib/libRbt.so
 # test files
 *.as
 tests/results
+!tests/data/1YET_reference_out.as
