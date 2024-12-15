@@ -14,6 +14,7 @@
 
 #include <cstring>
 
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
 
 // Less than operator for sorting coords
@@ -95,25 +96,20 @@ void RbtDockingSite::Write(ostream& ostr) {
     if (m_spGrid.Null()) {
         CreateGrid();
     }
-    // Write the class name as a title so we can check the authenticity of streams
-    // on read
-    const char* const header = _CT.c_str();
-    RbtInt length = strlen(header);
-    Rbt::WriteWithThrow(ostr, (const char*)&length, sizeof(length));
-    Rbt::WriteWithThrow(ostr, header, length);
+    bin_write(ostr, _CT);
 
     // DM 4 Apr 2002 - write overall min, max coords of all cavities, plus border
     m_minCoord.Write(ostr);
     m_maxCoord.Write(ostr);
-    Rbt::WriteWithThrow(ostr, (const char*)&m_border, sizeof(m_border));
+    bin_write(ostr, m_border);
 
     // Write the number of cavities
     RbtInt nCav = m_cavityList.size();
-    Rbt::WriteWithThrow(ostr, (const char*)&nCav, sizeof(nCav));
+    bin_write(ostr, nCav);
 
     // Write each cavity
-    for (RbtCavityListConstIter cIter = m_cavityList.begin(); cIter != m_cavityList.end(); cIter++) {
-        (*cIter)->Write(ostr);
+    for (const auto& cavity: m_cavityList) {
+        cavity->Write(ostr);
     }
 
     // DM 4 Apr 2002 - write the distance grid
@@ -130,15 +126,9 @@ void RbtDockingSite::Read(istream& istr) {
     m_border = 0.0;
 
     // Read title
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* header = new char[length + 1];
-    Rbt::ReadWithThrow(istr, header, length);
-    // Add null character to end of string
-    header[length] = '\0';
-    // Compare title with class name
-    RbtBool match = (_CT == header);
-    delete[] header;
+    std::string title;
+    bin_read(istr, title);
+    RbtBool match = (_CT == title);
     if (!match) {
         throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
     }
@@ -146,11 +136,11 @@ void RbtDockingSite::Read(istream& istr) {
     // DM 4 Apr 2002 - read overall min, max coords of all cavities, plus border
     m_minCoord.Read(istr);
     m_maxCoord.Read(istr);
-    Rbt::ReadWithThrow(istr, (char*)&m_border, sizeof(m_border));
+    bin_read(istr, m_border);
 
     // Read the number of cavities
     RbtInt nCav;
-    Rbt::ReadWithThrow(istr, (char*)&nCav, sizeof(nCav));
+    bin_read(istr, nCav);
     m_cavityList.reserve(nCav);
     // Read each cavity
     for (RbtInt i = 0; i < nCav; i++) {
