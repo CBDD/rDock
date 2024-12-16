@@ -98,7 +98,7 @@ void RbtBaseFileSink::Open(RbtBool bAppend) {
     std::_Ios_Openmode openMode = ios_base::out;
     if (bAppend) openMode = openMode | ios_base::app;
     try {
-        m_fileOut.open(m_strFileName.c_str(), openMode);
+        m_fileOut.open(m_strFileName, openMode);
     } catch (...) {
         throw RbtFileWriteError(_WHERE_, "Error opening " + m_strFileName);
     }

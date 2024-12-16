@@ -155,40 +155,36 @@ RbtDouble RbtVdwGridSF::RawScore() const {
 void RbtVdwGridSF::ReadGrids(istream& istr) {
     m_grids.clear();
     RbtInt iTrace = GetTrace();
-    try {
-        Rbt::ValidateTitle(istr, _CT);
+    Rbt::ValidateTitle(istr, _CT);
 
-        // Now read number of grids
-        RbtInt nGrids;
-        bin_read(istr, nGrids);
+    // Now read number of grids
+    RbtInt nGrids;
+    bin_read(istr, nGrids);
+    if (iTrace > 0) {
+        cout << _CT << ": reading " << nGrids << " grids..." << endl;
+    }
+
+    // We actually create a vector of size RbtTriposAtomType::MAXTYPES
+    // Each grid is in the file is prefixed by the atom type string (e.g. C.2)
+    // This string is converted to the corresponding RbtTriposAtomType::eType
+    // and the grid stored at m_grids[eType]
+    // This is slightly more transferable as it means grids can be read correctly even if the atom
+    // type enums change (as long as the atom type string stay the same)
+    // It also means we do not have to have a grid for each and every atom type if we don't want to
+    m_grids = RbtRealGridList(RbtTriposAtomType::MAXTYPES);
+    for (RbtInt i = 0; i < nGrids; i++) {
+        // Read the atom type string
+        std::string strType;
+        bin_read(istr, strType);
+        RbtTriposAtomType triposType;
+        RbtTriposAtomType::eType aType = triposType.Str2Type(strType);
         if (iTrace > 0) {
-            cout << _CT << ": reading " << nGrids << " grids..." << endl;
+            cout << "Grid# " << i << "\t"
+                 << "atom type=" << strType << " (type #" << aType << ")" << endl;
         }
-
-        // We actually create a vector of size RbtTriposAtomType::MAXTYPES
-        // Each grid is in the file is prefixed by the atom type string (e.g. C.2)
-        // This string is converted to the corresponding RbtTriposAtomType::eType
-        // and the grid stored at m_grids[eType]
-        // This is slightly more transferable as it means grids can be read correctly even if the atom
-        // type enums change (as long as the atom type string stay the same)
-        // It also means we do not have to have a grid for each and every atom type if we don't want to
-        m_grids = RbtRealGridList(RbtTriposAtomType::MAXTYPES);
-        for (RbtInt i = 0; i < nGrids; i++) {
-            // Read the atom type string
-            std::string strType;
-            bin_read(istr, strType);
-            RbtTriposAtomType triposType;
-            RbtTriposAtomType::eType aType = triposType.Str2Type(strType);
-            if (iTrace > 0) {
-                cout << "Grid# " << i << "\t"
-                     << "atom type=" << strType << " (type #" << aType << ")" << endl;
-            }
-            // Now we can read the grid
-            RbtRealGridPtr spGrid(new RbtRealGrid(istr));
-            m_grids[aType] = spGrid;
-        }
-    } catch (const std::ios_base::failure& e) {
-        throw RbtFileReadError(_WHERE_, "Error reading from binary stream in " + _CT + "::ReadGrids()" + e.what());
+        // Now we can read the grid
+        RbtRealGridPtr spGrid(new RbtRealGrid(istr));
+        m_grids[aType] = spGrid;
     }
 }
 

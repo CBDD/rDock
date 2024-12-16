@@ -16,7 +16,6 @@
 using std::setw;
 
 #include "RbtBinaryIO.h"
-#include "RbtFileError.h"
 #include "RbtRealGrid.h"
 
 // Static data members
@@ -428,30 +427,20 @@ void RbtRealGrid::OwnPrint(ostream& ostr) const {
 // Protected method for writing data members for this class to binary stream
 //(Serialisation)
 void RbtRealGrid::OwnWrite(ostream& ostr) const {
-    // Write the class name as a title so we can check the authenticity of streams
-    // on read
-    try {
-        bin_write(ostr, _CT);
-        // Write all the data members
-        bin_write(ostr, m_tol);
-        bin_write(ostr, m_data, GetN());
-    } catch (const std::ios_base::failure& e) {
-        throw RbtFileWriteError(_WHERE_, "Error writing to binary stream in " + _CT + "::Write()");
-    }
+    bin_write(ostr, _CT);
+    // Write all the data members
+    bin_write(ostr, m_tol);
+    bin_write(ostr, m_data, GetN());
 }
 
 // Protected method for reading data members for this class from binary stream
 // WARNING: Assumes grid data array has already been created
 // and is of the correct size
 void RbtRealGrid::OwnRead(istream& istr) {
-    try {
-        Rbt::ValidateTitle(istr, _CT);
-        // Read all the data members
-        bin_read(istr, m_tol);
-        bin_read(istr, m_data, GetN());
-    } catch (const std::ios_base::failure& e) {
-        throw RbtFileReadError(_WHERE_, "Error reading from binary stream in " + _CT + "::Read(): " + e.what());
-    }
+    Rbt::ValidateTitle(istr, _CT);
+    // Read all the data members
+    bin_read(istr, m_tol);
+    bin_read(istr, m_data, GetN());
 }
 
 ///////////////////////////////////////////////////////////////////////////
