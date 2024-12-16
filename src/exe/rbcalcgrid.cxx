@@ -17,8 +17,10 @@
 #include <iomanip>
 
 #include "RbtBiMolWorkSpace.h"
+#include "RbtBinaryIO.h"
 #include "RbtPRMFactory.h"
 #include "RbtParameterFileSource.h"
+#include "RbtPlatformCompatibility.h"
 #include "RbtRealGrid.h"
 #include "RbtSFFactory.h"
 #include "RbtTriposAtomType.h"
@@ -181,11 +183,7 @@ int main(int argc, char* argv[]) {
         RbtString strASFile = spWS->GetName() + ".as";
         RbtString strInputFile = Rbt::GetRbtFileName("data/grids", strASFile);
         // DM 26 Sep 2000 - ios_base::binary is invalid with IRIX CC
-#if defined(__sgi) && !defined(__GNUC__)
-        ifstream istr(strInputFile.c_str(), ios_base::in);
-#else
-        ifstream istr(strInputFile.c_str(), ios_base::in | ios_base::binary);
-#endif
+        ifstream istr(strInputFile, Rbt::inputMode);
         RbtDockingSitePtr spDS(new RbtDockingSite(istr));
         istr.close();
         spWS->SetDockingSite(spDS);
@@ -211,19 +209,15 @@ int main(int argc, char* argv[]) {
 
         // Open output file
         RbtString strOutputFile(spWS->GetName() + strSuffix);
-#if defined(__sgi) && !defined(__GNUC__)
-        ofstream ostr(strOutputFile.c_str(), ios_base::out | ios_base::trunc);
-#else
-        ofstream ostr(strOutputFile.c_str(), ios_base::out | ios_base::binary | ios_base::trunc);
-#endif
+        ofstream ostr(strOutputFile, Rbt::outputMode);
         // Write header string (RbtVdwGridSF)
         const char* const header = "RbtVdwGridSF";
         RbtInt length = strlen(header);
-        Rbt::WriteWithThrow(ostr, (const char*)&length, sizeof(length));
-        Rbt::WriteWithThrow(ostr, header, length);
+        bin_write(ostr, length);
+        bin_write(ostr, header, length);
         // Write number of grids
         RbtInt nGrids = probes.size();
-        Rbt::WriteWithThrow(ostr, (const char*)&nGrids, sizeof(nGrids));
+        bin_write(ostr, nGrids);
 
         // Store regular pointers to avoid smart pointer dereferencing overheads
         RbtRealGrid* pGrid(spGrid);
@@ -247,8 +241,8 @@ int main(int argc, char* argv[]) {
             // Write the atom type string to the grid file, before the grid itself
             const char* const szType = strType.c_str();
             RbtInt l = strlen(szType);
-            Rbt::WriteWithThrow(ostr, (const char*)&l, sizeof(l));
-            Rbt::WriteWithThrow(ostr, szType, l);
+            bin_write(ostr, l);
+            bin_write(ostr, szType, l);
             pGrid->Write(ostr);
         }
         ostr.close();

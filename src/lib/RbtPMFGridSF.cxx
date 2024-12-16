@@ -12,7 +12,7 @@
 
 #include "RbtPMFGridSF.h"
 
-#include "RbtFileError.h"
+#include "RbtBinaryIO.h"
 #include "RbtWorkSpace.h"
 
 RbtString RbtPMFGridSF::_CT("RbtPMFGridSF");
@@ -89,29 +89,18 @@ void RbtPMFGridSF::ReadGrids(istream& istr) {
     theGrids.clear();
 
     // Read header string
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* header = new char[length + 1];
-    Rbt::ReadWithThrow(istr, header, length);
-    // Add null character to end of string
-    header[length] = '\0';
-    // Compare title with
-    RbtBool match = (_CT == header);
-    delete[] header;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::ReadGrids()");
-    }
+    Rbt::ValidateTitle(istr, _CT);
 
     // Now read number of grids
     RbtInt nGrids;
-    Rbt::ReadWithThrow(istr, (char*)&nGrids, sizeof(nGrids));
+    bin_read(istr, nGrids);
     cout << "Reading " << nGrids << " grids..." << endl;
     theGrids.reserve(nGrids);
     for (RbtInt i = CF; i <= nGrids; i++) {
         cout << "Grid# " << i << " ";
         // Read type
         RbtPMFType theType;
-        Rbt::ReadWithThrow(istr, (char*)&theType, sizeof(theType));
+        bin_read(istr, theType);
         cout << "type " << Rbt::PMFType2Str(theType);
         // Now we can read the grid
         RbtRealGridPtr spGrid(new RbtRealGrid(istr));

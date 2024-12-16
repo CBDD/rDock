@@ -22,6 +22,7 @@
 #include <fstream>    //For ifstream
 //#include <ios>
 #include "Rbt.h"
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
 #include "RbtResources.h"
 #include "RbtVersion.h"
@@ -280,22 +281,6 @@ std::ostream& Rbt::PrintStdHeader(std::ostream& s, const RbtString& strExecutabl
     return s;
 }
 
-// Helper functions to read/write chars from iostreams
-// Throws error if stream state is not Good() before and after the read/write
-// It appears the STL ios_base exception throwing is not yet implemented
-// at least on RedHat 6.1, so this is a temporary workaround (yeah right)
-void Rbt::WriteWithThrow(std::ostream& ostr, const char* p, streamsize n) {
-    if (!ostr) throw RbtFileWriteError(_WHERE_, "Error writing to output stream");
-    ostr.write(p, n);
-    if (!ostr) throw RbtFileWriteError(_WHERE_, "Error writing to output stream");
-}
-
-void Rbt::ReadWithThrow(std::istream& istr, char* p, streamsize n) {
-    if (!istr) throw RbtFileReadError(_WHERE_, "Error reading from input stream");
-    istr.read(p, n);
-    if (!istr) throw RbtFileReadError(_WHERE_, "Error reading from input stream");
-}
-
 // Used to read RbtCoord. The separator between x y z should be a
 // ',', but this takes care of small mistakes, reading any white
 // space or commas there is between each variable.
@@ -312,4 +297,14 @@ istream& eatSeps(istream& is) {
         }
     }
     return is;
+}
+
+void Rbt::ValidateTitle(istream& istr, const std::string& className) {
+    std::string title;
+    bin_read(istr, title);
+    if (title != className) {
+        throw RbtFileParseError(
+            _WHERE_, "Invalid title string for class " + className + " while deserializing: " + title
+        );
+    }
 }

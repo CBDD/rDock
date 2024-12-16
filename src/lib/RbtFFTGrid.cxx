@@ -17,8 +17,8 @@
 #include <iomanip>
 #include <queue>
 
+#include "RbtBinaryIO.h"
 #include "RbtDebug.h"
-#include "RbtFileError.h"
 
 // Static data members
 RbtString RbtFFTGrid::_CT("RbtFFTGrid");
@@ -258,31 +258,10 @@ void RbtFFTGrid::OwnPrint(ostream& ostr) const { ostr << "Class\t" << _CT << end
 
 // Protected method for writing data members for this class to binary stream
 //(Serialisation)
-void RbtFFTGrid::OwnWrite(ostream& ostr) const {
-    // Write the class name as a title so we can check the authenticity of streams
-    // on read
-    const char* const gridTitle = _CT.c_str();
-    RbtInt length = strlen(gridTitle);
-    Rbt::WriteWithThrow(ostr, (const char*)&length, sizeof(length));
-    Rbt::WriteWithThrow(ostr, gridTitle, length);
-}
+void RbtFFTGrid::OwnWrite(ostream& ostr) const { bin_write(ostr, _CT); }
 
 // Protected method for reading data members for this class from binary stream
-void RbtFFTGrid::OwnRead(istream& istr) {
-    // Read title
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* gridTitle = new char[length + 1];
-    Rbt::ReadWithThrow(istr, gridTitle, length);
-    // Add null character to end of string
-    gridTitle[length] = '\0';
-    // Compare title with class name
-    RbtBool match = (_CT == gridTitle);
-    delete[] gridTitle;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-    }
-}
+void RbtFFTGrid::OwnRead(istream& istr) { Rbt::ValidateTitle(istr, _CT); }
 
 ///////////////////////////////////////////////////////////////////////////
 // Private methods
