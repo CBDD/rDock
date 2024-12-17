@@ -16,6 +16,7 @@ using std::ptr_fun;
 
 #include "RbtAtom.h"
 #include "RbtBond.h"
+#include "RbtDebug.h"
 #include "RbtModel.h"
 #include "RbtPseudoAtom.h"
 
@@ -352,7 +353,7 @@ RbtString Rbt::ConvertFormalChargeToString(RbtInt nCharge) {
             // For higher charges, return as +3,-3 etc
             ostringstream ostr;
             ostr.setf(ios_base::showpos);
-            ostr << nCharge << ends;
+            ostr << nCharge;
             RbtString strCharge(ostr.str());
             return strCharge;
     }
@@ -667,10 +668,6 @@ RbtAtomList Rbt::GetMatchingAtomList(const RbtAtomList& atomList, const RbtStrin
         case 3:  // we have segment, subunit and atom names
             if (!componentList[idx].empty()) {
                 matchingAtoms = Rbt::GetAtomList(matchingAtoms, Rbt::isSegmentName_eq(componentList[idx]));
-#ifdef _DEBUG
-                // cout << "Matching segment name=" << componentList[idx] << ", #atoms=" << matchingAtoms.size() <<
-                // endl;
-#endif  //_DEBUG
             }
             idx++;
 
@@ -682,24 +679,13 @@ RbtAtomList Rbt::GetMatchingAtomList(const RbtAtomList& atomList, const RbtStrin
                     case 2:  // Subunit ID and name are specified
                         if (!subunitList[1].empty()) {
                             matchingAtoms = Rbt::GetAtomList(matchingAtoms, Rbt::isSubunitId_eq(subunitList[1]));
-#ifdef _DEBUG
-                            // cout << "Matching subunit id=" << subunitList[1] << ", #atoms=" << matchingAtoms.size()
-                            // << endl;
-#endif  //_DEBUG
                         }
                     case 1:  // Fall-through!! Only the subunit name is specified
                         if (!subunitList[0].empty()) {
                             matchingAtoms = Rbt::GetAtomList(matchingAtoms, Rbt::isSubunitName_eq(subunitList[0]));
-#ifdef _DEBUG
-                            // cout << "Matching subunit name=" << subunitList[0] << ", #atoms=" <<
-                            // matchingAtoms.size() << endl;
-#endif  //_DEBUG
                         }
                         break;
                     default:
-#ifdef _DEBUG
-                        // cout << "Invalid subunit string in " << strFullName << endl;
-#endif  //_DEBUG
                         break;
                 }
             }
@@ -708,16 +694,10 @@ RbtAtomList Rbt::GetMatchingAtomList(const RbtAtomList& atomList, const RbtStrin
         case 1:  // Fall-through!! We only have an atom name specifier
             if (!componentList[idx].empty()) {
                 matchingAtoms = Rbt::GetAtomList(matchingAtoms, Rbt::isAtomName_eq(componentList[idx]));
-#ifdef _DEBUG
-                // cout << "Matching atom name=" << componentList[idx] << ", #atoms=" << matchingAtoms.size() << endl;
-#endif  //_DEBUG
             }
             break;
 
         default:
-#ifdef _DEBUG
-            // cout << "Too many colons (:) in " << strFullName << endl;
-#endif  //_DEBUG
             break;
     }
 
@@ -845,15 +825,11 @@ void Rbt::RemoveZwitterions(RbtAtomList& atomList) {
     // Now we can safely neutralise the 1-2 and 1-3 atoms
     for (RbtAtomListIter iter = cationicAtomList.begin(); iter != c14begin; iter++) {
         (*iter)->SetGroupCharge(0.0);
-#ifdef _DEBUG
-        cout << "RemoveZwitterions: Neutralising cation " << (*iter)->GetFullAtomName() << endl;
-#endif  //_DEBUG
+        DEBUG_ERR("RemoveZwitterions: Neutralising cation " << (*iter)->GetFullAtomName() << endl);
     }
 
     for (RbtAtomListIter iter = anionicAtomList.begin(); iter != a14begin; iter++) {
         (*iter)->SetGroupCharge(0.0);
-#ifdef _DEBUG
-        cout << "RemoveZwitterions: Neutralising anion " << (*iter)->GetFullAtomName() << endl;
-#endif  //_DEBUG
+        DEBUG_ERR("RemoveZwitterions: Neutralising anion " << (*iter)->GetFullAtomName() << endl);
     }
 }

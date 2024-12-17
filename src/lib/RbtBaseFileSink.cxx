@@ -19,13 +19,9 @@ using std::ios;
 
 ////////////////////////////////////////
 // Constructors/destructors
-// RbtBaseFileSink::RbtBaseFileSink(const char* fileName) :
-//   m_strFileName(fileName)
-//{
-//   _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSink");
-// }
 
 RbtBaseFileSink::RbtBaseFileSink(const RbtString& fileName): m_strFileName(fileName), m_bAppend(false) {
+    m_fileOut.exceptions(ios::badbit);
     _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSink");
 }
 
@@ -101,8 +97,11 @@ void RbtBaseFileSink::ReplaceLine(const RbtString& fileRec, RbtUInt nRec) {
 void RbtBaseFileSink::Open(RbtBool bAppend) {
     std::_Ios_Openmode openMode = ios_base::out;
     if (bAppend) openMode = openMode | ios_base::app;
-    m_fileOut.open(m_strFileName.c_str(), openMode);
-    if (!m_fileOut) throw RbtFileWriteError(_WHERE_, "Error opening " + m_strFileName);
+    try {
+        m_fileOut.open(m_strFileName, openMode);
+    } catch (...) {
+        throw RbtFileWriteError(_WHERE_, "Error opening " + m_strFileName);
+    }
 }
 
 void RbtBaseFileSink::Close() { m_fileOut.close(); }

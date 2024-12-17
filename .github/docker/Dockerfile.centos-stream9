@@ -1,4 +1,3 @@
-FROM quay.io/centos/centos:stream9 as base
+FROM quay.io/centos/centos:stream9 AS base
 
-# Install dependencies
-RUN yum install -y gcc-c++ make
+RUN yum install -y popt-devel gcc-c++ make diffutils

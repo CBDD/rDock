@@ -71,7 +71,7 @@ void RbtMdlFileSink::Render() {
         ostr << setw(3) << modelAtomList.size() + solventAtomList.size() << setw(3)
              << modelBondList.size() + solventBondList.size() << setw(3) << 0 << setw(3) << 0 << setw(3) << 0
              << setw(3) << 0 << setw(3) << 0 << setw(3) << 0 << setw(3) << 0 << setw(3) << 0 << setw(3) << 999
-             << " V2000" << ends;
+             << " V2000";
         AddLine(ostr.str());
 
         // DM 19 June 2006 - clear the map of logical atom IDs each time
@@ -125,8 +125,8 @@ void RbtMdlFileSink::RenderAtomList(const RbtAtomList& atomList) {
              << setw(3) << 0              // atom stereo parity
              << setw(3) << 0              // hydrogen count+1 (query CTABs only)
              << setw(3) << 0              // stereo care box (query CTABs only)
-             << setw(3) << 0              // valence (0 = no marking)
-             << ends;                     // Mass diff, formal charge, stereo parity, num hydrogens, center
+             << setw(3) << 0;             // valence (0 = no marking)
+                                          // Mass diff, formal charge, stereo parity, num hydrogens, center
         AddLine(ostr.str());
     }
 }
@@ -147,8 +147,8 @@ void RbtMdlFileSink::RenderBondList(const RbtBondList& bondList) {
             ostringstream ostr;
             ostr.setf(ios_base::right, ios_base::adjustfield);
             ostr << setw(3) << id1 << setw(3) << id2 << setw(3) << spBond->GetFormalBondOrder() << setw(3) << 0
-                 << setw(3) << 0 << setw(3) << 0
-                 << ends;  // Atom1, Atom2, bond order, stereo designator, unused, topology code
+                 << setw(3) << 0 << setw(3) << 0;
+            // Atom1, Atom2, bond order, stereo designator, unused, topology code
             AddLine(ostr.str());
         } else {
             // Should never happen. Probably best to throw an error at this point.

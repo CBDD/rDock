@@ -398,7 +398,7 @@ void RBDock(const RBDockConfig &config, const RbtString &strExeName) {
                 try {
                     if (config.bOutput) {
                         ostringstream histr;
-                        histr << config.strRunName << "_" << strMolName << nRec << "_his_" << iRun << ".sd" << ends;
+                        histr << config.strRunName << "_" << strMolName << nRec << "_his_" << iRun << ".sd";
                         RbtMolecularFileSinkPtr spHistoryFileSink(new RbtMdlFileSink(histr.str(), spLigand));
                         spWS->SetHistorySink(spHistoryFileSink);
                     }

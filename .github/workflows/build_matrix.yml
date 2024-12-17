@@ -10,7 +10,7 @@ jobs:
   check-lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: setup-lint
       run: |
         sudo apt-get update
@@ -24,8 +24,10 @@ jobs:
       fail-fast: false  # we want all the flows to run, to success or failure
       matrix:
         distribution:
+          - ubuntu-24.04
           - ubuntu-22.04
           - ubuntu-20.04
+          - debian-12
           - debian-11
           - debian-10
           - centos-stream9
@@ -46,11 +48,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3  # probably not needed, but just in case
+    - uses: actions/checkout@v4  # probably not needed, but just in case
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: artifacts/
+        pattern: rdock-*
+        merge-multiple: true
 
     - name: Set version
       id: set_version
@@ -60,6 +64,6 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         tag: v${{ steps.set_version.outputs.RELEASE_VERSION }}
-        artifacts: artifacts/*/*.tar.gz
+        artifacts: artifacts/*.tar.gz
         draft: true
 

@@ -156,10 +156,10 @@ void RbtMOL2FileSource::Parse(void) {
                     cout << _CT << ": WARNING Undefined Tripos type for " << (*iter)->GetFullAtomName() << endl;
                 }
                 if (tt_file != tt_auto) {
-#ifdef _DEBUG
-                    cout << _CT << ": INFO Disagreement in Tripos atom types for " << (*iter)->GetFullAtomName();
-                    cout << ": File=" << m_typer.Type2Str(tt_file) << "; Auto=" << m_typer.Type2Str(tt_auto) << endl;
-#endif  //_DEBUG
+                    DEBUG_ERR(_CT << ": INFO Disagreement in Tripos atom types for " << (*iter)->GetFullAtomName());
+                    DEBUG_ERR(
+                        ": File=" << m_typer.Type2Str(tt_file) << "; Auto=" << m_typer.Type2Str(tt_auto) << endl
+                    );
                 }
             }
 
@@ -566,11 +566,6 @@ void RbtMOL2FileSource::SetupVdWRadii() {
         }
         // Finally we can set the radius
         (*iter)->SetVdwRadius(vdwRadius);
-#ifdef _DEBUG
-        // cout << (*iter)->GetFullAtomName() << ": #H=" << nImplH
-        //<< "; vdwR=" << (*iter)->GetVdwRadius()
-        //<< "; mass=" << (*iter)->GetAtomicMass() << endl;
-#endif  //_DEBUG
     }
 }
 

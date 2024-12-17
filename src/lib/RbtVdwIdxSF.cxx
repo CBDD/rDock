@@ -40,16 +40,12 @@ RbtVdwIdxSF::RbtVdwIdxSF(const RbtString& strName):
     AddParameter(_ANNOTATION_LIPO, m_lipoAnnot);  // Threshold for outputting lipo vdW annotations
     AddParameter(_ANNOTATE, m_bAnnotate);         // Threshold for outputting lipo vdW annotations
     AddParameter(_FAST_SOLVENT, m_bFastSolvent);  // Controls solvent performance enhancements
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtVdwIdxSF::~RbtVdwIdxSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -109,7 +105,7 @@ void RbtVdwIdxSF::SetupReceptor() {
     m_bFlexRec = GetReceptor()->isFlexible();
 
     m_recAtomList = GetReceptor()->GetAtomList();
-    m_spGrid = CreateNonBondedGrid();
+    m_spGrid = CreateGrid<RbtNonBondedGrid>();
     RbtDouble maxError = GetMaxError();
     RbtDouble flexDist = 2.0;
     RbtDockingSitePtr spDS = GetWorkSpace()->GetDockingSite();
@@ -242,7 +238,7 @@ void RbtVdwIdxSF::SetupSolvent() {
     // The interaction map can be partitioned in advance, based on the maximum displacement
     // of any of the tethered atoms
     if (!m_solventFixTethAtomList.empty()) {
-        m_spSolventGrid = CreateNonBondedGrid();
+        m_spSolventGrid = CreateGrid<RbtNonBondedGrid>();
         RbtDouble maxError = GetMaxError();
         RbtDouble maxFlexDist = 0.0;
         for (RbtAtomRListConstIter iter = m_solventFixTethAtomList.begin(); iter != m_solventFixTethAtomList.end();

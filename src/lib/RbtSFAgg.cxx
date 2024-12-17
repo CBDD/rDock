@@ -21,26 +21,20 @@ RbtString RbtSFAgg::_CT("RbtSFAgg");
 ////////////////////////////////////////
 // Constructors/destructors
 RbtSFAgg::RbtSFAgg(const RbtString& strName): RbtBaseSF(_CT, strName), m_nNonHLigandAtoms(0) {
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtSFAgg::~RbtSFAgg() {
     // Delete all our children
-#ifdef _DEBUG
-    cout << _CT << "::~" << _CT << "(): Deleting child scoring functions of " << GetName() << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "::~" << _CT << "(): Deleting child scoring functions of " << GetName() << endl);
     // We need to iterate using a while loop because each deletion will reduce the size of m_sf,
     // hence conventional iterators would become invalid
     while (m_sf.size() > 0) {
         RbtBaseSF* pSF = m_sf.back();
         // Assertion: parent of child is this object
         Assert<RbtAssert>(!SFAGG_CHECK || pSF->m_parent == this);
-#ifdef _DEBUG
-        cout << "Deleting " << pSF->GetName() << " from " << GetName() << endl;
-#endif  //_DEBUG
+        DEBUG_ERR("Deleting " << pSF->GetName() << " from " << GetName() << endl);
         delete pSF;
     }
     _RBTOBJECTCOUNTER_DESTR_(_CT);
@@ -89,9 +83,7 @@ void RbtSFAgg::Add(RbtBaseSF* pSF) {
     // we handle attempts to readd existing children automatically,
     pSF->Orphan();
     pSF->m_parent = this;
-#ifdef _DEBUG
-    cout << _CT << "::Add(): Adding " << pSF->GetName() << " to " << GetName() << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "::Add(): Adding " << pSF->GetName() << " to " << GetName() << endl);
     m_sf.push_back(pSF);
 }
 
@@ -102,9 +94,7 @@ void RbtSFAgg::Remove(RbtBaseSF* pSF) {
     } else {
         // Assertion: parent of child is this object
         Assert<RbtAssert>(!SFAGG_CHECK || pSF->m_parent == this);
-#ifdef _DEBUG
-        cout << _CT << "::Remove(): Removing " << pSF->GetName() << " from " << GetName() << endl;
-#endif  //_DEBUG
+        DEBUG_ERR(_CT << "::Remove(): Removing " << pSF->GetName() << " from " << GetName() << endl);
         m_sf.erase(iter);
         pSF->m_parent = NULL;  // Nullify the parent pointer of the child that has been removed
     }
@@ -128,9 +118,7 @@ void RbtSFAgg::Register(RbtWorkSpace* pWorkSpace) {
     // as we need the number of heavy atoms in the ligand for calculating
     // the normalised scores
     RbtBaseObject::Register(pWorkSpace);
-#ifdef _DEBUG
-    cout << _CT << "::Register(): Registering child scoring functions of " << GetName() << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "::Register(): Registering child scoring functions of " << GetName() << endl);
     for (RbtBaseSFListIter iter = m_sf.begin(); iter != m_sf.end(); iter++) {
         (*iter)->Register(pWorkSpace);
     }
@@ -139,9 +127,7 @@ void RbtSFAgg::Register(RbtWorkSpace* pWorkSpace) {
 // Unregister with a workspace
 // Aggregate version unregisters all children, AND itself (new behaviour, 7 Feb 2005 (DM))
 void RbtSFAgg::Unregister() {
-#ifdef _DEBUG
-    cout << _CT << "::Unregister(): Unregistering child scoring functions of " << GetName() << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "::Unregister(): Unregistering child scoring functions of " << GetName() << endl);
     for (RbtBaseSFListIter iter = m_sf.begin(); iter != m_sf.end(); iter++) {
         (*iter)->Unregister();
     }

@@ -16,6 +16,7 @@
 #ifndef _RBTCAVITY_H_
 #define _RBTCAVITY_H_
 
+#include "RbtBinaryIO.h"
 #include "RbtConfig.h"
 #include "RbtCoord.h"
 #include "RbtPrincipalAxes.h"
@@ -63,9 +64,9 @@ class RbtCavity {
         m_gridStep.Write(ostr);
         // Write number of coords
         RbtInt nCoords = m_coordList.size();
-        Rbt::WriteWithThrow(ostr, (const char*)&nCoords, sizeof(nCoords));
-        for (RbtCoordListConstIter cIter = m_coordList.begin(); cIter != m_coordList.end(); cIter++) {
-            (*cIter).Write(ostr);  // Write each coord
+        bin_write(ostr, nCoords);
+        for (const RbtCoord& coord: m_coordList) {
+            coord.Write(ostr);
         }
     }
 
@@ -77,7 +78,7 @@ class RbtCavity {
         m_gridStep.Read(istr);
         // Read number of coords
         RbtInt nCoords;
-        Rbt::ReadWithThrow(istr, (char*)&nCoords, sizeof(nCoords));
+        bin_read(istr, nCoords);
         m_coordList.reserve(nCoords);
         RbtCoord c;
         // Read each coord and add it to the cavity list
