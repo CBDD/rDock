@@ -30,7 +30,6 @@ const RbtString _ROOT_SF = "SCORE";
 const RbtString _RESTRAINT_SF = "RESTR";
 const RbtString _ROOT_TRANSFORM = "DOCK";
 
-
 void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeName) {
     // Create a bimolecular workspace
     RbtBiMolWorkSpacePtr spWS(new RbtBiMolWorkSpace());

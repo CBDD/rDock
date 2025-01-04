@@ -93,11 +93,11 @@ struct RBDockConfig {
                     // for all other cases it doesn't matter
                 if (bContinue) {  // -t<TS> -n<N> -cont
                     strAuxFilter << "1 if - SCORE.NRUNS " << (nDockingRuns.value() - 1)
-                                << " 0.0 -1.0,\n1 - SCORE.INTER " << dTargetScore.value() << std::endl;
+                                 << " 0.0 -1.0,\n1 - SCORE.INTER " << dTargetScore.value() << std::endl;
                 } else {  // -t<TS> -n<N>
                     strAuxFilter << "1 if - " << dTargetScore.value() << " SCORE.INTER 0.0 "
-                                << "if - SCORE.NRUNS " << (nDockingRuns.value() - 1)
-                                << " 0.0 -1.0,\n1 - SCORE.INTER " << dTargetScore.value() << std::endl;
+                                 << "if - SCORE.NRUNS " << (nDockingRuns.value() - 1) << " 0.0 -1.0,\n1 - SCORE.INTER "
+                                 << dTargetScore.value() << std::endl;
                 }
         }                                     // no target score, no filter
         else if (nDockingRuns.has_value()) {  // -n<N>
@@ -105,7 +105,7 @@ struct RBDockConfig {
         } else {  // no -t no -n
             strAuxFilter << "0 0\n";
         }
-    return strAuxFilter.str();
+        return strAuxFilter.str();
     }
 };
 

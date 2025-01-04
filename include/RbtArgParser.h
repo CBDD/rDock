@@ -68,7 +68,6 @@ class RbtOptionValue {
         return *this;
     }
 
-
     inline bool is_present() { return value.count() > 0; }
 };
 

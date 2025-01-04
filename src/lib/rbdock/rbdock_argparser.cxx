@@ -36,11 +36,9 @@ RBDock::RBDockConfig RBDock::parse_args(int argc, const char *argv[]) {
         RBDock::RBDockConfig config;
         parser_result["input"] >> config.strLigandMdlFile;
         parser_result["receptor"] >> config.strReceptorPrmFile;
-        if (parser_result["protocol"].is_present()) {
-            parser_result["protocol"] >> config.strParamFile;
-        }
-        parser_result["output-root"] >> config.strOutputPrefix;
-        parser_result["runs"] >> config.nDockingRuns;
+        if (parser_result["protocol"].is_present()) parser_result["protocol"] >> config.strParamFile;
+        if (parser_result["output-root"].is_present()) parser_result["output-root"] >> config.strOutputPrefix;
+        if (parser_result["runs"].is_present()) parser_result["runs"] >> config.nDockingRuns;
         parser_result["ap"] >> config.bPosIonise;
         parser_result["an"] >> config.bNegIonise;
         parser_result["allH"] >> config.bAllH;
