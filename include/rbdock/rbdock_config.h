@@ -2,6 +2,7 @@
 #define _RBDOCK_CONFIG_H_
 
 #include <iostream>
+#include <optional>
 #include <string>
 
 #include "RbtValidationError.h"
@@ -9,45 +10,44 @@
 namespace RBDock {
 
 struct RBDockConfig {
+    // mandatory parameters
     std::string strLigandMdlFile;
-    bool bOutput = false;
-    std::string strRunName;
     std::string strReceptorPrmFile;
     std::string strParamFile;
-    std::string strFilterFile;
-    int nDockingRuns = 1;
-    bool bTarget = false;
+
+    // optional parameters
+    std::optional<std::string> strOutputPrefix;
+    std::optional<std::string> strFilterFile;
+    std::optional<int> nDockingRuns;
+    std::optional<double> dTargetScore;
+    std::optional<int> nSeed;
+    std::optional<int> iTrace;
+
+    // flags
     bool bContinue = false;
-    bool bDockingRuns = false;
-    double dTargetScore;
-    bool bFilter = false;
     bool bPosIonise = false;
     bool bNegIonise = false;
     bool bAllH = false;
-    bool bSeed = false;
-    int nSeed = 0;
-    bool bTrace = false;
-    int iTrace = 0;
 
     friend std::ostream &operator<<(std::ostream &os, const RBDockConfig &config) {
         os << "Command line args:" << std::endl;
         os << " -i " << config.strLigandMdlFile << std::endl;
         os << " -r " << config.strReceptorPrmFile << std::endl;
         os << " -p " << config.strParamFile << std::endl;
-        if (config.bOutput) {
-            os << " -o " << config.strRunName << std::endl;
+        if (config.strOutputPrefix.has_value()) {
+            os << " -o " << config.strOutputPrefix.value() << std::endl;
         } else {
             os << "WARNING: output file name is missing." << std::endl;
         }
-        auto def_aux = config.bDockingRuns ? " (default) " : "";
-        os << " -n " << config.nDockingRuns << def_aux << std::endl;
-        if (config.bSeed) os << " -s " << config.nSeed << std::endl;
-        if (config.bTrace) os << " -T " << config.iTrace << std::endl;
-        if (config.bPosIonise) os << " -ap " << std::endl;
-        if (config.bNegIonise) os << " -an " << std::endl;
-        if (!config.bAllH) os << " -allH " << std::endl;
-        if (config.bTarget) os << " -t " << config.dTargetScore << std::endl;
-        if (config.bContinue) os << " -cont " << std::endl;
+        auto def_aux = config.nDockingRuns.has_value() ? " (default) " : "";
+        os << " -n " << config.nDockingRuns.value_or(1) << def_aux << std::endl;
+        if (config.nSeed.has_value()) os << " -s " << config.nSeed.value() << std::endl;
+        if (config.iTrace.has_value()) os << " -T " << config.iTrace.value() << std::endl;
+        if (config.bPosIonise) os << " --ap " << std::endl;
+        if (config.bNegIonise) os << " --an " << std::endl;
+        if (!config.bAllH) os << " --allH " << std::endl;
+        if (config.dTargetScore.has_value()) os << " -t " << config.dTargetScore.value() << std::endl;
+        if (config.bContinue) os << " --cont " << std::endl;
         if (config.bPosIonise)
             os << "Automatically protonating positive ionisable groups (amines, imidazoles, guanidines)" << std::endl;
         if (config.bNegIonise)
@@ -59,9 +59,11 @@ struct RBDockConfig {
         else
             os << "Reading all hydrogens from ligand SD file" << std::endl;
 
-        if (config.bTarget) {
-            os << std::endl << "Lower target intermolecular score = " << config.dTargetScore << std::endl;
+        if (config.dTargetScore.has_value()) {
+            os << std::endl << "Lower target intermolecular score = " << config.dTargetScore.value() << std::endl;
         }
+        if (config.strFilterFile.has_value()) os << " -f " << config.strFilterFile.value() << std::endl;
+
         return os;
     }
 
@@ -72,13 +74,12 @@ struct RBDockConfig {
     }
 
     bool operator==(const RBDockConfig &rhs) const {
-        return strLigandMdlFile == rhs.strLigandMdlFile && bOutput == rhs.bOutput && strRunName == rhs.strRunName
+        return strLigandMdlFile == rhs.strLigandMdlFile && strOutputPrefix == rhs.strOutputPrefix
                && strReceptorPrmFile == rhs.strReceptorPrmFile && strParamFile == rhs.strParamFile
-               && strFilterFile == rhs.strFilterFile && nDockingRuns == rhs.nDockingRuns && bTarget == rhs.bTarget
-               && bContinue == rhs.bContinue && bDockingRuns == rhs.bDockingRuns && dTargetScore == rhs.dTargetScore
-               && bFilter == rhs.bFilter && bPosIonise == rhs.bPosIonise && bNegIonise == rhs.bNegIonise
-               && bAllH == rhs.bAllH && bSeed == rhs.bSeed && nSeed == rhs.nSeed && bTrace == rhs.bTrace
-               && iTrace == rhs.iTrace;
+               && strFilterFile == rhs.strFilterFile && nDockingRuns == rhs.nDockingRuns
+               && bContinue == rhs.bContinue && dTargetScore == rhs.dTargetScore
+               && bPosIonise == rhs.bPosIonise && bNegIonise == rhs.bNegIonise
+               && bAllH == rhs.bAllH && nSeed == rhs.nSeed && iTrace == rhs.iTrace;
     }
 };
 

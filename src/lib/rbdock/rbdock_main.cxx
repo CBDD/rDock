@@ -32,23 +32,23 @@ const RbtString _ROOT_TRANSFORM = "DOCK";
 
 std::string RBDock::get_filter_string(const RBDock::RBDockConfig &config) {
     std::ostringstream strFilter;
-    if (!config.bFilter) {
-        if (config.bTarget) {            // -t<TS>
-            if (!config.bDockingRuns) {  // -t<TS> only
-                strFilter << "0 1 - SCORE.INTER " << config.dTargetScore << std::endl;
+    if (!config.strFilterFile.has_value()) {
+        if (config.dTargetScore.has_value()) {            // -t<TS>
+            if (!config.nDockingRuns.has_value()) {  // -t<TS> only
+                strFilter << "0 1 - SCORE.INTER " << config.dTargetScore.value() << std::endl;
             } else  // -t<TS> -n<N> need to check if -cont present
                     // for all other cases it doesn't matter
                 if (config.bContinue) {  // -t<TS> -n<N> -cont
-                    strFilter << "1 if - SCORE.NRUNS " << (config.nDockingRuns - 1) << " 0.0 -1.0,\n1 - SCORE.INTER "
-                              << config.dTargetScore << std::endl;
+                    strFilter << "1 if - SCORE.NRUNS " << (config.nDockingRuns.value() - 1) << " 0.0 -1.0,\n1 - SCORE.INTER "
+                              << config.dTargetScore.value() << std::endl;
                 } else {  // -t<TS> -n<N>
-                    strFilter << "1 if - " << config.dTargetScore << " SCORE.INTER 0.0 "
-                              << "if - SCORE.NRUNS " << (config.nDockingRuns - 1) << " 0.0 -1.0,\n1 - SCORE.INTER "
-                              << config.dTargetScore << std::endl;
+                    strFilter << "1 if - " << config.dTargetScore.value() << " SCORE.INTER 0.0 "
+                              << "if - SCORE.NRUNS " << (config.nDockingRuns.value() - 1) << " 0.0 -1.0,\n1 - SCORE.INTER "
+                              << config.dTargetScore.value() << std::endl;
                 }
         }                                // no target score, no filter
-        else if (config.bDockingRuns) {  // -n<N>
-            strFilter << "1 if - SCORE.NRUNS " << (config.nDockingRuns - 1) << " 0.0 -1.0,\n0";
+        else if (config.nDockingRuns.has_value()) {  // -n<N>
+            strFilter << "1 if - SCORE.NRUNS " << (config.nDockingRuns.value() - 1) << " 0.0 -1.0,\n0";
         } else {  // no -t no -n
             strFilter << "0 0\n";
         }
@@ -118,8 +118,8 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
     // Override the TRACE levels for the scoring function and transform
     // Dump details to cout
     // Register the scoring function and the transform with the workspace
-    if (config.bTrace) {
-        RbtRequestPtr spTraceReq(new RbtSFSetParamRequest("TRACE", config.iTrace));
+    if (config.iTrace.has_value()) {
+        RbtRequestPtr spTraceReq(new RbtSFSetParamRequest("TRACE", config.iTrace.value()));
         spSF->HandleRequest(spTraceReq);
         spTransform->HandleRequest(spTraceReq);
     }
@@ -160,13 +160,13 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
     // Prepare the SD file sink for saving the docked conformations for each ligand
     // DM 3 Dec 1999 - replaced ostringstream with RbtString in determining SD file name
     // SRC 2014 moved here this block to allow WRITE_ERROR TRUE
-    if (config.bOutput) {
-        RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(config.strRunName + ".sd", RbtModelPtr()));
+    if (config.strOutputPrefix.has_value()) {
+        RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(config.strOutputPrefix.value() + ".sd", RbtModelPtr()));
         spWS->SetSink(spMdlFileSink);
     }
 
     RbtPRMFactory prmFactory(spRecepPrmSource, spDS);
-    prmFactory.SetTrace(config.iTrace);
+    prmFactory.SetTrace(config.iTrace.value_or(0));
     // Create the receptor model from the file names in the receptor parameter file
     RbtModelPtr spReceptor = prmFactory.CreateReceptor();
     spWS->SetReceptor(spReceptor);
@@ -185,22 +185,22 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
 
     // Seed the random number generator
     RbtRand &theRand = Rbt::GetRbtRand();  // ref to random number generator
-    if (config.bSeed) {
-        theRand.Seed(config.nSeed);
+    if (config.nSeed.has_value()) {
+        theRand.Seed(config.nSeed.value());
     }
 
     // Create the filter object for controlling early termination of protocol
     RbtFilterPtr spfilter;
-    if (config.bFilter) {
-        spfilter = new RbtFilter(config.strFilterFile);
-        if (config.bDockingRuns) {
-            spfilter->SetMaxNRuns(config.nDockingRuns);
+    if (config.strFilterFile.has_value()) {
+        spfilter = new RbtFilter(config.strFilterFile.value());
+        if (config.nDockingRuns.has_value()) {
+            spfilter->SetMaxNRuns(config.nDockingRuns.value());
         }
     } else {
         spfilter = new RbtFilter(get_filter_string(config), true);
     }
-    if (config.bTrace) {
-        RbtRequestPtr spTraceReq(new RbtSFSetParamRequest("TRACE", config.iTrace));
+    if (config.iTrace.has_value()) {
+        RbtRequestPtr spTraceReq(new RbtSFSetParamRequest("TRACE", config.iTrace.value()));
         spfilter->HandleRequest(spTraceReq);
     }
 
@@ -239,7 +239,7 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
             RbtString strMolName = spLigand->GetName();
             spWS->SetLigand(spLigand);
             // Update any model coords from embedded chromosomes in the ligand file
-            spWS->UpdateModelCoordsFromChromRecords(spMdlFileSource, config.iTrace);
+            spWS->UpdateModelCoordsFromChromRecords(spMdlFileSource, config.iTrace.value_or(0));
 
             // DM 18 May 1999 - store run info in model data
             // Clear any previous Rbt.* data fields
@@ -265,9 +265,9 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
             while (!bTargetMet) {
                 // Catching errors with this specific run
                 try {
-                    if (config.bOutput) {
+                    if (config.strOutputPrefix.has_value()) {
                         ostringstream histr;
-                        histr << config.strRunName << "_" << strMolName << nRec << "_his_" << iRun << ".sd";
+                        histr << config.strOutputPrefix.value() << "_" << strMolName << nRec << "_his_" << iRun << ".sd";
                         RbtMolecularFileSinkPtr spHistoryFileSink(new RbtMdlFileSink(histr.str(), spLigand));
                         spWS->SetHistorySink(spHistoryFileSink);
                     }
@@ -275,7 +275,7 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
                     RbtBool bterm = spfilter->Terminate();
                     RbtBool bwrite = spfilter->Write();
                     if (bterm) bTargetMet = true;
-                    if (config.bOutput && bwrite) {
+                    if (config.strOutputPrefix.has_value() && bwrite) {
                         spWS->Save();
                     }
                     iRun++;

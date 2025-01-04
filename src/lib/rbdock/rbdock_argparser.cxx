@@ -20,10 +20,11 @@ RbtArgParser::RbtArgParser RBDock::get_options_parser() {
     parser.add_flag("P,ap", "protonate all neutral amines, guanidines, imidazoles");
     parser.add_flag("D,an", "deprotonate all carboxylic, sulphur and phosphorous acid groups");
     parser.add_flag("H,allH", "read all hydrogens present. If disabled, read polar hydrogens only");
-    parser.add<string>("t,target", "score threshold OR filter file name");
+    parser.add<string>("t,target", "score threshold (or filter file name, deprecated)");
     parser.add_flag("C,cont", "if enabled, continue if score threshold is met (use with -t <targetScore>)");
     parser.add<int>("T,trace", "controls output level for debugging (0 = minimal, >0 = more verbose)", "0");
     parser.add<int>("s,seed", "random number seed (default=from sys clock)");
+    parser.add<string>("f,filter", "filter file name", "");
 
     return parser;
 }
@@ -38,26 +39,30 @@ RBDock::RBDockConfig RBDock::parse_args(int argc, const char *argv[]) {
         if (parser_result["protocol"].is_present()) {
             parser_result["protocol"] >> config.strParamFile;
         }
-        config.bOutput = parser_result["output-root"].is_present();
-        parser_result["output-root"] >> config.strRunName;
+        parser_result["output-root"] >> config.strOutputPrefix;
         parser_result["runs"] >> config.nDockingRuns;
         parser_result["ap"] >> config.bPosIonise;
         parser_result["an"] >> config.bNegIonise;
         parser_result["allH"] >> config.bAllH;
-        config.bSeed = parser_result["seed"].is_present();
-        if (config.bSeed) parser_result["seed"] >> config.nSeed;
-        config.bTrace = parser_result["trace"].is_present();
-        if (config.bTrace) parser_result["trace"] >> config.iTrace;
+        if (parser_result["seed"].is_present()) parser_result["seed"] >> config.nSeed;
+        if (parser_result["trace"].is_present()) parser_result["trace"] >> config.iTrace;
         if (parser_result["target"].is_present()) {
             std::string target;
             parser_result["target"] >> target;
-            if (target.find(".prm") != string::npos) {
-                config.bFilter = true;
-                config.strFilterFile = target;
-            } else {
-                config.bTarget = true;
+            // if target is numeric, store as a target score
+            try {
                 config.dTargetScore = std::stod(target);
+            } catch (std::invalid_argument &e) {
+                // if target is not numeric, store as a filter file name
+                std::cerr << "Warning: -t option is deprecated for filter files. Use -f instead." << std::endl;
+                config.strFilterFile = target;
             }
+        }
+        if (parser_result["filter"].is_present()) {
+            if (config.dTargetScore.has_value()) {
+                throw Rbt::ValidationError("Cannot specify both -t and -f options");
+            }
+            parser_result["filter"] >> config.strFilterFile;
         }
         parser_result["cont"] >> config.bContinue;
 
