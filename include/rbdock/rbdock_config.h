@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <optional>
+#include <sstream>
 #include <string>
 
 #include "RbtValidationError.h"
@@ -70,16 +71,41 @@ struct RBDockConfig {
     void validate() {
         if (strLigandMdlFile.empty()) throw Rbt::ValidationError("input ligand SD file is mandatory");
         if (strReceptorPrmFile.empty()) throw Rbt::ValidationError("receptor parameter file is mandatory");
-        if (nDockingRuns < 1) throw Rbt::ValidationError("number of runs must be greater than 0");
+        if (nDockingRuns.has_value() && nDockingRuns < 1)
+            throw Rbt::ValidationError("number of runs must be greater than 0");
     }
 
     bool operator==(const RBDockConfig &rhs) const {
         return strLigandMdlFile == rhs.strLigandMdlFile && strOutputPrefix == rhs.strOutputPrefix
                && strReceptorPrmFile == rhs.strReceptorPrmFile && strParamFile == rhs.strParamFile
-               && strFilterFile == rhs.strFilterFile && nDockingRuns == rhs.nDockingRuns
-               && bContinue == rhs.bContinue && dTargetScore == rhs.dTargetScore
-               && bPosIonise == rhs.bPosIonise && bNegIonise == rhs.bNegIonise
+               && strFilterFile == rhs.strFilterFile && nDockingRuns == rhs.nDockingRuns && bContinue == rhs.bContinue
+               && dTargetScore == rhs.dTargetScore && bPosIonise == rhs.bPosIonise && bNegIonise == rhs.bNegIonise
                && bAllH == rhs.bAllH && nSeed == rhs.nSeed && iTrace == rhs.iTrace;
+    }
+
+    std::string get_filter_string() const {
+        std::ostringstream strAuxFilter;
+        if (strFilterFile.has_value()) return "";
+        if (dTargetScore.has_value()) {       // -t<TS>
+            if (!nDockingRuns.has_value()) {  // -t<TS> only
+                strAuxFilter << "0 1 - SCORE.INTER " << dTargetScore.value() << std::endl;
+            } else  // -t<TS> -n<N> need to check if -cont present
+                    // for all other cases it doesn't matter
+                if (bContinue) {  // -t<TS> -n<N> -cont
+                    strAuxFilter << "1 if - SCORE.NRUNS " << (nDockingRuns.value() - 1)
+                                << " 0.0 -1.0,\n1 - SCORE.INTER " << dTargetScore.value() << std::endl;
+                } else {  // -t<TS> -n<N>
+                    strAuxFilter << "1 if - " << dTargetScore.value() << " SCORE.INTER 0.0 "
+                                << "if - SCORE.NRUNS " << (nDockingRuns.value() - 1)
+                                << " 0.0 -1.0,\n1 - SCORE.INTER " << dTargetScore.value() << std::endl;
+                }
+        }                                     // no target score, no filter
+        else if (nDockingRuns.has_value()) {  // -n<N>
+            strAuxFilter << "1 if - SCORE.NRUNS " << (nDockingRuns.value() - 1) << " 0.0 -1.0,\n0";
+        } else {  // no -t no -n
+            strAuxFilter << "0 0\n";
+        }
+    return strAuxFilter.str();
     }
 };
 

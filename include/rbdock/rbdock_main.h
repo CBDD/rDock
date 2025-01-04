@@ -6,7 +6,6 @@
 #include "rbdock/rbdock_config.h"
 
 namespace RBDock {
-std::string get_filter_string(const RBDockConfig &config);
 void RBDock(const RBDockConfig &config, const std::string &strExeName);
 }  // namespace RBDock
 

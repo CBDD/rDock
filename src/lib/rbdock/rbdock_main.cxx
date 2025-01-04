@@ -30,31 +30,6 @@ const RbtString _ROOT_SF = "SCORE";
 const RbtString _RESTRAINT_SF = "RESTR";
 const RbtString _ROOT_TRANSFORM = "DOCK";
 
-std::string RBDock::get_filter_string(const RBDock::RBDockConfig &config) {
-    std::ostringstream strFilter;
-    if (!config.strFilterFile.has_value()) {
-        if (config.dTargetScore.has_value()) {            // -t<TS>
-            if (!config.nDockingRuns.has_value()) {  // -t<TS> only
-                strFilter << "0 1 - SCORE.INTER " << config.dTargetScore.value() << std::endl;
-            } else  // -t<TS> -n<N> need to check if -cont present
-                    // for all other cases it doesn't matter
-                if (config.bContinue) {  // -t<TS> -n<N> -cont
-                    strFilter << "1 if - SCORE.NRUNS " << (config.nDockingRuns.value() - 1) << " 0.0 -1.0,\n1 - SCORE.INTER "
-                              << config.dTargetScore.value() << std::endl;
-                } else {  // -t<TS> -n<N>
-                    strFilter << "1 if - " << config.dTargetScore.value() << " SCORE.INTER 0.0 "
-                              << "if - SCORE.NRUNS " << (config.nDockingRuns.value() - 1) << " 0.0 -1.0,\n1 - SCORE.INTER "
-                              << config.dTargetScore.value() << std::endl;
-                }
-        }                                // no target score, no filter
-        else if (config.nDockingRuns.has_value()) {  // -n<N>
-            strFilter << "1 if - SCORE.NRUNS " << (config.nDockingRuns.value() - 1) << " 0.0 -1.0,\n0";
-        } else {  // no -t no -n
-            strFilter << "0 0\n";
-        }
-    }
-    return strFilter.str();
-}
 
 void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeName) {
     // Create a bimolecular workspace
@@ -161,7 +136,8 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
     // DM 3 Dec 1999 - replaced ostringstream with RbtString in determining SD file name
     // SRC 2014 moved here this block to allow WRITE_ERROR TRUE
     if (config.strOutputPrefix.has_value()) {
-        RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(config.strOutputPrefix.value() + ".sd", RbtModelPtr()));
+        RbtMolecularFileSinkPtr spMdlFileSink(new RbtMdlFileSink(config.strOutputPrefix.value() + ".sd", RbtModelPtr())
+        );
         spWS->SetSink(spMdlFileSink);
     }
 
@@ -197,7 +173,7 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
             spfilter->SetMaxNRuns(config.nDockingRuns.value());
         }
     } else {
-        spfilter = new RbtFilter(get_filter_string(config), true);
+        spfilter = new RbtFilter(config.get_filter_string(), true);
     }
     if (config.iTrace.has_value()) {
         RbtRequestPtr spTraceReq(new RbtSFSetParamRequest("TRACE", config.iTrace.value()));
@@ -267,7 +243,8 @@ void RBDock::RBDock(const RBDock::RBDockConfig &config, const RbtString &strExeN
                 try {
                     if (config.strOutputPrefix.has_value()) {
                         ostringstream histr;
-                        histr << config.strOutputPrefix.value() << "_" << strMolName << nRec << "_his_" << iRun << ".sd";
+                        histr << config.strOutputPrefix.value() << "_" << strMolName << nRec << "_his_" << iRun
+                              << ".sd";
                         RbtMolecularFileSinkPtr spHistoryFileSink(new RbtMdlFileSink(histr.str(), spLigand));
                         spWS->SetHistorySink(spHistoryFileSink);
                     }
