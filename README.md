@@ -21,13 +21,12 @@ make sure the following requirements are installed and available:
 
 * make
 * a c++ compiler (g++ by default)
-* popt and development headers (libpopt0 and libpopt-dev in ubuntu)
 * git (optional if you download the code directly)
 
 if you're running ubuntu, you can get all of them by running
 
 ```
-sudo apt update && sudo apt install -y make git libpopt0 libpopt-dev g++
+sudo apt update && sudo apt install -y make git g++
 ```
 
 you can also check requirements for other officially supported distributions in the [Dockerfiles](https://github.com/CBDD/rDock/blob/main/.github/docker) used for CI
