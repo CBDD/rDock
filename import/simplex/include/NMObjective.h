@@ -6,7 +6,12 @@
 #if !defined _userfile_
 #define _userfile_
 
+#if defined(__APPLE__) || defined(__FreeBSD__)
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
+
 #include <vector>
 
 double getInitialStep();
