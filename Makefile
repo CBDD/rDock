@@ -58,6 +58,15 @@ CONFIG                      ?= RELEASE
 RBT_VERSION                 ?= v$(shell date +%y.%m-alpha)
 CXX                         ?= g++
 
+# OS-specific settings
+LIB_PATH_VAR := LD_LIBRARY_PATH
+ifeq ($(shell uname),Darwin)
+    BREW_PREFIX := /opt/homebrew
+    CXX_BASE_FLAGS += -I$(BREW_PREFIX)/include
+    LINK_FLAGS += -L$(BREW_PREFIX)/lib
+    LIB_PATH_VAR := DYLD_LIBRARY_PATH
+endif
+
 CXX_BASE_FLAGS              += -Wall
 CXX_STD                     ?= c++17
 EXE_FOLDER				    = src/exe
@@ -86,7 +95,13 @@ endif
 DEFINES                     += -DRBT_VERSION=\"$(RBT_VERSION)\"
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
-LIB_DEPENDENCIES            += -lm -lpopt
+LIB_DEPENDENCIES            = -lm -lpopt
+
+# Modify library dependencies for macOS
+ifeq ($(shell uname),Darwin)
+    LIB_DEPENDENCIES = -L$(BREW_PREFIX)/lib -lpopt -lm
+endif
+
 LIBS                        += $(LIB_DEPENDENCIES) -lRbt
 INCLUDE                     := $(addprefix -I./, $(shell find include/ -type d )) $(addprefix -I./, $(shell find import/ -type d ))
 TESTS_INCLUDE				:= $(INCLUDE) $(addprefix -I./, $(shell find tests/include/ -type d ))
@@ -161,7 +176,7 @@ test: build ## run the tests suite
 
 test_dock_run: build tests/data/1YET_test.as
 	mkdir -p tests/results
-	cd tests/data ; RBT_ROOT=../.. LD_LIBRARY_PATH=../../lib:$(LD_LIBRARY_PATH) ../../bin/rbdock -r1YET_test.prm -i 1YET_c.sd -p dock.prm -n 1 -s 48151623 -o ../results/1YET_test_out > ../results/1YET_test_out.log
+	cd tests/data ; RBT_ROOT=../.. $(LIB_PATH_VAR)=../../lib:$($(LIB_PATH_VAR)) ../../bin/rbdock -r1YET_test.prm -i 1YET_c.sd -p dock.prm -n 1 -s 48151623 -o ../results/1YET_test_out > ../results/1YET_test_out.log
 	
 	@tests/scripts/check_results.sh ./tests/data/1YET_reference_out.sd ./tests/results/1YET_test_out.sd
 
@@ -169,7 +184,7 @@ test_rbcavity: tests/data/1koc.as tests/data/1YET.as tests/data/1YET_test.as
 	diff -q tests/data/1YET_test.as tests/data/1YET_reference_out.as
 
 test_suite: build_tests
-	LD_LIBRARY_PATH=./lib tests/bin/test_suite
+	$(LIB_PATH_VAR)=./lib tests/bin/test_suite
 
 clean: ## removes the object files and folder
 	@rm -rf obj
@@ -220,13 +235,13 @@ scripts: build_directories
 lib: lib/libRbt.so
 
 lib/libRbt.so: $(objects)
-	$(CXX) $(CXX_FLAGS) -shared -L$(LIBRARY) $^ -o lib/libRbt.so $(LIB_DEPENDENCIES)
+	$(CXX) $(CXX_FLAGS) $(LINK_FLAGS) -shared $^ -o lib/libRbt.so $(LIB_DEPENDENCIES)
 
 bin/%: src/exe/%.cxx lib/libRbt.so
 	$(CXX) $(CXX_FLAGS) $(INCLUDE) -L$(LIBRARY) -o $@ $< $(LIBS)
 
 tests/data/%.as: tests/data/%.prm bin/rbcavity
-	cd tests/data ; RBT_ROOT=../.. LD_LIBRARY_PATH=../../lib:$(LD_LIBRARY_PATH) ../../bin/rbcavity -r$(notdir $<) -was
+	cd tests/data ; RBT_ROOT=../.. $(LIB_PATH_VAR)=../../lib:$($(LIB_PATH_VAR)) ../../bin/rbcavity -r$(notdir $<) -was
 
 tests_directories:
 	@mkdir -p tests/obj tests/bin
