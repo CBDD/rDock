@@ -49,10 +49,9 @@ cd rDock
 make
 ```
 
-on `macOS`, you may need to run `export CC=gcc` before running make in order to use gcc instead of clang. Here is an example for gcc-14 installed with homebrew:
+on `macOS`, you may need to run `export CXX=gcc` before running make in order to use gcc instead of clang. Here is an example for gcc-14 installed with homebrew:
 
 ```
-export CC=/opt/homebrew/Cellar/gcc/14.2.0_1/bin/gcc-14
 export CXX=/opt/homebrew/Cellar/gcc/14.2.0_1/bin/g++-14
 ```
 
