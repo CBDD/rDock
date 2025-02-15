@@ -101,15 +101,12 @@ you may want to add these lines to your profile/configuration files like ~/.bash
 
 ### Next steps
 
-If everything went well, you should be able to run rDock binaries like `rbcavity` or `rbdock`.
+If everything went well, you should be able to run rDock binaries like `rbcavity` or `rbdock`.  
 You can find more information about the available tools in the [rDock documentation](https://rdock.github.io/documentation/), including several tutorials to get you started.
 
 ## rDock legacy version
 
-with each new release, we try to improve the build system and the codebase, making it easier to maintain and to add new features, and the new features are not always fully compatible with the old ones.
-for this reason, the legacy version of rDock was frozen and will only receive critical bug fixes.
+with each new release, we try to improve the build system and the codebase, making it easier to maintain and to add new features, and the new features are not always fully compatible with the old ones.  
+for this reason, the legacy version of rDock was frozen and will only receive critical bug fixes.  
 you can find the [latest legacy release here](https://github.com/CBDD/rDock/releases/tag/v24.04.204-legacy)
 
-```
-
-```
