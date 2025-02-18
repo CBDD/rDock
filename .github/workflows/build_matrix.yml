@@ -14,7 +14,7 @@ jobs:
     - name: setup-lint
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-recommends clang-format make
+        sudo apt-get install -y --no-install-recommends clang-format=1:14.0-55~exp2 make
     - name: check-lint
       run: make lint-check
       
