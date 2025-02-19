@@ -6,7 +6,7 @@
 #if !defined _userfile_
 #define _userfile_
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <vector>
 
 double getInitialStep();
