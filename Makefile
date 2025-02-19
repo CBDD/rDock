@@ -95,11 +95,11 @@ endif
 DEFINES                     += -DRBT_VERSION=\"$(RBT_VERSION)\"
 CXX_FLAGS                   := $(CXX_BASE_FLAGS) $(CXX_CONFIG_FLAGS) $(CXX_WARNING_FLAGS) $(CXX_EXTRA_FLAGS) $(DEFINES)
 LINK_FLAGS                  := -shared
-LIB_DEPENDENCIES            = -lm -lpopt
+LIB_DEPENDENCIES            += -lm
 
 # Modify library dependencies for macOS
 ifeq ($(shell uname),Darwin)
-    LIB_DEPENDENCIES = -L$(BREW_PREFIX)/lib -lpopt -lm
+    LIB_DEPENDENCIES = -L$(BREW_PREFIX)/lib -lm
 endif
 
 LIBS                        += $(LIB_DEPENDENCIES) -lRbt

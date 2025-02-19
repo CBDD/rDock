@@ -22,13 +22,12 @@ make sure the following requirements are installed and available:
 
 - make
 - a c++ compiler (g++ by default)
-- popt and development headers (libpopt0 and libpopt-dev in ubuntu)
 - git (optional if you download the code directly)
 
 if you're running ubuntu, you can get all of them by running
 
 ```
-sudo apt update && sudo apt install -y make git libpopt0 libpopt-dev g++
+sudo apt update && sudo apt install -y make git g++
 ```
 
 if you're running `macOS`, make sure to use gcc instead of clang. You can install gcc and popt using homebrew

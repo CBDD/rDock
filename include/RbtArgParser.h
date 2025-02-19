@@ -2,6 +2,7 @@
 #define _RBTARGPARSER_H_
 
 #include <cxxopts.hpp>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -57,6 +58,12 @@ class RbtOptionValue {
 
     template <typename T>
     RbtOptionValue &operator>>(T &v) {
+        v = value.as<T>();
+        return *this;
+    }
+
+    template <typename T>
+    RbtOptionValue &operator>>(std::optional<T> &v) {
         v = value.as<T>();
         return *this;
     }

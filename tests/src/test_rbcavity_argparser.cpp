@@ -1,24 +1,22 @@
 #include <catch2/catch_amalgamated.hpp>
+#include <tuple>
+#include <vector>
 
 #include "rbcavity/rbcavity_argparser.h"
 #include "rbcavity/rbcavity_config.h"
-
 #include "test_utils.hpp"
 
-#include <vector>
-#include <tuple>
-
-
-struct TestConfig{
+struct TestConfig {
     std::vector<std::string> input;
     RBCavity::RBCavityConfig expected_config;
 };
 
-
 TEST_CASE("rbcavity", "[argparser]") {
     auto config_base = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm"};
-    auto config_with_list = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bList = true, .dist = 3.0f};
-    auto config_with_border = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bBorder = true, .border = 5.0f};
+    auto config_with_list =
+        RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bList = true, .dist = 3.0f};
+    auto config_with_border =
+        RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bBorder = true, .border = 5.0f};
     auto config_with_read_as = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bReadAS = true};
     auto config_with_write_as = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bWriteAS = true};
     auto config_with_dump_insight = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bDump = true};
@@ -26,7 +24,8 @@ TEST_CASE("rbcavity", "[argparser]") {
     auto config_with_site = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bSite = true};
     auto config_with_moe_grid = RBCavity::RBCavityConfig{.strReceptorPrmFile = "receptor.prm", .bMOEgrid = true};
 
-    std::vector<std::string> all_settings{"-r", "receptor.prm", "-l", "3", "-b", "5", "-R", "-W", "-d", "-v", "-s", "-m"};
+    std::vector<std::string> all_settings{
+        "-r", "receptor.prm", "-l", "3", "-b", "5", "-R", "-W", "-d", "-v", "-s", "-m"};
     auto config_all_settings = RBCavity::RBCavityConfig{
         .strReceptorPrmFile = "receptor.prm",
         .bReadAS = true,
@@ -41,7 +40,7 @@ TEST_CASE("rbcavity", "[argparser]") {
         .dist = 3.0f,
     };
 
-    std::vector<TestConfig> configs {
+    std::vector<TestConfig> configs{
         TestConfig{.input = {"-r", "receptor.prm"}, .expected_config = config_base},
         TestConfig{.input = {"-rreceptor.prm"}, .expected_config = config_base},
         TestConfig{.input = {"-receptor=receptor.prm"}, .expected_config = config_base},
@@ -75,16 +74,14 @@ TEST_CASE("rbcavity", "[argparser]") {
         TestConfig{.input = {"-r", "receptor.prm", "-m"}, .expected_config = config_with_moe_grid},
         TestConfig{.input = {"-r", "receptor.prm", "-dump-moe"}, .expected_config = config_with_moe_grid},
         TestConfig{.input = {"-r", "receptor.prm", "--dump-moe"}, .expected_config = config_with_moe_grid},
-        TestConfig{.input = all_settings, .expected_config = config_all_settings}
-    };
+        TestConfig{.input = all_settings, .expected_config = config_all_settings}};
     NullBuffer null_buffer;
     CoutRedirect redirect_cout(&null_buffer);
     CerrRedirect redirect_cerr(&null_buffer);
-    
-    for (auto test_config: configs) {
-        auto inputs = std::vector<const char *>{"rbcavity"};
-        for (auto & input: test_config.input) inputs.push_back(input.c_str());
-        auto result = RBCavity::parse_args(inputs.size(), inputs.data());
-        REQUIRE(result == test_config.expected_config);
-    }
+
+    auto test_config = GENERATE_COPY(from_range(configs));
+    auto inputs = std::vector<const char *>{"rbcavity"};
+    for (auto &input: test_config.input) inputs.push_back(input.c_str());
+    auto result = RBCavity::parse_args(inputs.size(), inputs.data());
+    REQUIRE(result == test_config.expected_config);
 }
