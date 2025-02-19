@@ -1,0 +1,450 @@
+#!/usr/bin/env python3
+
+import numpy as np
+
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
+
+import argparse
+import itertools
+import multiprocessing
+import os
+from collections import Counter
+from functools import partial
+from pathlib import Path
+
+
+def apply_threshold(scored_poses, column, steps, threshold):
+    """
+    Filter out molecules from `scored_poses`, where the minimum score reached (for a specified `column`) after `steps` is more negative than `threshold`.
+    """
+    # minimum score after `steps` per molecule
+    mins = np.min(scored_poses[:, :steps, column], axis=1)
+    # return those molecules where the minimum score is less than the threshold
+    passing_molecules = np.where(mins < threshold)[0]
+    return passing_molecules
+
+
+def prepare_array(sdreport_array, name_column):
+    """
+    Convert `sdreport_array` (read directly from the tsv) to 3D array (molecules x poses x columns) and filter out molecules with too few/many poses
+    """
+    # find points in the array where the name_column changes (i.e. we are dealing with a new molecule) and split the array
+    split_array = np.split(
+        sdreport_array,
+        np.where(
+            sdreport_array[:, name_column]
+            != np.hstack((sdreport_array[1:, name_column], sdreport_array[0, name_column]))
+        )[0]
+        + 1,
+    )
+    modal_shape = Counter([n.shape for n in split_array]).most_common(1)[0]
+    number_of_poses = modal_shape[0][0]  # find modal number of poses per molecule in the array
+
+    split_array_clean = sum(
+        [
+            np.array_split(n, n.shape[0] / number_of_poses)
+            for n in split_array
+            if not n.shape[0] % number_of_poses and n.shape[0]
+        ],
+        [],
+    )
+
+    if len(split_array_clean) * number_of_poses < sdreport_array.shape[0] * 0.99:
+        print(
+            f"WARNING: the number of poses provided per molecule is inconsistent. Only {len(split_array_clean)} of {int(sdreport_array.shape[0] / number_of_poses)} moleules have {number_of_poses} poses."
+        )
+
+    molecule_array = np.array(split_array_clean)
+    # overwrite the name column (should be the only one with dtype=str) so we can force everything to float
+    molecule_array[:, :, name_column] = 0
+    return np.array(molecule_array, dtype=float)
+
+
+def calculate_results_for_filter_combination(
+    filter_combination,
+    molecule_array,
+    filters,
+    min_score_indices,
+    number_of_validation_mols,
+):
+    """
+    For a particular combination of filters, calculate the percentage of molecules that will be filtered, the percentage of top-scoring molecules that will be filtered, and the time taken relative to exhaustive docking
+    """
+    # mols_passed_threshold is a list of indices of molecules which have passed the applied filters. As more filters are applied, it gets smaller. Before any iteration, we initialise with all molecules passing
+    mols_passed_threshold = list(range(molecule_array.shape[0]))
+    filter_percentages = []
+    number_of_simulated_poses = 0  # number of poses which we calculate would be generated, we use this to calculate the TIME column in the final output
+    for n, threshold in enumerate(filter_combination):
+        if n:
+            # e.g. if there are 5000 mols left after 15 steps and the last filter was at 5 steps, append 5000 * (15 - 5) to number_of_simulated_poses
+            number_of_simulated_poses += len(mols_passed_threshold) * (filters[n]["steps"] - filters[n - 1]["steps"])
+        else:
+            number_of_simulated_poses += len(mols_passed_threshold) * filters[n]["steps"]
+        mols_passed_threshold = [  # all mols which pass the threshold and which were already in mols_passed_threshold, i.e. passed all previous filters
+            n
+            for n in apply_threshold(molecule_array, filters[n]["column"], filters[n]["steps"], threshold)
+            if n in mols_passed_threshold
+        ]
+        filter_percentages.append(len(mols_passed_threshold) / molecule_array.shape[0])
+    number_of_simulated_poses += len(mols_passed_threshold) * (molecule_array.shape[1] - filters[-1]["steps"])
+    perc_val = {
+        k: len([n for n in v if n in mols_passed_threshold]) / number_of_validation_mols
+        for k, v in min_score_indices.items()
+    }
+    return {
+        "filter_combination": filter_combination,
+        "perc_val": perc_val,
+        "filter_percentages": filter_percentages,
+        "time": number_of_simulated_poses / np.product(molecule_array.shape[:2]),
+    }
+
+
+def write_output(results, filters, number_of_validation_mols, output_file, column_names):
+    """
+    Print results as a table. The number of columns varies depending how many columns the user picked.
+    """
+    with open(output_file, "w") as f:
+        # write header
+        for n in range(len(results[0]["filter_combination"])):
+            f.write(f"FILTER{n+1}\tNSTEPS{n+1}\tTHR{n+1}\tPERC{n+1}\t")
+        for n in results[0]["perc_val"]:
+            f.write(f"TOP{number_of_validation_mols}_{column_names[n]}\t")
+            f.write(f"ENRICH_{column_names[n]}\t")
+        f.write("TIME\n")
+
+        # write results
+        for result in results:
+            for n, threshold in enumerate(result["filter_combination"]):
+                f.write(
+                    f"{column_names[filters[n]['column']]}\t{filters[n]['steps']}\t{threshold:.2f}\t{result['filter_percentages'][n]*100:.2f}\t"
+                )
+            for n in result["perc_val"]:
+                f.write(f"{result['perc_val'][n]*100:.2f}\t")
+                if result["filter_percentages"][-1]:
+                    f.write(f"{result['perc_val'][n]/result['filter_percentages'][-1]:.2f}\t")
+                else:
+                    f.write("NaN\t")
+            f.write(f"{result['time']:.4f}\n")
+    return
+
+
+def select_best_filter_combination(results, max_time, min_perc):
+    """
+    Very debatable how to do this...
+    Here we exclude all combinations with TIME < max_time and calculate an "enrichment factor"
+    (= percentage of validation compounds / percentage of all compounds); we select the
+    threshold with the highest enrichment factor
+    """
+    min_max_values = {}
+    for col in results[0]["perc_val"].keys():
+        vals = [result["perc_val"][col] for result in results]
+        min_max_values[col] = {"min": min(vals), "max": max(vals)}
+    time_vals = [result["time"] for result in results]
+    min_max_values["time"] = {"min": min(time_vals), "max": max(time_vals)}
+
+    combination_scores = [
+        sum(
+            [
+                (
+                    (result["perc_val"][col] - min_max_values[col]["min"])
+                    / (min_max_values[col]["max"] - min_max_values[col]["min"])
+                )
+                for col in results[0]["perc_val"].keys()
+            ]
+            + [
+                (min_max_values["time"]["max"] - result["time"])
+                / (min_max_values["time"]["max"] - min_max_values["time"]["min"])
+            ]
+        )
+        if result["time"] < max_time and result["filter_percentages"][-1] >= min_perc / 100
+        else 0
+        for result in results
+    ]
+    return np.argmax(combination_scores)
+
+
+def write_threshold_file(filters, best_filter_combination, threshold_file, column_names, max_number_of_runs):
+    with open(threshold_file, "w") as f:
+        # write number of filters to apply
+        f.write(f"{len(filters) + 1}\n")
+        # write each filter to a separate line
+        for n, filtr in enumerate(filters):
+            f.write(
+                f'if - {best_filter_combination[n]:.2f} {column_names[filtr["column"]]} 1.0 if - SCORE.NRUNS  {filtr["steps"]} 0.0 -1.0,\n'
+            )
+        # write filter to terminate docking when NRUNS reaches the number of runs used in the input file
+        f.write(f"if - SCORE.NRUNS {max_number_of_runs - 1} 0.0 -1.0\n")
+
+        # write final filters - find strictest filters for all columns and apply them again
+        filters_by_column = {
+            col: [best_filter_combination[n] for n, filtr in enumerate(filters) if filtr["column"] == col]
+            for col in set([filtr["column"] for filtr in filters])
+        }
+        # write number of filters (same as number of columns filtered on)
+        f.write(f"{len(filters_by_column)}\n")
+        # write filter
+        for col, values in filters_by_column.items():
+            f.write(f"- {column_names[col]} {min(values)},\n")
+
+
+def main():
+    """
+    Parse arguments; read in data; calculate filter combinations and apply them; print results
+    """
+    parser = argparse.ArgumentParser(
+        description="""Estimate the results and computation time of an rDock high
+throughput protocol. The following steps should be followed:
+1) exhaustive docking of a small representative part of the entire
+  library.
+2) Store the result of sdreport -t over that exhaustive docking run
+  in a file <sdreport_file> which will be the input of this script.
+3) Run rbhtfinder, specifying -i <sdreport_file> and an arbitrary
+  number of filters specified using the -f option, for example
+  "-f column=6,steps=5,min=0.5,max=1.0,interval=0.1". This example
+  would simulate the effect of applying thresholds on column 6 after
+  5 poses have been generated, for values between 0.5 and 1.0 (i.e.
+  0.5, 0.6, 0.7, 0.8, 0.9, 1.0). More than one threshold can be
+  specified, e.g., "-f column=4,steps=5,min=-12,max=-10,interval=1
+  -f column=4,steps=15,min=-16,max=-15,interval=1" will test the
+  following combinations of thresholds on column 4:
+            5   -10     15      -15
+            5   -11     15      -15
+            5   -12     15      -15
+            5   -10     15      -16
+            5   -11     15      -16
+            5   -12     15      -16
+  The number of combinations will increase very rapidly, the more
+  filters are used and the larger the range of values specified for
+  each. It may be sensible to run rbhtfinder several times to explore
+  the effects of various filters independently.
+
+  The output of the program consists of the following columns.
+            FILTER1 NSTEPS1 THR1    PERC1   TOP500_SCORE.INTER  ENRICH_SCORE.INTER      TIME
+            SCORE.INTER     5       -13.00  6.04    72.80   12.05   0.0500
+            SCORE.INTER     5       -12.00  9.96    82.80   8.31    0.0500
+  The four columns are repeated for each filter specified with the -f
+  option: name of the column on which the filter is applied
+  (FILTER1), number of steps at which the threshold is applied
+  (NSTEPS1), value of the threshold (THR1)   and the percentage of
+  poses which pass this filter (PERC1). Additional filters (FILTER2,
+  FILTER3 etc.) are listed in the order that they are applied (i.e.
+  by NSTEPS).
+
+  The final columns provide some overall statistics for the
+  combination of thresholds specified in a row. TOP500_SCORE.INTER
+  gives the percentage of the top-scoring 500 poses, measured by
+  SCORE.INTER, from the whole of <sdreport_file> which are retained
+  after the thresholds are applied. This can be contrasted with the
+  final PERC column. The higher the ratio (the 'enrichment factor'),
+  the better the combination of thresholds. If thresholds are applied
+  on multiple columns, this column will be duplicated for each, e.g.
+  TOP500_SCORE.INTER and TOP500_SCORE.RESTR will give the percentage
+  of the top-scoring poses retained for both of these scoring
+  methods. The exact number of poses used for this validation can be
+  changed from the default 500 using the --validation flag.
+  ENRICH_SCORE.INTER gives the enrichment factor as a quick
+  rule-of-thumb to assess the best choice of thresholds. The final
+  column TIME provides an estimate of the time taken to perform
+  docking, as a proportion of the time taken for exhaustive docking.
+  This value should be below 0.1.
+
+  After a combination of thresholds has been selected, they need to
+  be encoded into a threshold file which rDock can use as an input.
+  rbhtfinder attempts to help with this task by automatically
+  selecting a combination and writing a threshold file. The
+  combination chosen is that which provides the highest enrichment
+  factor, after all options with a TIME value over 0.1 are excluded.
+  This choice should not be blindly followed, so the threshold file
+  should be considered a template that the user modifies as needed.
+
+  rbhtfinder requires NumPy. Installation of pandas is recommended,
+  but optional; if pandas is not available, loading the input file
+  for calculations will be considerably slower.
+
+    """,
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "-i",
+        "--input",
+        help="Input from sdreport (tabular separated format).",
+        type=Path,
+        required=True,
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="Output file for report on threshold combinations.",
+        type=Path,
+        required=True,
+    )
+    parser.add_argument(
+        "-t",
+        "--threshold",
+        help="Threshold file used by rDock as input.",
+        type=Path,
+    )
+    parser.add_argument(
+        "-n",
+        "--name",
+        type=int,
+        default=2,
+        help="Index of column containing the molecule name. Default is 2.",
+    )
+    parser.add_argument(
+        "-f",
+        "--filter",
+        nargs="+",
+        action="append",
+        type=str,
+        help="Filter to apply, e.g. column=4,steps=5,min=-10,max=-15,interval=1 will test applying a filter to column 4 after generation of 5 poses, with threshold values between -10 and -15 tested. The variables column, steps, min and max must all be specified; interval defaults to 1 if not given.",
+    )
+    parser.add_argument(
+        "-v",
+        "--validation",
+        type=int,
+        default=500,
+        help="Top-scoring N molecules from input to use for validating threshold combinations. Default is 500.",
+    )
+    parser.add_argument(
+        "--header",
+        action="store_true",
+        help="Specify if the input file from sdreport contains a header line with column names. If not, output files will describe columns using indices, e.g. COL4, COL5.",
+    )
+    parser.add_argument(
+        "--max-time",
+        type=float,
+        default=0.1,
+        help="Maximum value for time to use when autogenerating a high-throughput protocol - default is 0.1, i.e. 10%% of the time exhaustive docking would take.",
+    )
+    parser.add_argument(
+        "--min-perc",
+        type=float,
+        default=1.0,
+        help="Minimum value for the estimated final percentage of compounds to use when autogenerating a high-throughput protocol - default is 1.",
+    )
+
+    args = parser.parse_args()
+    args.name -= 1  # because np arrays need 0-based indices
+
+    # create filters dictionary from args.filter passed in
+    filters = [dict([n.split("=") for n in filtr[0].split(",")]) for filtr in args.filter]
+    filters = [
+        {k: float(v) if k in ["interval", "min", "max"] else int(v) for k, v in filtr.items()} for filtr in filters
+    ]
+
+    for filtr in filters:
+        # user inputs with 1-based numbering whereas python uses 0-based
+        filtr["column"] -= 1
+
+    # sort filters by step at which they are applied
+    filters.sort(key=lambda n: n["steps"])
+
+    # generates all possible combinations from filters provided
+    filter_combinations = list(
+        itertools.product(
+            *(
+                np.arange(*n)
+                for n in [
+                    (
+                        filtr["min"],
+                        filtr["max"] + filtr.get("interval", 1),
+                        filtr.get("interval", 1),
+                    )
+                    for filtr in filters
+                ]
+            )
+        )
+    )
+    print(f"{len(filter_combinations)} combinations of filters calculated.")
+
+    # remove redundant combinations, i.e. where filters for later steps are less or equally strict to earlier steps
+    filter_combinations = np.array(filter_combinations)
+    cols = [filtr["column"] for filtr in filters]
+    indices_per_col = {col: [n for n, filter_col in enumerate(cols) if col == filter_col] for col in set(cols)}
+    filter_combination_indices_to_keep = range(len(filter_combinations))
+    for col, indices in indices_per_col.items():
+        filter_combination_indices_to_keep = [
+            n
+            for n, comb in enumerate(filter_combinations[:, indices])
+            if list(comb) == sorted(comb, reverse=True)
+            and len(set(comb)) == comb.shape[0]
+            and n in filter_combination_indices_to_keep
+        ]
+    filter_combinations = filter_combinations[filter_combination_indices_to_keep]
+
+    if len(filter_combinations):
+        print(
+            f"{len(filter_combinations)} combinations of filters remain after removal of redundant combinations. Starting calculations..."
+        )
+    else:
+        print("No filter combinations could be calculated - check the thresholds specified.")
+        exit(1)
+
+    if pd:
+        # pandas is weird... i.e., skip line 0 if there's a header, else read all lines
+        header = 0 if args.header else None
+        sdreport_dataframe = pd.read_csv(args.input, sep="\t", header=header)
+        if args.header:
+            column_names = sdreport_dataframe.columns.values
+        else:
+            # use index names; add 1 to deal with zero-based numbering
+            column_names = [f"COL{n+1}" for n in range(len(sdreport_dataframe.columns))]
+        sdreport_array = sdreport_dataframe.values
+    else:  # pd not available
+        np_array = np.loadtxt(args.input, dtype=str)
+        if args.header:
+            column_names = np_array[0]
+            sdreport_array = np_array[1:]
+        else:
+            column_names = [f"COL{n+1}" for n in range(np_array.shape[1])]
+            sdreport_array = np_array
+    print("Data read in from input file.")
+
+    # convert to 3D array (molecules x poses x columns)
+    molecule_array = prepare_array(sdreport_array, args.name)
+
+    # find the top scoring compounds for validation of the filter combinations
+    min_score_indices = {}
+    for column in set(filtr["column"] for filtr in filters):
+        min_scores = np.min(molecule_array[:, :, column], axis=1)
+        min_score_indices[column] = np.argpartition(min_scores, args.validation)[: args.validation]
+
+    results = []
+
+    pool = multiprocessing.Pool(os.cpu_count())
+    results = pool.map(
+        partial(
+            calculate_results_for_filter_combination,
+            molecule_array=molecule_array,
+            filters=filters,
+            min_score_indices=min_score_indices,
+            number_of_validation_mols=args.validation,
+        ),
+        filter_combinations,
+    )
+
+    write_output(results, filters, args.validation, args.output, column_names)
+
+    best_filter_combination = select_best_filter_combination(results, args.max_time, args.min_perc)
+    if args.threshold:
+        if best_filter_combination:
+            write_threshold_file(
+                filters,
+                filter_combinations[best_filter_combination],
+                args.threshold,
+                column_names,
+                molecule_array.shape[1],
+            )
+        else:
+            print(
+                "Filter combinations defined are too strict or would take too long to run; no threshold file was written."
+            )
+            exit(1)
+
+
+if __name__ == "__main__":
+    main()
