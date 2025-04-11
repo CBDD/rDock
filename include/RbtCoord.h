@@ -22,9 +22,13 @@
 #include <algorithm>  //for min,max
 #include <numeric>    //for accumulate
 
+#include "RbtBinaryIO.h"
 #include "RbtConfig.h"
 
 extern istream& eatSeps(istream& is);
+
+using Rbt::bin_read;
+using Rbt::bin_write;
 
 class RbtCoord {
     ///////////////////////////////////////////////
@@ -59,15 +63,15 @@ class RbtCoord {
 
     // DM 19 Jul 2000 - Read,Write methods to read/write coords to binary streams
     inline ostream& Write(ostream& ostr) const {
-        ostr.write((const char*)&x, sizeof(x));
-        ostr.write((const char*)&y, sizeof(y));
-        ostr.write((const char*)&z, sizeof(z));
+        bin_write(ostr, x);
+        bin_write(ostr, y);
+        bin_write(ostr, z);
         return ostr;
     }
     inline istream& Read(istream& istr) {
-        istr.read((char*)&x, sizeof(x));
-        istr.read((char*)&y, sizeof(y));
-        istr.read((char*)&z, sizeof(z));
+        bin_read(istr, x);
+        bin_read(istr, y);
+        bin_read(istr, z);
         return istr;
     }
 

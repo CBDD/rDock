@@ -12,7 +12,9 @@
 
 #include <fstream>
 
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
+#include "RbtPlatformCompatibility.h"
 #include "RbtVdwGridSF.h"
 
 /////////////////////////////////////////////////////////////////////
@@ -58,31 +60,21 @@ int main(int argc, char* argv[]) {
 
     try {
         // Read the grid file header
-#if defined(__sgi) && !defined(__GNUC__)
-        ifstream istr(strInputFile.c_str(), ios_base::in);
-#else
-        ifstream istr(strInputFile.c_str(), ios_base::in | ios_base::binary);
-#endif
+        std::ifstream istr(strInputFile, Rbt::inputMode);
         if (istr) {
             cout << strInputFile << " opened OK" << endl;
         }
         // Read header string
-        RbtInt length;
-        Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-        char* header = new char[length + 1];
-        Rbt::ReadWithThrow(istr, header, length);
-        // Add null character to end of string
-        header[length] = '\0';
-        // Compare title with
+        RbtString header;
+        bin_read(istr, header);
         RbtBool match = (RbtVdwGridSF::_CT == header);
-        delete[] header;
         if (!match) {
             throw RbtFileParseError(_WHERE_, "Invalid title string in " + strInputFile);
         }
 
         // Skip the appropriate number of grids
         RbtInt nGrids;
-        Rbt::ReadWithThrow(istr, (char*)&nGrids, sizeof(nGrids));
+        bin_read(istr, nGrids);
         cout << "File contains " << nGrids << " grids..." << endl;
         if ((iGrid > nGrids) || (iGrid < 1)) {
             cout << "Listing grids..." << endl;
@@ -91,14 +83,9 @@ int main(int argc, char* argv[]) {
         }
         RbtRealGridPtr spGrid;
         for (RbtInt i = 1; (i <= nGrids) && (i <= iGrid); i++) {
+            RbtString strType;
             // Read the atom type string
-            Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-            char* szType = new char[length + 1];
-            Rbt::ReadWithThrow(istr, szType, length);
-            // Add null character to end of string
-            szType[length] = '\0';
-            RbtString strType(szType);
-            delete[] szType;
+            bin_read(istr, strType);
             RbtTriposAtomType triposType;
             RbtTriposAtomType::eType aType = triposType.Str2Type(strType);
             cout << "Grid# " << i << "\t"
@@ -109,7 +96,7 @@ int main(int argc, char* argv[]) {
         // If we are not in listing mode, write the grid
         if ((iGrid <= nGrids) && (iGrid >= 1)) {
             cout << "Writing grid# " << iGrid << " to " << strOutputFile << "..." << endl;
-            ofstream ostr(strOutputFile.c_str());
+            std::ofstream ostr(strOutputFile);
             spGrid->PrintInsightGrid(ostr);
             ostr.close();
         }

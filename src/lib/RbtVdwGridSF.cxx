@@ -12,7 +12,9 @@
 
 #include "RbtVdwGridSF.h"
 
+#include "RbtBinaryIO.h"
 #include "RbtFileError.h"
+#include "RbtPlatformCompatibility.h"
 #include "RbtWorkSpace.h"
 
 // Static data members
@@ -26,16 +28,12 @@ RbtVdwGridSF::RbtVdwGridSF(const RbtString& strName): RbtBaseSF(_CT, strName), m
     // Add parameters
     AddParameter(_GRID, ".grd");
     AddParameter(_SMOOTHED, m_bSmoothed);
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtVdwGridSF::~RbtVdwGridSF() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -60,13 +58,7 @@ void RbtVdwGridSF::SetupReceptor() {
 
     RbtString strSuffix = GetParameter(_GRID);
     RbtString strFile = Rbt::GetRbtFileName("data/grids", strWSName + strSuffix);
-    // DM 26 Sep 2000 - ios_base::binary qualifier doesn't appear to be valid
-    // with IRIX CC
-#ifdef __sgi
-    ifstream istr(strFile.c_str(), ios_base::in);
-#else
-    ifstream istr(strFile.c_str(), ios_base::in | ios_base::binary);
-#endif
+    ifstream istr(strFile, Rbt::inputMode);
     ReadGrids(istr);
     istr.close();
 }
@@ -163,24 +155,11 @@ RbtDouble RbtVdwGridSF::RawScore() const {
 void RbtVdwGridSF::ReadGrids(istream& istr) {
     m_grids.clear();
     RbtInt iTrace = GetTrace();
-
-    // Read header string
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* header = new char[length + 1];
-    Rbt::ReadWithThrow(istr, header, length);
-    // Add null character to end of string
-    header[length] = '\0';
-    // Compare title with
-    RbtBool match = (_CT == header);
-    delete[] header;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::ReadGrids()");
-    }
+    Rbt::ValidateTitle(istr, _CT);
 
     // Now read number of grids
     RbtInt nGrids;
-    Rbt::ReadWithThrow(istr, (char*)&nGrids, sizeof(nGrids));
+    bin_read(istr, nGrids);
     if (iTrace > 0) {
         cout << _CT << ": reading " << nGrids << " grids..." << endl;
     }
@@ -195,13 +174,8 @@ void RbtVdwGridSF::ReadGrids(istream& istr) {
     m_grids = RbtRealGridList(RbtTriposAtomType::MAXTYPES);
     for (RbtInt i = 0; i < nGrids; i++) {
         // Read the atom type string
-        Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-        char* szType = new char[length + 1];
-        Rbt::ReadWithThrow(istr, szType, length);
-        // Add null character to end of string
-        szType[length] = '\0';
-        RbtString strType(szType);
-        delete[] szType;
+        std::string strType;
+        bin_read(istr, strType);
         RbtTriposAtomType triposType;
         RbtTriposAtomType::eType aType = triposType.Str2Type(strType);
         if (iTrace > 0) {

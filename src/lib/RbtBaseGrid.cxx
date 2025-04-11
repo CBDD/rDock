@@ -16,7 +16,7 @@
 #include <cstring>    //for strlen
 #include <iomanip>
 
-#include "RbtFileError.h"
+#include "RbtBinaryIO.h"
 
 // Static data members
 RbtString RbtBaseGrid::_CT("RbtBaseGrid");
@@ -225,71 +225,53 @@ void RbtBaseGrid::OwnPrint(ostream& ostr) const {
 void RbtBaseGrid::OwnWrite(ostream& ostr) const {
     // Write the class name as a title so we can check the authenticity of streams
     // on read
-    const char* const gridTitle = _CT.c_str();
-    RbtInt length = strlen(gridTitle);
-    Rbt::WriteWithThrow(ostr, (const char*)&length, sizeof(length));
-    Rbt::WriteWithThrow(ostr, gridTitle, length);
+    bin_write(ostr, _CT);
 
     // Write all the data members
-    // The RbtCoord::Write method doesn't throw an error, but we can live with that for now
     m_min.Write(ostr);
     m_max.Write(ostr);
     m_step.Write(ostr);
     m_padMin.Write(ostr);
     m_padMax.Write(ostr);
-    Rbt::WriteWithThrow(ostr, (const char*)&m_NX, sizeof(m_NX));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_NY, sizeof(m_NY));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_NZ, sizeof(m_NZ));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_N, sizeof(m_N));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_SX, sizeof(m_SX));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_SY, sizeof(m_SY));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_SZ, sizeof(m_SZ));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_NPad, sizeof(m_NPad));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_nXMin, sizeof(m_nXMin));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_nXMax, sizeof(m_nXMax));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_nYMin, sizeof(m_nYMin));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_nYMax, sizeof(m_nYMax));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_nZMin, sizeof(m_nZMin));
-    Rbt::WriteWithThrow(ostr, (const char*)&m_nZMax, sizeof(m_nZMax));
+    bin_write(ostr, m_NX);
+    bin_write(ostr, m_NY);
+    bin_write(ostr, m_NZ);
+    bin_write(ostr, m_N);
+    bin_write(ostr, m_SX);
+    bin_write(ostr, m_SY);
+    bin_write(ostr, m_SZ);
+    bin_write(ostr, m_NPad);
+    bin_write(ostr, m_nXMin);
+    bin_write(ostr, m_nXMax);
+    bin_write(ostr, m_nYMin);
+    bin_write(ostr, m_nYMax);
+    bin_write(ostr, m_nZMin);
+    bin_write(ostr, m_nZMax);
 }
 
 // Protected method for reading data members for this class from binary stream
 void RbtBaseGrid::OwnRead(istream& istr) {
-    // Read title
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* gridTitle = new char[length + 1];
-    Rbt::ReadWithThrow(istr, gridTitle, length);
-    // Add null character to end of string
-    gridTitle[length] = '\0';
-    // Compare title with class name
-    RbtBool match = (_CT == gridTitle);
-    delete[] gridTitle;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-    }
-
+    Rbt::ValidateTitle(istr, _CT);
     // Read all the data members
-    // The RbtCoord::Read method doesn't throw an error, but we can live with that for now
     m_min.Read(istr);
     m_max.Read(istr);
     m_step.Read(istr);
     m_padMin.Read(istr);
     m_padMax.Read(istr);
-    Rbt::ReadWithThrow(istr, (char*)&m_NX, sizeof(m_NX));
-    Rbt::ReadWithThrow(istr, (char*)&m_NY, sizeof(m_NY));
-    Rbt::ReadWithThrow(istr, (char*)&m_NZ, sizeof(m_NZ));
-    Rbt::ReadWithThrow(istr, (char*)&m_N, sizeof(m_N));
-    Rbt::ReadWithThrow(istr, (char*)&m_SX, sizeof(m_SX));
-    Rbt::ReadWithThrow(istr, (char*)&m_SY, sizeof(m_SY));
-    Rbt::ReadWithThrow(istr, (char*)&m_SZ, sizeof(m_SZ));
-    Rbt::ReadWithThrow(istr, (char*)&m_NPad, sizeof(m_NPad));
-    Rbt::ReadWithThrow(istr, (char*)&m_nXMin, sizeof(m_nXMin));
-    Rbt::ReadWithThrow(istr, (char*)&m_nXMax, sizeof(m_nXMax));
-    Rbt::ReadWithThrow(istr, (char*)&m_nYMin, sizeof(m_nYMin));
-    Rbt::ReadWithThrow(istr, (char*)&m_nYMax, sizeof(m_nYMax));
-    Rbt::ReadWithThrow(istr, (char*)&m_nZMin, sizeof(m_nZMin));
-    Rbt::ReadWithThrow(istr, (char*)&m_nZMax, sizeof(m_nZMax));
+    bin_read(istr, m_NX);
+    bin_read(istr, m_NY);
+    bin_read(istr, m_NZ);
+    bin_read(istr, m_N);
+    bin_read(istr, m_SX);
+    bin_read(istr, m_SY);
+    bin_read(istr, m_SZ);
+    bin_read(istr, m_NPad);
+    bin_read(istr, m_nXMin);
+    bin_read(istr, m_nXMax);
+    bin_read(istr, m_nYMin);
+    bin_read(istr, m_nYMax);
+    bin_read(istr, m_nZMin);
+    bin_read(istr, m_nZMax);
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -24,16 +24,12 @@ RbtRandLigTransform::RbtRandLigTransform(const RbtString& strName, const Config&
     RbtBaseUniMolTransform(_CT, strName),
     m_rand(Rbt::GetRbtRand()),
     config{config} {
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtRandLigTransform::~RbtRandLigTransform() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 

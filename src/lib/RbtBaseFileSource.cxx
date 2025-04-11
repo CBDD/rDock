@@ -14,18 +14,16 @@
 
 #include <cstring>
 
+#include "RbtDebug.h"
 #include "RbtFileError.h"
 
 // Constructors
-// RbtBaseFileSource::RbtBaseFileSource(const char* fileName)
-//{
-//   m_strFileName = fileName;
-//   ClearCache();
-//   _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
-// }
 
-RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName): m_bFileOpen(false), m_bMultiRec(false) {
-    m_strFileName = fileName;
+RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName):
+    m_strFileName(fileName),
+    m_bFileOpen(false),
+    m_bMultiRec(false) {
+    m_fileIn.exceptions(std::ios::badbit);
     m_szBuf = new char[MAXLINELENGTH + 1];  // DM 24 Mar - allocate line buffer
     ClearCache();
     _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
@@ -33,13 +31,9 @@ RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName): m_bFileOpen(fal
 
 // Multi-record constructor
 RbtBaseFileSource::RbtBaseFileSource(const RbtString& fileName, const RbtString& strRecDelim):
-    m_bFileOpen(false),
-    m_bMultiRec(true),
-    m_strRecDelim(strRecDelim) {
-    m_strFileName = fileName;
-    m_szBuf = new char[MAXLINELENGTH + 1];  // DM 24 Mar - allocate line buffer
-    ClearCache();
-    _RBTOBJECTCOUNTER_CONSTR_("RbtBaseFileSource");
+    RbtBaseFileSource(fileName) {
+    this->m_strRecDelim = strRecDelim;
+    this->m_bMultiRec = true;
 }
 
 // Default destructor
@@ -52,13 +46,6 @@ RbtBaseFileSource::~RbtBaseFileSource() {
 
 // Public methods
 RbtString RbtBaseFileSource::GetFileName() { return m_strFileName; }
-
-// void RbtBaseFileSource::SetFileName(const char* fileName)
-//{
-//   Close();
-//   ClearCache();
-//   m_strFileName = fileName;
-// }
 
 void RbtBaseFileSource::SetFileName(const RbtString& fileName) {
     Close();
@@ -134,9 +121,7 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
                     const char* cszRecDelim = m_strRecDelim.c_str();
                     RbtInt n = strlen(cszRecDelim);
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-#ifdef _DEBUG
-                        cout << m_szBuf << endl;
-#endif  //_DEBUG
+                        DEBUG_ERR(m_szBuf << endl);
                         m_lineRecs.push_back(m_szBuf);
                     }
                 }
@@ -172,9 +157,7 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0))
                         ;
                     while ((m_fileIn.getline(m_szBuf, MAXLINELENGTH)) && (strncmp(m_szBuf, cszRecDelim, n) != 0)) {
-#ifdef _DEBUG
-                        cout << m_szBuf << endl;
-#endif  //_DEBUG
+                        DEBUG_ERR(m_szBuf << endl);
                         m_lineRecs.push_back(m_szBuf);
                     }
                 }
@@ -204,13 +187,13 @@ void RbtBaseFileSource::Read(RbtBool aDelimiterAtEnd) {
 // Private functions
 void RbtBaseFileSource::Open() {
     // DM 23 Mar 1999 - check if file is already open, to allow Open() to be called redundantly
-    if (!m_bFileOpen) m_fileIn.open(m_strFileName.c_str(), ios_base::in);
-
-    // If file did not open, throw an error
-    if (!m_fileIn)
-        throw RbtFileReadError(_WHERE_, "Error opening " + m_strFileName);
-    else
+    if (m_bFileOpen) return;
+    try {
+        m_fileIn.open(m_strFileName, ios_base::in);
         m_bFileOpen = true;
+    } catch (...) {
+        throw RbtFileReadError(_WHERE_, "Error opening " + m_strFileName);
+    }
 }
 
 void RbtBaseFileSource::Close() {

@@ -16,10 +16,15 @@
 #ifndef _RBTBASEIDXSF_H_
 #define _RBTBASEIDXSF_H_
 
+#include <type_traits>
+
+#include "RbtBaseGrid.h"
 #include "RbtBaseSF.h"
+#include "RbtDockingSite.h"
 #include "RbtInteractionGrid.h"
 #include "RbtNonBondedGrid.h"
 #include "RbtNonBondedHHSGrid.h"
+#include "RbtWorkSpace.h"
 
 class RbtBaseIdxSF: public virtual RbtBaseSF {
  public:
@@ -47,9 +52,8 @@ class RbtBaseIdxSF: public virtual RbtBaseSF {
     ///////////////////
     RbtBaseIdxSF();
 
-    RbtInteractionGridPtr CreateInteractionGrid() const;
-    RbtNonBondedGridPtr CreateNonBondedGrid() const;
-    RbtNonBondedHHSGridPtr CreateNonBondedHHSGrid() const;
+    template <class T>
+    SmartPtr<T> CreateGrid() const;
     RbtDouble GetMaxError() const;
     // DM 12 Apr 2002
     // Returns the maximum range of the scoring function,
@@ -80,5 +84,24 @@ class RbtBaseIdxSF: public virtual RbtBaseSF {
     RbtDouble m_gridStep;
     RbtDouble m_border;
 };
+
+template <class T>
+SmartPtr<T> RbtBaseIdxSF::CreateGrid() const {
+    // Create a grid covering the docking site
+    static_assert(std::is_base_of<RbtBaseGrid, T>::value, "T must inherit from RbtBaseGrid");
+    RbtDockingSitePtr spDS = GetWorkSpace()->GetDockingSite();
+    if (spDS.Null()) return SmartPtr<T>();
+
+    // Extend grid by _BORDER, mainly to allow for the possibility of polar hydrogens
+    // falling outside of the docking site
+    RbtCoord minCoord = spDS->GetMinCoord() - m_border;
+    RbtCoord maxCoord = spDS->GetMaxCoord() + m_border;
+    RbtVector recepExtent = maxCoord - minCoord;
+    RbtVector gridStep(m_gridStep, m_gridStep, m_gridStep);
+    RbtUInt nX = int(recepExtent.x / gridStep.x) + 1;
+    RbtUInt nY = int(recepExtent.y / gridStep.y) + 1;
+    RbtUInt nZ = int(recepExtent.z / gridStep.z) + 1;
+    return SmartPtr<T>(new T(minCoord, gridStep, nX, nY, nZ));
+}
 
 #endif  //_RBTBASEIDXSF_H_

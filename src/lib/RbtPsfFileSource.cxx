@@ -279,11 +279,6 @@ void RbtPsfFileSource::SetupVdWRadii() {
         }
         // Finally we can set the radius
         (*iter)->SetVdwRadius(vdwRadius);
-#ifdef _DEBUG
-        // cout << (*iter)->GetFullAtomName() << ": #H=" << nImplH
-        //<< "; vdwR=" << (*iter)->GetVdwRadius()
-        //<< "; mass=" << (*iter)->GetAtomicMass() << endl;
-#endif  //_DEBUG
     }
 }
 
@@ -324,9 +319,7 @@ void RbtPsfFileSource::RemoveNonPolarHydrogens() {
             }
             // Adjust number of implicit hydrogens
             (*cIter)->SetNumImplicitHydrogens((*cIter)->GetNumImplicitHydrogens() + nImplH);
-#ifdef _DEBUG
-            cout << "Removing " << nImplH << " hydrogens from " << (*cIter)->GetFullAtomName() << endl;
-#endif  //_DEBUG
+            DEBUG_ERR("Removing " << nImplH << " hydrogens from " << (*cIter)->GetFullAtomName() << endl);
         }
     }
 }

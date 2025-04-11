@@ -23,9 +23,7 @@ RbtString RbtVble::_CT("RbtVble");
 
 RbtContext::RbtContext() {
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
-#ifdef _DEBUG
-    cout << _CT << "base context const\n";
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "base context const\n");
 }
 
 RbtContext::RbtContext(const RbtContext& c) { _RBTOBJECTCOUNTER_COPYCONSTR_(_CT); }
@@ -82,20 +80,8 @@ RbtCellContext::RbtCellContext(ifstream& ifile) {
         vm[key] = new RbtVble(name, val);
     }
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
-#ifdef _DEBUG
-    cout << "cell context const\n";
-#endif  //_DEBUG
+    DEBUG_ERR("cell context const\n");
 }
-
-/*
-void RbtCellContext::Clear()
-{
-    for (RbtIntVbleMapIter it = vm.begin() ; it != vm.end() ; it++)
-    {
-        if (it->first >= ninputs)
-            vm.erase(it);
-    }
-}*/
 
 RbtDouble RbtStringContext::Get(RbtModelPtr lig, RbtString name) {
     if (name == "LIG_MW") return lig->GetTotalAtomicMass();

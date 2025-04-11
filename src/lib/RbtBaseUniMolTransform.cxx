@@ -12,6 +12,7 @@
 
 #include "RbtBaseUniMolTransform.h"
 
+#include "RbtDebug.h"
 #include "RbtWorkSpace.h"
 
 // Static data members
@@ -21,16 +22,12 @@ RbtString RbtBaseUniMolTransform::_CT("RbtBaseUniMolTransform");
 // Constructors/destructors
 RbtBaseUniMolTransform::RbtBaseUniMolTransform(const RbtString& strClass, const RbtString& strName):
     RbtBaseTransform(strClass, strName) {
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseUniMolTransform::~RbtBaseUniMolTransform() {
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -49,9 +46,7 @@ void RbtBaseUniMolTransform::Update(RbtSubject* theChangedSubject) {
         if (pWorkSpace->GetNumModels() >= 2) {
             RbtModelPtr spLigand = GetWorkSpace()->GetModel(1);
             if (spLigand != m_spLigand) {
-#ifdef _DEBUG
-                cout << _CT << "::Update(): Ligand has been updated" << endl;
-#endif  //_DEBUG
+                DEBUG_ERR(_CT << "::Update(): Ligand has been updated" << endl);
                 m_spLigand = spLigand;
                 SetupTransform();
             }

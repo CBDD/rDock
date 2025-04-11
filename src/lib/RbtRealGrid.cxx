@@ -15,7 +15,7 @@
 #include <iomanip>
 using std::setw;
 
-#include "RbtFileError.h"
+#include "RbtBinaryIO.h"
 #include "RbtRealGrid.h"
 
 // Static data members
@@ -148,22 +148,16 @@ RbtDouble RbtRealGrid::GetSmoothedValue(const RbtCoord& c) const {
     RbtUInt iX = int(rx * (c.x - gridMin.x) - 0.5) + 1;
     RbtUInt iY = int(ry * (c.y - gridMin.y) - 0.5) + 1;
     RbtUInt iZ = int(rz * (c.z - gridMin.z) - 0.5) + 1;
-#ifdef _DEBUG
-    cout << "GetSmoothedValue" << c << "\tiX,iY,iZ=" << iX << "\t" << iY << "\t" << iZ << endl;
-#endif  //_DEBUG
+    DEBUG_ERR("GetSmoothedValue" << c << "\tiX,iY,iZ=" << iX << "\t" << iY << "\t" << iZ << endl);
     // Check this point (iX,iY,iZ) and (iX+1,iY+1,iZ+1) are all in bounds
     // else return the unsmoothed GetValue(c)
     if (!isValid(iX, iY, iZ) || !isValid(iX + 1, iY + 1, iZ + 1)) {
-#ifdef _DEBUG
-        cout << "Out of bounds" << endl;
-#endif  //_DEBUG
+        DEBUG_ERR("Out of bounds" << endl);
         return GetValue(c);
     }
     // p is the vector relative to the lower left corner
     RbtVector p = c - GetCoord(iX, iY, iZ);
-#ifdef _DEBUG
-    cout << "p=" << p << endl;
-#endif  //_DEBUG
+    DEBUG_ERR("p=" << p << endl);
     // Set up B0 and B1 for each of x,y,z axes
     // RbtDoubleList bx(2);
     // RbtDoubleList by(2);
@@ -433,43 +427,20 @@ void RbtRealGrid::OwnPrint(ostream& ostr) const {
 // Protected method for writing data members for this class to binary stream
 //(Serialisation)
 void RbtRealGrid::OwnWrite(ostream& ostr) const {
-    // Write the class name as a title so we can check the authenticity of streams
-    // on read
-    const char* const gridTitle = _CT.c_str();
-    RbtInt length = strlen(gridTitle);
-    Rbt::WriteWithThrow(ostr, (const char*)&length, sizeof(length));
-    Rbt::WriteWithThrow(ostr, gridTitle, length);
-
+    bin_write(ostr, _CT);
     // Write all the data members
-    Rbt::WriteWithThrow(ostr, (const char*)&m_tol, sizeof(m_tol));
-    for (RbtUInt i = 0; i < GetN(); i++) {
-        Rbt::WriteWithThrow(ostr, (const char*)&m_data[i], sizeof(m_data[i]));
-    }
+    bin_write(ostr, m_tol);
+    bin_write(ostr, m_data, GetN());
 }
 
 // Protected method for reading data members for this class from binary stream
 // WARNING: Assumes grid data array has already been created
 // and is of the correct size
 void RbtRealGrid::OwnRead(istream& istr) {
-    // Read title
-    RbtInt length;
-    Rbt::ReadWithThrow(istr, (char*)&length, sizeof(length));
-    char* gridTitle = new char[length + 1];
-    Rbt::ReadWithThrow(istr, gridTitle, length);
-    // Add null character to end of string
-    gridTitle[length] = '\0';
-    // Compare title with class name
-    RbtBool match = (_CT == gridTitle);
-    delete[] gridTitle;
-    if (!match) {
-        throw RbtFileParseError(_WHERE_, "Invalid title string in " + _CT + "::Read()");
-    }
-
+    Rbt::ValidateTitle(istr, _CT);
     // Read all the data members
-    Rbt::ReadWithThrow(istr, (char*)&m_tol, sizeof(m_tol));
-    for (RbtUInt i = 0; i < GetN(); i++) {
-        Rbt::ReadWithThrow(istr, (char*)&m_data[i], sizeof(m_data[i]));
-    }
+    bin_read(istr, m_tol);
+    bin_read(istr, m_data, GetN());
 }
 
 ///////////////////////////////////////////////////////////////////////////

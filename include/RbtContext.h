@@ -67,7 +67,7 @@ class RbtCellContext: public RbtContext {
             vm[key]->SetValue(val);
         else {
             ostringstream s;
-            s << val << ends;
+            s << val;
             vm[key] = new RbtVble(s.str(), val);
         }
     }

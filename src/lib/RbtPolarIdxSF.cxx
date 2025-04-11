@@ -38,9 +38,7 @@ RbtPolarIdxSF::RbtPolarIdxSF(const RbtString& strName):
     AddParameter(_ATTR, m_bAttr);
     AddParameter(_THRESHOLD_POS, m_posThreshold);
     AddParameter(_THRESHOLD_NEG, m_negThreshold);
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor" << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
@@ -48,9 +46,7 @@ RbtPolarIdxSF::~RbtPolarIdxSF() {
     ClearReceptor();
     ClearLigand();
     ClearSolvent();
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -109,9 +105,9 @@ void RbtPolarIdxSF::SetupReceptor() {
     RbtInt nCoords = GetReceptor()->GetNumSavedCoords() - 1;
     if (nCoords > 0) {
         RbtAtomList atomList = GetReceptor()->GetAtomList();
-        m_spPosGrid = CreateInteractionGrid();
+        m_spPosGrid = CreateGrid<RbtInteractionGrid>();
         m_recepPosList = CreateDonorInteractionCenters(atomList);
-        m_spNegGrid = CreateInteractionGrid();
+        m_spNegGrid = CreateGrid<RbtInteractionGrid>();
         m_recepNegList = CreateAcceptorInteractionCenters(atomList);
         for (RbtInt i = 1; i <= nCoords; i++) {
             if (iTrace > 0) {
@@ -133,8 +129,8 @@ void RbtPolarIdxSF::SetupReceptor() {
         }
     } else {
         RbtAtomList atomList = spDS->GetAtomList(GetReceptor()->GetAtomList(), 0.0, GetCorrectedRange());
-        m_spPosGrid = CreateInteractionGrid();
-        m_spNegGrid = CreateInteractionGrid();
+        m_spPosGrid = CreateGrid<RbtInteractionGrid>();
+        m_spNegGrid = CreateGrid<RbtInteractionGrid>();
         m_recepPosList = CreateDonorInteractionCenters(atomList);
         m_recepNegList = CreateAcceptorInteractionCenters(atomList);
 

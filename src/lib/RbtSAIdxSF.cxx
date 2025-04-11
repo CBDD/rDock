@@ -66,7 +66,7 @@ void RbtSAIdxSF::SetupReceptor() {
     // and that they don't move very far (up to 2A)
     m_bFlexRec = GetReceptor()->isFlexible();
     RbtDouble flexDist = 2.0;
-    theIdxGrid = CreateNonBondedHHSGrid();
+    theIdxGrid = CreateGrid<RbtNonBondedHHSGrid>();
     RbtDouble idxIncr = GetParameter(_INCR).Double() + GetMaxError();
     RbtDouble flexIncr = idxIncr + flexDist;
 

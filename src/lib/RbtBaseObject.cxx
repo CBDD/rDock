@@ -12,6 +12,7 @@
 
 #include "RbtBaseObject.h"
 
+#include "RbtDebug.h"
 #include "RbtSFRequest.h"
 #include "RbtWorkSpace.h"
 
@@ -33,26 +34,20 @@ RbtBaseObject::RbtBaseObject(const RbtString& strClass, const RbtString& strName
     AddParameter(_NAME, strName);
     AddParameter(_ENABLED, m_enabled);
     AddParameter(_TRACE, m_trace);  // DM 1 Mar 2002 - move from RbtBaseTransform
-#ifdef _DEBUG
-    cout << _CT << " parameterised constructor for " << strClass << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " parameterised constructor for " << strClass << endl);
     _RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 // Dummy default constructor for virtual base subclasses
 // Should never get called
 RbtBaseObject::RbtBaseObject() {
-#ifdef _DEBUG
-    cout << "WARNING: " << _CT << " default constructor" << endl;
-#endif  //_DEBUG
-        //_RBTOBJECTCOUNTER_CONSTR_(_CT);
+    DEBUG_ERR("WARNING: " << _CT << " default constructor" << endl);
+    //_RBTOBJECTCOUNTER_CONSTR_(_CT);
 }
 
 RbtBaseObject::~RbtBaseObject() {
     Unregister();  // Unregister object from workspace
-#ifdef _DEBUG
-    cout << _CT << " destructor" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << " destructor" << endl);
     _RBTOBJECTCOUNTER_DESTR_(_CT);
 }
 
@@ -83,9 +78,7 @@ void RbtBaseObject::Register(RbtWorkSpace* pWorkSpace) {
     // First unregister with current workspace
     Unregister();
     m_workspace = pWorkSpace;
-#ifdef _DEBUG
-    cout << _CT << "::Register(): Registering " << GetName() << " with workspace" << endl;
-#endif  //_DEBUG
+    DEBUG_ERR(_CT << "::Register(): Registering " << GetName() << " with workspace" << endl);
     m_workspace->Attach(this);
 }
 
@@ -93,9 +86,7 @@ void RbtBaseObject::Register(RbtWorkSpace* pWorkSpace) {
 // Base class version just unregisters itself
 void RbtBaseObject::Unregister() {
     if (m_workspace) {
-#ifdef _DEBUG
-        cout << _CT << "::Unregister(): Unregistering " << GetName() << " from workspace" << endl;
-#endif  //_DEBUG
+        DEBUG_ERR(_CT << "::Unregister(): Unregistering " << GetName() << " from workspace" << endl);
         m_workspace->Detach(this);
     }
     m_workspace = NULL;
@@ -108,9 +99,7 @@ RbtWorkSpace* RbtBaseObject::GetWorkSpace() const { return m_workspace; }
 // Notify observer that subject is about to be deleted
 void RbtBaseObject::Deleted(RbtSubject* theDeletedSubject) {
     if (theDeletedSubject == m_workspace) {
-#ifdef _DEBUG
-        cout << _CT << "::Deleted(): " << GetName() << " received notice that subject is to be deleted " << endl;
-#endif  //_DEBUG
+        DEBUG_ERR(_CT << "::Deleted(): " << GetName() << " received notice that subject is to be deleted " << endl);
         Unregister();
     }
 }

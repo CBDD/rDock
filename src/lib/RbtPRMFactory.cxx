@@ -121,7 +121,7 @@ RbtModelPtr RbtPRMFactory::CreateReceptor() {
         }
         for (RbtInt i = 1; i <= n; i++) {
             ostringstream ostr;
-            ostr << _REC_COORD_FILE << "_" << i << ends;
+            ostr << _REC_COORD_FILE << "_" << i;
             RbtString paramName(ostr.str());
             RbtString strCoordFile = m_pParamSource->GetParameterValueAsString(paramName);
             if (m_iTrace > 0) {

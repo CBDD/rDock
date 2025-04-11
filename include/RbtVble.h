@@ -41,7 +41,7 @@ class RbtVble {
         value = val;
         if (name == "") {
             ostringstream s;
-            s << value << ends;
+            s << value;
             name = s.str();
         }
     }

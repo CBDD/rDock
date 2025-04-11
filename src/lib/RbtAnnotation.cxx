@@ -76,7 +76,7 @@ RbtString RbtAnnotation::Render() const {
     }
     ostr.setf(ios_base::fixed, ios_base::floatfield);
     ostr.precision(2);
-    ostr << m_dist << "," << m_score << ends;
+    ostr << m_dist << "," << m_score;
     RbtString retVal(ostr.str());
     return retVal;
 }

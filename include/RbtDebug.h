@@ -65,4 +65,23 @@ extern RbtObjectCounterMap theObjectCounterMap;
 
 #endif  //_RBTOBJECTCOUNTER
 
+#ifdef _DEBUG
+    #include <iostream>
+    #define DEBUG_OUT(x)    \
+        do {                \
+            std::cout << x; \
+        } while (0)
+    #define DEBUG_ERR(x)    \
+        do {                \
+            std::cerr << x; \
+        } while (0)
+#else
+    #define DEBUG_OUT(x) \
+        do {             \
+        } while (0)
+    #define DEBUG_ERR(x) \
+        do {             \
+        } while (0)
+#endif
+
 #endif  //_RBTDEBUG_H_
