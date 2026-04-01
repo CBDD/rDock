@@ -1,0 +1,4 @@
+FROM quay.io/centos/centos:stream10 AS base
+
+# Install dependencies
+RUN yum install -y popt-devel gcc-c++ make

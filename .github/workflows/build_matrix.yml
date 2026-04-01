@@ -10,7 +10,7 @@ jobs:
   check-lint:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: setup-lint
       run: |
         sudo apt-get update
@@ -27,9 +27,10 @@ jobs:
           - ubuntu-24.04
           - ubuntu-22.04
           - ubuntu-20.04
+          - debian-13
           - debian-12
           - debian-11
-          - debian-10
+          - centos-stream10
           - centos-stream9
         compiler:
           - g++
@@ -48,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4  # probably not needed, but just in case
+    - uses: actions/checkout@v6  # probably not needed, but just in case
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
